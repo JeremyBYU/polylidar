@@ -38,7 +38,7 @@ class get_numpy_include(object):
 ext_modules = [
     Extension(
         'polylidar',
-        ['polylidar/module.cpp', 'polylidar/polylidar.cpp'],
+        ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
@@ -109,7 +109,7 @@ setup(
     name='polylidar',
     version=__version__,
     author='Jeremy Castagno',
-    author_email='jdcata@umich.edu',
+    author_email='jdcasta@umich.edu',
     url='',
     description='Polygon extraction from Point Cloud data',
     long_description='',

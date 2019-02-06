@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "C:\\Users\\Jerem\\Anaconda3\\envs\\mle\\python.exe",
+  "python.pythonPath": "/home/jeremy/miniconda3/envs/polylidarv2/bin/python",
   "files.associations": {
     "algorithm": "cpp",
     "deque": "cpp",
@@ -48,7 +48,27 @@
     "xstddef": "cpp",
     "xtr1common": "cpp",
     "xtree": "cpp",
-    "xutility": "cpp"
+    "xutility": "cpp",
+    "cctype": "cpp",
+    "clocale": "cpp",
+    "cstdarg": "cpp",
+    "cwctype": "cpp",
+    "*.tcc": "cpp",
+    "forward_list": "cpp",
+    "list": "cpp",
+    "unordered_map": "cpp",
+    "unordered_set": "cpp",
+    "optional": "cpp",
+    "fstream": "cpp",
+    "functional": "cpp",
+    "memory": "cpp",
+    "sstream": "cpp",
+    "cinttypes": "cpp",
+    "typeindex": "cpp",
+    "valarray": "cpp",
+    "complex": "cpp",
+    "string_view": "cpp",
+    "variant": "cpp"
   },
   "cSpell.words": [
     "linf",
