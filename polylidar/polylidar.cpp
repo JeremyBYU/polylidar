@@ -70,15 +70,78 @@ namespace polylidar {
         return triangles;
     }
 
-    Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &delaunay, Config &config) {
+    std::tuple<std::unordered_map<size_t, std::vector<size_t>>, std::unordered_map<size_t, size_t>, ExtremePoint> constructPointHash(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points) {
+        auto &triangles = delaunay.triangles;
+        auto &halfedges = delaunay.halfedges;
+        // all incoming half eddges to a point index
+        std::unordered_map<size_t, std::vector<size_t>> pointHash;
+        // all valid triangles
+        std::unordered_map<size_t, size_t> triHash;
+        // all empty border half edges
+        std::unordered_map<size_t, size_t> edgeHash;
+        // create a hash of all triangles in this plane set
+        for (auto &&t : plane) {
+            triHash[t] = t;
+        }
+
+        // extreme point
+        ExtremePoint xPoint;
+        auto points_unchecked = points.unchecked<2>();
+
+        // Loop through every triangle in the plane
+        for (auto &&t : plane) {
+            // Loop through every edge in the triangle
+            for (int i = 0; i < 3; i++) {
+                // get halfedge index
+                auto heIndex = t * 3 + i;
+                // get the adjacent edge of this triangle edge
+                auto oppHe = halfedges[heIndex];
+                auto oppT = std::floor(oppHe / 3);
+                // check if this triangle (oppT) is on the convex hull or removed
+                if (triHash.count(oppT) == 0) {
+                    // Record this edge
+                    edgeHash[heIndex] = heIndex;
+                    // get point index of this half edge, this is an edge leaving from this pi
+                    auto pi = triangles[heIndex];
+                    trackExtremePoint(pi, points_unchecked, xPoint, heIndex);
+                    // Check if the point has already been indexed
+                    if (pointHash.count(pi) == 0) {
+                        // construct a new vector holding this half edge index
+                        pointHash[pi] = std::vector<size_t>(1, heIndex);
+                    } else {
+                        // point already exists, just append to it
+                        pointHash[pi].push_back(heIndex);
+                    }
+
+                }
+            }
+        }
+
+        return std::make_tuple(std::move(pointHash), std::move(edgeHash), std::move(xPoint));
+    }
+
+    Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config) {
+        // point hash
+        std::unordered_map<size_t, std::vector<size_t>> pointHash;
+        // hash of all empty border half edges
+        std::unordered_map<size_t, size_t> edgeHash;
+        // the left and right most extreme points
+        ExtremePoint xPoint;
+        std::tie(pointHash, edgeHash, xPoint) = constructPointHash(plane, delaunay, points);
+
+        auto startingHalfEdge = xPoint.xr_he;
+        auto startingPointIndex = xPoint.xr_pi;
+        auto stopPoint = startingPointIndex;
+        auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, false);
+
 
     }
 
-    std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::Delaunator &delaunay, Config &config) {
+    std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config) {
         
         std::vector<Polygon> polygons;
         for(auto &&plane: planes) {
-            Polygon poly = extractConcaveHull(plane, delaunay, config);
+            Polygon poly = extractConcaveHull(plane, delaunay, points, config);
         }
         return polygons;
     }

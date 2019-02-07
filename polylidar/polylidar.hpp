@@ -29,6 +29,8 @@
 #define DEBUG 1
 
 namespace polylidar {
+
+
     struct Config
     {
         // 2D base configuration
