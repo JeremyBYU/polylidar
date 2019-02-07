@@ -5,6 +5,10 @@ namespace py = pybind11;
 PYBIND11_MAKE_OPAQUE(std::vector<size_t>);
 PYBIND11_MAKE_OPAQUE(std::vector<double>);
 
+using namespace pybind11::literals;
+
+// double DESIRED_VECTOR_2[3] = {0.0, 0.0, 1.0};
+
 PYBIND11_MODULE(polylidar, m)
 {
 
@@ -23,11 +27,16 @@ PYBIND11_MODULE(polylidar, m)
     py::bind_vector<std::vector<std::size_t>>(m, "VectorInts", py::buffer_protocol());
     py::bind_vector<std::vector<double>>(m, "VectorDouble", py::buffer_protocol());
     py::class_<delaunator::Delaunator>(m, "Delaunator")
-        .def(py::init<pybind11::array_t<double>>())
+        .def(py::init<py::array_t<double>>())
         .def("triangulate", &delaunator::Delaunator::triangulate)
         .def_readonly("triangles", &delaunator::Delaunator::triangles)
         .def_readonly("halfedges", &delaunator::Delaunator::halfedges)
         .def_readonly("coords", &delaunator::Delaunator::coords);
+    
+    m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons,
+        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "minTriangles"_a=DEFAULT_MINTRIANGLES,
+        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
+        "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     // py::bind_vector<std::vector<double>>(m, "VectorInt", py::buffer_protocol());
     // py::class_<PyMultiAStar>(m, "PyMultiAStar")

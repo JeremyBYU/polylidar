@@ -38,7 +38,7 @@ class get_numpy_include(object):
 ext_modules = [
     Extension(
         'polylidar',
-        ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp'],
+        ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),

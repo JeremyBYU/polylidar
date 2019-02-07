@@ -428,16 +428,17 @@ Delaunator::Delaunator(pybind11::array_t<double> nparray)
       m_center_y(),
       m_hash_size(),
       m_edge_stack() {
-        std::cout << "Inside Delaunator Numpy Constructor" << std::endl;
+        // std::cout << "Inside Delaunator Numpy Constructor" << std::endl;
         auto shape = nparray.shape();
         auto rows = shape[0];
         auto cols = shape[1];
 
-        std::cout << "Shape " << rows << " , " << cols << std::endl;
+        // std::cout << "Shape " << rows << " , " << cols << std::endl;
 
         auto size = rows * 2;
         const double *data = nparray.data();
-        coords = std::vector<double>(data, data + size);
+        auto temp = std::vector<double>(data, data + size);
+        coords.swap(temp);
     }
     
 
