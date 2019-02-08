@@ -20,6 +20,71 @@ struct ExtremePoint
 
 double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points);
 
+inline void maxZChangeAndNormal(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points,
+                                double &diff, std::array<double, 3> &normal) {
+    auto &triangles = delaunay.triangles;
+    std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
+    auto &pi0 = pis[0];
+    auto &pi1 = pis[1];
+    auto &pi2 = pis[2];
+    // get max Z dimension change in a triangle
+    auto zMin = std::min(std::min(points(pi0, 2), points(pi1, 2)), points(pi2, 2));
+    auto zMax = std::max(std::max(points(pi0, 2), points(pi1, 2)), points(pi2, 2));
+    diff = zMax - zMin;
+
+    
+
+    std::array<double, 3> vv1 = {points(pi0, 0),points(pi0, 1),points(pi0, 2)};
+    std::array<double, 3> vv2 = {points(pi1, 0),points(pi1, 1),points(pi1, 2)};
+    std::array<double, 3> vv3 = {points(pi2, 0),points(pi2, 1),points(pi2, 2)};
+
+    // two lines of triangle
+    auto u1 = vv2[0] - vv1[0];
+    auto u2 = vv2[1] - vv1[1];
+    auto u3 = vv2[2] - vv1[2];
+
+    auto v1 = vv3[0] - vv1[0];
+    auto v2 = vv3[1] - vv1[1];
+    auto v3 = vv3[2] - vv1[2];
+
+    // cross product
+    normal[0] = u2 * v3 - u3 * v2;
+    normal[1] = u3 * v1 - u1 * v3;
+    normal[2] = u1 * v2 - u2 * v1;
+
+    auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+
+    normal[0] /= norm;
+    normal[1] /= norm;
+    normal[2] /= norm;
+
+}
+
+
+inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) {
+  return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+}
+
+
+// export function triangleNormal(vv1:[number, number, number], vv2:[number, number, number], vv3: [number, number, number]): [number, number, number] {
+//   const u1 = vv2[0] - vv1[0]
+//   const u2 = vv2[1] - vv1[1]
+//   const u3 = vv2[2] - vv1[2]
+
+//   const v1 = vv3[0] - vv1[0]
+//   const v2 = vv3[1] - vv1[1]
+//   const v3 = vv3[2] - vv1[2]
+
+//   // # print(u1, u2, u3, v1, v2, v3)
+//   const ans = [0,0, 0]
+//   ans[0] = u2 * v3 - u3 * v2
+//   ans[1] = u3 * v1 - u1 * v3
+//   ans[2] = u1 * v2 - u2 * v1
+
+//   const normTemp = Math.sqrt(ans[0] * ans[0] + ans[1] * ans[1] + ans[2] * ans[2])
+//   return [ans[0] / normTemp, ans[1] / normTemp, ans[2] / normTemp]
+// }
+
 inline double getMaxDimTriangle(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points) {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};

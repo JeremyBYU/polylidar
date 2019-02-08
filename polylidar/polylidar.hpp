@@ -32,7 +32,7 @@
 
 namespace polylidar {
 
-
+    using vvi = std::vector<std::vector<size_t>>;
     struct Config
     {
         // 2D base configuration
@@ -46,12 +46,19 @@ namespace polylidar {
         double normThresh = DEFAULT_NORMTHRESH;
         // 4D configuration
         double allowedClass = DEFAULT_ALLOWEDCLASS;
-        // double desiredVector[3] = {0, 0, 1};
+        std::array<double, 3> desiredVector[3] = {0, 0, 1};
     };
 
     struct Polygon {
         std::vector<size_t> shell;
         std::vector<std::vector<size_t>> holes;
+        // I know this looks crazy
+        // but for some reason I need this to allow the polygon to have holes
+        // without it I could access the holes, but only ONCE. Then they would be gone
+        // i.e in python "polygon.holes" <- Now its dead the next time you acces it
+        // So I think this now makes a copy on every access. but whatever
+        vvi getHoles() const {return holes;}
+        vvi setHoles(vvi x) {holes = x;}
     };
 
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(pybind11::array_t<double> nparray, Config config);

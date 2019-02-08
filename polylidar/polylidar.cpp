@@ -7,11 +7,14 @@ using namespace pybind11::literals;
 
 namespace polylidar {
 
+    // Polygon::set()
+
     std::ostream& operator<<(std::ostream& os, const Config& config)
     {   
-        os << "Dim=" << config.dim << " alpha=" << config.alpha << " minTriangles=" << config.minTriangles 
+        os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThres=" << config.xyThresh << " minTriangles=" << config.minTriangles 
         << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
-        << " allowedClass=" << config.allowedClass;
+        << " allowedClass=" << config.allowedClass 
+        << " desiredVector= [" << (*config.desiredVector)[0] << ", " << (*config.desiredVector)[1] << ", " << (*config.desiredVector)[2] << "]";
 
         return os;
     }
@@ -49,11 +52,80 @@ namespace polylidar {
         return true;
     }
 
+    inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config) {
+        bool passZThresh = false;
+        double zDiff = 0.0;
+        std::array<double, 3> normal;
+        maxZChangeAndNormal(t, delaunay, points, zDiff, normal);
+        if (config.zThresh > 0 && zDiff < config.zThresh) {
+            passZThresh = true;
+        }
+        // std::cout<< "Normal: " <<normal[0] << ", " << normal[1] << ", " << normal[2] << std::endl;
+        auto test = config.desiredVector;
+        auto prod = std::abs(dotProduct3(normal, *config.desiredVector));
+        if (prod < config.normThresh && !passZThresh) {
+            return false;
+        }
+        return true;
+
+    }
+
+//       function validateTriangle3DClosure(
+//     t: number,
+//     delaunay: Delaunator<number>,
+//     pointsAll?: any,
+//   ) {
+//     if (!validator2D(t, delaunay, pointsAll)) {
+//       return false
+//     }
+
+//     const points = pointsOfTriangle(delaunay, t).map((p: number) => {
+//       return [
+//         pointsAll[p * config.dim],
+//         pointsAll[p * config.dim + 1],
+//         pointsAll[p * config.dim + 2],
+//       ]
+//     })
+
+//     // Check if zThresh is met, then automatically allow the triangle
+//     if (config.z_thresh) {
+//       const zMin = Math.min(points[0][2], points[1][2], points[2][2])
+//       const zMax = Math.max(points[0][2], points[1][2], points[2][2])
+//       const diff = zMax - zMin
+//       // We return early here, normal filtering doesn't apply
+//       if (diff < config.z_thresh) {
+//         return true
+//       }
+//     }
+
+//     if (config.norm_thresh) {
+//       const normal = triangleNormal(points[0], points[1], points[2])
+//       const dotProd = Math.abs(dotProduct3(normal, config.desired_vector))
+//       if (dotProd < config.norm_thresh) {
+//         return false
+//       }
+//     }
+
+//     return true
+//   }
+
     void createTriHash2(std::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config ) {
         auto points_unchecked = points.unchecked<2>();
         size_t numTriangles = std::floor(delaunay.triangles.size() / 3 );
         for (size_t t = 0; t < numTriangles; t++) {
             if(validateTriangle2D(t, delaunay, points_unchecked, config)) {
+                triHash[t] = t;
+            }
+        }
+    }
+
+    void createTriHash3(std::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config ) {
+        auto points_unchecked = points.unchecked<2>();
+        size_t numTriangles = std::floor(delaunay.triangles.size() / 3 );
+        for (size_t t = 0; t < numTriangles; t++) {
+            bool valid2D = validateTriangle2D(t, delaunay, points_unchecked, config);
+            bool valid3D = validateTriangle3D(t, delaunay, points_unchecked, config);
+            if(valid2D && valid3D) {
                 triHash[t] = t;
             }
         }
@@ -205,40 +277,6 @@ namespace polylidar {
         return allHoles;
     }
 
-//     function extractInteriorHoles(
-//   pointHash: ArrayHash,
-//   edgeHash: NumberHash,
-//   delaunay: Delaunator<number>,
-// ) {
-//   const triangles = delaunay.triangles
-//   // Check if there are leftover **interior** holes of this mesh
-//   // We will be using the same extract concave section to get these holes
-//   const allHoles = []
-//   while (1) {
-//     const edgeKeys = Object.keys(edgeHash)
-//     if (edgeKeys.length === 0) {
-//       break
-//     }
-//     const startEdge = parseFloat(edgeKeys[0])
-//     const startingPointIndex = triangles[startEdge]
-//     const stopPoint = startingPointIndex
-
-//     // note the true argument at end. This tells the concave section that this edge is hole edge
-//     const hole = concaveSection(
-//       pointHash,
-//       edgeHash,
-//       delaunay,
-//       startEdge,
-//       stopPoint,
-//       false,
-//     )
-//     allHoles.push(hole)
-//   }
-
-//   return allHoles
-// }
-
-
     Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config) {
         // point hash
         std::unordered_map<size_t, std::vector<size_t>> pointHash;
@@ -342,6 +380,9 @@ namespace polylidar {
         if (config.dim == 2) {
             createTriHash2(triHash, delaunay, points, config);
         }
+        if (config.dim == 3) {
+            createTriHash3(triHash, delaunay, points, config);
+        }
 
         while(!triHash.empty()) {
             auto seedIdx = std::begin(triHash)->first;
@@ -358,6 +399,9 @@ namespace polylidar {
         auto shape = nparray.shape();
         int rows = shape[0];
         int cols = shape[1];
+        config.dim = cols;
+
+        std::cout << "Config: " << config <<std::endl;
 
         // std::cout << "Shape " << rows << "," << cols << std::endl;
         py::array_t<double> temp;
@@ -407,7 +451,7 @@ namespace polylidar {
         // This function allows us to convert keyword arguments into a configuration struct
         Config config {dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
 
-        std::cout << "Config: " << config <<std::endl;
+        
 
         return _extractPlanesAndPolygons(nparray, config);
 

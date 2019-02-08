@@ -1,3 +1,4 @@
+from os import path
 import time
 import numpy as np
 from polylidar import Delaunator, extractPlanesAndPolygons
@@ -8,9 +9,13 @@ import seaborn as sns
 
 from testing.fixtures.hardcase1 import pointsList
 
+DIR_NAME =path.dirname(__file__)
+FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
 
 COLOR_PALETTE = sns.color_palette()
 
+def load_csv(file):
+    return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64)
 
 def plot_polygons(polygons, delaunay, points, ax):
     for poly in polygons:
@@ -105,22 +110,19 @@ def plot_points(points, ax):
     # print(triangles_shapely)
 
     
-points = np.array(pointsList)
-points = generate_test_points(num_groups=1000, seed=1)
+# points = np.array(pointsList)
+# points = generate_test_points(num_groups=10000, seed=1)
+points = load_csv('building6_example2_360.csv')
+points = points[:, :3]
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
-delaunay, planes, polygons = extractPlanesAndPolygons(points, alpha=0.0, xyThresh=20.0)
+delaunay, planes, polygons = extractPlanesAndPolygons(points, alpha=0.5, xyThresh=0.0)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
-# for poly in polygons:
-#     print("Test")
-#     # pass
-#     for hole in poly.holes:
-#         print("test1")
-#         print(poly.holes)
 
-if points.shape[0] < 1000:
+
+if points.shape[0] < 10000:
     fig, ax = plt.subplots(figsize=(10,10), nrows=1, ncols=1)
 
     # plot points
