@@ -191,8 +191,6 @@ struct DelaunatorPoint {
 void Delaunator::triangulate() {
     std::size_t n = coords.size() >> 1;
 
-    std::cout<< "Vector Length " << coords.size() << std::endl;
-
     double max_x = std::numeric_limits<double>::min();
     double max_y = std::numeric_limits<double>::min();
     double min_x = std::numeric_limits<double>::max();
@@ -431,7 +429,7 @@ Delaunator::Delaunator(pybind11::array_t<double> nparray)
         // std::cout << "Inside Delaunator Numpy Constructor" << std::endl;
         auto shape = nparray.shape();
         auto rows = shape[0];
-        auto cols = shape[1];
+        // auto cols = shape[1];
 
         // std::cout << "Shape " << rows << " , " << cols << std::endl;
 

@@ -9,18 +9,21 @@ namespace polylidar {
 
     std::ostream& operator<<(std::ostream& os, const Config& config)
     {   
-        os << "Config: Dim=" << config.dim << " alpha=" << config.alpha << " minTriangles=" << config.minTriangles 
+        os << "Dim=" << config.dim << " alpha=" << config.alpha << " minTriangles=" << config.minTriangles 
         << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
         << " allowedClass=" << config.allowedClass;
 
         return os;
     }
 
-    // void printConfig(const Config& config) {
-    //     std::cout << "Config: Dim=" << config.dim << " alpha=" << config.alpha << " minTriangles=" << config.minTriangles 
-    //     << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
-    //     << " allowedClass=" << config.allowedClass << std::endl;
-    // }
+    std::ostream& operator<<(std::ostream& os, const std::vector<size_t>& values)
+    {   
+        for (auto &&val : values) {
+            os << val << ", ";
+        }
+
+        return os;
+    }
 
     void copy2Ddata(py::array_t<double> &src, py::array_t<double> &dest) {
         auto shape = src.shape();
@@ -35,9 +38,12 @@ namespace polylidar {
     }
 
     inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config) {
-        auto radius = circumsribedRadius(t, delaunay, points);
+        // auto maxXY = getMaxDimTriangle(t, delaunay, points);
         // std::cout << "Triangle " << t << " Radius: " << radius << std::endl;
-        if (radius > 1.0 / config.alpha) {
+        if (config.alpha > 0.0 && circumsribedRadius(t, delaunay, points) > 1.0 / config.alpha) {
+            return false;
+        }
+        if (config.xyThresh > 0.0 && getMaxDimTriangle(t, delaunay, points) > config.xyThresh) {
             return false;
         }
         return true;
@@ -120,6 +126,119 @@ namespace polylidar {
         return std::make_tuple(std::move(pointHash), std::move(edgeHash), std::move(xPoint));
     }
 
+
+    std::vector<size_t> concaveSection(std::unordered_map<size_t, std::vector<size_t>> &pointHash, 
+                        std::unordered_map<size_t, size_t> &edgeHash,
+                        delaunator::Delaunator &delaunay,
+                        size_t startEdge, size_t stopPoint,
+                        bool isHole) {
+
+        // std::cout << "Inside concave section" <<std::endl;
+        std::vector<size_t> hullSection;
+
+        auto &triangles = delaunay.triangles;
+        auto &coords = delaunay.coords;
+        auto workingEdge = startEdge;
+        while (true) 
+        {
+            // std::cout << "Start while" << std::endl;
+            edgeHash.erase(workingEdge);
+            // Get the next EDGE of the SAME triangle
+            auto nextHalfEdge = nextHalfedge(workingEdge);
+            // std::cout << "nextHalf edge: " <<  nextHalfEdge <<std::endl;
+            // Get the starting point of this edge
+            auto nextPi = triangles[nextHalfEdge];
+            // std::cout<< "nextPi: " << nextPi << std::endl;
+            // std::cout<< "nextPi Coord: " << coords[2 * nextPi] << ", " << coords[2 * nextPi + 1] << std::endl;
+            // Add point to the hull section
+            hullSection.push_back(nextPi);
+            // Check if this is the stop point
+            if (nextPi == stopPoint) {
+                return hullSection;
+            }
+
+            // Get outgoing edges for this point
+            auto &nextEdges = pointHash[nextPi];
+
+            // std::cout<< "nextEdges: " << nextEdges << std::endl;
+            
+            // filter edges that have already been seen!
+            nextEdges.erase(std::remove_if(nextEdges.begin(), nextEdges.end(),
+                            [&edgeHash](size_t &e){ return edgeHash.count(e) == 0;}),
+                            nextEdges.end());
+            // std::cout<< "nextEdges after filter: " << nextEdges << std::endl;
+            if (nextEdges.size() == 1) {
+                workingEdge = nextEdges[0];
+            } else {
+                // We have a junction of outgoing edges at this point
+                auto newEdge = getHullEdge(workingEdge, nextEdges, delaunay, isHole);
+                workingEdge = newEdge;
+            }
+            // std::cout<< "Next working edge: " << workingEdge << std::endl;
+            // std::vector<size_t> nextEdgesFiltered;
+            // std::remove_copy (nextEdges.begin(), nextEdges.end(),nextEdgesFiltered.begin(),20)
+        
+        }
+
+        return hullSection;
+    }
+
+    std::vector<std::vector<size_t>> extractInteriorHoles(std::unordered_map<size_t, std::vector<size_t>> pointHash,
+                                                        std::unordered_map<size_t, size_t> edgeHash,
+                                                        delaunator::Delaunator &delaunay)
+    {
+        std::vector<std::vector<size_t>>  allHoles;
+        auto &triangles = delaunay.triangles;
+        while (true)
+        {
+            if(edgeHash.empty()) {
+                break;
+            }
+            auto startEdge = std::begin(edgeHash)->first;
+            // auto startingPointIndex = triangles[startEdge];
+            auto stopPoint = triangles[startEdge];
+            auto hole = concaveSection(pointHash, edgeHash, delaunay, startEdge, stopPoint, false);
+            allHoles.push_back(hole);
+
+        }
+
+        return allHoles;
+    }
+
+//     function extractInteriorHoles(
+//   pointHash: ArrayHash,
+//   edgeHash: NumberHash,
+//   delaunay: Delaunator<number>,
+// ) {
+//   const triangles = delaunay.triangles
+//   // Check if there are leftover **interior** holes of this mesh
+//   // We will be using the same extract concave section to get these holes
+//   const allHoles = []
+//   while (1) {
+//     const edgeKeys = Object.keys(edgeHash)
+//     if (edgeKeys.length === 0) {
+//       break
+//     }
+//     const startEdge = parseFloat(edgeKeys[0])
+//     const startingPointIndex = triangles[startEdge]
+//     const stopPoint = startingPointIndex
+
+//     // note the true argument at end. This tells the concave section that this edge is hole edge
+//     const hole = concaveSection(
+//       pointHash,
+//       edgeHash,
+//       delaunay,
+//       startEdge,
+//       stopPoint,
+//       false,
+//     )
+//     allHoles.push(hole)
+//   }
+
+//   return allHoles
+// }
+
+
     Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config) {
         // point hash
         std::unordered_map<size_t, std::vector<size_t>> pointHash;
@@ -129,12 +248,20 @@ namespace polylidar {
         ExtremePoint xPoint;
         std::tie(pointHash, edgeHash, xPoint) = constructPointHash(plane, delaunay, points);
 
+
+
         auto startingHalfEdge = xPoint.xr_he;
         auto startingPointIndex = xPoint.xr_pi;
         auto stopPoint = startingPointIndex;
+
         auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, false);
+        auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay);
 
-
+        // std::vector<std::vector<size_t>> holes;
+        Polygon poly;
+        poly.shell = std::move(shell); // TODO these are copies, use std::move?
+        poly.holes = std::move(holes);
+        return poly;
     }
 
     std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config) {
@@ -142,6 +269,7 @@ namespace polylidar {
         std::vector<Polygon> polygons;
         for(auto &&plane: planes) {
             Polygon poly = extractConcaveHull(plane, delaunay, points, config);
+            polygons.push_back(poly);
         }
         return polygons;
     }
@@ -201,6 +329,9 @@ namespace polylidar {
 
     // TODO
     bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::Delaunator &delaunay, Config &config) {
+        if(planeMesh.size() < config.minTriangles) {
+            return false;
+        }
         return true;
     }
 
@@ -237,13 +368,29 @@ namespace polylidar {
             copy2Ddata(nparray, temp);
             nparray2D = &temp;
         }
-
+        auto before = std::chrono::high_resolution_clock::now();
         delaunator::Delaunator delaunay(*nparray2D);
         delaunay.triangulate();
-
-
-        std::vector<Polygon> polygons;
+        auto after = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+        std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
+        // std::vector<Polygon> polygonsTest;
+        // Polygon testPoly;
+        // testPoly.shell = {1, 2, 3};
+        // polygonsTest.push_back(testPoly);
+        
+        before = std::chrono::high_resolution_clock::now();
         std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
+        after = std::chrono::high_resolution_clock::now();
+        elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+        std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+
+        before = std::chrono::high_resolution_clock::now();
+        std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
+        after = std::chrono::high_resolution_clock::now();
+        elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+        std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+        // std::ve
         return std::make_tuple(delaunay, planes, polygons);
 
 
@@ -253,12 +400,12 @@ namespace polylidar {
 
 
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygons(py::array_t<double> nparray, int dim = DEFAULT_DIM,
-                                  double alpha = DEFAULT_ALPHA, size_t minTriangles = DEFAULT_MINTRIANGLES,
+                                  double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                   double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH, 
                                   double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
     {
         // This function allows us to convert keyword arguments into a configuration struct
-        Config config {dim, alpha, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+        Config config {dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
 
         std::cout << "Config: " << config <<std::endl;
 

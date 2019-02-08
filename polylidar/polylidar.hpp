@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <queue>
 #include <cmath>
+#include <chrono>
 
 #include "helper.hpp"
 #include "delaunator.hpp"
@@ -20,6 +21,7 @@
 
 #define DEFAULT_DIM 2
 #define DEFAULT_ALPHA 1.0
+#define DEFAULT_XYTHRESH 0.0
 #define DEFAULT_MINTRIANGLES 20
 #define DEFAULT_MINBBOX 100.0
 #define DEFAULT_ZTHRESH 0.20
@@ -36,6 +38,7 @@ namespace polylidar {
         // 2D base configuration
         int dim = DEFAULT_DIM;
         double alpha = DEFAULT_ALPHA;
+        double xyThresh = DEFAULT_XYTHRESH;
         size_t minTriangles = DEFAULT_MINTRIANGLES;
         double minBboxArea = DEFAULT_MINBBOX;
         // 3D configuration
@@ -54,7 +57,7 @@ namespace polylidar {
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(pybind11::array_t<double> nparray, Config config);
 
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygons(pybind11::array_t<double> nparray, int dim,
-                                double alpha, size_t minTriangles,
+                                double alpha, double xyThresh, size_t minTriangles,
                                 double minBboxArea, double zThresh, 
                                 double normThresh, double allowedClass);
 }

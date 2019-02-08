@@ -32,9 +32,15 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("triangles", &delaunator::Delaunator::triangles)
         .def_readonly("halfedges", &delaunator::Delaunator::halfedges)
         .def_readonly("coords", &delaunator::Delaunator::coords);
+
+    py::class_<polylidar::Polygon>(m, "Polygon")
+        .def(py::init<>())
+        .def_readonly("shell", &polylidar::Polygon::shell)
+        .def_readonly("holes", &polylidar::Polygon::holes);
     
     m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons,
-        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "minTriangles"_a=DEFAULT_MINTRIANGLES,
+        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 

@@ -68,7 +68,9 @@
     "valarray": "cpp",
     "complex": "cpp",
     "string_view": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "chrono": "cpp",
+    "ratio": "cpp"
   },
   "cSpell.words": [
     "linf",

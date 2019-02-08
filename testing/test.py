@@ -6,16 +6,28 @@ from shapely.geometry import Polygon
 from descartes import PolygonPatch
 import seaborn as sns
 
+from testing.fixtures.hardcase1 import pointsList
+
 
 COLOR_PALETTE = sns.color_palette()
 
-# a = np.random.rand(100, 2)
-# delaunay = Delaunator(a)
-# delaunay.triangulate()
 
-# print(type(delaunay.coords))
+def plot_polygons(polygons, delaunay, points, ax):
+    for poly in polygons:
+        shell_coords = [get_point(pi, points) for pi in poly.shell]
+        outline = Polygon(shell=shell_coords)
+        outlinePatch = PolygonPatch(outline, ec='green', fill=False, linewidth=2)
+        ax.add_patch(outlinePatch)
 
-def generate_test_points(num_groups=2, dist = 100, group_size=10):
+        for hole_poly in poly.holes:
+            shell_coords = [get_point(pi, points) for pi in hole_poly]
+            outline = Polygon(shell=shell_coords)
+            outlinePatch = PolygonPatch(outline, ec='orange', fill=False, linewidth=2)
+            ax.add_patch(outlinePatch)
+
+        
+def generate_test_points(num_groups=2, dist = 100, group_size=10, seed=1):
+    np.random.seed(1)
     sigma = dist / (num_groups)
     cov = np.array([[sigma, 0], [0, sigma]])
     a = np.array([0, 0])
@@ -93,23 +105,34 @@ def plot_points(points, ax):
     # print(triangles_shapely)
 
     
-points = generate_test_points(num_groups=1000)
+points = np.array(pointsList)
+points = generate_test_points(num_groups=1000, seed=1)
+print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
-delaunay, planes, polygons = extractPlanesAndPolygons(points, alpha=.2)
+delaunay, planes, polygons = extractPlanesAndPolygons(points, alpha=0.0, xyThresh=20.0)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
+# for poly in polygons:
+#     print("Test")
+#     # pass
+#     for hole in poly.holes:
+#         print("test1")
+#         print(poly.holes)
 
+if points.shape[0] < 1000:
+    fig, ax = plt.subplots(figsize=(10,10), nrows=1, ncols=1)
 
-# fig, ax = plt.subplots(figsize=(10,10), nrows=1, ncols=1)
+    # plot points
+    plot_points(points, ax)
+    # plot all triangles
+    plot_triangles(get_triangles_from_he(delaunay.triangles, points), ax)
+    # plot mesh triangles
+    triangle_meshes = get_plane_triangles(planes, delaunay.triangles, points)
+    plot_triangle_meshes(triangle_meshes, ax)
+    # plot polygons
+    plot_polygons(polygons, delaunay, points, ax)
 
-# # plot points
-# plot_points(points, ax)
-# # plot all triangles
-# plot_triangles(get_triangles_from_he(delaunay.triangles, points), ax)
-# # plot mesh triangles
-# triangle_meshes = get_plane_triangles(planes, delaunay.triangles, points)
-# plot_triangle_meshes(triangle_meshes, ax)
-# plt.axis('equal')
+    plt.axis('equal')
 
-# plt.show()
+    plt.show()

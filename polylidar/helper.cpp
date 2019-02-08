@@ -23,18 +23,22 @@ namespace polylidar {
         return (aLength * bLength * cLength) / (area * 4.0);
     }
 
-    inline void trackExtremePoint(size_t pi, pybind11::detail::unchecked_reference<double, 2L> &points, ExtremePoint &exPoint, size_t he){
-        
-        if (points(pi,0) > exPoint.xr_val) {
-            exPoint.xr_he = he;
-            exPoint.xr_pi = pi;
-            exPoint.xr_val = points(pi, 0);
-        } else if(points(pi,1) < exPoint.xl_val) {
-            exPoint.xl_he = he;
-            exPoint.xl_pi = pi;
-            exPoint.xl_val = points(pi, 1);
+    std::ostream& operator<<(std::ostream& os, const std::array<double, 2ul>& values)
+    {   
+        for (auto &&val : values) {
+            os << val << ", ";
         }
 
+        return os;
+    }
+
+    std::ostream& operator<<(std::ostream& os, const std::vector<double>& values)
+    {
+        for (auto &&val : values) {
+            os << val << ", ";
+        }
+
+        return os;
     }
 
 }
