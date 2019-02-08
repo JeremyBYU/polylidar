@@ -28,6 +28,13 @@ namespace polylidar {
         return os;
     }
 
+    std::ostream& operator<<(std::ostream& os, const ExtremePoint &values)
+    {   
+        os << "xr_he" << values.xr_he << " xr_pi" << values.xr_pi << " xr_val" << values.xr_val;
+
+        return os;
+    }
+
     void copy2Ddata(py::array_t<double> &src, py::array_t<double> &dest) {
         auto shape = src.shape();
         auto rows = shape[0];
@@ -60,7 +67,7 @@ namespace polylidar {
         if (config.zThresh > 0 && zDiff < config.zThresh) {
             passZThresh = true;
         }
-        // std::cout<< "Normal: " <<normal[0] << ", " << normal[1] << ", " << normal[2] << std::endl;
+
         auto test = config.desiredVector;
         auto prod = std::abs(dotProduct3(normal, *config.desiredVector));
         if (prod < config.normThresh && !passZThresh) {
@@ -70,44 +77,11 @@ namespace polylidar {
 
     }
 
-//       function validateTriangle3DClosure(
-//     t: number,
-//     delaunay: Delaunator<number>,
-//     pointsAll?: any,
-//   ) {
-//     if (!validator2D(t, delaunay, pointsAll)) {
-//       return false
-//     }
+    inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config) {
+        // hmm simple for right now
+        return checkPointClass(t, delaunay, points, config.allowedClass);
+    }
 
-//     const points = pointsOfTriangle(delaunay, t).map((p: number) => {
-//       return [
-//         pointsAll[p * config.dim],
-//         pointsAll[p * config.dim + 1],
-//         pointsAll[p * config.dim + 2],
-//       ]
-//     })
-
-//     // Check if zThresh is met, then automatically allow the triangle
-//     if (config.z_thresh) {
-//       const zMin = Math.min(points[0][2], points[1][2], points[2][2])
-//       const zMax = Math.max(points[0][2], points[1][2], points[2][2])
-//       const diff = zMax - zMin
-//       // We return early here, normal filtering doesn't apply
-//       if (diff < config.z_thresh) {
-//         return true
-//       }
-//     }
-
-//     if (config.norm_thresh) {
-//       const normal = triangleNormal(points[0], points[1], points[2])
-//       const dotProd = Math.abs(dotProduct3(normal, config.desired_vector))
-//       if (dotProd < config.norm_thresh) {
-//         return false
-//       }
-//     }
-
-//     return true
-//   }
 
     void createTriHash2(std::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config ) {
         auto points_unchecked = points.unchecked<2>();
@@ -131,6 +105,25 @@ namespace polylidar {
         }
     }
 
+    void createTriHash4(std::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config ) {
+        auto points_unchecked = points.unchecked<2>();
+        // std::cout << "Delaunay size " << delaunay.coords.size();
+        size_t numTriangles = std::floor(delaunay.triangles.size() / 3 );
+        for (size_t t = 0; t < numTriangles; t++) {
+            // std::cout<< "Beginning 2D validation: " << t << std::endl;
+            bool valid2D = validateTriangle2D(t, delaunay, points_unchecked, config);
+            // std::cout<< "Beginning 3D validation: " << t << std::endl;
+            bool valid3D = validateTriangle3D(t, delaunay, points_unchecked, config);
+            // std::cout<< "Beginning 4D validation: " << t << std::endl;
+            bool valid4D = validateTriangle4D(t, delaunay, points_unchecked, config);
+            // std::cout << "Valid4D: " << valid4D << std::endl;
+            // auto valid4D = true;
+            if(valid2D && valid3D && valid4D) {
+                triHash[t] = t;
+            }
+        }
+    }
+
     std::vector<size_t> trianglesAdjacentToTriangle(size_t t, delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash) {
         std::vector<size_t> triangles;
         std::vector<size_t> edgesOfTriangle = {t * 3, t * 3 + 1, t * 3 + 2};
@@ -147,6 +140,7 @@ namespace polylidar {
         }
         return triangles;
     }
+
 
     std::tuple<std::unordered_map<size_t, std::vector<size_t>>, std::unordered_map<size_t, size_t>, ExtremePoint> constructPointHash(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points) {
         auto &triangles = delaunay.triangles;
@@ -165,6 +159,7 @@ namespace polylidar {
         // extreme point
         ExtremePoint xPoint;
         auto points_unchecked = points.unchecked<2>();
+
 
         // Loop through every triangle in the plane
         for (auto &&t : plane) {
@@ -211,8 +206,10 @@ namespace polylidar {
         auto &triangles = delaunay.triangles;
         auto &coords = delaunay.coords;
         auto workingEdge = startEdge;
+        // std::cout<< "Starting working edge: " << workingEdge << std::endl;
         while (true) 
         {
+            // std::this_thread::sleep_for(std::chrono::milliseconds(200));
             // std::cout << "Start while" << std::endl;
             edgeHash.erase(workingEdge);
             // Get the next EDGE of the SAME triangle
@@ -278,6 +275,7 @@ namespace polylidar {
     }
 
     Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config) {
+        Polygon poly;
         // point hash
         std::unordered_map<size_t, std::vector<size_t>> pointHash;
         // hash of all empty border half edges
@@ -286,17 +284,18 @@ namespace polylidar {
         ExtremePoint xPoint;
         std::tie(pointHash, edgeHash, xPoint) = constructPointHash(plane, delaunay, points);
 
-
-
+        // std::cout << "xPoint: " << xPoint << std::endl;
+        // std::cout << "Plane size: " << plane.size() << std::endl;
+        // std::cout << "Point Hash size: " << pointHash.size() << std::endl;
+        // std::cout << "Edge Hash size: " << edgeHash.size() << std::endl;
+        
         auto startingHalfEdge = xPoint.xr_he;
         auto startingPointIndex = xPoint.xr_pi;
         auto stopPoint = startingPointIndex;
-
         auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, false);
         auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay);
 
         // std::vector<std::vector<size_t>> holes;
-        Polygon poly;
         poly.shell = std::move(shell); // TODO these are copies, use std::move?
         poly.holes = std::move(holes);
         return poly;
@@ -312,35 +311,6 @@ namespace polylidar {
         return polygons;
     }
 
-    // export function extractConcaveHulls(
-    // planes: number[][],
-    // delaunay: Delaunator<number>,
-    // config: IConfig2D | IConfig3D,
-    // ): IPolygon[] {
-    // // Each plane will be a polygon with possible holes in it
-    // const concaveHulls: IPolygon[] = []
-    // for (const plane of planes) {
-    //     const cHull = extractConcaveHull(plane, delaunay, config)
-    //     concaveHulls.push(cHull)
-    // }
-
-    // return concaveHulls
-    // }
-
-//     export function trianglesAdjacentToTriangle(
-//   delaunay: Delaunator<number>,
-//   t: number,
-// ): number[] {
-//   const adjacentTriangles = []
-//   for (const e of edgesOfTriangle(t)) {
-//     const opposite = delaunay.halfedges[e]
-//     if (opposite >= 0) {
-//       adjacentTriangles.push(triangleOfEdge(opposite))
-//     }
-//   }
-
-//   return adjacentTriangles
-// }
 
     std::vector<size_t> extractMeshHash(delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash, size_t seedIdx) {
         // Construct queue for triangle neighbor expansion
@@ -383,6 +353,9 @@ namespace polylidar {
         if (config.dim == 3) {
             createTriHash3(triHash, delaunay, points, config);
         }
+        if (config.dim == 4) {
+            createTriHash4(triHash, delaunay, points, config);
+        }
 
         while(!triHash.empty()) {
             auto seedIdx = std::begin(triHash)->first;
@@ -401,7 +374,7 @@ namespace polylidar {
         int cols = shape[1];
         config.dim = cols;
 
-        std::cout << "Config: " << config <<std::endl;
+        // std::cout << "Config: " << config <<std::endl;
 
         // std::cout << "Shape " << rows << "," << cols << std::endl;
         py::array_t<double> temp;
@@ -434,7 +407,6 @@ namespace polylidar {
         after = std::chrono::high_resolution_clock::now();
         elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
         std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
-        // std::ve
         return std::make_tuple(delaunay, planes, polygons);
 
 

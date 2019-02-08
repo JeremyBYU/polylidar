@@ -11,15 +11,28 @@ struct ExtremePoint
 {
     size_t xr_he = -1;
     size_t xr_pi = -1;
-    double xr_val = std::numeric_limits<double>::min();
+    double xr_val = -1 * std::numeric_limits<double>::infinity();
     size_t xl_he = -1;
     size_t xl_pi = -1;
-    double xl_val = std::numeric_limits<double>::max();
+    double xl_val = std::numeric_limits<double>::infinity();
 
 };
 
 double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points);
 
+inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points, double allowedClass)
+{
+    auto &triangles = delaunay.triangles;
+    std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
+    auto &pi0 = pis[0];
+    auto &pi1 = pis[1];
+    auto &pi2 = pis[2];
+    // std::cout << "pi0" << pi0 << " pi1" << pi1 << " pi2" << pi0 << std::endl; 
+    // std::cout << "pi0" << points(pi0, 3) << " pi1" << points(pi1, 3) << " pi2" << points(pi2, 3) << std::endl; 
+    auto result = points(pi0, 3) == allowedClass && points(pi1, 3) == allowedClass && points(pi2, 3) == allowedClass;
+    return result;
+
+}
 inline void maxZChangeAndNormal(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points,
                                 double &diff, std::array<double, 3> &normal) {
     auto &triangles = delaunay.triangles;
@@ -65,26 +78,6 @@ inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) 
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
-
-// export function triangleNormal(vv1:[number, number, number], vv2:[number, number, number], vv3: [number, number, number]): [number, number, number] {
-//   const u1 = vv2[0] - vv1[0]
-//   const u2 = vv2[1] - vv1[1]
-//   const u3 = vv2[2] - vv1[2]
-
-//   const v1 = vv3[0] - vv1[0]
-//   const v2 = vv3[1] - vv1[1]
-//   const v3 = vv3[2] - vv1[2]
-
-//   // # print(u1, u2, u3, v1, v2, v3)
-//   const ans = [0,0, 0]
-//   ans[0] = u2 * v3 - u3 * v2
-//   ans[1] = u3 * v1 - u1 * v3
-//   ans[2] = u1 * v2 - u2 * v1
-
-//   const normTemp = Math.sqrt(ans[0] * ans[0] + ans[1] * ans[1] + ans[2] * ans[2])
-//   return [ans[0] / normTemp, ans[1] / normTemp, ans[2] / normTemp]
-// }
-
 inline double getMaxDimTriangle(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points) {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
@@ -104,7 +97,6 @@ std::ostream& operator<<(std::ostream& os, const std::array<double, 2ul>& values
 std::ostream& operator<<(std::ostream& os, const std::vector<double>& values);
 
 inline void trackExtremePoint(size_t pi, pybind11::detail::unchecked_reference<double, 2L> &points, ExtremePoint &exPoint, size_t he){
-    
     if (points(pi,0) > exPoint.xr_val) {
         exPoint.xr_he = he;
         exPoint.xr_pi = pi;
@@ -114,7 +106,6 @@ inline void trackExtremePoint(size_t pi, pybind11::detail::unchecked_reference<d
         exPoint.xl_pi = pi;
         exPoint.xl_val = points(pi, 1);
     }
-
 }
 
 inline size_t fast_mod(const size_t i, const size_t c) {

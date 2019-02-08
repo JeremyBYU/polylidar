@@ -10,6 +10,7 @@
 #include <queue>
 #include <cmath>
 #include <chrono>
+#include <thread>
 
 #include "helper.hpp"
 #include "delaunator.hpp"

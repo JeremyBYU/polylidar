@@ -15,7 +15,7 @@ FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
 COLOR_PALETTE = sns.color_palette()
 
 def load_csv(file):
-    return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64)
+    return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64, skiprows=1)
 
 def plot_polygons(polygons, delaunay, points, ax):
     for poly in polygons:
@@ -111,9 +111,10 @@ def plot_points(points, ax):
 
     
 # points = np.array(pointsList)
+# np.savetxt('hardcase2d.csv', points, fmt='%.4f', header="X,Y")
+
 # points = generate_test_points(num_groups=10000, seed=1)
 points = load_csv('building6_example2_360.csv')
-points = points[:, :3]
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
