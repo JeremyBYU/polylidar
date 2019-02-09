@@ -7,8 +7,6 @@ from shapely.geometry import Polygon
 from descartes import PolygonPatch
 import seaborn as sns
 
-from testing.fixtures.hardcase1 import pointsList
-
 DIR_NAME =path.dirname(__file__)
 FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
 
@@ -43,7 +41,7 @@ def generate_test_points(num_groups=2, dist = 100, group_size=10, seed=1):
 
     return a
 
-def get_point(pi, coords):
+def get_point(pi, points):
     return [points[pi, 0], points[pi, 1]]
 
 def get_triangles_from_he(triangles, points):
@@ -114,7 +112,7 @@ def plot_points(points, ax):
 # np.savetxt('hardcase2d.csv', points, fmt='%.4f', header="X,Y")
 
 # points = generate_test_points(num_groups=10000, seed=1)
-points = load_csv('building6_example2_360.csv')
+points = load_csv('building1.csv')
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
