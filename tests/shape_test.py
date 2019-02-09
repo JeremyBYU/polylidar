@@ -23,6 +23,10 @@ def hardcase1():
 def basic_params():
     return dict(alpha=0.5, xyThresh=0.0)
 
+@pytest.fixture()
+def hardcase1_params():
+    return dict(alpha=0.0, xyThresh=20.0)
+
 def test_verify_building1(building1):
     verify_points(building1, 4)
 
@@ -38,6 +42,22 @@ def test_building1(building1, basic_params):
     basic_polylidar_verification(building1, delaunay, planes, polygons)
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, building1)
+    # Ensure that all polygons are as expected
+
+def test_building2(building2, basic_params):
+    delaunay, planes, polygons = extractPlanesAndPolygons(building2, **basic_params)
+    # Basic test to ensure no obvious errors occurred
+    basic_polylidar_verification(building2, delaunay, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, building2)
+    # Ensure that all polygons are as expected
+
+def test_hardcase1(hardcase1, hardcase1_params):
+    delaunay, planes, polygons = extractPlanesAndPolygons(hardcase1, **hardcase1_params)
+    # Basic test to ensure no obvious errors occurred
+    basic_polylidar_verification(hardcase1, delaunay, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, hardcase1)
     # Ensure that all polygons are as expected
 
 
