@@ -1,4 +1,4 @@
-# Pollidar V2
+# Polylidar V2
 
 Polylidar allows one to extract planar meshes from a point cloud **and** their 2D projected polygons. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and is built as a python plugin.  A Typescript (javascript) version is also created as well.
 
@@ -17,7 +17,7 @@ Much of this work is possible because of the amazing library called [delaunator]
 
 Please run the tests to ensure everything is working. Pytest should be installed as it is listed as a dependency.
 
-1. `pytest`
+1. Simply type `pytest` to run tests
 
 ## Demo
 
