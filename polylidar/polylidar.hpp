@@ -1,6 +1,7 @@
 
 #ifndef POLYLIDAR
 #define POLYLIDAR
+#define _USE_MATH_DEFINES
 
 #include <array>
 #include <ostream>
@@ -59,7 +60,7 @@ namespace polylidar {
         // i.e in python "polygon.holes" <- Now its dead the next time you acces it
         // So I think this now makes a copy on every access. but whatever
         vvi getHoles() const {return holes;}
-        vvi setHoles(vvi x) {holes = x;}
+        void setHoles(vvi x) {holes = x;}
     };
 
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(pybind11::array_t<double> nparray, Config config);

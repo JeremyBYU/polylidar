@@ -1,7 +1,7 @@
 
 #ifndef POLYLIDARHELPER
 #define POLYLIDARHELPER
-
+#define _USE_MATH_DEFINES
 #include "delaunator.hpp"
 #include "polylidar.hpp"
 
