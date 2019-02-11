@@ -48,7 +48,7 @@ namespace polylidar {
         double normThresh = DEFAULT_NORMTHRESH;
         // 4D configuration
         double allowedClass = DEFAULT_ALLOWEDCLASS;
-        std::array<double, 3> desiredVector[3] = {0.0, 0.0, 1.0};
+        std::array<double, 3> desiredVector = {0.0, 0.0, 1.0};
     };
 
     struct Polygon {

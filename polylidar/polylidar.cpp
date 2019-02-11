@@ -14,10 +14,11 @@ std::ostream &operator<<(std::ostream &os, const Config &config)
     os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThres=" << config.xyThresh << " minTriangles=" << config.minTriangles
        << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
        << " allowedClass=" << config.allowedClass
-       << " desiredVector= [" << (*config.desiredVector)[0] << ", " << (*config.desiredVector)[1] << ", " << (*config.desiredVector)[2] << "]";
+       << " desiredVector= [" << (config.desiredVector)[0] << ", " << (config.desiredVector)[1] << ", " << (config.desiredVector)[2] << "]";
 
     return os;
 }
+
 
 std::ostream &operator<<(std::ostream &os, const std::vector<size_t> &values)
 {
@@ -77,7 +78,7 @@ inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybin
     }
 
     auto test = config.desiredVector;
-    auto prod = std::abs(dotProduct3(normal, *config.desiredVector));
+    auto prod = std::abs(dotProduct3(normal, config.desiredVector));
     if (prod < config.normThresh && !passZThresh)
     {
         return false;
