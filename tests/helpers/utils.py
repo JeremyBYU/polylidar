@@ -39,7 +39,7 @@ def verify_valid_polygon(poly, points):
     # Verify polygon outer shell
     shapelyPoly = Polygon(shell=shell_coords)
     assert shapelyPoly.is_valid
-    # Verify polygon outer shell
+    # Verify polygon outer shell and holes
     shapelyPoly = Polygon(shell=shell_coords, holes=hold_coords)
     assert shapelyPoly.is_valid
 

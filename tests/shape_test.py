@@ -4,7 +4,7 @@ import numpy as np
 
 
 from tests.helpers.utils import load_csv, verify_points, basic_polylidar_verification, verify_all_polygons_are_valid
-from polylidar import extractPlanesAndPolygons
+from polylidar import extractPlanesAndPolygons, extractPolygons
 
 
 @pytest.fixture
@@ -42,7 +42,11 @@ def test_building1(building1, basic_params):
     basic_polylidar_verification(building1, delaunay, planes, polygons)
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, building1)
-    # Ensure that all polygons are as expected
+    # Test just polygon extraction
+    polygons = extractPolygons(building1, **basic_params)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, building1)
+
 
 def test_building2(building2, basic_params):
     delaunay, planes, polygons = extractPlanesAndPolygons(building2, **basic_params)
@@ -51,6 +55,10 @@ def test_building2(building2, basic_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, building2)
     # Ensure that all polygons are as expected
+    # Test just polygon extraction
+    polygons = extractPolygons(building2, **basic_params)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, building2)
 
 def test_hardcase1(hardcase1, hardcase1_params):
     delaunay, planes, polygons = extractPlanesAndPolygons(hardcase1, **hardcase1_params)
@@ -59,6 +67,10 @@ def test_hardcase1(hardcase1, hardcase1_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, hardcase1)
     # Ensure that all polygons are as expected
+    # Test just polygon extraction
+    polygons = extractPolygons(hardcase1, **hardcase1_params)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, hardcase1)
 
 
 

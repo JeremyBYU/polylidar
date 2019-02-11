@@ -69,6 +69,11 @@ namespace polylidar {
                                 double alpha, double xyThresh, size_t minTriangles,
                                 double minBboxArea, double zThresh, 
                                 double normThresh, double allowedClass);
+
+    std::vector<Polygon>  extractPolygons(pybind11::array_t<double> nparray, int dim,
+                                double alpha, double xyThresh, size_t minTriangles,
+                                double minBboxArea, double zThresh, 
+                                double normThresh, double allowedClass);
 }
 
 

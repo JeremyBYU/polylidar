@@ -179,10 +179,10 @@ inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdg
 
     // YOUR SELECTING ANGLE
     if (isHole) {
-        int min_pos = std::distance(angleDist.begin(),std::min_element(angleDist.begin(),angleDist.end()));
+        auto min_pos = std::distance(angleDist.begin(),std::min_element(angleDist.begin(),angleDist.end()));
         return outgoingEdges[min_pos];
     } else {
-        int max_pos = std::distance(angleDist.begin(),std::max_element(angleDist.begin(),angleDist.end()));
+        auto max_pos = std::distance(angleDist.begin(),std::max_element(angleDist.begin(),angleDist.end()));
         return outgoingEdges[max_pos];
     }
 
