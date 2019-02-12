@@ -19,7 +19,6 @@ std::ostream &operator<<(std::ostream &os, const Config &config)
     return os;
 }
 
-
 std::ostream &operator<<(std::ostream &os, const std::vector<size_t> &values)
 {
     for (auto &&val : values)
@@ -432,6 +431,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
         copy2Ddata(nparray, temp);
         nparray2D = &temp;
     }
+    std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();
@@ -478,6 +478,7 @@ std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config
         copy2Ddata(nparray, temp);
         nparray2D = &temp;
     }
+    // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();

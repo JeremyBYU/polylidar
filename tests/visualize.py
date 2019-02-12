@@ -113,6 +113,11 @@ def plot_points(points, ax):
 
 # points = generate_test_points(num_groups=10000, seed=1)
 points = load_csv('building1.csv')
+# print(points.flags)
+# points = np.ascontiguousarray(points[:, :2])
+# noise = np.random.randn(points.shape[0], 2) * .10
+# points[:, :2] = points[:, :2] + noise
+# print(points.flags)
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()

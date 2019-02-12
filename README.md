@@ -35,5 +35,9 @@ You can see a demo in action py running `python tests/visualize.py`. Requires `m
 | 10,000   | 5         |
 |          |           |
 
+## Issues
+
+* If there are coincident points then it seems the delaunator cpp library gets stuck in an infinite loop. Add a very small amount of noise to the data to ensure this doesn't happen.
+
 
 
