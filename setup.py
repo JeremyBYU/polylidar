@@ -44,6 +44,7 @@ ext_modules = [
             get_pybind_include(),
             get_pybind_include(user=True),
             get_numpy_include(),
+            '/home/nvidia/home/nvidia/Envs/unreal/include/site/python3.5',
             'polylidar/'
         ],
         language='c++'
