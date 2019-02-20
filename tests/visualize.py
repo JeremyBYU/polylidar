@@ -12,6 +12,12 @@ FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
 
 COLOR_PALETTE = sns.color_palette()
 
+def get_poly_coords(outline, points):
+    return [get_point(pi, points) for pi in outline]
+
+def get_point(pi, points):
+    return [points[pi, 0], points[pi, 1]]
+
 def load_csv(file):
     return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64, skiprows=1)
 
@@ -113,6 +119,7 @@ def plot_points(points, ax):
 
 # points = generate_test_points(num_groups=10000, seed=1)
 points = load_csv('building1.csv')
+points = np.load("scratch/error_56000.npy")
 # print(points.flags)
 # points = np.ascontiguousarray(points[:, :2])
 # noise = np.random.randn(points.shape[0], 2) * .10
@@ -121,23 +128,45 @@ points = load_csv('building1.csv')
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
-delaunay, planes, polygons = extractPlanesAndPolygons(points, alpha=0.5, xyThresh=0.0)
+delaunay, planes, polygons = extractPlanesAndPolygons(points)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 
 
-if points.shape[0] < 10000:
+# for plane in planes:
+#     new_plane = []
+#     for t in plane:
+#         new_plane.append(t)
+#     new_plane = np.array(new_plane)
+#     print(new_plane.shape)
+#     print("Min: {}, Max: {}".format(new_plane.min(), new_plane.max()))
+
+
+for i, poly in enumerate(polygons):
+    shell_coords = get_poly_coords(poly.shell, points)
+    hold_coords = [get_poly_coords(hole, points) for hole in poly.holes]
+    poly_shape = Polygon(shell=shell_coords, holes=hold_coords)
+    print(i, poly_shape.is_valid, poly_shape.area)
+
+# import pdb; pdb.set_trace()
+
+if points.shape[0] < 100000:
     fig, ax = plt.subplots(figsize=(10,10), nrows=1, ncols=1)
 
     # plot points
     plot_points(points, ax)
     # plot all triangles
-    plot_triangles(get_triangles_from_he(delaunay.triangles, points), ax)
+    # plot_triangles(get_triangles_from_he(delaunay.triangles, points), ax)
     # plot mesh triangles
-    triangle_meshes = get_plane_triangles(planes, delaunay.triangles, points)
-    plot_triangle_meshes(triangle_meshes, ax)
+    # triangle_meshes = get_plane_triangles(planes, delaunay.triangles, points)
+    # plot_triangle_meshes(triangle_meshes, ax)
     # plot polygons
-    plot_polygons(polygons, delaunay, points, ax)
+    poly = polygons[18]
+    shell_coords = get_poly_coords(poly.shell, points)
+    hold_coords = [get_poly_coords(hole, points) for hole in poly.holes]
+    poly_shape = Polygon(shell=shell_coords, holes=hold_coords)
+    print(poly_shape.is_valid, poly_shape.area)
+    plot_polygons([polygons[18]], delaunay, points, ax)
 
     plt.axis('equal')
 

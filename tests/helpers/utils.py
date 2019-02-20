@@ -41,6 +41,8 @@ def verify_valid_polygon(poly, points):
     assert shapelyPoly.is_valid
     # Verify polygon outer shell and holes
     shapelyPoly = Polygon(shell=shell_coords, holes=hold_coords)
+#     if not shapelyPoly.is_valid:
+#         np.save("scratch/error_{}.npy".format(points.shape[0]), points)
     assert shapelyPoly.is_valid
 
 

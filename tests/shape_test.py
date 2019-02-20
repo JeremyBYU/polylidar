@@ -73,6 +73,21 @@ def test_hardcase1(hardcase1, hardcase1_params):
     verify_all_polygons_are_valid(polygons, hardcase1)
 
 
+ts = range(1000, 100000, 1000)  # This creates 100 numpy arrays frangin from (1000,2) -> (100000,2)
+np.random.seed(1)
+@pytest.fixture(params=ts)
+def random_points(request):
+    points = np.random.randn(request.param, 2) * 100 +  700000
+    # points[0, :] = [1.0,1.0]
+    # points[10, :] = [1.0,1.0]
+    return points
+
+def test_random_points(random_points):
+    delaunay, planes, polygons = extractPlanesAndPolygons(random_points)
+    # Basic test to ensure no obvious errors occurred
+    # basic_polylidar_verification(random_points, delaunay, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, random_points)
 
 
 

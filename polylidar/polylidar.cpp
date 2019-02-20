@@ -4,6 +4,8 @@ double DESIRED_VECTOR[3] = {0.0, 0.0, 1.0};
 namespace py = pybind11;
 using namespace pybind11::literals;
 
+std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+
 namespace polylidar
 {
 
@@ -318,12 +320,18 @@ Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &de
     ExtremePoint xPoint;
     std::tie(pointHash, edgeHash, xPoint) = constructPointHash(plane, delaunay, points);
 
-    // std::cout << "xPoint: " << xPoint << std::endl;
-    // std::cout << "Plane size: " << plane.size() << std::endl;
-    // std::cout << "Point Hash size: " << pointHash.size() << std::endl;
-    // std::cout << "Edge Hash size: " << edgeHash.size() << std::endl;
 
     auto startingHalfEdge = xPoint.xr_he;
+    // Error checking, just in case the extreme right point has a hole connected to it
+    auto &nextEdges = pointHash[xPoint.xr_pi];
+    if (nextEdges.size() > 1) {
+        // std::cout << "Right extreme point is connected to a hole. Determining correct edge..." << std::endl;
+        // std::cout << "xPoint: " << xPoint << std::endl;
+        // std::cout << "Plane size: " << plane.size() << std::endl;
+        // std::cout << "Point Hash size: " << pointHash.size() << std::endl;
+        // std::cout << "Edge Hash size: " << edgeHash.size() << std::endl;
+        startingHalfEdge= getHullEdgeStart(UP_VECTOR, nextEdges, delaunay, false);
+    }
     auto startingPointIndex = xPoint.xr_pi;
     auto stopPoint = startingPointIndex;
     auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, false);
@@ -431,7 +439,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
         copy2Ddata(nparray, temp);
         nparray2D = &temp;
     }
-    std::cout << "Before Delaunay" << std::endl;
+    // std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();

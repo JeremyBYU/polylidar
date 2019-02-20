@@ -188,6 +188,38 @@ inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdg
 
 }
 
+
+inline size_t getHullEdgeStart(std::array<double, 2> &v1, std::vector<size_t> &outgoingEdges,  delaunator::Delaunator &delaunay, bool isHole=false)
+{
+    // std::cout << "v1: " << v1 << std::endl; 
+    std::vector<std::array<double, 2>> otherVectors;
+    // Gosh everything is so verbose with c++, even with the c11+ stdlib
+    std::transform(outgoingEdges.begin(), outgoingEdges.end(), std::back_inserter(otherVectors), 
+                    [&delaunay](size_t edge) -> std::array<double,2> {return getVector(edge, delaunay, false);});
+
+    // for (auto &&vecs : otherVectors) {
+    //     std::cout << "other vec " << vecs << std::endl;
+    // }
+    
+    std::vector<double> angleDist;
+    std::transform(otherVectors.begin(), otherVectors.end(), std::back_inserter(angleDist), 
+                [&v1](std::array<double,2> &outVector) -> double {return get360Angle(v1, outVector);});
+    
+    // for (auto &&angle : angleDist) {
+    //     std::cout << "angle " << angle << std::endl;
+    // }
+
+    // YOUR SELECTING ANGLE
+    if (isHole) {
+        auto min_pos = std::distance(angleDist.begin(),std::min_element(angleDist.begin(),angleDist.end()));
+        return outgoingEdges[min_pos];
+    } else {
+        auto max_pos = std::distance(angleDist.begin(),std::max_element(angleDist.begin(),angleDist.end()));
+        return outgoingEdges[max_pos];
+    }
+
+}
+
 }
 
 
