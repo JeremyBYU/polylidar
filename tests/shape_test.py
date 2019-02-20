@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 
-from tests.helpers.utils import load_csv, verify_points, basic_polylidar_verification, verify_all_polygons_are_valid
+from tests.helpers.utils import load_csv, verify_points, basic_polylidar_verification, verify_all_polygons_are_valid, load_npy
 from polylidar import extractPlanesAndPolygons, extractPolygons
 
 
@@ -19,6 +19,10 @@ def building2():
 def hardcase1():
     return load_csv("hardcase1.csv")
 
+@pytest.fixture
+def bad_convex_hull():
+    return load_npy("possible_error_free.npy")
+
 @pytest.fixture()
 def basic_params():
     return dict(alpha=0.5, xyThresh=0.0)
@@ -26,6 +30,10 @@ def basic_params():
 @pytest.fixture()
 def hardcase1_params():
     return dict(alpha=0.0, xyThresh=20.0)
+
+@pytest.fixture()
+def bad_convex_hull_params():
+    return dict(alpha=0.0, xyThresh=1300.0)
 
 def test_verify_building1(building1):
     verify_points(building1, 4)
@@ -71,6 +79,18 @@ def test_hardcase1(hardcase1, hardcase1_params):
     polygons = extractPolygons(hardcase1, **hardcase1_params)
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, hardcase1)
+
+def test_bad_convex_hull(bad_convex_hull, bad_convex_hull_params):
+    delaunay, planes, polygons = extractPlanesAndPolygons(bad_convex_hull, **bad_convex_hull_params)
+    # Basic test to ensure no obvious errors occurred
+    basic_polylidar_verification(bad_convex_hull, delaunay, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, bad_convex_hull)
+    # Ensure that all polygons are as expected
+    # Test just polygon extraction
+    polygons = extractPolygons(bad_convex_hull, **bad_convex_hull_params)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, bad_convex_hull)
 
 
 ts = range(1000, 100000, 1000)  # This creates 100 numpy arrays frangin from (1000,2) -> (100000,2)

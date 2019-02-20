@@ -17,6 +17,9 @@ def get_point(pi, points):
 def load_csv(file):
     return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64, skiprows=1)
 
+def load_npy(file):
+    return np.load(path.join(FIXTURES_DIR, file))
+
 def verify_points(data, n_cols=2):
     assert isinstance(data, np.ndarray)
     assert data.shape[1] == n_cols
