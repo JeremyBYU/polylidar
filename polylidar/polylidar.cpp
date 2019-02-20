@@ -262,6 +262,13 @@ std::vector<size_t> concaveSection(std::unordered_map<size_t, std::vector<size_t
         // Get outgoing edges for this point
         auto &nextEdges = pointHash[nextPi];
 
+        if (nextEdges.size() == 0)
+        {
+            std::cout<< "ERROR! Found a broken edge when extracting a concave section (most likely during hole extraction). Possible that delaunator mislabeled an edge as part of the convex hull" << std::endl;
+            // return empty hull
+            return std::vector<size_t>();
+        }
+
         // std::cout<< "nextEdges: " << nextEdges << std::endl;
 
         // filter edges that have already been seen!
@@ -293,6 +300,7 @@ std::vector<std::vector<size_t>> extractInteriorHoles(std::unordered_map<size_t,
 {
     std::vector<std::vector<size_t>> allHoles;
     auto &triangles = delaunay.triangles;
+    // std::cout<< "Starting extracting Interior Holes" << std::endl;
     while (true)
     {
         if (edgeHash.empty())
@@ -303,7 +311,9 @@ std::vector<std::vector<size_t>> extractInteriorHoles(std::unordered_map<size_t,
         // auto startingPointIndex = triangles[startEdge];
         auto stopPoint = triangles[startEdge];
         auto hole = concaveSection(pointHash, edgeHash, delaunay, startEdge, stopPoint, false);
-        allHoles.push_back(hole);
+        if (hole.size() > 0){
+            allHoles.push_back(hole);
+        }
     }
 
     return allHoles;
@@ -439,7 +449,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
         copy2Ddata(nparray, temp);
         nparray2D = &temp;
     }
-    // std::cout << "Before Delaunay" << std::endl;
+    std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();

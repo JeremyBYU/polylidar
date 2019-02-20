@@ -119,7 +119,7 @@ def plot_points(points, ax):
 
 # points = generate_test_points(num_groups=10000, seed=1)
 points = load_csv('building1.csv')
-points = np.load("scratch/error_56000.npy")
+points = np.load("scratch/possible_error_free.npy")
 # print(points.flags)
 # points = np.ascontiguousarray(points[:, :2])
 # noise = np.random.randn(points.shape[0], 2) * .10
@@ -128,7 +128,7 @@ points = np.load("scratch/error_56000.npy")
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
-delaunay, planes, polygons = extractPlanesAndPolygons(points)
+delaunay, planes, polygons = extractPlanesAndPolygons(points, xyThresh=1300.0, alpha=0.0, minTriangles=20)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 
@@ -144,8 +144,11 @@ print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 
 for i, poly in enumerate(polygons):
     shell_coords = get_poly_coords(poly.shell, points)
-    hold_coords = [get_poly_coords(hole, points) for hole in poly.holes]
-    poly_shape = Polygon(shell=shell_coords, holes=hold_coords)
+    # print(poly.shell)
+    # print(poly.holes)
+    hole_coords = [get_poly_coords(hole, points) for hole in poly.holes]
+    # print(hole_coords)
+    poly_shape = Polygon(shell=shell_coords, holes=hole_coords)
     print(i, poly_shape.is_valid, poly_shape.area)
 
 # import pdb; pdb.set_trace()
@@ -156,17 +159,18 @@ if points.shape[0] < 100000:
     # plot points
     plot_points(points, ax)
     # plot all triangles
-    # plot_triangles(get_triangles_from_he(delaunay.triangles, points), ax)
+    plot_triangles(get_triangles_from_he(delaunay.triangles, points), ax)
     # plot mesh triangles
-    # triangle_meshes = get_plane_triangles(planes, delaunay.triangles, points)
-    # plot_triangle_meshes(triangle_meshes, ax)
+    triangle_meshes = get_plane_triangles(planes, delaunay.triangles, points)
+    plot_triangle_meshes(triangle_meshes, ax)
+    plot_polygons(polygons, delaunay, points, ax)
     # plot polygons
-    poly = polygons[18]
-    shell_coords = get_poly_coords(poly.shell, points)
-    hold_coords = [get_poly_coords(hole, points) for hole in poly.holes]
-    poly_shape = Polygon(shell=shell_coords, holes=hold_coords)
-    print(poly_shape.is_valid, poly_shape.area)
-    plot_polygons([polygons[18]], delaunay, points, ax)
+    # poly = polygons[0]
+    # shell_coords = get_poly_coords(poly.shell, points)
+    # hold_coords = [get_poly_coords(hole, points) for hole in poly.holes]
+    # poly_shape = Polygon(shell=shell_coords, holes=hold_coords)
+    # print(poly_shape.is_valid, poly_shape.area)
+    # plot_polygons([polygons[0]], delaunay, points, ax)
 
     plt.axis('equal')
 
