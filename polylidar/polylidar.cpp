@@ -456,10 +456,6 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     auto after = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
-    // std::vector<Polygon> polygonsTest;
-    // Polygon testPoly;
-    // testPoly.shell = {1, 2, 3};
-    // polygonsTest.push_back(testPoly);
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);

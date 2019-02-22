@@ -26,7 +26,30 @@ You can see a demo in action py running `python tests/visualize.py`. Requires `m
 
 ## API
 
-`delaunay, planes, polygons = extractPlanesAndPolygons(point_cloud:ndarray`)
+What are the inputs to the code?  The input arguments are a **contiguous** numpy array with length N and 2,3,or 4 columns depending on your data.  There are also configuration options as well that you can pass as keyword arguments.
+
+What are the outputs?
+
+* Delaunay - This is a C++ class data structure that has information about your triangles, half edges, and point indices. Read more [here](https://mapbox.github.io/delaunator/).
+* planes - This is a *list* of C++ *vectors* holding `ints`. Each vector is an extracted plane.  The `ints` correspond to triangle indices.
+* polygons - This is a *list* of C++ `polygon` data structure.
+* polygon - This is a struct that has two fields: shell and holes. Shell is a *vector* of `ints`, where each int represents a *point* index. Holes is a list of a vector of `ints`. Each vector represents a hole in the polygon.
+
+Example calls
+```python
+from polylidar import extractPlanesAndPolygons, extractPolygons, Delaunator
+
+# You want everything!
+delaunay, planes, polygons = extractPlanesAndPolygons(point_cloud:ndarray)
+
+# Show me JUST the polygons!
+polygons = extractPolygons(point_cloud:ndarray)
+
+# Also if you just want fast 2D delaunay triangulation, no polylidar
+delaunay = Delaunator(point_cloud:ndarray)
+```
+
+
 
 ## Benchmark
 
@@ -37,7 +60,7 @@ You can see a demo in action py running `python tests/visualize.py`. Requires `m
 
 ## Issues
 
-* If there are coincident points then it seems the delaunator cpp library gets stuck in an infinite loop. Add a very small amount of noise to the data to ensure this doesn't happen.
+* If there are coincident points then it seems the delaunator cpp library gets stuck in an infinite loop (sometimes?). Add a very small amount of noise to the data (jitter) to ensure this doesn't happen.
 
 
 
