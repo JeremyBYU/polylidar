@@ -12,6 +12,7 @@
 #include <cmath>
 #include <chrono>
 #include <thread>
+#include <iomanip>
 
 #include "helper.hpp"
 #include "delaunator.hpp"

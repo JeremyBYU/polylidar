@@ -56,7 +56,7 @@ inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, pybin
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
     // std::cout << "Triangle " << t << " Radius: " << radius << std::endl;
-    if (config.alpha > 0.0 && circumsribedRadius(t, delaunay, points) > 1.0 / config.alpha)
+    if (config.alpha > 0.0 && circumsribedRadius(t, delaunay, points) > config.alpha)
     {
         return false;
     }
@@ -404,7 +404,7 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
 {
     std::vector<std::vector<size_t>> planes;
     std::unordered_map<size_t, size_t> triHash;
-
+    // auto before = std::chrono::high_resolution_clock::now();
     if (config.dim == 2)
     {
         createTriHash2(triHash, delaunay, points, config);
@@ -417,7 +417,9 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     {
         createTriHash4(triHash, delaunay, points, config);
     }
-
+    // auto after = std::chrono::high_resolution_clock::now();
+    // double elapsed = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Tri Hash Creation took " << elapsed << " milliseconds" << std::endl;
     while (!triHash.empty())
     {
         auto seedIdx = std::begin(triHash)->first;
@@ -497,20 +499,20 @@ std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
+    double elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
-    elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+    double elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
-    elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+    double elapsed_ch = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
     return polygons;
 }
 
