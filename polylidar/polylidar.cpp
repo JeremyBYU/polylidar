@@ -499,20 +499,65 @@ std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
-    double elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
-    double elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
-    double elapsed_ch = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    float elapsed_ch = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
+    return polygons;
+}
+
+std::vector<Polygon> _extractPolygonsAndTimings(py::array_t<double> nparray, Config config, std::vector<float> &timings)
+{
+    auto shape = nparray.shape();
+    int rows = shape[0];
+    int cols = shape[1];
+    config.dim = cols;
+
+    // std::cout << "Config: " << config <<std::endl;
+
+    // std::cout << "Shape " << rows << "," << cols << std::endl;
+    py::array_t<double> temp;
+    py::array_t<double> *nparray2D;
+    nparray2D = &nparray;
+    if (cols > 2)
+    {
+        temp.resize({rows, 2});
+        copy2Ddata(nparray, temp);
+        nparray2D = &temp;
+    }
+    // std::cout << "Beginning Delaunay" << std::endl;
+    auto before = std::chrono::high_resolution_clock::now();
+    delaunator::Delaunator delaunay(*nparray2D);
+    delaunay.triangulate();
+    auto after = std::chrono::high_resolution_clock::now();
+    float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
+
+    before = std::chrono::high_resolution_clock::now();
+    std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
+    after = std::chrono::high_resolution_clock::now();
+    float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
+
+    before = std::chrono::high_resolution_clock::now();
+    std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
+    after = std::chrono::high_resolution_clock::now();
+    float elapsed_ch = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
+    timings.push_back(elapsed_d);
+    timings.push_back(elapsed_ep);
+    timings.push_back(elapsed_ch);
+
     return polygons;
 }
 
@@ -534,6 +579,19 @@ std::vector<Polygon> extractPolygons(py::array_t<double> nparray, int dim = DEFA
     // This function allows us to convert keyword arguments into a configuration struct
     Config config{dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
     return _extractPolygons(nparray, config);
+}
+
+std::tuple<std::vector<Polygon>, std::vector<float>> extractPolygonsAndTimings(py::array_t<double> nparray, int dim = DEFAULT_DIM,
+                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, size_t minTriangles = DEFAULT_MINTRIANGLES,
+                                     double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
+                                     double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
+{
+    // This function allows us to convert keyword arguments into a configuration struct
+    Config config{dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    std::vector<float> timings;
+    auto polygons = _extractPolygonsAndTimings(nparray, config, timings);
+    
+    return std::make_tuple(polygons, timings);
 }
 
 } // namespace polylidar

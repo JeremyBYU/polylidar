@@ -52,6 +52,12 @@ PYBIND11_MODULE(polylidar, m)
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
+    m.def("extractPolygonsAndTimings", &polylidar::extractPolygonsAndTimings,
+        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "minTriangles"_a=DEFAULT_MINTRIANGLES,
+        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
+        "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;
