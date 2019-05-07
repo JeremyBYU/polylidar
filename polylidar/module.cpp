@@ -32,6 +32,7 @@ PYBIND11_MODULE(polylidar, m)
         .def("triangulate", &delaunator::Delaunator::triangulate)
         .def_readonly("triangles", &delaunator::Delaunator::triangles)
         .def_readonly("halfedges", &delaunator::Delaunator::halfedges)
+        .def_readonly("hull_tri", &delaunator::Delaunator::hull_tri)
         .def_readonly("coords", &delaunator::Delaunator::coords);
 
     py::class_<polylidar::Polygon>(m, "Polygon")

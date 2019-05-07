@@ -23,10 +23,12 @@ std::ostream &operator<<(std::ostream &os, const Config &config)
 
 std::ostream &operator<<(std::ostream &os, const std::vector<size_t> &values)
 {
+    os << "[";
     for (auto &&val : values)
     {
         os << val << ", ";
     }
+    os << "]";
 
     return os;
 }
@@ -146,45 +148,60 @@ void createTriHash4(std::unordered_map<size_t, size_t> &triHash, delaunator::Del
     }
 }
 
-std::vector<size_t> trianglesAdjacentToTriangle(size_t t, delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash)
-{
-    std::vector<size_t> triangles;
-    std::vector<size_t> edgesOfTriangle = {t * 3, t * 3 + 1, t * 3 + 2};
-    for (auto &&e : edgesOfTriangle)
-    {
-        auto opposite = delaunay.halfedges[e];
-        if (opposite >= 0)
-        {
-            // convert opposite edge to a triangle
-            // TODO static_cast<size_t>
-            size_t tn = std::floor(opposite / 3);
-            if (triHash.count(tn) > 0)
-            {
-                triangles.push_back(tn);
-            }
-        }
-    }
-    return triangles;
-}
+// std::vector<size_t> trianglesAdjacentToTriangle(size_t t, delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash)
+// {
+//     std::vector<size_t> triangles;
+//     std::vector<size_t> edgesOfTriangle = {t * 3, t * 3 + 1, t * 3 + 2};
+//     for (auto &&e : edgesOfTriangle)
+//     {
+//         auto opposite = delaunay.halfedges[e];
+//         if (opposite >= 0)
+//         {
+//             // convert opposite edge to a triangle
+//             // TODO static_cast<size_t>
+//             size_t tn = std::floor(opposite / 3);
+//             if (triHash.count(tn) > 0)
+//             {
+//                 triangles.push_back(tn);
+//             }
+//         }
+//     }
+//     return triangles;
+// }
 
-std::tuple<std::unordered_map<size_t, std::vector<size_t>>, std::unordered_map<size_t, size_t>, ExtremePoint> constructPointHash(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points)
+void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, py::array_t<double> &points,
+                        std::unordered_map<size_t, std::vector<size_t>> &pointHash, std::unordered_map<size_t, size_t> &edgeHash,
+                        ExtremePoint &xPoint)
 {
     auto &triangles = delaunay.triangles;
     auto &halfedges = delaunay.halfedges;
-    // all incoming half eddges to a point index
-    std::unordered_map<size_t, std::vector<size_t>> pointHash;
+
     // all valid triangles
     std::unordered_map<size_t, size_t> triHash;
-    // all empty border half edges
-    std::unordered_map<size_t, size_t> edgeHash;
+
+    // THIS REDUCED THIS FUNCTIONS RUNTIME BY 1/2
+    // LESS ALLOCATIONS AND HASH COLLISIONS
+    size_t max_triangles = static_cast<size_t>(plane.size());
+    triHash.reserve(max_triangles);
+
+    // This does not seem to make much of a difference
+    // But it does not hurt it
+    size_t nominal_edges = static_cast<size_t>(std::sqrt(max_triangles) * 3);
+    pointHash.reserve(nominal_edges);
+    edgeHash.reserve(nominal_edges);
+
+    // auto before = std::chrono::high_resolution_clock::now();
+    // This for loop takes up about 50% the execution time of constructPointHash
     // create a hash of all triangles in this plane set
     for (auto &&t : plane)
     {
         triHash[t] = t;
     }
+    // auto after = std::chrono::high_resolution_clock::now();
+    // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // std::cout << "ConstructPointHash - Time creating triangle Hash (ms): " << elapsed.count() << std::endl;
 
-    // extreme point
-    ExtremePoint xPoint;
+
     auto points_unchecked = points.unchecked<2>();
 
     // Loop through every triangle in the plane
@@ -200,7 +217,7 @@ std::tuple<std::unordered_map<size_t, std::vector<size_t>>, std::unordered_map<s
             // TODO static_cast<size_t>
             size_t oppT = std::floor(oppHe / 3);
             // check if this triangle (oppT) is on the convex hull or removed
-            if (triHash.count(oppT) == 0)
+            if (triHash.find(oppT) == triHash.end())
             {
                 // Record this edge
                 edgeHash[heIndex] = heIndex;
@@ -208,9 +225,10 @@ std::tuple<std::unordered_map<size_t, std::vector<size_t>>, std::unordered_map<s
                 auto pi = triangles[heIndex];
                 trackExtremePoint(pi, points_unchecked, xPoint, heIndex);
                 // Check if the point has already been indexed
-                if (pointHash.count(pi) == 0)
+                if (pointHash.find(pi) == pointHash.end())
                 {
                     // construct a new vector holding this half edge index
+                    // pointHash.insert(std::make_pair(pi, std::vector<size_t>(1, heIndex))); // No improvement
                     pointHash[pi] = std::vector<size_t>(1, heIndex);
                 }
                 else
@@ -222,7 +240,6 @@ std::tuple<std::unordered_map<size_t, std::vector<size_t>>, std::unordered_map<s
         }
     }
 
-    return std::make_tuple(std::move(pointHash), std::move(edgeHash), std::move(xPoint));
 }
 
 std::vector<size_t> concaveSection(std::unordered_map<size_t, std::vector<size_t>> &pointHash,
@@ -264,7 +281,7 @@ std::vector<size_t> concaveSection(std::unordered_map<size_t, std::vector<size_t
 
         if (nextEdges.size() == 0)
         {
-            std::cout<< "ERROR! Found a broken edge when extracting a concave section (most likely during hole extraction). Possible that delaunator mislabeled an edge as part of the convex hull" << std::endl;
+            std::cerr<< "ERROR! Found a broken edge when extracting a concave section (most likely during hole extraction). Possible that delaunator mislabeled an edge as part of the convex hull" << std::endl;
             // return empty hull
             return std::vector<size_t>();
         }
@@ -319,17 +336,30 @@ std::vector<std::vector<size_t>> extractInteriorHoles(std::unordered_map<size_t,
     return allHoles;
 }
 
-Polygon extractConcaveHull(std::vector<size_t> plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
 {
     Polygon poly;
-    // point hash
+    // point hash map
     std::unordered_map<size_t, std::vector<size_t>> pointHash;
     // hash of all empty border half edges
     std::unordered_map<size_t, size_t> edgeHash;
     // the left and right most extreme points
     ExtremePoint xPoint;
-    std::tie(pointHash, edgeHash, xPoint) = constructPointHash(plane, delaunay, points);
 
+    // 99.6% of the time inside extractConcaveHull is inside constructPointHash
+    // auto before = std::chrono::high_resolution_clock::now();
+    constructPointHash(plane, delaunay, points, pointHash, edgeHash, xPoint);
+    // auto after = std::chrono::high_resolution_clock::now();
+    // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // std::cout << "ConstructPointHash - Total (ms): " << elapsed.count() << std::endl;
+
+    // std::vector<size_t> bucket_sizes;
+    // for(auto i = 0; i < edgeHash.bucket_count(); ++i) 
+    // {
+    //   auto bucket_size = edgeHash.bucket_size(i);
+    //   bucket_sizes.push_back(bucket_size);
+    // }
+    // std::cout << bucket_sizes << std::endl;
 
     auto startingHalfEdge = xPoint.xr_he;
     // Error checking, just in case the extreme right point has a hole connected to it
@@ -365,7 +395,7 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
     return polygons;
 }
 
-std::vector<size_t> extractMeshHash(delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash, size_t seedIdx)
+void extractMeshHash(delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash, size_t seedIdx, std::vector<size_t> &candidates)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
@@ -373,21 +403,39 @@ std::vector<size_t> extractMeshHash(delaunator::Delaunator &delaunay, std::unord
     queue.push(seedIdx);
     triHash.erase(seedIdx);
 
-    std::vector<size_t> candidates;
+
+    // std::vector<size_t> candidates;
     while (!queue.empty())
     {
         auto tri = queue.front();
         queue.pop();
         candidates.push_back(tri);
         // Get all neighbors that are inside our triangle hash map
-        auto neighbors = trianglesAdjacentToTriangle(tri, delaunay, triHash);
-        for (auto &&t : neighbors)
+        // std::vector<size_t> triangles;
+        // std::vector<size_t> edgesOfTriangle = {tri * 3, tri * 3 + 1, tri * 3 + 2};
+        for (size_t i=0; i < 3; ++i)
         {
-            queue.push(t);
-            triHash.erase(t);
+            auto e = tri * 3 + i;
+            auto opposite = delaunay.halfedges[e];
+            if (opposite >= 0)
+            {
+                // convert opposite edge to a triangle
+                // TODO static_cast<size_t>
+                size_t tn = std::floor(opposite / 3);
+                if (triHash.find(tn) != triHash.end())
+                {
+                    queue.push(tn);
+                    triHash.erase(tn);
+                }
+            }
         }
+        // auto neighbors = trianglesAdjacentToTriangle(tri, delaunay, triHash);
+        // for (auto &&t : neighbors)
+        // {
+        //     queue.push(t);
+        //     triHash.erase(t);
+        // }
     }
-    return candidates;
 }
 
 // TODO
@@ -404,6 +452,11 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
 {
     std::vector<std::vector<size_t>> planes;
     std::unordered_map<size_t, size_t> triHash;
+    // Reserve hash size to hold all possible triangles
+    size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
+    triHash.reserve(max_triangles);
+
+    // std::cout << "reserving " << max_triangles << " triangles in hash" << std::endl;
     // auto before = std::chrono::high_resolution_clock::now();
     if (config.dim == 2)
     {
@@ -417,16 +470,20 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     {
         createTriHash4(triHash, delaunay, points, config);
     }
+
+
     // auto after = std::chrono::high_resolution_clock::now();
     // double elapsed = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Tri Hash Creation took " << elapsed << " milliseconds" << std::endl;
     while (!triHash.empty())
     {
+        planes.emplace_back();
+        auto &planeMesh = planes[planes.size() -1];
         auto seedIdx = std::begin(triHash)->first;
-        std::vector<size_t> planeMesh = extractMeshHash(delaunay, triHash, seedIdx);
-        if (passPlaneConstraints(planeMesh, delaunay, config))
+        extractMeshHash(delaunay, triHash, seedIdx, planeMesh);
+        if (!passPlaneConstraints(planeMesh, delaunay, config))
         {
-            planes.emplace_back(planeMesh);
+            planes.pop_back();
         }
     }
     return planes;
@@ -451,25 +508,25 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
         copy2Ddata(nparray, temp);
         nparray2D = &temp;
     }
-    std::cout << "Before Delaunay" << std::endl;
+    // std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(*nparray2D);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
+    // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+    // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+    // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
     return std::make_tuple(delaunay, planes, polygons);
 
     // nparray2D is a contigious buffer of (ROWS,2)
@@ -548,6 +605,9 @@ std::vector<Polygon> _extractPolygonsAndTimings(py::array_t<double> nparray, Con
     after = std::chrono::high_resolution_clock::now();
     float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
+
+    // std::vector<Polygon> polygons;
+    // float elapsed_ch = 0.0;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);

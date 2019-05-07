@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "C:\\Users\\Jerem\\Anaconda3\\envs\\polylidarv2\\python.exe",
+  "python.pythonPath": "/home/jeremy/miniconda3/envs/concave/bin/python",
   "files.associations": {
     "algorithm": "cpp",
     "deque": "cpp",
