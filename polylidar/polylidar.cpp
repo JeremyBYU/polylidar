@@ -148,26 +148,6 @@ void createTriHash4(std::unordered_map<size_t, size_t> &triHash, delaunator::Del
     }
 }
 
-// std::vector<size_t> trianglesAdjacentToTriangle(size_t t, delaunator::Delaunator &delaunay, std::unordered_map<size_t, size_t> &triHash)
-// {
-//     std::vector<size_t> triangles;
-//     std::vector<size_t> edgesOfTriangle = {t * 3, t * 3 + 1, t * 3 + 2};
-//     for (auto &&e : edgesOfTriangle)
-//     {
-//         auto opposite = delaunay.halfedges[e];
-//         if (opposite >= 0)
-//         {
-//             // convert opposite edge to a triangle
-//             // TODO static_cast<size_t>
-//             size_t tn = std::floor(opposite / 3);
-//             if (triHash.count(tn) > 0)
-//             {
-//                 triangles.push_back(tn);
-//             }
-//         }
-//     }
-//     return triangles;
-// }
 
 void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, py::array_t<double> &points,
                         std::unordered_map<size_t, std::vector<size_t>> &pointHash, std::unordered_map<size_t, size_t> &edgeHash,
@@ -185,7 +165,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
     triHash.reserve(max_triangles);
 
     // This does not seem to make much of a difference
-    // But it does not hurt it
+    // But it does not hurt it, Perimeter (boundary edges) grows as sqrt of area (triangles)
     size_t nominal_edges = static_cast<size_t>(std::sqrt(max_triangles) * 3);
     pointHash.reserve(nominal_edges);
     edgeHash.reserve(nominal_edges);
@@ -303,9 +283,6 @@ std::vector<size_t> concaveSection(std::unordered_map<size_t, std::vector<size_t
             auto newEdge = getHullEdge(workingEdge, nextEdges, delaunay, isHole);
             workingEdge = newEdge;
         }
-        // std::cout<< "Next working edge: " << workingEdge << std::endl;
-        // std::vector<size_t> nextEdgesFiltered;
-        // std::remove_copy (nextEdges.begin(), nextEdges.end(),nextEdgesFiltered.begin(),20)
     }
 
     return hullSection;
@@ -370,7 +347,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
         // std::cout << "Plane size: " << plane.size() << std::endl;
         // std::cout << "Point Hash size: " << pointHash.size() << std::endl;
         // std::cout << "Edge Hash size: " << edgeHash.size() << std::endl;
-        startingHalfEdge= getHullEdgeStart(UP_VECTOR, nextEdges, delaunay, false);
+        startingHalfEdge = getHullEdgeStart(UP_VECTOR, nextEdges, delaunay, false);
     }
     auto startingPointIndex = xPoint.xr_pi;
     auto stopPoint = startingPointIndex;
@@ -378,7 +355,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
     auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay);
 
     // std::vector<std::vector<size_t>> holes;
-    poly.shell = std::move(shell); // TODO these are copies, use std::move?
+    poly.shell = std::move(shell);
     poly.holes = std::move(holes);
     return poly;
 }
@@ -411,8 +388,7 @@ void extractMeshHash(delaunator::Delaunator &delaunay, std::unordered_map<size_t
         queue.pop();
         candidates.push_back(tri);
         // Get all neighbors that are inside our triangle hash map
-        // std::vector<size_t> triangles;
-        // std::vector<size_t> edgesOfTriangle = {tri * 3, tri * 3 + 1, tri * 3 + 2};
+        // Loop through every edge of this triangle and get adjacent triangle of this edge
         for (size_t i=0; i < 3; ++i)
         {
             auto e = tri * 3 + i;
@@ -429,12 +405,6 @@ void extractMeshHash(delaunator::Delaunator &delaunay, std::unordered_map<size_t
                 }
             }
         }
-        // auto neighbors = trianglesAdjacentToTriangle(tri, delaunay, triHash);
-        // for (auto &&t : neighbors)
-        // {
-        //     queue.push(t);
-        //     triHash.erase(t);
-        // }
     }
 }
 
@@ -477,10 +447,11 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     // std::cout << "Tri Hash Creation took " << elapsed << " milliseconds" << std::endl;
     while (!triHash.empty())
     {
-        planes.emplace_back();
-        auto &planeMesh = planes[planes.size() -1];
+        planes.emplace_back(); // construct empty vector inside planes
+        auto &planeMesh = planes[planes.size() -1]; // retrieve this newly created vector
         auto seedIdx = std::begin(triHash)->first;
         extractMeshHash(delaunay, triHash, seedIdx, planeMesh);
+        // Remove plane if it does not pass constraints
         if (!passPlaneConstraints(planeMesh, delaunay, config))
         {
             planes.pop_back();
