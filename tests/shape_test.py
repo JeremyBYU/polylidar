@@ -6,6 +6,7 @@ import numpy as np
 from tests.helpers.utils import load_csv, verify_points, basic_polylidar_verification, verify_all_polygons_are_valid, load_npy
 from polylidar import extractPlanesAndPolygons, extractPolygons
 
+np.random.seed(1)
 
 @pytest.fixture
 def building1():
@@ -27,6 +28,10 @@ def bad_convex_hull():
 def basic_params():
     return dict(alpha=0.5, xyThresh=0.0)
 
+@pytest.fixture
+def np_100K_array():
+    return np.random.randn(100_000, 2) * 100
+
 @pytest.fixture()
 def hardcase1_params():
     return dict(alpha=0.0, xyThresh=20.0)
@@ -44,8 +49,8 @@ def test_verify_building2(building2):
 def test_verify_hardcase1(hardcase1):
     verify_points(hardcase1, 2)
 
-def test_building1(building1, basic_params):
-    delaunay, planes, polygons = extractPlanesAndPolygons(building1, **basic_params)
+def test_building1(benchmark, building1, basic_params):
+    delaunay, planes, polygons = benchmark(extractPlanesAndPolygons, building1, **basic_params)
     # Basic test to ensure no obvious errors occurred
     basic_polylidar_verification(building1, delaunay, planes, polygons)
     # Ensure that the polygons returned are valid
@@ -56,8 +61,8 @@ def test_building1(building1, basic_params):
     verify_all_polygons_are_valid(polygons, building1)
 
 
-def test_building2(building2, basic_params):
-    delaunay, planes, polygons = extractPlanesAndPolygons(building2, **basic_params)
+def test_building2(benchmark, building2, basic_params):
+    delaunay, planes, polygons = benchmark(extractPlanesAndPolygons, building2, **basic_params)
     # Basic test to ensure no obvious errors occurred
     basic_polylidar_verification(building2, delaunay, planes, polygons)
     # Ensure that the polygons returned are valid
@@ -68,7 +73,8 @@ def test_building2(building2, basic_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, building2)
 
-def test_hardcase1(hardcase1, hardcase1_params):
+def test_hardcase1(benchmark, hardcase1, hardcase1_params):
+    # Dont benchmark
     delaunay, planes, polygons = extractPlanesAndPolygons(hardcase1, **hardcase1_params)
     # Basic test to ensure no obvious errors occurred
     basic_polylidar_verification(hardcase1, delaunay, planes, polygons)
@@ -80,8 +86,9 @@ def test_hardcase1(hardcase1, hardcase1_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, hardcase1)
 
-def test_bad_convex_hull(bad_convex_hull, bad_convex_hull_params):
-    delaunay, planes, polygons = extractPlanesAndPolygons(bad_convex_hull, **bad_convex_hull_params)
+def test_bad_convex_hull(benchmark, bad_convex_hull, bad_convex_hull_params):
+    delaunay, planes, polygons = benchmark(extractPlanesAndPolygons, bad_convex_hull, **bad_convex_hull_params)
+    # delaunay, planes, polygons = extractPlanesAndPolygons(bad_convex_hull, **bad_convex_hull_params)
     # Basic test to ensure no obvious errors occurred
     basic_polylidar_verification(bad_convex_hull, delaunay, planes, polygons)
     # Ensure that the polygons returned are valid
@@ -92,9 +99,21 @@ def test_bad_convex_hull(bad_convex_hull, bad_convex_hull_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, bad_convex_hull)
 
+def test_100k_array(benchmark, np_100K_array, basic_params):
+    # delaunay, planes, polygons = benchmark(extractPlanesAndPolygons, np_100K_array, **basic_params)
+    delaunay, planes, polygons = extractPlanesAndPolygons(np_100K_array, **basic_params)
+    # Basic test to ensure no obvious errors occurred
+    basic_polylidar_verification(np_100K_array, delaunay, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, np_100K_array)
+    # Ensure that all polygons are as expected
+    # Test just polygon extraction
+    polygons = benchmark(extractPolygons, np_100K_array, **basic_params)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, np_100K_array)
+
 
 ts = range(1000, 100000, 1000)  # This creates 100 numpy arrays frangin from (1000,2) -> (100000,2)
-np.random.seed(1)
 @pytest.fixture(params=ts)
 def random_points(request):
     points = np.random.randn(request.param, 2) * 100 +  700000
