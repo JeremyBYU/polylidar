@@ -79,15 +79,34 @@ inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) 
 }
 
 inline double getMaxDimTriangle(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points) {
-    auto &triangles = delaunay.triangles;
-    std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
-    auto &pi0 = pis[0];
-    auto &pi1 = pis[1];
-    auto &pi2 = pis[2];
+    auto pi0= delaunay.triangles[t * 3];
+    auto pi1 = delaunay.triangles[t * 3 + 1];
+    auto pi2 = delaunay.triangles[t * 3 + 2];
     // get max XY dimension change on one side of the triangle
     auto l1 = std::max(std::abs(points(pi0, 0) - points(pi1, 0)), std::abs(points(pi0, 1) - points(pi1, 1)));
     auto l2 = std::max(std::abs(points(pi0, 0) - points(pi2, 0)), std::abs(points(pi0, 1) - points(pi2, 1)));
     auto l3 = std::max(std::abs(points(pi1, 0) - points(pi2, 0)), std::abs(points(pi1, 1) - points(pi2, 1)));
+    return std::max(std::max(l1, l2), l3);
+}
+
+// inline double l2Norm(double &x0, double &y0, double &x1, double &y1)
+// {
+//     return l2Norm(x1-x0, y1-y0);
+// }
+
+inline double l2Norm(double dx, double dy)
+{
+    return std::sqrt(dx * dx + dy * dy);
+}
+
+inline double getMaxEdgeLength(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points) {
+    auto pi0= delaunay.triangles[t * 3];
+    auto pi1 = delaunay.triangles[t * 3 + 1];
+    auto pi2 = delaunay.triangles[t * 3 + 2];
+    // get max XY dimension change on one side of the triangle
+    auto l1 = l2Norm(points(pi0, 0) - points(pi1, 0), points(pi0, 1) - points(pi1, 1));
+    auto l2 = l2Norm(points(pi0, 0) - points(pi2, 0), points(pi0, 1) - points(pi2, 1));
+    auto l3 = l2Norm(points(pi1, 0) - points(pi2, 0), points(pi1, 1) - points(pi2, 1));
     return std::max(std::max(l1, l2), l3);
 }
 

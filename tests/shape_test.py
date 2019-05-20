@@ -24,13 +24,25 @@ def hardcase1():
 def bad_convex_hull():
     return load_npy("possible_error_free.npy")
 
+@pytest.fixture
+def np_100K_array():
+    return np.random.randn(100_000, 2) * 100
+
 @pytest.fixture()
 def basic_params():
     return dict(alpha=0.5, xyThresh=0.0)
 
-@pytest.fixture
-def np_100K_array():
-    return np.random.randn(100_000, 2) * 100
+@pytest.fixture()
+def params_xyThresh():
+    return dict(alpha=0.0, xyThresh=100.0)
+
+@pytest.fixture()
+def params_lmax():
+    return dict(alpha=0.0, xyThresh=0.0, lmax=100.0)
+
+@pytest.fixture()
+def params_alpha():
+    return dict(alpha=100.0, xyThresh=0.0, lmax=0.0)
 
 @pytest.fixture()
 def hardcase1_params():
@@ -73,7 +85,7 @@ def test_building2(benchmark, building2, basic_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, building2)
 
-def test_hardcase1(benchmark, hardcase1, hardcase1_params):
+def test_hardcase1(hardcase1, hardcase1_params):
     # Dont benchmark
     delaunay, planes, polygons = extractPlanesAndPolygons(hardcase1, **hardcase1_params)
     # Basic test to ensure no obvious errors occurred
@@ -99,18 +111,14 @@ def test_bad_convex_hull(benchmark, bad_convex_hull, bad_convex_hull_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, bad_convex_hull)
 
-def test_100k_array(benchmark, np_100K_array, basic_params):
-    # delaunay, planes, polygons = benchmark(extractPlanesAndPolygons, np_100K_array, **basic_params)
-    delaunay, planes, polygons = extractPlanesAndPolygons(np_100K_array, **basic_params)
-    # Basic test to ensure no obvious errors occurred
-    basic_polylidar_verification(np_100K_array, delaunay, planes, polygons)
-    # Ensure that the polygons returned are valid
-    verify_all_polygons_are_valid(polygons, np_100K_array)
-    # Ensure that all polygons are as expected
-    # Test just polygon extraction
-    polygons = benchmark(extractPolygons, np_100K_array, **basic_params)
-    # Ensure that the polygons returned are valid
-    verify_all_polygons_are_valid(polygons, np_100K_array)
+def test_100k_array_xyThresh(benchmark, np_100K_array, params_xyThresh):
+    polygons = benchmark(extractPolygons, np_100K_array, **params_xyThresh)
+
+def test_100k_array_lmax(benchmark, np_100K_array, params_lmax):
+    polygons = benchmark(extractPolygons, np_100K_array, **params_lmax)
+
+def test_100k_array_alpha(benchmark, np_100K_array, params_alpha):
+    polygons = benchmark(extractPolygons, np_100K_array, **params_alpha)
 
 
 ts = range(1000, 100000, 1000)  # This creates 100 numpy arrays frangin from (1000,2) -> (100000,2)

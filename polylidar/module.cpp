@@ -7,8 +7,6 @@ PYBIND11_MAKE_OPAQUE(std::vector<double>);
 
 using namespace pybind11::literals;
 
-// double DESIRED_VECTOR_2[3] = {0.0, 0.0, 1.0};
-
 PYBIND11_MODULE(polylidar, m)
 {
 
@@ -42,20 +40,20 @@ PYBIND11_MODULE(polylidar, m)
         .def_property("holes", &polylidar::Polygon::getHoles, &polylidar::Polygon::setHoles);
     
     m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons,
-        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
-        "minTriangles"_a=DEFAULT_MINTRIANGLES,
+        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     m.def("extractPolygons", &polylidar::extractPolygons,
-        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
-        "minTriangles"_a=DEFAULT_MINTRIANGLES,
+        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     m.def("extractPolygonsAndTimings", &polylidar::extractPolygonsAndTimings,
-        "nparray"_a, "dim"_a=DEFAULT_DIM, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
-        "minTriangles"_a=DEFAULT_MINTRIANGLES,
+        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 

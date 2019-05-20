@@ -28,6 +28,22 @@ You can see a demo in action py running `python tests/visualize.py`. Requires `m
 
 What are the inputs to the code?  The input arguments are a **contiguous** numpy array with length N and 2,3,or 4 columns depending on your data.  There are also configuration options as well that you can pass as keyword arguments.
 
+
+What are the inputs?
+
+* points - Numpy array
+* Optional - 2D Triangle Filtering
+  * alpha (double) - The maximum circumradius of a triangle.
+  * lmax (double) - Maximum edge length of any edge in a triangle
+* Optional - 3D Triangle Filtering
+  * normalVector ([double, double, double]) - NOT IMPLEMENTED. Currently fixed to [0,0,1]. The normal vector of the planar mesh(s) you desire to extract.
+  * normalThresh (double) - Any triangle whose `abs(normalVector * triangleNormal) > normalThresh` is filtered
+  * zThresh (double) - Normal filtering is ignored if the the "height" of a triangle is less than zThresh. Parameter to hep noisy pontclouds 
+* Optional - Plane Filtering
+  * minTriangles (int) - Any planar mesh who has less than this quantity of triangles will not be returned
+* Optional - Triangle Filtering by Clas (4th Dimension)
+  * allowedClass (double) - Will filter out triangles whose vertices are not classified the same as allowedClass
+
 What are the outputs?
 
 * Delaunay - This is a C++ class data structure that has information about your triangles, half edges, and point indices. Read more [here](https://mapbox.github.io/delaunator/).
@@ -53,10 +69,21 @@ delaunay = Delaunator(point_cloud:ndarray)
 
 ## Benchmark
 
-| # Points | Time (ms) |
-|----------|-----------|
-| 10,000   | 5         |
-|          |           |
+```
+----------------------------------------------------------------------------------- benchmark: 4 tests ----------------------------------------------------------------------------------
+Name (time in ms)            Min                Max               Mean            StdDev             Median               IQR            Outliers       OPS            Rounds  Iterations
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+test_bad_convex_hull      1.2780 (1.0)       2.0440 (1.0)       1.2879 (1.0)      0.0388 (1.0)       1.2824 (1.0)      0.0034 (1.0)         17;40  776.4774 (1.0)         767           1
+test_building1            2.1215 (1.66)      2.7847 (1.36)      2.1386 (1.66)     0.0397 (1.02)      2.1336 (1.66)     0.0051 (1.48)         8;31  467.5944 (0.60)        404           1
+test_building2            2.4713 (1.93)      3.2301 (1.58)      2.4957 (1.94)     0.0627 (1.61)      2.4811 (1.93)     0.0054 (1.58)        21;62  400.6942 (0.52)        399           1
+test_100k_array          50.2531 (39.32)    52.2024 (25.54)    50.7566 (39.41)    0.4435 (11.42)    50.6749 (39.51)    0.1969 (57.50)         5;5   19.7019 (0.03)         20           1
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Legend:
+  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
+  OPS: Operations Per Second, computed as 1 / Mean
+======================================================================================== 107 passed, 1 warnings in 15.70 seconds =========================================================================================
+```
 
 ## Issues
 

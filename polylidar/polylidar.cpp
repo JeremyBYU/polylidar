@@ -13,7 +13,7 @@ namespace polylidar
 
 std::ostream &operator<<(std::ostream &os, const Config &config)
 {
-    os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThres=" << config.xyThresh << " minTriangles=" << config.minTriangles
+    os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThresh=" << config.xyThresh << " lmax=" << config.xyThresh << " minTriangles=" << config.minTriangles
        << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
        << " allowedClass=" << config.allowedClass
        << " desiredVector= [" << (config.desiredVector)[0] << ", " << (config.desiredVector)[1] << ", " << (config.desiredVector)[2] << "]";
@@ -62,12 +62,19 @@ inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, pybin
     {
         return false;
     }
-    if (config.xyThresh > 0.0 && getMaxDimTriangle(t, delaunay, points) > config.xyThresh)
+    else if (config.xyThresh > 0.0 && getMaxDimTriangle(t, delaunay, points) > config.xyThresh)
     {
         return false;
     }
+    else if (config.lmax > 0.0 && getMaxEdgeLength(t, delaunay, points) > config.lmax)
+    {
+        return false;
+    }
+    
+    
     return true;
 }
+
 
 inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config)
 {
@@ -80,7 +87,6 @@ inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybin
         passZThresh = true;
     }
 
-    auto test = config.desiredVector;
     auto prod = std::abs(dotProduct3(normal, config.desiredVector));
     if (prod < config.normThresh && !passZThresh)
     {
@@ -233,7 +239,7 @@ std::vector<size_t> concaveSection(std::unordered_map<size_t, std::vector<size_t
     std::vector<size_t> hullSection;
 
     auto &triangles = delaunay.triangles;
-    auto &coords = delaunay.coords;
+    // auto &coords = delaunay.coords;
     auto workingEdge = startEdge;
     // std::cout<< "Starting working edge: " << workingEdge << std::endl;
     while (true)
@@ -592,33 +598,33 @@ std::vector<Polygon> _extractPolygonsAndTimings(py::array_t<double> nparray, Con
     return polygons;
 }
 
-std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygons(py::array_t<double> nparray, int dim = DEFAULT_DIM,
-                                                                                                                    double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, size_t minTriangles = DEFAULT_MINTRIANGLES,
+std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygons(py::array_t<double> nparray,
+                                                                                                                    double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                                                                                                     double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
                                                                                                                     double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
 {
     // This function allows us to convert keyword arguments into a configuration struct
-    Config config{dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
     return _extractPlanesAndPolygons(nparray, config);
 }
 
-std::vector<Polygon> extractPolygons(py::array_t<double> nparray, int dim = DEFAULT_DIM,
-                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, size_t minTriangles = DEFAULT_MINTRIANGLES,
+std::vector<Polygon> extractPolygons(py::array_t<double> nparray,
+                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                      double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
                                      double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
 {
     // This function allows us to convert keyword arguments into a configuration struct
-    Config config{dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
     return _extractPolygons(nparray, config);
 }
 
-std::tuple<std::vector<Polygon>, std::vector<float>> extractPolygonsAndTimings(py::array_t<double> nparray, int dim = DEFAULT_DIM,
-                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, size_t minTriangles = DEFAULT_MINTRIANGLES,
+std::tuple<std::vector<Polygon>, std::vector<float>> extractPolygonsAndTimings(py::array_t<double> nparray,
+                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                      double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
                                      double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
 {
     // This function allows us to convert keyword arguments into a configuration struct
-    Config config{dim, alpha, xyThresh, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
     std::vector<float> timings;
     auto polygons = _extractPolygonsAndTimings(nparray, config, timings);
     

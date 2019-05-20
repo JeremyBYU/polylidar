@@ -47,9 +47,6 @@ def generate_test_points(num_groups=2, dist = 100, group_size=10, seed=1):
 
     return a
 
-def get_point(pi, points):
-    return [points[pi, 0], points[pi, 1]]
-
 def get_triangles_from_he(triangles, points):
     triangle_list = []
     for i in range(0, len(triangles), 3):
@@ -128,7 +125,7 @@ points = load_csv('building1.csv')
 print("Point Shape {}".format(points.shape))
 
 t1 = time.time()
-delaunay, planes, polygons = extractPlanesAndPolygons(points, xyThresh=1300.0, alpha=0.0, minTriangles=20)
+delaunay, planes, polygons = extractPlanesAndPolygons(points, xyThresh=0.0, alpha=0.0, lmax=20.0, minTriangles=20)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 
