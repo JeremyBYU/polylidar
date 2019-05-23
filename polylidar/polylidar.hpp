@@ -35,6 +35,8 @@
 
 #define DEBUG 1
 
+namespace py = pybind11;
+
 namespace polylidar {
 
     using vvi = std::vector<std::vector<size_t>>;
@@ -73,6 +75,9 @@ namespace polylidar {
                                 double alpha, double xyThresh, double lmax, size_t minTriangles,
                                 double minBboxArea, double zThresh, 
                                 double normThresh, double allowedClass);
+
+
+    std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config);
 
     std::vector<Polygon>  extractPolygons(pybind11::array_t<double> nparray,
                                 double alpha, double xyThresh, double lamx, size_t minTriangles,

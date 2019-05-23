@@ -50,6 +50,8 @@ ext_modules = [
     ),
 ]
 
+print([x.__str__() for x in ext_modules[0].include_dirs])
+
 
 # As of Python 3.6, CCompiler has a `has_flag` method.
 # cf http://bugs.python.org/issue26689

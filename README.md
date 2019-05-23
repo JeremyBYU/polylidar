@@ -38,10 +38,10 @@ What are the inputs?
 * Optional - 3D Triangle Filtering
   * normalVector ([double, double, double]) - NOT IMPLEMENTED. Currently fixed to [0,0,1]. The normal vector of the planar mesh(s) you desire to extract.
   * normalThresh (double) - Any triangle whose `abs(normalVector * triangleNormal) > normalThresh` is filtered
-  * zThresh (double) - Normal filtering is ignored if the the "height" of a triangle is less than zThresh. Parameter to hep noisy pontclouds 
+  * zThresh (double) - Normal filtering is ignored if the the "height" of a triangle is less than zThresh. Parameter to reduce filtering in noisy pointclouds. 
 * Optional - Plane Filtering
   * minTriangles (int) - Any planar mesh who has less than this quantity of triangles will not be returned
-* Optional - Triangle Filtering by Clas (4th Dimension)
+* Optional - Triangle Filtering by Class (4th Dimension)
   * allowedClass (double) - Will filter out triangles whose vertices are not classified the same as allowedClass
 
 What are the outputs?
