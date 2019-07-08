@@ -116,9 +116,10 @@ def plot_points(points, ax):
 
 # points = generate_test_points(num_groups=10000, seed=1)
 points = load_csv('building1.csv')
-# points = np.load("scratch/possible_error_free.npy")
+# points = np.load("tests/fixtures/possible_error_free.npy")
+# points = np.load("scratch/error_coincident.npy")
 # print(points.flags)
-# points = np.ascontiguousarray(points[:, :2])
+points = np.ascontiguousarray(points[:, :2])
 # noise = np.random.randn(points.shape[0], 2) * .10
 # points[:, :2] = points[:, :2] + noise
 # print(points.flags)
