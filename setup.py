@@ -111,11 +111,12 @@ setup(
     version=__version__,
     author='Jeremy Castagno',
     author_email='jdcasta@umich.edu',
+    packages=['polyutil', 'polylidar'],
     url='',
     description='Polygon extraction from Point Cloud data',
     long_description='',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2', 'numpy', 'pytest', 'shapely', 'pytest-benchmark'],
+    install_requires=['pybind11>=2.2', 'numpy', 'pytest', 'shapely', 'pytest-benchmark', 'descartes', 'matplotlib'],
     cmdclass={'build_ext': BuildExt},
     zip_safe=False,
 )

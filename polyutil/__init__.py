@@ -5,13 +5,62 @@ from shapely.geometry import Polygon
 from descartes import PolygonPatch
 import seaborn as sns
 
-COLOR_PALETTE = sns.color_palette()
+COLOR_PALETTE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 def get_poly_coords(outline, points):
     return [get_point(pi, points) for pi in outline]
 
 def get_point(pi, points):
-    return [points[pi, 0], points[pi, 1]]
+    """Get a point from a numpy array.
+    If the numpy array has 3 dimensions, will return all three (x,y,z)
+    Arguments:
+        pi {int} -- Point index in numpy array
+        points {ndarray} -- Numpy array of points
+    
+    Returns:
+        [list] -- List of poins [x,y,(z)]
+    """
+    if points.shape[1] > 2:
+        return [points[pi, 0], points[pi, 1], points[pi, 2]]
+    else:
+        return [points[pi, 0], points[pi, 1]]
+
+def convert_to_shapely_polygons(polygons, points, return_first=False, sort=False, mp=False):
+    """Convert Polylidar C++ polygons to shapely polygons
+    
+    Arguments:
+        polygons {vector<polygons>} -- Vector of polygons
+        points {ndarray} -- ndarray
+    
+    Keyword Arguments:
+        return_first {bool} -- Return the first polygon (default: {False})
+        sort {bool} -- Sort polygons by largest number of vertices  (default: {False})
+        mp {bool} -- Convert list of polygons to MultiPolygon (default: {False})
+    
+    Returns:
+        [list or single Polygon or Single Multipolygon] -- Its up to you what you want
+    """
+    if sort:
+        polygons.sort(key=lambda poly: len(poly.shell), reverse=True)
+
+    shapely_polygons = []
+    for poly in polygons:
+        shell_coords = get_poly_coords(poly.shell, points)
+        hole_coords = [get_poly_coords(hole, points) for hole in poly.holes]
+        poly_shape = Polygon(shell=shell_coords, holes=hole_coords)
+        
+        shapely_polygons.append(poly_shape)
+
+    # Return only the largest by number of vertices
+    if shapely_polygons and return_first:
+        return shapely_polygons[0]
+
+    # Check if a multipolygon
+    if len(shapely_polygons) > 1 and mp:
+        return MultiPolygon(shapely_polygons)
+    else:
+        return shapely_polygons
+
 
 def plot_polygons(polygons, delaunay, points, ax):
     for poly in polygons:
