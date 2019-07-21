@@ -5,6 +5,7 @@ from shapely.geometry import Polygon
 from descartes import PolygonPatch
 import seaborn as sns
 
+
 COLOR_PALETTE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
 def get_poly_coords(outline, points):

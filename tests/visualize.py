@@ -8,12 +8,10 @@ from polylidarutil import (generate_test_points, plot_points, plot_triangles,
 import matplotlib.pyplot as plt
 from shapely.geometry import Polygon
 from descartes import PolygonPatch
-import seaborn as sns
 
 DIR_NAME = path.dirname(__file__)
 FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
 
-COLOR_PALETTE = sns.color_palette()
 
 
 def load_csv(file):
