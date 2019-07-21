@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from polylidar import extractPlanesAndPolygons
-from polyutil import (generate_test_points, plot_points, plot_triangles,
-                      plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
+from polylidarutil import (generate_test_points, plot_points, plot_triangles,
+                            plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
 
 # generate random points, 200 X 2 numpy array.
 points = generate_test_points(group_size=100)

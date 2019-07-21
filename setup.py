@@ -111,7 +111,7 @@ setup(
     version=__version__,
     author='Jeremy Castagno',
     author_email='jdcasta@umich.edu',
-    packages=['polyutil', 'polylidar'],
+    packages=['polylidarutil', 'polylidar'],
     url='',
     description='Polygon extraction from Point Cloud data',
     long_description='',

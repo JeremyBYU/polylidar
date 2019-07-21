@@ -1,24 +1,25 @@
+
 from os import path
 import time
 import numpy as np
 from polylidar import Delaunator, extractPlanesAndPolygons
+from polylidarutil import (generate_test_points, plot_points, plot_triangles,
+                           plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
 import matplotlib.pyplot as plt
 from shapely.geometry import Polygon
 from descartes import PolygonPatch
 import seaborn as sns
 
-DIR_NAME =path.dirname(__file__)
+DIR_NAME = path.dirname(__file__)
 FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
 
 COLOR_PALETTE = sns.color_palette()
 
-from polyutil import (generate_test_points, plot_points, plot_triangles,
-                      plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
 
 def load_csv(file):
     return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64, skiprows=1)
 
-    
+
 # points = np.array(pointsList)
 # np.savetxt('hardcase2d.csv', points, fmt='%.4f', header="X,Y")
 
@@ -41,7 +42,7 @@ print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 # import pdb; pdb.set_trace()
 
 if points.shape[0] < 100000:
-    fig, ax = plt.subplots(figsize=(10,10), nrows=1, ncols=1)
+    fig, ax = plt.subplots(figsize=(10, 10), nrows=1, ncols=1)
     # plot points
     plot_points(points, ax)
     # plot all triangles
