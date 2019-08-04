@@ -35,6 +35,8 @@
 #include <utility>
 #include <vector>
 
+#include "predicates.h"
+
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
 #include "pybind11/stl.h"      // Pybind11 import for STL containers
 #include "pybind11/numpy.h"

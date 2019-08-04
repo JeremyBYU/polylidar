@@ -22,9 +22,8 @@
 
 #include "delaunator.hpp"
 
+
 namespace delaunator {
-
-
 
 
 //@see https://stackoverflow.com/questions/33333363/built-in-mod-vs-custom-mod-function-improve-the-performance-of-modulus-op/33333636#33333636
@@ -82,14 +81,11 @@ inline double circumradius(
     }
 }
 
-inline bool orient(
-    const double px,
-    const double py,
-    const double qx,
-    const double qy,
-    const double rx,
-    const double ry) {
-    return (qy - py) * (rx - qx) - (qx - px) * (ry - qy) < 0.0;
+inline bool orient_fast(
+    const double * p,
+    const double * q,
+    const double * r) {
+    return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]) < 0.0;
 }
 
 inline std::pair<double, double> circumcenter(
@@ -137,21 +133,18 @@ struct compare {
     }
 };
 
-inline bool in_circle(
-    const double ax,
-    const double ay,
-    const double bx,
-    const double by,
-    const double cx,
-    const double cy,
-    const double px,
-    const double py) {
-    const double dx = ax - px;
-    const double dy = ay - py;
-    const double ex = bx - px;
-    const double ey = by - py;
-    const double fx = cx - px;
-    const double fy = cy - py;
+inline bool in_circle_fast(
+    const double * a,
+    const double * b,
+    const double * c,
+    const double * p) {
+
+    const double dx = a[0] - p[0];
+    const double dy = a[1] - p[1];
+    const double ex = b[0] - p[0];
+    const double ey = b[1] - p[1];
+    const double fx = c[0] - p[0];
+    const double fy = c[1] - p[1];
 
     const double ap = dx * dx + dy * dy;
     const double bp = ex * ex + ey * ey;
@@ -161,6 +154,23 @@ inline bool in_circle(
             dy * (ex * cp - bp * fx) +
             ap * (ex * fy - ey * fx)) < 0.0;
 }
+
+
+#ifdef USE_ROBUST
+    #define incircle_generic(a, b, c, d) \
+        predicates::incircle(a, b,c, d) < 0.0
+
+    #define orient_generic(a, b, c) \
+        (predicates::orient2d(a, b, c) > 0.0)
+#else
+    #define incircle_generic(a, b, c, d) \
+        in_circle_fast(a, b,c, d)
+
+    #define orient_generic(a, b, c) \
+        orient_fast(a, b, c)
+#endif
+
+
 
 constexpr double EPSILON = std::numeric_limits<double>::epsilon();
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
@@ -266,7 +276,7 @@ void Delaunator::triangulate() {
     double i2x = coords[2 * i2];
     double i2y = coords[2 * i2 + 1];
 
-    if (orient(i0x, i0y, i1x, i1y, i2x, i2y)) {
+    if (orient_generic(&coords[2 * i0], &coords[2 * i1], &coords[2 * i2])) {
         std::swap(i1, i2);
         std::swap(i1x, i2x);
         std::swap(i1y, i2y);
@@ -338,7 +348,7 @@ void Delaunator::triangulate() {
         size_t e = start;
         size_t q;
 
-        while (q = hull_next[e], !orient(x, y, coords[2 * e], coords[2 * e + 1], coords[2 * q], coords[2 * q + 1])) { //TODO: does it works in a same way as in JS
+        while (q = hull_next[e], !orient_generic(&coords[2 * i], &coords[2 * e], &coords[2 * q])) { //TODO: does it works in a same way as in JS
             e = q;
             if (e == start) {
                 e = INVALID_INDEX;
@@ -365,7 +375,7 @@ void Delaunator::triangulate() {
         std::size_t next = hull_next[e];
         while (
             q = hull_next[next],
-            orient(x, y, coords[2 * next], coords[2 * next + 1], coords[2 * q], coords[2 * q + 1])) {
+            orient_generic(&coords[2 * i], &coords[2 * next], &coords[2 * q])) {
             t = add_triangle(next, i, q, hull_tri[i], INVALID_INDEX, hull_tri[next]);
             hull_tri[i] = legalize(t + 2);
             hull_next[next] = next; // mark as removed
@@ -377,7 +387,7 @@ void Delaunator::triangulate() {
         if (e == start) {
             while (
                 q = hull_prev[e],
-                orient(x, y, coords[2 * q], coords[2 * q + 1], coords[2 * e], coords[2 * e + 1])) {
+                orient_generic(&coords[2 * i], &coords[2 * q], &coords[2 * e])) {
                 t = add_triangle(q, i, e, INVALID_INDEX, hull_tri[e], hull_tri[q]);
                 legalize(t + 2);
                 hull_tri[q] = t;
@@ -497,15 +507,11 @@ std::size_t Delaunator::legalize(std::size_t a) {
         const std::size_t pl = triangles[al];
         const std::size_t p1 = triangles[bl];
 
-        const bool illegal = in_circle(
-            coords[2 * p0],
-            coords[2 * p0 + 1],
-            coords[2 * pr],
-            coords[2 * pr + 1],
-            coords[2 * pl],
-            coords[2 * pl + 1],
-            coords[2 * p1],
-            coords[2 * p1 + 1]);
+        const bool illegal = incircle_generic(
+            &coords[2 * p0],
+            &coords[2 * pr],
+            &coords[2 * pl],
+            &coords[2 * p1]);
 
         if (illegal) {
             triangles[a] = p1;

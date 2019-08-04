@@ -4,6 +4,16 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import setuptools
 
+
+USE_ROBUST_PREDICATES_NAME = 'USE_ROBUST_PREDICATES'
+USE_ROBUST_PREDICATES = os.environ.get( USE_ROBUST_PREDICATES_NAME, False )
+
+if USE_ROBUST_PREDICATES:
+    print("Building with robust geometric predicates.")
+else:
+    print("NOT building with robust predicates")
+
+
 __version__ = '0.0.3'
 
 class get_pybind_include(object):
@@ -38,13 +48,15 @@ class get_numpy_include(object):
 ext_modules = [
     Extension(
         'polylidar',
-        ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp'],
+        ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp',
+        'polylidar/predicates/constants.c', 'polylidar/predicates/predicates.c', 'polylidar/predicates/printing.c', 'polylidar/predicates/random.c'],
         include_dirs=[
             # Path to pybind11 headers
             get_pybind_include(),
             get_pybind_include(user=True),
             get_numpy_include(),
-            'polylidar/'
+            'polylidar/',
+            'polylidar/predicates/'
         ],
         language='c++'
     ),
@@ -100,8 +112,12 @@ class BuildExt(build_ext):
             opts.append(cpp_flag(self.compiler))
             if has_flag(self.compiler, '-fvisibility=hidden'):
                 opts.append('-fvisibility=hidden')
+            if USE_ROBUST_PREDICATES:
+                opts.append('-DUSE_ROBUST')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
+            if USE_ROBUST_PREDICATES:
+                opts.append('-DUSE_ROBUST')
         for ext in self.extensions:
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
