@@ -3,8 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from shapely.geometry import Polygon
 from descartes import PolygonPatch
-import seaborn as sns
-
 
 COLOR_PALETTE = plt.rcParams['axes.prop_cycle'].by_key()['color']
 

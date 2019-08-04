@@ -6,8 +6,7 @@ import setuptools
 
 
 USE_ROBUST_PREDICATES_NAME = 'USE_ROBUST_PREDICATES'
-USE_ROBUST_PREDICATES = os.environ.get( USE_ROBUST_PREDICATES_NAME, False )
-
+USE_ROBUST_PREDICATES = int(os.environ.get( USE_ROBUST_PREDICATES_NAME, 0 ))
 if USE_ROBUST_PREDICATES:
     print("Building with robust geometric predicates.")
 else:
@@ -44,20 +43,23 @@ class get_numpy_include(object):
         import numpy as np
         return np.get_include()
 
+# Source files for polylidar
+source_files = ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp']
+# Source files for robust geometric predicates
+robust_files = ['polylidar/predicates/constants.c', 'polylidar/predicates/predicates.c', 'polylidar/predicates/printing.c', 'polylidar/predicates/random.c']
+# Include directories for polylidar
+include_dirs = [get_pybind_include(), get_pybind_include(user=True), get_numpy_include(), 'polylidar/']
+
+# If compiling with robust predicates then add robust c and header files
+if USE_ROBUST_PREDICATES:
+    source_files.extend(robust_files)
+    include_dirs.append('polylidar/predicates/')
 
 ext_modules = [
     Extension(
         'polylidar',
-        ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp',
-        'polylidar/predicates/constants.c', 'polylidar/predicates/predicates.c', 'polylidar/predicates/printing.c', 'polylidar/predicates/random.c'],
-        include_dirs=[
-            # Path to pybind11 headers
-            get_pybind_include(),
-            get_pybind_include(user=True),
-            get_numpy_include(),
-            'polylidar/',
-            'polylidar/predicates/'
-        ],
+        source_files,
+        include_dirs=include_dirs,
         language='c++'
     ),
 ]
