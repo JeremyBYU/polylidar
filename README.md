@@ -46,8 +46,8 @@ What are the inputs?
 * Optional - 3D Triangle Filtering (normal filtering)
   * normalVector ([double, double, double]) - NOT IMPLEMENTED. Currently fixed to [0,0,1]. The normal vector of the planar mesh(s) you desire to extract.
   * normThresh (double, default=0.9) - Any triangle whose `abs(normalVector * triangleNormal) < normThresh` is filtered
-  * zThresh (double) - Normal filtering is ignored (bypassed) if the the "height" of a triangle is less than zThresh. This is used to attenuate false-positive filtering in noisy pointclouds. 
-  * normThreshMin (double, default=0.1) - Any triangle whose `abs(normalVector * triangleNormal) < normThreshMin` is filtered. This take priority over anything else, even zThresh bypass.
+  * zThresh (double,default=0.2) - Normal filtering is ignored (bypassed) if the the "height" of a triangle is less than zThresh. This is used to attenuate false-positive filtering in noisy pointclouds. 
+  * normThreshMin (double, default=0.1) - Any triangle whose `abs(normalVector * triangleNormal) < normThreshMin` is filtered. This take priority over anything else, even zThresh bypass. Think of this as the bare minimum of flatness a triangle must have to remain in the mesh.
 * Optional - Plane Filtering
   * minTriangles (int) - Any planar mesh who has less than this quantity of triangles will not be returned
 * Optional - Triangle Filtering by Class (4th Dimension)
@@ -58,7 +58,7 @@ What are the outputs?
 * Delaunay - This is a C++ class data structure that has information about your triangles, half edges, and point indices. Read more [here](https://mapbox.github.io/delaunator/).
 * planes - This is a *list* of C++ *vectors* holding `ints`. Each vector is an extracted plane.  The `ints` correspond to triangle indices.
 * polygons - This is a *list* of C++ `polygon` data structure.
-* polygon - This is a struct that has two fields: shell and holes. Shell is a *vector* of `ints`, where each int represents a *point* index. Holes is a list of a vector of `ints`. Each vector represents a hole in the polygon.
+* polygon - This is a struct that has two fields: shell and holes. Shell is a *vector* of `ints`, where each int represents a *point* index. Holes is a list of a **vector** of `ints`. Each vector represents a hole in the polygon.
 
 Example calls
 ```python
@@ -74,6 +74,9 @@ polygons = extractPolygons(point_cloud:ndarray)
 delaunay = Delaunator(point_cloud:ndarray)
 ```
 
+## Examples
+
+Please see `examples/python`. You can also look in the `tests` folder.
 
 
 ## Benchmark
