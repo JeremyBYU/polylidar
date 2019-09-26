@@ -95,7 +95,14 @@ Legend:
 
 ## Issues
 
-* If there are coincident points then it seems the delaunator cpp library gets stuck in an infinite loop (sometimes?). Add a very small amount of noise to the data (jitter) to ensure this doesn't happen.
+- [X] If there are coincident points then it seems the delaunator cpp library gets stuck in an infinite loop (sometimes?). Add a very small amount of noise to the data (jitter) to ensure this doesn't happen.
+  - Patched delaunator, no need to add jitter. https://github.com/mapbox/delaunator/pull/49
+- [X] Polylidar makes heavy use of hashmaps. Try a better hashmap than std::unordered_map
+  - Add robinhood hashing as direct replacement for std::unorderd_map. Polylidar is now 30% faster.
+- [X] Improper triangulation because of floating point inaccuracies
+  - Added geometric predicates for those have this issue. 20% speed reduction.
+- [] 3D extension improvement. If 3D point clouds are denser (close spacing in x,y) than sensor noise there are issues. The zThresh parameter is now larger (because of noise) than the spacing which causes the normal threshold bypassing.
+  - Added additional normalThreshMin parameter which if is not satisfied will automatically filter triangle.  ZThresh will have not affect for normal filtering bypass.
 
 
 
