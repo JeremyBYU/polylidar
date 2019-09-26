@@ -43,10 +43,11 @@ What are the inputs?
 * Optional - 2D Triangle Filtering
   * alpha (double) - The maximum circumradius of a triangle.
   * lmax (double) - Maximum edge length of any edge in a triangle
-* Optional - 3D Triangle Filtering
+* Optional - 3D Triangle Filtering (normal filtering)
   * normalVector ([double, double, double]) - NOT IMPLEMENTED. Currently fixed to [0,0,1]. The normal vector of the planar mesh(s) you desire to extract.
-  * normalThresh (double) - Any triangle whose `abs(normalVector * triangleNormal) > normalThresh` is filtered
-  * zThresh (double) - Normal filtering is ignored if the the "height" of a triangle is less than zThresh. Parameter to reduce filtering in noisy pointclouds. 
+  * normThresh (double, default=0.9) - Any triangle whose `abs(normalVector * triangleNormal) < normThresh` is filtered
+  * zThresh (double) - Normal filtering is ignored (bypassed) if the the "height" of a triangle is less than zThresh. This is used to attenuate false-positive filtering in noisy pointclouds. 
+  * normThreshMin (double, default=0.1) - Any triangle whose `abs(normalVector * triangleNormal) < normThreshMin` is filtered. This take priority over anything else, even zThresh bypass.
 * Optional - Plane Filtering
   * minTriangles (int) - Any planar mesh who has less than this quantity of triangles will not be returned
 * Optional - Triangle Filtering by Class (4th Dimension)
@@ -101,8 +102,8 @@ Legend:
   - Add robinhood hashing as direct replacement for std::unorderd_map. Polylidar is now 30% faster.
 - [X] Improper triangulation because of floating point inaccuracies
   - Added geometric predicates for those have this issue. 20% speed reduction.
-- [X] 3D extension improvement. If 3D point clouds are denser (close spacing in x,y) than sensor noise there are issues. The zThresh parameter is now larger (because of noise) than the spacing which causes the normal threshold bypassing.
-  - Added additional normThreshMin parameter which if is not satisfied will automatically filter triangle.  ZThresh will no affect for normal filtering bypass.
+- [X] 3D extension improvement. If 3D point clouds are denser, close spacing in x,y, than sensor noise there are issues. This manifests itself into triangle wall climbing.
+  - Added additional normThreshMin parameter which if not satisfied will automatically filter triangle.  ZThresh will no have no effect to prevent this.
 
 
 
