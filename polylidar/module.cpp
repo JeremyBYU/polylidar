@@ -43,13 +43,15 @@ PYBIND11_MODULE(polylidar, m)
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
-        "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+        "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
+        "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     m.def("extractPolygons", &polylidar::extractPolygons,
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
-        "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+        "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
+        "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     m.def("extractPolygonsAndTimings", &polylidar::extractPolygonsAndTimings,
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,

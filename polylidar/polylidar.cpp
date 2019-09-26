@@ -81,18 +81,17 @@ inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybin
     bool passZThresh = false;
     double zDiff = 0.0;
     std::array<double, 3> normal;
+    // get zDiff and normal of triangle
     maxZChangeAndNormal(t, delaunay, points, zDiff, normal);
+    // get dot product of triangle
+    auto prod = std::abs(dotProduct3(normal, config.desiredVector));
+
     if (config.zThresh > 0 && zDiff < config.zThresh)
     {
         passZThresh = true;
     }
 
-    auto prod = std::abs(dotProduct3(normal, config.desiredVector));
-    if (prod < config.normThresh && !passZThresh)
-    {
-        return false;
-    }
-    return true;
+    return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
 
 inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config)
@@ -601,20 +600,22 @@ std::vector<Polygon> _extractPolygonsAndTimings(py::array_t<double> nparray, Con
 std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygons(py::array_t<double> nparray,
                                                                                                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                                                                                                     double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
-                                                                                                                    double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
+                                                                                                                    double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN, 
+                                                                                                                    double allowedClass = DEFAULT_ALLOWEDCLASS)
 {
     // This function allows us to convert keyword arguments into a configuration struct
-    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, normThreshMin,  allowedClass};
     return _extractPlanesAndPolygons(nparray, config);
 }
 
 std::vector<Polygon> extractPolygons(py::array_t<double> nparray,
                                      double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                      double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
-                                     double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
+                                     double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN,
+                                     double allowedClass = DEFAULT_ALLOWEDCLASS)
 {
     // This function allows us to convert keyword arguments into a configuration struct
-    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass};
     return _extractPolygons(nparray, config);
 }
 
@@ -624,7 +625,7 @@ std::tuple<std::vector<Polygon>, std::vector<float>> extractPolygonsAndTimings(p
                                      double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
 {
     // This function allows us to convert keyword arguments into a configuration struct
-    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, allowedClass};
+    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, 0.5, allowedClass};
     std::vector<float> timings;
     auto polygons = _extractPolygonsAndTimings(nparray, config, timings);
     

@@ -32,6 +32,7 @@
 #define DEFAULT_MINBBOX 100.0
 #define DEFAULT_ZTHRESH 0.20
 #define DEFAULT_NORMTHRESH 0.90
+#define DEFAULT_NORMTHRESH_MIN 0.1
 #define DEFAULT_ALLOWEDCLASS 4.0
 
 #define DEBUG 1
@@ -53,6 +54,7 @@ namespace polylidar {
         // 3D configuration
         double zThresh = DEFAULT_ZTHRESH;
         double normThresh = DEFAULT_NORMTHRESH;
+        double normThreshMin = DEFAULT_NORMTHRESH_MIN;
         // 4D configuration
         double allowedClass = DEFAULT_ALLOWEDCLASS;
         std::array<double, 3> desiredVector = std::array<double, 3>{0.0, 0.0, 1.0};
@@ -75,7 +77,7 @@ namespace polylidar {
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygons(pybind11::array_t<double> nparray,
                                 double alpha, double xyThresh, double lmax, size_t minTriangles,
                                 double minBboxArea, double zThresh, 
-                                double normThresh, double allowedClass);
+                                double normThresh, double normThreshMin, double allowedClass);
 
 
     std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config);
@@ -83,7 +85,7 @@ namespace polylidar {
     std::vector<Polygon>  extractPolygons(pybind11::array_t<double> nparray,
                                 double alpha, double xyThresh, double lamx, size_t minTriangles,
                                 double minBboxArea, double zThresh, 
-                                double normThresh, double allowedClass);
+                                double normThresh, double normThreshMin, double allowedClass);
     std::tuple<std::vector<Polygon>, std::vector<float>>  extractPolygonsAndTimings(pybind11::array_t<double> nparray,
                                 double alpha, double xyThresh, double lmax, size_t minTriangles,
                                 double minBboxArea, double zThresh, 

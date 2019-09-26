@@ -101,8 +101,8 @@ Legend:
   - Add robinhood hashing as direct replacement for std::unorderd_map. Polylidar is now 30% faster.
 - [X] Improper triangulation because of floating point inaccuracies
   - Added geometric predicates for those have this issue. 20% speed reduction.
-- [] 3D extension improvement. If 3D point clouds are denser (close spacing in x,y) than sensor noise there are issues. The zThresh parameter is now larger (because of noise) than the spacing which causes the normal threshold bypassing.
-  - Added additional normalThreshMin parameter which if is not satisfied will automatically filter triangle.  ZThresh will have not affect for normal filtering bypass.
+- [X] 3D extension improvement. If 3D point clouds are denser (close spacing in x,y) than sensor noise there are issues. The zThresh parameter is now larger (because of noise) than the spacing which causes the normal threshold bypassing.
+  - Added additional normThreshMin parameter which if is not satisfied will automatically filter triangle.  ZThresh will no affect for normal filtering bypass.
 
 
 

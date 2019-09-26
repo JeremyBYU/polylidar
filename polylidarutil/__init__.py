@@ -1,10 +1,11 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.colors as colors 
 from shapely.geometry import Polygon
 from descartes import PolygonPatch
 
-COLOR_PALETTE = plt.rcParams['axes.prop_cycle'].by_key()['color']
+COLOR_PALETTE = list(map(colors.to_rgb, plt.rcParams['axes.prop_cycle'].by_key()['color']))
 
 def get_poly_coords(outline, points):
     return [get_point(pi, points) for pi in outline]
@@ -59,6 +60,52 @@ def convert_to_shapely_polygons(polygons, points, return_first=False, sort=False
         return MultiPolygon(shapely_polygons)
     else:
         return shapely_polygons
+
+def set_axes_radius(ax, origin, radius):
+    ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
+    ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
+    ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
+
+
+def set_axes_equal(ax):
+    '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
+    cubes as cubes, etc..  This is one possible solution to Matplotlib's
+    ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
+
+    Input
+      ax: a matplotlib axis, e.g., as output from plt.gca().
+    '''
+
+    limits = np.array([
+        ax.get_xlim3d(),
+        ax.get_ylim3d(),
+        ax.get_zlim3d(),
+    ])
+
+    origin = np.mean(limits, axis=1)
+    radius = 0.5 * np.max(np.abs(limits[:, 1] - limits[:, 0]))
+    set_axes_radius(ax, origin, radius)
+
+
+def generate_3d_plane(bounds_x=[0,10,0.5], bounds_y=[0, 10, 0.5], holes=[[[3,5], [3, 5]]], height=0, planar_noise=0.01, height_noise=0.1):
+    X, Y = np.mgrid[bounds_x[0]:bounds_x[1]:bounds_x[2], bounds_y[0]:bounds_y[1]:bounds_y[2]]
+    pc = np.column_stack((X.ravel(), Y.ravel()))
+
+    plane_noise = np.random.randn(pc.shape[0], 2) * planar_noise
+    pc[:,:2] = pc[:,:2] + plane_noise
+
+    plane_height = (np.random.randn(pc.shape[0]) * height_noise) + height
+    pc_noisy = np.column_stack((pc[:,0], pc[:, 1], plane_height))
+
+    mask = np.zeros(pc_noisy.shape[0], dtype=bool)
+    for hole in holes:
+        holes_x, holes_y = hole
+        mask1 = (pc_noisy[:,0] > holes_x[0]) & (pc_noisy[:,0] < holes_x[1])
+        mask2 = (pc_noisy[:,1] > holes_y[0]) & (pc_noisy[:,1] < holes_y[1])
+        mask3 = mask1 & mask2
+        mask = mask | mask3
+
+    return pc_noisy[~mask]
 
 
 def plot_polygons(polygons, delaunay, points, ax):
@@ -131,6 +178,21 @@ def get_all_triangles(delaunay, points):
     coords = delaunay.coords
     triangle_coords = get_triangles_from_he(triangles, points)
     return triangle_coords
+
+
+def scale_points(points, z_value=None, z_scale=1.0):
+    if z_value is not None:
+        return points[:,0], points[:, 1], np.ones_like(points[:, 1]) * z_value
+    else:
+        return points[:,0], points[:, 1], points[:,2] * z_scale
+
+def plot_planes_3d(lidar_building, triangles, planes, ax, alpha=1.0, z_scale=1.0):
+    ax_planes = []
+    for i, plane in enumerate(planes):
+        triangles_plane = triangles[plane]
+        ax_plane = ax.plot_trisurf(*scale_points(lidar_building, z_scale=z_scale),triangles=triangles_plane, color=(COLOR_PALETTE[i] + (alpha, )),  edgecolor=(0,0,0,0.3), linewidth=0.5)
+        ax_planes.append(ax_plane)
+    return ax_planes
 
 def plot_triangle_meshes(plane_triangles, ax):
     for plane in plane_triangles:
