@@ -91,10 +91,10 @@ def generate_3d_plane(bounds_x=[0,10,0.5], bounds_y=[0, 10, 0.5], holes=[[[3,5],
     X, Y = np.mgrid[bounds_x[0]:bounds_x[1]:bounds_x[2], bounds_y[0]:bounds_y[1]:bounds_y[2]]
     pc = np.column_stack((X.ravel(), Y.ravel()))
 
-    plane_noise = np.random.randn(pc.shape[0], 2) * planar_noise
+    plane_noise = np.abs(np.random.randn(pc.shape[0], 2)) * planar_noise
     pc[:,:2] = pc[:,:2] + plane_noise
 
-    plane_height = (np.random.randn(pc.shape[0]) * height_noise) + height
+    plane_height = (np.abs(np.random.randn(pc.shape[0])) * height_noise) + height
     pc_noisy = np.column_stack((pc[:,0], pc[:, 1], plane_height))
 
     mask = np.zeros(pc_noisy.shape[0], dtype=bool)

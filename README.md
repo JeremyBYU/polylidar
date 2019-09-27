@@ -40,15 +40,15 @@ What are the inputs to the code?  The input arguments are a **contiguous** numpy
 What are the inputs?
 
 * points - Numpy array
-* Optional - 2D Triangle Filtering
-  * alpha (double) - The maximum circumradius of a triangle.
-  * lmax (double) - Maximum edge length of any edge in a triangle
-* Optional - 3D Triangle Filtering (normal filtering)
+* Required - 2D Triangle Filtering
+  * alpha (double, default=1.0) - The maximum circumradius of a triangle.
+  * lmax (double,default=0.0 [inactive]) - Maximum edge length of any edge in a triangle. i.e. maximum point distance for spatial connectivity.
+* Optional - 3D Triangle Filtering (normal filtering aka planarity constraints)
   * normalVector ([double, double, double]) - NOT IMPLEMENTED. Currently fixed to [0,0,1]. The normal vector of the planar mesh(s) you desire to extract.
   * normThresh (double, default=0.9) - Any triangle whose `abs(normalVector * triangleNormal) < normThresh` is filtered
-  * zThresh (double,default=0.2) - Normal filtering is ignored (bypassed) if the the "height" of a triangle is less than zThresh. This is used to attenuate false-positive filtering in noisy pointclouds. 
+  * zThresh (double,default=0.2) - Normal filtering is ignored (bypassed) if the the "height" (dz) of a triangle is less than zThresh. This is used to attenuate false-positive filtering in noisy pointclouds. 
   * normThreshMin (double, default=0.1) - Any triangle whose `abs(normalVector * triangleNormal) < normThreshMin` is filtered. This take priority over anything else, even zThresh bypass. Think of this as the bare minimum of flatness a triangle must have to remain in the mesh.
-* Optional - Plane Filtering
+* Optional - 3D Plane Filtering
   * minTriangles (int) - Any planar mesh who has less than this quantity of triangles will not be returned
 * Optional - Triangle Filtering by Class (4th Dimension)
   * allowedClass (double) - Will filter out triangles whose vertices are not classified the same as allowedClass
@@ -105,8 +105,13 @@ Legend:
   - Add robinhood hashing as direct replacement for std::unorderd_map. Polylidar is now 30% faster.
 - [X] Improper triangulation because of floating point inaccuracies
   - Added geometric predicates for those have this issue. 20% speed reduction.
-- [X] 3D extension improvement. If 3D point clouds are denser, close spacing in x,y, than sensor noise there are issues. This manifests itself into triangle wall climbing.
+- [X] 3D extension improvement. If 3D point clouds are denser than sensor noise there are issues (zThresh [noise] ~= max(triangle_dx, triangle_dy) [density]). This manifests itself into triangle wall climbing (merging non connected surfaces)
   - Added additional normThreshMin parameter which if not satisfied will automatically filter triangle.  ZThresh will no have no effect to prevent this.
+  - Drawback, small holes may appear in your mesh for very dense point clouds (very small triangles). Possible ways to resolve on user end:
+    - intelligently downsample to spread out point distribution on plane.
+    - or Buffer outward, then inward extracted polygon by very small amount. This will fill in tiny holes.
+  - Example of dense and noisy point clouds that can aid from normThreshMin - Intel Realsense D435. 
+  - Example of sensor with **non** noisy and **not** dense point clouds - Single Velodyne scan, (beam spacing removes density in a direction leading to long skinny triangles). No need for normThreshMin.
 
 
 
