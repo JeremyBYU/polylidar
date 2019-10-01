@@ -9,8 +9,6 @@ std::array<double, 2> UP_VECTOR = {0.0, 1.0};
 namespace polylidar
 {
 
-// Polygon::set()
-
 std::ostream &operator<<(std::ostream &os, const Config &config)
 {
     os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThresh=" << config.xyThresh << " lmax=" << config.xyThresh << " minTriangles=" << config.minTriangles
@@ -597,39 +595,5 @@ std::vector<Polygon> _extractPolygonsAndTimings(py::array_t<double> nparray, Con
     return polygons;
 }
 
-std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygons(py::array_t<double> nparray,
-                                                                                                                    double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
-                                                                                                                    double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
-                                                                                                                    double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN, 
-                                                                                                                    double allowedClass = DEFAULT_ALLOWEDCLASS)
-{
-    // This function allows us to convert keyword arguments into a configuration struct
-    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, normThreshMin,  allowedClass};
-    return _extractPlanesAndPolygons(nparray, config);
-}
-
-std::vector<Polygon> extractPolygons(py::array_t<double> nparray,
-                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
-                                     double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
-                                     double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN,
-                                     double allowedClass = DEFAULT_ALLOWEDCLASS)
-{
-    // This function allows us to convert keyword arguments into a configuration struct
-    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass};
-    return _extractPolygons(nparray, config);
-}
-
-std::tuple<std::vector<Polygon>, std::vector<float>> extractPolygonsAndTimings(py::array_t<double> nparray,
-                                     double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
-                                     double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
-                                     double normThresh = DEFAULT_NORMTHRESH, double allowedClass = DEFAULT_ALLOWEDCLASS)
-{
-    // This function allows us to convert keyword arguments into a configuration struct
-    Config config{0, alpha, xyThresh, lmax, minTriangles, minBboxArea, zThresh, normThresh, 0.5, allowedClass};
-    std::vector<float> timings;
-    auto polygons = _extractPolygonsAndTimings(nparray, config, timings);
-    
-    return std::make_tuple(polygons, timings);
-}
 
 } // namespace polylidar

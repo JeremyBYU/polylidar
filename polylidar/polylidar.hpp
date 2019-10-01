@@ -4,6 +4,8 @@
 #define _USE_MATH_DEFINES
 #define VERSION_INFO "0.0.3"
 
+// #define NDEBUG
+#include <cassert>
 #include <array>
 #include <ostream>
 #include <vector>
@@ -40,6 +42,27 @@
 namespace py = pybind11;
 
 namespace polylidar {
+
+    class Matrix {
+        public:
+        double *ptr;
+        size_t rows;
+        size_t cols;
+        
+        Matrix(double *ptr_, size_t rows_, size_t cols_)
+            :  ptr(ptr_),
+               rows(rows_),
+               cols(cols_){}
+
+        
+        const double& operator()(int &i, int &j) 
+        { 
+            assert(i >= 0 && i < rows);
+            assert(j >= 0 && j < cols);
+
+            return ptr[i * cols + j]; 
+        } 
+    };
 
     using vvi = std::vector<std::vector<size_t>>;
     struct Config
