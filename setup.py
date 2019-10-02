@@ -4,9 +4,6 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import setuptools
 
-os.environ["CXX"] = "g++-6"
-os.environ["CC"] = "gcc-6"
-
 
 USE_ROBUST_PREDICATES_NAME = 'USE_ROBUST_PREDICATES'
 USE_ROBUST_PREDICATES = int(os.environ.get( USE_ROBUST_PREDICATES_NAME, 0 ))
@@ -114,6 +111,7 @@ class BuildExt(build_ext):
         if ct == 'unix':
             opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append('-Wall')
+            # opts.append('-stdlib=libstdc++')
             opts.append(cpp_flag(self.compiler))
             if has_flag(self.compiler, '-fvisibility=hidden'):
                 opts.append('-fvisibility=hidden')

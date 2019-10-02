@@ -10,17 +10,19 @@ from polylidarutil import (generate_test_points, plot_points, plot_triangles, ge
 from tests.helpers.utils import load_csv
 
 
-config = dict(alpha=0.0, xyThresh=0.0, lmax=100.0)
-# points = load_csv('100K_array_3d.csv')
+config = dict(alpha=0.0, xyThresh=0.0, lmax=100.0, minTriangles=1)
+points = load_csv('100K_array_3d.csv')
 points = np.array([
     [0.,0.,1.0],
     [0.,1., 1.0],
     [1., 1., 1.0],
     [1, 0.0, 1.0]
 ])
+print(points.dtype, points.flags, points.shape)
 np.random.seed(1)
 points = np.random.randn(10, 3)
 points[:,2] = points[:,2] * 0.01
+print(points.dtype, points.flags, points.shape)
 print(points)
 # print(points[1,0], points[1,1])
 
