@@ -1,36 +1,14 @@
-
+// This is a helper class for Polylidar
 #ifndef POLYLIDARHELPER
 #define POLYLIDARHELPER
 #define _USE_MATH_DEFINES
+#include "util.hpp"
 #include "delaunator.hpp"
 // #define NDEBUG
 #include <cassert>
 
 namespace polylidar {
 
-constexpr std::size_t operator "" _z ( unsigned long long n )
-    { return n; }
-
-class Matrix {
-    public:
-    double *ptr;
-    size_t rows;
-    size_t cols;
-    
-    Matrix(double *ptr_, size_t rows_, size_t cols_)
-        :  ptr(ptr_),
-            rows(rows_),
-            cols(cols_){}
-
-    
-    const double& operator()(size_t i, size_t j) 
-    { 
-        // assert(i >= 0 && i < rows);
-        // assert(j >= 0 && j < cols);
-
-        return ptr[i * cols + j]; 
-    } 
-};
 
 struct ExtremePoint 
 {
@@ -167,10 +145,10 @@ inline std::array<double, 2> getVector(size_t edge, delaunator::Delaunator &dela
     std::array<double, 2> result;
 
     auto pi = triangles[edge];
-    std::array<double, 2> p0 = {coords[pi * 2], coords[pi * 2 +1]};
+    std::array<double, 2> p0 = {coords(pi, 0_z), coords(pi, 1_z)};
 
     auto piNext = triangles[nextHalfedge(edge)];
-    std::array<double, 2> p1 = {coords[piNext * 2], coords[piNext * 2 +1]};
+    std::array<double, 2> p1 = {coords(piNext, 0_z), coords(piNext, 1_z)};
     if (flip) {
         result[0] = p0[0] - p1[0];
         result[1] = p0[1] - p1[1];

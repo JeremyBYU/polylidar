@@ -465,21 +465,21 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
 {
     config.dim = nparray.cols;
 
-    std::vector<double> coords2D;
-    auto size2D = nparray.rows * 2;
-    if (nparray.cols > 2_z)
-    {
-        coords2D.resize(size2D);
-        copy2Ddata(nparray, coords2D);
-    } else 
-    {
-        double* data = nparray.ptr;
-        auto temp = std::vector<double>(data, data + size2D);
-        coords2D.swap(temp);
-    }
+    // std::vector<double> coords2D;
+    // auto size2D = nparray.rows * 2;
+    // if (nparray.cols > 2_z)
+    // {
+    //     coords2D.resize(size2D);
+    //     copy2Ddata(nparray, coords2D);
+    // } else 
+    // {
+    //     double* data = nparray.ptr;
+    //     auto temp = std::vector<double>(data, data + size2D);
+    //     coords2D.swap(temp);
+    // }
     // std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
-    delaunator::Delaunator delaunay(coords2D);
+    delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
@@ -505,21 +505,21 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 {
     config.dim = nparray.cols;
 
-    std::vector<double> coords2D;
-    auto size2D = nparray.rows * 2;
-    if (nparray.cols > 2_z)
-    {
-        coords2D.resize(size2D);
-        copy2Ddata(nparray, coords2D);
-    } else 
-    {
-        double* data = nparray.ptr;
-        auto temp = std::vector<double>(data, data + size2D);
-        coords2D.swap(temp);
-    }
+    // std::vector<double> coords2D;
+    // auto size2D = nparray.rows * 2;
+    // if (nparray.cols > 2_z)
+    // {
+    //     coords2D.resize(size2D);
+    //     copy2Ddata(nparray, coords2D);
+    // } else 
+    // {
+    //     double* data = nparray.ptr;
+    //     auto temp = std::vector<double>(data, data + size2D);
+    //     coords2D.swap(temp);
+    // }
     // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
-    delaunator::Delaunator delaunay(coords2D);
+    delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
@@ -544,20 +544,20 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, 
     config.dim = nparray.cols;
 
     std::vector<double> coords2D;
-    auto size2D = nparray.rows * 2;
-    if (nparray.cols > 2_z)
-    {
-        coords2D.resize(size2D);
-        copy2Ddata(nparray, coords2D);
-    } else 
-    {
-        double* data = nparray.ptr;
-        auto temp = std::vector<double>(data, data + size2D);
-        coords2D.swap(temp);
-    }
+    // auto size2D = nparray.rows * 2;
+    // if (nparray.cols > 2_z)
+    // {
+    //     coords2D.resize(size2D);
+    //     copy2Ddata(nparray, coords2D);
+    // } else 
+    // {
+    //     double* data = nparray.ptr;
+    //     auto temp = std::vector<double>(data, data + size2D);
+    //     coords2D.swap(temp);
+    // }
     // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
-    delaunator::Delaunator delaunay(coords2D);
+    delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;

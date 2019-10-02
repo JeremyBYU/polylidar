@@ -1,3 +1,4 @@
+// This defines the main entry point for the C++ Python Extension using Pybind11
 #include "glue.hpp"
 
 namespace py = pybind11;
@@ -24,6 +25,19 @@ PYBIND11_MODULE(polylidar, m)
 
     py::bind_vector<std::vector<std::size_t>>(m, "VectorInts", py::buffer_protocol());
     py::bind_vector<std::vector<double>>(m, "VectorDouble", py::buffer_protocol());
+
+    py::class_<polylidar::Matrix>(m, "Matrix", py::buffer_protocol())
+   .def_buffer([](polylidar::Matrix &m) -> py::buffer_info {
+        return py::buffer_info(
+            m.ptr,                               /* Pointer to buffer */
+            sizeof(double),                          /* Size of one scalar */
+            py::format_descriptor<double>::format(), /* Python struct-style format descriptor */
+            2,                                      /* Number of dimensions */
+            { m.rows, m.cols },                 /* Buffer dimensions */
+            { sizeof(double) * m.cols,             /* Strides (in bytes) for each index */
+              sizeof(double) }
+        );
+    });
 
     py::class_<delaunator::Delaunator>(m, "Delaunator")
         .def(py::init<py::array_t<double>>())

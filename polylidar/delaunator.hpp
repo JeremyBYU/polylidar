@@ -2,6 +2,8 @@
 
 // Copyright (c) 2018 Volodymyr Bilonenko
 
+// Note that this has been heavily modified by Jeremy Castagno
+
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
@@ -39,6 +41,8 @@
 #include "predicates.h"
 #endif
 
+#include "util.hpp"
+
 #ifdef PY_EXTENSION
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
 #include "pybind11/stl.h"      // Pybind11 import for STL containers
@@ -49,7 +53,7 @@ namespace delaunator {
     class Delaunator {
 
     public:
-        std::vector<double> coords;
+        polylidar::Matrix coords;
         std::vector<std::size_t> triangles;
         std::vector<std::size_t> halfedges;
         std::vector<std::size_t> hull_prev;
@@ -57,7 +61,7 @@ namespace delaunator {
         std::vector<std::size_t> hull_tri;
         std::size_t hull_start;
 
-        Delaunator(std::vector<double> &in_coords);
+        Delaunator(polylidar::Matrix &in_coords);
         #ifdef PY_EXTENSION
         Delaunator(pybind11::array_t<double> nparray);
         #endif

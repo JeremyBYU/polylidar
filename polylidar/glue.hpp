@@ -1,3 +1,6 @@
+// This glues pybind11 to the pure C++ polylidar project
+// Jeremy Castagno
+
 #include "polylidar.hpp"
 #include "delaunator.hpp"
 

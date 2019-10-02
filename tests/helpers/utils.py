@@ -26,7 +26,7 @@ def verify_points(data, n_cols=2):
 
 def basic_polylidar_verification(points, delaunay, planes, polygons):
     # make sure delaunay has the correct number of points
-    assert points.shape[0] == len(delaunay.coords) / 2
+    assert points.shape[0] == np.array(delaunay.coords).shape[0]
     # make sure that some planes were extracted
     assert len(planes) > 0
     # make sure that some polygons were extracted

@@ -175,7 +175,6 @@ def get_plane_triangles(planes, triangles, points):
 
 def get_all_triangles(delaunay, points):
     triangles = delaunay.triangles
-    coords = delaunay.coords
     triangle_coords = get_triangles_from_he(triangles, points)
     return triangle_coords
 

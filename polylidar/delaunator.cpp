@@ -24,6 +24,9 @@
 
 namespace delaunator {
 
+constexpr std::size_t operator "" _z ( unsigned long long n )
+    { return n; }
+
 //@see https://stackoverflow.com/questions/33333363/built-in-mod-vs-custom-mod-function-improve-the-performance-of-modulus-op/33333636#33333636
 inline size_t fast_mod(const size_t i, const size_t c) {
     return i >= c ? i % c : i;
@@ -110,16 +113,16 @@ inline std::pair<double, double> circumcenter(
 
 struct compare {
 
-    std::vector<double> const& coords;
+    polylidar::Matrix const& coords;
     double cx;
     double cy;
 
     bool operator()(std::size_t i, std::size_t j) {
-        const double d1 = dist(coords[2 * i], coords[2 * i + 1], cx, cy);
-        const double d2 = dist(coords[2 * j], coords[2 * j + 1], cx, cy);
+        const double d1 = dist(coords(i, 0_z), coords(i, 1_z), cx, cy);
+        const double d2 = dist(coords(j, 0_z), coords(j, 1_z), cx, cy);
         const double diff1 = d1 - d2;
-        const double diff2 = coords[2 * i] - coords[2 * j];
-        const double diff3 = coords[2 * i + 1] - coords[2 * j + 1];
+        const double diff2 = coords(i, 0_z) - coords(j, 0_z);
+        const double diff3 = coords(i, 1_z) - coords(j, 1_z);
 
         if (diff1 > 0.0 || diff1 < 0.0) {
             return diff1 < 0;
@@ -197,7 +200,7 @@ struct DelaunatorPoint {
 // Delaunator::Delaunator(pybind11::array_t<double> nparray)
 
 void Delaunator::triangulate() {
-    std::size_t n = coords.size() >> 1;
+    std::size_t n = coords.rows;
 
     double max_x = std::numeric_limits<double>::min();
     double max_y = std::numeric_limits<double>::min();
@@ -207,8 +210,8 @@ void Delaunator::triangulate() {
     ids.reserve(n);
 
     for (std::size_t i = 0; i < n; i++) {
-        const double x = coords[2 * i];
-        const double y = coords[2 * i + 1];
+        const double x = coords(i, 0);
+        const double y = coords(i, 1);
 
         if (x < min_x) min_x = x;
         if (y < min_y) min_y = y;
@@ -227,30 +230,30 @@ void Delaunator::triangulate() {
 
     // pick a seed point close to the centroid
     for (std::size_t i = 0; i < n; i++) {
-        const double d = dist(cx, cy, coords[2 * i], coords[2 * i + 1]);
+        const double d = dist(cx, cy, coords(i, 0), coords(i, 1));
         if (d < min_dist) {
             i0 = i;
             min_dist = d;
         }
     }
 
-    const double i0x = coords[2 * i0];
-    const double i0y = coords[2 * i0 + 1];
+    const double i0x = coords(i0, 0);
+    const double i0y = coords(i0, 1);
 
     min_dist = std::numeric_limits<double>::max();
 
     // find the point closest to the seed
     for (std::size_t i = 0; i < n; i++) {
         if (i == i0) continue;
-        const double d = dist(i0x, i0y, coords[2 * i], coords[2 * i + 1]);
+        const double d = dist(i0x, i0y, coords(i, 0), coords(i, 1));
         if (d < min_dist && d > 0.0) {
             i1 = i;
             min_dist = d;
         }
     }
 
-    double i1x = coords[2 * i1];
-    double i1y = coords[2 * i1 + 1];
+    double i1x = coords(i1, 0);
+    double i1y = coords(i1, 1);
 
     double min_radius = std::numeric_limits<double>::max();
 
@@ -259,7 +262,7 @@ void Delaunator::triangulate() {
         if (i == i0 || i == i1) continue;
 
         const double r = circumradius(
-            i0x, i0y, i1x, i1y, coords[2 * i], coords[2 * i + 1]);
+            i0x, i0y, i1x, i1y, coords(i, 0), coords(i, 1));
 
         if (r < min_radius) {
             i2 = i;
@@ -271,10 +274,10 @@ void Delaunator::triangulate() {
         throw std::runtime_error("not triangulation");
     }
 
-    double i2x = coords[2 * i2];
-    double i2y = coords[2 * i2 + 1];
+    double i2x = coords(i2, 0);
+    double i2y = coords(i2, 1);
 
-    if (orient_generic(&coords[2 * i0], &coords[2 * i1], &coords[2 * i2])) {
+    if (orient_generic(&coords(i0, 0), &coords(i1, 0), &coords(i2, 0))) {
         std::swap(i1, i2);
         std::swap(i1x, i2x);
         std::swap(i1y, i2y);
@@ -319,8 +322,8 @@ void Delaunator::triangulate() {
     double yp = std::numeric_limits<double>::quiet_NaN();
     for (std::size_t k = 0; k < n; k++) {
         const std::size_t i = ids[k];
-        const double x = coords[2 * i];
-        const double y = coords[2 * i + 1];
+        const double x = coords(i, 0);
+        const double y = coords(i, 1);
 
         // skip near-duplicate points
         if (k > 0 && check_pts_equal(x, y, xp, yp)) continue;
@@ -346,7 +349,7 @@ void Delaunator::triangulate() {
         size_t e = start;
         size_t q;
 
-        while (q = hull_next[e], !orient_generic(&coords[2 * i], &coords[2 * e], &coords[2 * q])) { //TODO: does it works in a same way as in JS
+        while (q = hull_next[e], !orient_generic(&coords(i, 0), &coords(e, 0), &coords(q, 0))) { //TODO: does it works in a same way as in JS
             e = q;
             if (e == start) {
                 e = INVALID_INDEX;
@@ -373,7 +376,7 @@ void Delaunator::triangulate() {
         std::size_t next = hull_next[e];
         while (
             q = hull_next[next],
-            orient_generic(&coords[2 * i], &coords[2 * next], &coords[2 * q])) {
+            orient_generic(&coords(i, 0), &coords(next, 0), &coords(q, 0))) {
             t = add_triangle(next, i, q, hull_tri[i], INVALID_INDEX, hull_tri[next]);
             hull_tri[i] = legalize(t + 2);
             hull_next[next] = next; // mark as removed
@@ -385,7 +388,7 @@ void Delaunator::triangulate() {
         if (e == start) {
             while (
                 q = hull_prev[e],
-                orient_generic(&coords[2 * i], &coords[2 * q], &coords[2 * e])) {
+                orient_generic(&coords(i, 0), &coords(q, 0), &coords(e, 0))) {
                 t = add_triangle(q, i, e, INVALID_INDEX, hull_tri[e], hull_tri[q]);
                 legalize(t + 2);
                 hull_tri[q] = t;
@@ -403,12 +406,12 @@ void Delaunator::triangulate() {
         hull_next[i] = next;
 
         m_hash[hash_key(x, y)] = i;
-        m_hash[hash_key(coords[2 * e], coords[2 * e + 1])] = e;
+        m_hash[hash_key(coords(e, 0), coords(e, 1))] = e;
     }
 }
 
-Delaunator::Delaunator(std::vector<double> &in_coords)
-    : coords(),
+Delaunator::Delaunator(polylidar::Matrix &in_coords)
+    : coords(in_coords),
       triangles(),
       halfedges(),
       hull_prev(),
@@ -420,7 +423,6 @@ Delaunator::Delaunator(std::vector<double> &in_coords)
       m_center_y(),
       m_hash_size(),
       m_edge_stack() {
-          coords.swap(in_coords);
     }
 #ifdef PY_EXTENSION
 Delaunator::Delaunator(pybind11::array_t<double> nparray)
@@ -437,16 +439,12 @@ Delaunator::Delaunator(pybind11::array_t<double> nparray)
       m_hash_size(),
       m_edge_stack() {
         // std::cout << "Inside Delaunator Numpy Constructor" << std::endl;
-        auto shape = nparray.shape();
-        auto rows = shape[0];
-        // auto cols = shape[1];
-
-        // std::cout << "Shape " << rows << " , " << cols << std::endl;
-
-        auto size = rows * 2;
-        const double *data = nparray.data();
-        auto temp = std::vector<double>(data, data + size);
-        coords.swap(temp);
+        auto info = nparray.request();
+        std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
+        coords.ptr = (double*)info.ptr;
+        coords.rows = shape[0];
+        coords.cols = shape[1];
+        // coords = polylidar::Matrix((double*)info.ptr, shape[0], shape[1]);
     }
 #endif
     
@@ -455,7 +453,7 @@ double Delaunator::get_hull_area() {
     std::vector<double> hull_area;
     size_t e = hull_start;
     do {
-        hull_area.push_back((coords[2 * e] - coords[2 * hull_prev[e]]) * (coords[2 * e + 1] + coords[2 * hull_prev[e] + 1]));
+        hull_area.push_back((coords(e, 0) - coords(hull_prev[e], 0)) * (coords(e, 1) + coords(hull_prev[e], 1)));
         e = hull_next[e];
     } while (e != hull_start);
     return sum(hull_area);
@@ -509,10 +507,10 @@ std::size_t Delaunator::legalize(std::size_t a) {
         const std::size_t p1 = triangles[bl];
 
         const bool illegal = incircle_generic(
-            &coords[2 * p0],
-            &coords[2 * pr],
-            &coords[2 * pl],
-            &coords[2 * p1]);
+            &coords(p0, 0),
+            &coords(pr, 0),
+            &coords(pl, 0),
+            &coords(p1, 0));
 
         if (illegal) {
             triangles[a] = p1;
