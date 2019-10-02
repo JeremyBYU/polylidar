@@ -4,8 +4,6 @@
 #define _USE_MATH_DEFINES
 #define VERSION_INFO "0.0.3"
 
-// #define NDEBUG
-#include <cassert>
 #include <array>
 #include <ostream>
 #include <vector>
@@ -21,10 +19,10 @@
 #include "delaunator.hpp"
 #include "robin_hood.h"
 
-#include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
-#include "pybind11/stl.h"      // Pybind11 import for STL containers
-#include <pybind11/stl_bind.h> // Pybind11 stl bindings
-#include "pybind11/numpy.h"
+// #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
+// #include "pybind11/stl.h"      // Pybind11 import for STL containers
+// #include <pybind11/stl_bind.h> // Pybind11 stl bindings
+// #include "pybind11/numpy.h"
 
 #define DEFAULT_DIM 2
 #define DEFAULT_ALPHA 1.0
@@ -39,36 +37,16 @@
 
 #define DEBUG 1
 
-namespace py = pybind11;
+// namespace py = pybind11;
 
 namespace polylidar {
-
-    class Matrix {
-        public:
-        double *ptr;
-        size_t rows;
-        size_t cols;
-        
-        Matrix(double *ptr_, size_t rows_, size_t cols_)
-            :  ptr(ptr_),
-               rows(rows_),
-               cols(cols_){}
-
-        
-        const double& operator()(int &i, int &j) 
-        { 
-            assert(i >= 0 && i < rows);
-            assert(j >= 0 && j < cols);
-
-            return ptr[i * cols + j]; 
-        } 
-    };
-
     using vvi = std::vector<std::vector<size_t>>;
+
+
     struct Config
     {
         // 2D base configuration
-        int dim = DEFAULT_DIM;
+        size_t dim = DEFAULT_DIM;
         double alpha = DEFAULT_ALPHA;
         double xyThresh = DEFAULT_XYTHRESH;
         double lmax = DEFAULT_LMAX;
@@ -95,24 +73,25 @@ namespace polylidar {
         void setHoles(vvi x) {holes = x;}
     };
 
-    std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(pybind11::array_t<double> nparray, Config config);
 
-    std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygons(pybind11::array_t<double> nparray,
-                                double alpha, double xyThresh, double lmax, size_t minTriangles,
-                                double minBboxArea, double zThresh, 
-                                double normThresh, double normThreshMin, double allowedClass);
+    // std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygons(pybind11::array_t<double> nparray,
+    //                             double alpha, double xyThresh, double lmax, size_t minTriangles,
+    //                             double minBboxArea, double zThresh, 
+    //                             double normThresh, double normThreshMin, double allowedClass);
 
 
-    std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config);
+    std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(Matrix &nparray, Config config);
+    std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config);
+    std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, std::vector<float> &timings);
 
-    std::vector<Polygon>  extractPolygons(pybind11::array_t<double> nparray,
-                                double alpha, double xyThresh, double lamx, size_t minTriangles,
-                                double minBboxArea, double zThresh, 
-                                double normThresh, double normThreshMin, double allowedClass);
-    std::tuple<std::vector<Polygon>, std::vector<float>>  extractPolygonsAndTimings(pybind11::array_t<double> nparray,
-                                double alpha, double xyThresh, double lmax, size_t minTriangles,
-                                double minBboxArea, double zThresh, 
-                                double normThresh, double allowedClass);
+    // std::vector<Polygon>  extractPolygons(pybind11::array_t<double> nparray,
+    //                             double alpha, double xyThresh, double lamx, size_t minTriangles,
+    //                             double minBboxArea, double zThresh, 
+    //                             double normThresh, double normThreshMin, double allowedClass);
+    // std::tuple<std::vector<Polygon>, std::vector<float>>  extractPolygonsAndTimings(pybind11::array_t<double> nparray,
+    //                             double alpha, double xyThresh, double lmax, size_t minTriangles,
+    //                             double minBboxArea, double zThresh, 
+    //                             double normThresh, double allowedClass);
 }
 
 

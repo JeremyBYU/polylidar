@@ -407,8 +407,8 @@ void Delaunator::triangulate() {
     }
 }
 
-Delaunator::Delaunator(std::vector<double> in_coords)
-    : coords(in_coords),
+Delaunator::Delaunator(std::vector<double> &in_coords)
+    : coords(),
       triangles(),
       halfedges(),
       hull_prev(),
@@ -420,10 +420,12 @@ Delaunator::Delaunator(std::vector<double> in_coords)
       m_center_y(),
       m_hash_size(),
       m_edge_stack() {
+          coords.swap(in_coords);
     }
 
 Delaunator::Delaunator(pybind11::array_t<double> nparray)
-    : triangles(),
+    : coords(),
+      triangles(),
       halfedges(),
       hull_prev(),
       hull_next(),

@@ -7,6 +7,9 @@
 #include "pybind11/numpy.h"
 
 
+namespace py = pybind11;
+
+
 namespace polylidar {
 
   std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygons(py::array_t<double> nparray,

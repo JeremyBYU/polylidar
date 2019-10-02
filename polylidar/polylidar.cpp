@@ -1,10 +1,10 @@
 #include "polylidar.hpp"
 
 double DESIRED_VECTOR[3] = {0.0, 0.0, 1.0};
-namespace py = pybind11;
-using namespace pybind11::literals;
-
 std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+// namespace py = pybind11;
+// using namespace pybind11::literals;
+
 
 namespace polylidar
 {
@@ -38,21 +38,18 @@ std::ostream &operator<<(std::ostream &os, const ExtremePoint &values)
     return os;
 }
 
-void copy2Ddata(py::array_t<double> &src, py::array_t<double> &dest)
+void copy2Ddata(Matrix &src, std::vector<double> &dest)
 {
-    auto shape = src.shape();
-    auto rows = shape[0];
+    size_t rows = src.rows;
 
-    auto src_ = src.unchecked<2>();
-    auto dest_ = dest.mutable_unchecked<2>();
-    for (int i = 0; i < rows; i++)
+    for (size_t i = 0; i < rows; i++)
     {
-        dest_(i, 0) = src_(i, 0);
-        dest_(i, 1) = src_(i, 1);
+        dest[2*i] = src(i,0);
+        dest[2*i+1] = src(i,1);
     }
 }
 
-inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config)
+inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
     // std::cout << "Triangle " << t << " Radius: " << radius << std::endl;
@@ -74,7 +71,7 @@ inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, pybin
 }
 
 
-inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config)
+inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay,  Matrix &points, Config &config)
 {
     bool passZThresh = false;
     double zDiff = 0.0;
@@ -92,35 +89,35 @@ inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay, pybin
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
 
-inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> points, Config &config)
+inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay,  Matrix &points, Config &config)
 {
     // hmm simple for right now
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
-void createTriHash2(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+void createTriHash2(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
-    auto points_unchecked = points.unchecked<2>();
+    // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
     {
-        if (validateTriangle2D(t, delaunay, points_unchecked, config))
+        if (validateTriangle2D(t, delaunay, points, config))
         {
             triHash[t] = t;
         }
     }
 }
 
-void createTriHash3(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+void createTriHash3(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
-    auto points_unchecked = points.unchecked<2>();
+    // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
     {
-        bool valid2D = validateTriangle2D(t, delaunay, points_unchecked, config);
-        bool valid3D = validateTriangle3D(t, delaunay, points_unchecked, config);
+        bool valid2D = validateTriangle2D(t, delaunay, points, config);
+        bool valid3D = validateTriangle3D(t, delaunay, points, config);
         if (valid2D && valid3D)
         {
             triHash[t] = t;
@@ -128,20 +125,20 @@ void createTriHash3(robin_hood::unordered_map<size_t, size_t> &triHash, delaunat
     }
 }
 
-void createTriHash4(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+void createTriHash4(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
-    auto points_unchecked = points.unchecked<2>();
+    // auto points_unchecked = points.unchecked<2>();
     // std::cout << "Delaunay size " << delaunay.coords.size();
     // TODO static_cast<size_t>
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
     {
         // std::cout<< "Beginning 2D validation: " << t << std::endl;
-        bool valid2D = validateTriangle2D(t, delaunay, points_unchecked, config);
+        bool valid2D = validateTriangle2D(t, delaunay, points, config);
         // std::cout<< "Beginning 3D validation: " << t << std::endl;
-        bool valid3D = validateTriangle3D(t, delaunay, points_unchecked, config);
+        bool valid3D = validateTriangle3D(t, delaunay, points, config);
         // std::cout<< "Beginning 4D validation: " << t << std::endl;
-        bool valid4D = validateTriangle4D(t, delaunay, points_unchecked, config);
+        bool valid4D = validateTriangle4D(t, delaunay, points, config);
         // std::cout << "Valid4D: " << valid4D << std::endl;
         // auto valid4D = true;
         if (valid2D && valid3D && valid4D)
@@ -152,7 +149,7 @@ void createTriHash4(robin_hood::unordered_map<size_t, size_t> &triHash, delaunat
 }
 
 
-void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, py::array_t<double> &points,
+void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, Matrix &points,
                         robin_hood::unordered_map<size_t, std::vector<size_t>> &pointHash, robin_hood::unordered_map<size_t, size_t> &edgeHash,
                         ExtremePoint &xPoint)
 {
@@ -185,7 +182,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
     // std::cout << "ConstructPointHash - Time creating triangle Hash (ms): " << elapsed.count() << std::endl;
 
 
-    auto points_unchecked = points.unchecked<2>();
+    // auto points_unchecked = points.unchecked<2>();
 
     // Loop through every triangle in the plane
     for (auto &&t : plane)
@@ -206,7 +203,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
                 edgeHash[heIndex] = heIndex;
                 // get point index of this half edge, this is an edge leaving from this pi
                 auto pi = triangles[heIndex];
-                trackExtremePoint(pi, points_unchecked, xPoint, heIndex);
+                trackExtremePoint(pi, points, xPoint, heIndex);
                 // Check if the point has already been indexed
                 if (pointHash.find(pi) == pointHash.end())
                 {
@@ -316,7 +313,7 @@ std::vector<std::vector<size_t>> extractInteriorHoles(robin_hood::unordered_map<
     return allHoles;
 }
 
-Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     Polygon poly;
     // point hash map
@@ -363,7 +360,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
     return poly;
 }
 
-std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
 
     std::vector<Polygon> polygons;
@@ -421,7 +418,7 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::Delaunator 
     return true;
 }
 
-std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay, py::array_t<double> &points, Config &config)
+std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
     robin_hood::unordered_map<size_t, size_t> triHash;
@@ -463,28 +460,26 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     return planes;
 }
 
-std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(py::array_t<double> nparray, Config config)
+
+std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix &nparray, Config config)
 {
-    auto shape = nparray.shape();
-    int rows = shape[0];
-    int cols = shape[1];
-    config.dim = cols;
+    config.dim = nparray.cols;
 
-    // std::cout << "Config: " << config <<std::endl;
-
-    // std::cout << "Shape " << rows << "," << cols << std::endl;
-    py::array_t<double> temp;
-    py::array_t<double> *nparray2D;
-    nparray2D = &nparray;
-    if (cols > 2)
+    std::vector<double> coords2D;
+    auto size2D = nparray.rows * 2;
+    if (nparray.cols > 2_z)
     {
-        temp.resize({rows, 2});
-        copy2Ddata(nparray, temp);
-        nparray2D = &temp;
+        coords2D.resize(size2D);
+        copy2Ddata(nparray, coords2D);
+    } else 
+    {
+        double* data = nparray.ptr;
+        auto temp = std::vector<double>(data, data + size2D);
+        coords2D.swap(temp);
     }
     // std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
-    delaunator::Delaunator delaunay(*nparray2D);
+    delaunator::Delaunator delaunay(coords2D);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
@@ -506,28 +501,25 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // nparray2D is a contigious buffer of (ROWS,2)
 }
 
-std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config)
+std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 {
-    auto shape = nparray.shape();
-    int rows = shape[0];
-    int cols = shape[1];
-    config.dim = cols;
+    config.dim = nparray.cols;
 
-    // std::cout << "Config: " << config <<std::endl;
-
-    // std::cout << "Shape " << rows << "," << cols << std::endl;
-    py::array_t<double> temp;
-    py::array_t<double> *nparray2D;
-    nparray2D = &nparray;
-    if (cols > 2)
+    std::vector<double> coords2D;
+    auto size2D = nparray.rows * 2;
+    if (nparray.cols > 2_z)
     {
-        temp.resize({rows, 2});
-        copy2Ddata(nparray, temp);
-        nparray2D = &temp;
+        coords2D.resize(size2D);
+        copy2Ddata(nparray, coords2D);
+    } else 
+    {
+        double* data = nparray.ptr;
+        auto temp = std::vector<double>(data, data + size2D);
+        coords2D.swap(temp);
     }
     // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
-    delaunator::Delaunator delaunay(*nparray2D);
+    delaunator::Delaunator delaunay(coords2D);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
@@ -547,28 +539,25 @@ std::vector<Polygon> _extractPolygons(py::array_t<double> nparray, Config config
     return polygons;
 }
 
-std::vector<Polygon> _extractPolygonsAndTimings(py::array_t<double> nparray, Config config, std::vector<float> &timings)
+std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, std::vector<float> &timings)
 {
-    auto shape = nparray.shape();
-    int rows = shape[0];
-    int cols = shape[1];
-    config.dim = cols;
+    config.dim = nparray.cols;
 
-    // std::cout << "Config: " << config <<std::endl;
-
-    // std::cout << "Shape " << rows << "," << cols << std::endl;
-    py::array_t<double> temp;
-    py::array_t<double> *nparray2D;
-    nparray2D = &nparray;
-    if (cols > 2)
+    std::vector<double> coords2D;
+    auto size2D = nparray.rows * 2;
+    if (nparray.cols > 2_z)
     {
-        temp.resize({rows, 2});
-        copy2Ddata(nparray, temp);
-        nparray2D = &temp;
+        coords2D.resize(size2D);
+        copy2Ddata(nparray, coords2D);
+    } else 
+    {
+        double* data = nparray.ptr;
+        auto temp = std::vector<double>(data, data + size2D);
+        coords2D.swap(temp);
     }
     // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
-    delaunator::Delaunator delaunay(*nparray2D);
+    delaunator::Delaunator delaunay(coords2D);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
     float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;

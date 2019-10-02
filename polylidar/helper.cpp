@@ -9,7 +9,7 @@ namespace polylidar {
         return std::sqrt(a * a + b * b);
     }
 
-    double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points){
+    double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, Matrix &points){
         auto pa = delaunay.triangles[t * 3];
         auto pb = delaunay.triangles[t * 3 + 1];
         auto pc = delaunay.triangles[t * 3 + 2];

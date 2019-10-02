@@ -3,9 +3,34 @@
 #define POLYLIDARHELPER
 #define _USE_MATH_DEFINES
 #include "delaunator.hpp"
-#include "polylidar.hpp"
+// #define NDEBUG
+#include <cassert>
 
 namespace polylidar {
+
+constexpr std::size_t operator "" _z ( unsigned long long n )
+    { return n; }
+
+class Matrix {
+    public:
+    double *ptr;
+    size_t rows;
+    size_t cols;
+    
+    Matrix(double *ptr_, size_t rows_, size_t cols_)
+        :  ptr(ptr_),
+            rows(rows_),
+            cols(cols_){}
+
+    
+    const double& operator()(size_t i, size_t j) 
+    { 
+        // assert(i >= 0 && i < rows);
+        // assert(j >= 0 && j < cols);
+
+        return ptr[i * cols + j]; 
+    } 
+};
 
 struct ExtremePoint 
 {
@@ -18,22 +43,22 @@ struct ExtremePoint
 
 };
 
-double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points);
+double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, Matrix &points);
 
-inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points, double allowedClass)
+inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, Matrix &points, double allowedClass)
 {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
-    auto &pi0 = pis[0];
-    auto &pi1 = pis[1];
-    auto &pi2 = pis[2];
+    size_t &pi0 = pis[0];
+    size_t &pi1 = pis[1];
+    size_t &pi2 = pis[2];
     // std::cout << "pi0" << pi0 << " pi1" << pi1 << " pi2" << pi0 << std::endl; 
     // std::cout << "pi0" << points(pi0, 3) << " pi1" << points(pi1, 3) << " pi2" << points(pi2, 3) << std::endl; 
-    auto result = points(pi0, 3) == allowedClass && points(pi1, 3) == allowedClass && points(pi2, 3) == allowedClass;
+    auto result = points(pi0, 3_z) == allowedClass && points(pi1, 3_z) == allowedClass && points(pi2, 3_z) == allowedClass;
     return result;
 
 }
-inline void maxZChangeAndNormal(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points,
+inline void maxZChangeAndNormal(size_t t, delaunator::Delaunator &delaunay, Matrix &points,
                                 double &diff, std::array<double, 3> &normal) {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
@@ -78,7 +103,7 @@ inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) 
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
-inline double getMaxDimTriangle(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points) {
+inline double getMaxDimTriangle(size_t t, delaunator::Delaunator &delaunay, Matrix &points) {
     auto pi0= delaunay.triangles[t * 3];
     auto pi1 = delaunay.triangles[t * 3 + 1];
     auto pi2 = delaunay.triangles[t * 3 + 2];
@@ -99,7 +124,7 @@ inline double l2Norm(double dx, double dy)
     return std::sqrt(dx * dx + dy * dy);
 }
 
-inline double getMaxEdgeLength(size_t t, delaunator::Delaunator &delaunay, pybind11::detail::unchecked_reference<double, 2L> &points) {
+inline double getMaxEdgeLength(size_t t, delaunator::Delaunator &delaunay, Matrix &points) {
     auto pi0= delaunay.triangles[t * 3];
     auto pi1 = delaunay.triangles[t * 3 + 1];
     auto pi2 = delaunay.triangles[t * 3 + 2];
@@ -115,7 +140,7 @@ double norm(double a, double b);
 std::ostream& operator<<(std::ostream& os, const std::array<double, 2ul>& values);
 std::ostream& operator<<(std::ostream& os, const std::vector<double>& values);
 
-inline void trackExtremePoint(size_t pi, pybind11::detail::unchecked_reference<double, 2L> &points, ExtremePoint &exPoint, size_t he){
+inline void trackExtremePoint(size_t pi, Matrix &points, ExtremePoint &exPoint, size_t he){
     if (points(pi,0) > exPoint.xr_val) {
         exPoint.xr_he = he;
         exPoint.xr_pi = pi;
