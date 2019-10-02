@@ -1,7 +1,5 @@
 #include "helper.hpp"
 
-namespace py = pybind11;
-
 namespace polylidar {
 
 

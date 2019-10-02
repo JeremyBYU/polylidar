@@ -1,7 +1,7 @@
 CXXFLAGS=-Wall -std=c++14 -O3
 CC := cc
-CXX := g++
-INCLUDES=-I../../polylidar -I${HOME}/miniconda3/envs/polylidar/include -I${HOME}/miniconda3/envs/polylidar/include/python3.6m -I${HOME}/.local/include -I${HOME}/miniconda3/envs/polylidar/lib/python3.6/site-packages/numpy/core/include
+CXX := g++ # DONT USE GCC7, USE GCC5,6,8,9; Clang; or MSVC. See WIKI for details.
+INCLUDES=-I../../polylidar
 LDFLAGS=-L/usr/local/lib
 
 POLYLIDAR_DIR = ../../polylidar

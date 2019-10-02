@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
   std::vector<double> points;
   std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
 
-  // N X 4 array as one contigous array
+  // N X 3 array as one contigious array
   auto success = file_input(points, file_path);
   if (!success)
     return 0;
