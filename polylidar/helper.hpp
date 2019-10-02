@@ -25,8 +25,8 @@ class Matrix {
     
     const double& operator()(size_t i, size_t j) 
     { 
-        // assert(i >= 0 && i < rows);
-        // assert(j >= 0 && j < cols);
+        assert(i >= 0 && i < rows);
+        assert(j >= 0 && j < cols);
 
         return ptr[i * cols + j]; 
     } 

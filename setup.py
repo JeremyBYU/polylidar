@@ -4,6 +4,9 @@ from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import setuptools
 
+os.environ["CXX"] = "g++-6"
+os.environ["CC"] = "gcc-6"
+
 
 USE_ROBUST_PREDICATES_NAME = 'USE_ROBUST_PREDICATES'
 USE_ROBUST_PREDICATES = int(os.environ.get( USE_ROBUST_PREDICATES_NAME, 0 ))
