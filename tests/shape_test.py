@@ -28,6 +28,12 @@ def bad_convex_hull():
 def np_100K_array():
     return np.random.randn(100_000, 2) * 100
 
+@pytest.fixture
+def np_100K_array_3d():
+    a = np.random.randn(100_000, 3) * 100
+    a[:,2] = a[:,2] * 0.0001
+    return a
+
 @pytest.fixture()
 def basic_params():
     return dict(alpha=0.5, xyThresh=0.0)
@@ -119,6 +125,9 @@ def test_100k_array_lmax(benchmark, np_100K_array, params_lmax):
 
 def test_100k_array_alpha(benchmark, np_100K_array, params_alpha):
     polygons = benchmark(extractPolygons, np_100K_array, **params_alpha)
+
+def test_100k_array_3d_lmax(benchmark, np_100K_array_3d, params_lmax):
+    polygons = benchmark(extractPolygons, np_100K_array_3d, **params_lmax)
 
 
 ts = range(1000, 100000, 1000)  # This creates 100 numpy arrays frangin from (1000,2) -> (100000,2)
