@@ -1,6 +1,6 @@
 CXXFLAGS=-Wall -std=c++14
-CXX=g++
-INCLUDES=-I../../polylidar -I/home/jeremy/miniconda3/envs/polylidar/include -I/home/jeremy/miniconda3/envs/polylidar/include/python3.6m -I/home/jeremy/.local/include -I/home/jeremy/miniconda3/envs/polylidar/lib/python3.6/site-packages/numpy/core/include
+CXX=g++ -O3
+INCLUDES=-I../../polylidar -I${HOME}/miniconda3/envs/polylidar/include -I${HOME}/miniconda3/envs/polylidar/include/python3.6m -I${HOME}/.local/include -I${HOME}/miniconda3/envs/polylidar/lib/python3.6/site-packages/numpy/core/include
 LDFLAGS=-L/usr/local/lib
 
 POLYLIDAR_DIR = ../../polylidar

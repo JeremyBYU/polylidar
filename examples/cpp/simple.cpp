@@ -37,20 +37,19 @@ bool file_input(std::vector<double> &points, std::string file_path)
 
   std::string line;
   std::getline(is, line); // Skip header
-  std::cout<<line<<std::endl;
+  // std::cout<<line<<std::endl;
   while (std::getline(is, line))
   {
     std::istringstream iss(line);
     char _;
-    double a, b, c, d;
-    if (!(iss >> a >> _ >> b >> _ >> c >> _ >> d))
+    double a, b, c;
+    if (!(iss >> a >> _ >> b >> _ >> c))
     {
       break;
     } // error
     points.push_back(a);
     points.push_back(b);
     points.push_back(c);
-    points.push_back(d);
   }
 
   return true;
@@ -61,25 +60,29 @@ int main(int argc, char *argv[])
 
   std::cout << "Simple C++ Example of Polylidar" << std::endl;
   std::vector<double> points;
-  std::string file_path = "../../tests/fixtures/building1.csv";
+  std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
 
   // N X 4 array as one contigous array
   auto success = file_input(points, file_path);
   if (!success)
     return 0;
 
-  // Conver to multidimensional array
-  std::vector<std::size_t> shape = { points.size() / 4, 4 };
+  // Convert to multidimensional array
+  std::vector<std::size_t> shape = { points.size() / 3, 3 };
   polylidar::Matrix points_(points.data(), shape[0], shape[1]);
   // Set configuration parameters
   polylidar::Config config;
   config.xyThresh = 0.0;
   config.alpha = 0.0;
-  config.lmax = 20.0;
-  config.minTriangles = 20;
+  config.lmax = 100.0;
 
   // Extract polygon
+  auto before = std::chrono::high_resolution_clock::now();
   auto polygons = polylidar::_extractPolygons(points_, config);
+  auto after = std::chrono::high_resolution_clock::now();
+  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+  std::cout << "Polygon extraction took " << elapsed.count() << " milliseconds" << std::endl;
+  std::cout << "Point indices of Polygon Shell: " << std::endl;
   for(auto const& polygon: polygons) {
     std::cout << polygon.shell << std::endl;
   }
