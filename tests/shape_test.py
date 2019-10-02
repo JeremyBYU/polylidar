@@ -26,13 +26,11 @@ def bad_convex_hull():
 
 @pytest.fixture
 def np_100K_array():
-    return np.random.randn(100_000, 2) * 100
+    return load_csv("100K_array_2d.csv")
 
 @pytest.fixture
 def np_100K_array_3d():
-    a = np.random.randn(100_000, 3) * 100
-    a[:,2] = a[:,2] * 0.0001
-    return a
+    return load_csv("100K_array_3d.csv")
 
 @pytest.fixture()
 def basic_params():
