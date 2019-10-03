@@ -22,7 +22,7 @@ If you desire to have robust geometric predicates built into Polylidar you must 
 1. Install [conda](https://conda.io/projects/conda/en/latest/) - [Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)
 2. `conda install -c conda-forge pybind11`
 3. `conda install shapely` - Only needed for windows binary dependency
-3. `python setup.py build install`
+3. `pip install -e .`
 
 Please run the tests to ensure everything is working. Pytest should be installed as it is listed as a dependency.
 

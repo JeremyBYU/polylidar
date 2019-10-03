@@ -22,7 +22,7 @@
 #ifndef POLYLIDAR
 #define POLYLIDAR
 #define _USE_MATH_DEFINES
-#define VERSION_INFO "0.0.3"
+#define VERSION_INFO "0.0.4"
 
 #include <array>
 #include <ostream>
@@ -56,7 +56,13 @@
 
 namespace polylidar {
     using vvi = std::vector<std::vector<size_t>>;
-
+    #ifdef USE_ROBINHOOD_UNORDERED_MAP
+    template<typename T, typename G>
+    using unordered_map = robin_hood::unordered_map<T,G>;
+    #else
+    template<typename T, typename G>
+    using unordered_map = std::unordered_map<T,G>;
+    #endif
 
     struct Config
     {

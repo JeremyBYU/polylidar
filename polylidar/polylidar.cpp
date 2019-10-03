@@ -2,9 +2,6 @@
 
 double DESIRED_VECTOR[3] = {0.0, 0.0, 1.0};
 std::array<double, 2> UP_VECTOR = {0.0, 1.0};
-// namespace py = pybind11;
-// using namespace pybind11::literals;
-
 
 namespace polylidar
 {
@@ -95,7 +92,7 @@ inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay,  Matr
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
-void createTriHash2(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
@@ -109,7 +106,7 @@ void createTriHash2(robin_hood::unordered_map<size_t, size_t> &triHash, delaunat
     }
 }
 
-void createTriHash3(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
@@ -125,7 +122,7 @@ void createTriHash3(robin_hood::unordered_map<size_t, size_t> &triHash, delaunat
     }
 }
 
-void createTriHash4(robin_hood::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriHash4(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // std::cout << "Delaunay size " << delaunay.coords.size();
@@ -150,14 +147,14 @@ void createTriHash4(robin_hood::unordered_map<size_t, size_t> &triHash, delaunat
 
 
 void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, Matrix &points,
-                        robin_hood::unordered_map<size_t, std::vector<size_t>> &pointHash, robin_hood::unordered_map<size_t, size_t> &edgeHash,
+                        polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash, polylidar::unordered_map<size_t, size_t> &edgeHash,
                         ExtremePoint &xPoint)
 {
     auto &triangles = delaunay.triangles;
     auto &halfedges = delaunay.halfedges;
 
     // all valid triangles
-    robin_hood::unordered_map<size_t, size_t> triHash;
+    polylidar::unordered_map<size_t, size_t> triHash;
 
     // THIS REDUCED THIS FUNCTIONS RUNTIME BY 1/2
     // LESS ALLOCATIONS AND HASH COLLISIONS
@@ -222,8 +219,8 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
 
 }
 
-std::vector<size_t> concaveSection(robin_hood::unordered_map<size_t, std::vector<size_t>> &pointHash,
-                                   robin_hood::unordered_map<size_t, size_t> &edgeHash,
+std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash,
+                                   polylidar::unordered_map<size_t, size_t> &edgeHash,
                                    delaunator::Delaunator &delaunay,
                                    size_t startEdge, size_t stopPoint,
                                    bool isHole)
@@ -288,8 +285,8 @@ std::vector<size_t> concaveSection(robin_hood::unordered_map<size_t, std::vector
     return hullSection;
 }
 
-std::vector<std::vector<size_t>> extractInteriorHoles(robin_hood::unordered_map<size_t, std::vector<size_t>> pointHash,
-                                                      robin_hood::unordered_map<size_t, size_t> edgeHash,
+std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<size_t, std::vector<size_t>> pointHash,
+                                                      polylidar::unordered_map<size_t, size_t> edgeHash,
                                                       delaunator::Delaunator &delaunay)
 {
     std::vector<std::vector<size_t>> allHoles;
@@ -317,9 +314,9 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
 {
     Polygon poly;
     // point hash map
-    robin_hood::unordered_map<size_t, std::vector<size_t>> pointHash;
+    polylidar::unordered_map<size_t, std::vector<size_t>> pointHash;
     // hash of all empty border half edges
-    robin_hood::unordered_map<size_t, size_t> edgeHash;
+    polylidar::unordered_map<size_t, size_t> edgeHash;
     // the left and right most extreme points
     ExtremePoint xPoint;
 
@@ -372,7 +369,7 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
     return polygons;
 }
 
-void extractMeshHash(delaunator::Delaunator &delaunay, robin_hood::unordered_map<size_t, size_t> &triHash, size_t seedIdx, std::vector<size_t> &candidates)
+void extractMeshHash(delaunator::Delaunator &delaunay, polylidar::unordered_map<size_t, size_t> &triHash, size_t seedIdx, std::vector<size_t> &candidates)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
@@ -421,7 +418,7 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::Delaunator 
 std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
-    robin_hood::unordered_map<size_t, size_t> triHash;
+    polylidar::unordered_map<size_t, size_t> triHash;
     // Reserve hash size to hold all possible triangles
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
     triHash.reserve(max_triangles);

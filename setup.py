@@ -6,14 +6,21 @@ import setuptools
 
 
 USE_ROBUST_PREDICATES_NAME = 'USE_ROBUST_PREDICATES'
-USE_ROBUST_PREDICATES = int(os.environ.get( USE_ROBUST_PREDICATES_NAME, 0 ))
+USE_ROBUST_PREDICATES = int(os.environ.get(USE_ROBUST_PREDICATES_NAME, 0))
 if USE_ROBUST_PREDICATES:
     print("Building with robust geometric predicates.")
 else:
     print("NOT building with robust predicates")
 
+USE_ROBINHOOD_UNORDERED_MAP_NAME = 'USE_ROBINHOOD_UNORDERED_MAP'
+USE_ROBINHOOD_UNORDERED_MAP = int(os.environ.get(USE_ROBINHOOD_UNORDERED_MAP_NAME, 0))
+if USE_ROBINHOOD_UNORDERED_MAP:
+    print("Building with fast robinhood::unordered_map. 30% Speedup. Does not work with GCC7. See Wiki.")
+else:
+    print("Building with slow std::unordered_map.")
 
-__version__ = '0.0.3'
+
+__version__ = '0.0.4'
 
 class get_pybind_include(object):
     """Helper class to determine the pybind11 include path
@@ -117,10 +124,14 @@ class BuildExt(build_ext):
                 opts.append('-fvisibility=hidden')
             if USE_ROBUST_PREDICATES:
                 opts.append('-DUSE_ROBUST')
+            if USE_ROBINHOOD_UNORDERED_MAP:
+                opts.append('-DUSE_ROBINHOOD_UNORDERED_MAP')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
             if USE_ROBUST_PREDICATES:
                 opts.append('-DUSE_ROBUST')
+            if USE_ROBINHOOD_UNORDERED_MAP:
+                opts.append('-DUSE_ROBINHOOD_UNORDERED_MAP')
         for ext in self.extensions:
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
