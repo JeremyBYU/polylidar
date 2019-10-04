@@ -42,15 +42,14 @@ bool file_input(std::vector<double> &points, std::string file_path)
   {
     std::istringstream iss(line);
     char _;
-    double a, b, c, d;
-    if (!(iss >> a >> _ >> b >> _ >> c >> _ >> d))
+    double a, b, c;
+    if (!(iss >> a >> _ >> b >> _ >> c))
     {
       break;
     } // error
     points.push_back(a);
     points.push_back(b);
     points.push_back(c);
-    points.push_back(d);
   }
 
   return true;
@@ -61,7 +60,7 @@ int main(int argc, char *argv[])
 
   std::cout << "Simple C++ Example of Polylidar" << std::endl;
   std::vector<double> points;
-  std::string file_path = "../../tests/fixtures/building1.csv";
+  std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
 
   // N X 4 array as one contigous array
   auto success = file_input(points, file_path);
@@ -69,7 +68,7 @@ int main(int argc, char *argv[])
     return 0;
 
   // Conver to multidimensional array
-  std::vector<std::size_t> shape = { points.size() / 4, 4 };
+  std::vector<std::size_t> shape = { points.size() / 3, 3 };
   polylidar::Matrix points_(points.data(), shape[0], shape[1]);
   // Set configuration parameters
   polylidar::Config config;
