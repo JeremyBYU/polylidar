@@ -379,6 +379,11 @@ void extractMeshHash(delaunator::Delaunator &delaunay, robin_hood::unordered_map
     queue.push(seedIdx);
     triHash.erase(seedIdx);
 
+    std::cout << "Trihash contains:";
+    for ( auto it = triHash.begin(); it != triHash.end(); ++it )
+        std::cout << " " << it->first << ":" << it->second;
+    std::cout << std::endl;
+
 
     // std::vector<size_t> candidates;
     while (!queue.empty())
@@ -454,7 +459,7 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     std::cout << "Trihash contains:";
     for ( auto it = triHash.begin(); it != triHash.end(); ++it )
         std::cout << " " << it->first << ":" << it->second;
-        std::cout << std::endl;
+    std::cout << std::endl;
     int counter = 0;
     while (!triHash.empty())
     {
@@ -462,7 +467,7 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
         auto &planeMesh = planes[planes.size() -1]; // retrieve this newly created vector
         auto seedIdx = std::begin(triHash)->first;
         counter++;
-        if (counter > 10)
+        if (counter > 12)
             break;
         std::cout << seedIdx << ", " << triHash.size() <<  std::endl;
         extractMeshHash(delaunay, triHash, seedIdx, planeMesh);
@@ -483,7 +488,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     std::vector<double> coords2D;
     auto size2D = nparray.rows * 2;
     std::cout << nparray(1, 0) << ", " << nparray(1, 1) <<  ", " << nparray(1, 2) << std::endl;
-    if (nparray.cols > 2_z)
+    if (nparray.cols > 2)
     {
         coords2D.resize(size2D);
         copy2Ddata(nparray, coords2D);
@@ -528,7 +533,7 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 
     std::vector<double> coords2D;
     auto size2D = nparray.rows * 2;
-    if (nparray.cols > 2_z)
+    if (nparray.cols > 2)
     {
         coords2D.resize(size2D);
         copy2Ddata(nparray, coords2D);
@@ -566,7 +571,7 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, 
 
     std::vector<double> coords2D;
     auto size2D = nparray.rows * 2;
-    if (nparray.cols > 2_z)
+    if (nparray.cols > 2)
     {
         coords2D.resize(size2D);
         copy2Ddata(nparray, coords2D);

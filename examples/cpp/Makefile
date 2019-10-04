@@ -17,6 +17,8 @@ all: $(TARGET)
 OBJFILESD:$(CPPFILES)
 	$(CXX) $(CXXFLAGS) -c $(CPPFILES) $(INCLUDES)
 
+robin:
+	$(CXX) $(CXXFLAGS) robin.cpp $(INCLUDES) -o ./bin/robin
 
 $(TARGET): OBJFILESD
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJFILES) $(INCLUDES) -o ./bin/$(TARGET)

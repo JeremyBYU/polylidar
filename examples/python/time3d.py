@@ -18,7 +18,7 @@ points = np.array([
     [1., 1., 1.0],
     [1, 0.0, 1.0]
 ])
-print(points.dtype, points.flags, points.shape)
+# print(points.dtype, points.flags, points.shape)
 np.random.seed(1)
 points = np.random.randn(10, 3)
 points[:,2] = points[:,2] * 0.01

@@ -8,8 +8,8 @@
 
 namespace polylidar {
 
-constexpr std::size_t operator "" _z ( unsigned long long n )
-    { return n; }
+// constexpr std::size_t operator "" _z ( unsigned long long n )
+//     { return n; }
 
 class Matrix {
     public:
@@ -54,7 +54,7 @@ inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, Matrix &
     size_t &pi2 = pis[2];
     // std::cout << "pi0" << pi0 << " pi1" << pi1 << " pi2" << pi0 << std::endl; 
     // std::cout << "pi0" << points(pi0, 3) << " pi1" << points(pi1, 3) << " pi2" << points(pi2, 3) << std::endl; 
-    auto result = points(pi0, 3_z) == allowedClass && points(pi1, 3_z) == allowedClass && points(pi2, 3_z) == allowedClass;
+    auto result = points(pi0, 3) == allowedClass && points(pi1, 3) == allowedClass && points(pi2, 3) == allowedClass;
     return result;
 
 }

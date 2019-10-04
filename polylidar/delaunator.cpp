@@ -407,6 +407,21 @@ void Delaunator::triangulate() {
     }
 }
 
+Delaunator::Delaunator()
+    : coords(),
+      triangles(),
+      halfedges(),
+      hull_prev(),
+      hull_next(),
+      hull_tri(),
+      hull_start(),
+      m_hash(),
+      m_center_x(),
+      m_center_y(),
+      m_hash_size(),
+      m_edge_stack() {
+    }
+
 Delaunator::Delaunator(std::vector<double> &in_coords)
     : coords(),
       triangles(),

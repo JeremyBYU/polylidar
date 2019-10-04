@@ -56,6 +56,7 @@ namespace delaunator {
         std::size_t hull_start;
 
         Delaunator(std::vector<double> &in_coords);
+        Delaunator();
         Delaunator(pybind11::array_t<double> nparray);
         void triangulate();
 
