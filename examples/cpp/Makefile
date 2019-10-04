@@ -1,4 +1,9 @@
-CXXFLAGS=-Wall -std=c++14 -O3
+ifdef USE_ROBINHOOD_UNORDERED_MAP
+	DEFINE_FLAGS=-DUSE_ROBINHOOD_UNORDERED_MAP=1
+else
+	DEFINE_FLAGS=
+endif
+CXXFLAGS=-Wall -std=c++14 -O3 ${DEFINE_FLAGS}
 CC := cc
 CXX := g++ # DONT USE GCC7, USE GCC5,6,8,9; Clang; or MSVC. See WIKI for details.
 INCLUDES=-I../../polylidar
