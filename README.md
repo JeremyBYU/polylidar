@@ -33,6 +33,12 @@ I can also make the bug go away with a single line change. Uncomment line 436 in
 ```
 I don't think this line has anything truly related with the issue. I think somehow whatever bad optimization is being made by GCC is skipped when this std::cout occurs. 
 
+**Cause bug another way with GCC7 -O3**
+
+Go to ``helper.hpp`` and uncomment out line 6:
+```
+// #define NDEBUG // uncommenting this will cause an error in gcc7 with -O3 enabled
+```
 
 
 ## Details:

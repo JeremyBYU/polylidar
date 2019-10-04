@@ -58,16 +58,16 @@ bool file_input(std::vector<double> &points, std::string file_path)
 int main(int argc, char *argv[])
 {
 
-  std::cout << "Simple C++ Example of Polylidar" << std::endl;
+  std::cout << "Simple C++ Example of Polylidar BUG" << std::endl;
   std::vector<double> points;
-  std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
+  // std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
 
 
 
-  // N X 4 array as one contigous array
-  auto success = file_input(points, file_path);
-  if (!success)
-    return 0;
+  // // N X 4 array as one contigous array
+  // auto success = file_input(points, file_path);
+  // if (!success)
+  //   return 0;
   
   points = std::vector<double>({1.62434536e+00, -6.11756414e-01, -5.28171752e-03, 
             -1.07296862e+00, 8.65407629e-01, -2.30153870e-02,
