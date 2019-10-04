@@ -433,7 +433,7 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     robin_hood::unordered_map<size_t, size_t> triHash;
     // Reserve hash size to hold all possible triangles
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
-    std::cout << delaunay.triangles << std::endl; // uncommenting this line causes bug in GCC-7 with -O3
+    // std::cout << delaunay.triangles << std::endl; // commenting this line causes bug in GCC-7 with -O3
     triHash.reserve(max_triangles);
 
     std::cout << "reserving " << max_triangles << " triangles in hash" << std::endl;

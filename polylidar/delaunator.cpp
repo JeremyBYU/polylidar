@@ -423,6 +423,7 @@ Delaunator::Delaunator(std::vector<double> &in_coords)
           coords.swap(in_coords);
     }
 
+#ifdef PY_EXTENSION
 Delaunator::Delaunator(pybind11::array_t<double> nparray)
     : coords(),
       triangles(),
@@ -448,6 +449,7 @@ Delaunator::Delaunator(pybind11::array_t<double> nparray)
         auto temp = std::vector<double>(data, data + size);
         coords.swap(temp);
     }
+#endif
     
 
 double Delaunator::get_hull_area() {

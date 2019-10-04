@@ -39,9 +39,11 @@
 #include "predicates.h"
 #endif
 
+#ifdef PY_EXTENSION
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
 #include "pybind11/stl.h"      // Pybind11 import for STL containers
 #include "pybind11/numpy.h"
+#endif
 
 namespace delaunator {
     class Delaunator {
@@ -56,7 +58,9 @@ namespace delaunator {
         std::size_t hull_start;
 
         Delaunator(std::vector<double> &in_coords);
+        #ifdef PY_EXTENSION
         Delaunator(pybind11::array_t<double> nparray);
+        #endif
         void triangulate();
 
         double get_hull_area();
