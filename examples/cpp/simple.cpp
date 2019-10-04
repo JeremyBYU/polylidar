@@ -67,6 +67,19 @@ int main(int argc, char *argv[])
   if (!success)
     return 0;
 
+
+  points = std::vector<double>({1.62434536e+00, -6.11756414e-01, -5.28171752e-03, 
+            -1.07296862e+00, 8.65407629e-01, -2.30153870e-02,
+            1.74481176e+00, -7.61206901e-01,  3.19039096e-03,
+            -2.49370375e-01,  1.46210794e+00, -2.06014071e-02,
+            -3.22417204e-01, -3.84054355e-01,  1.13376944e-02,
+            -1.09989127e+00, -1.72428208e-01, -8.77858418e-03,
+            4.22137467e-02,  5.82815214e-01, -1.10061918e-02,
+            1.14472371e+00,  9.01590721e-01, 5.02494339e-03,
+            9.00855949e-01, -6.83727859e-01, -1.22890226e-03,
+            -9.35769434e-01, -2.67888080e-01,  5.30355467e-03});
+
+
   // Conver to multidimensional array
   std::vector<std::size_t> shape = { points.size() / 3, 3 };
   polylidar::Matrix points_(points.data(), shape[0], shape[1]);
@@ -74,8 +87,8 @@ int main(int argc, char *argv[])
   polylidar::Config config;
   config.xyThresh = 0.0;
   config.alpha = 0.0;
-  config.lmax = 20.0;
-  config.minTriangles = 20;
+  config.lmax = 100.0;
+  config.minTriangles = 1;
 
   // Extract polygon
   auto polygons = polylidar::_extractPolygons(points_, config);
