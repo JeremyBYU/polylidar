@@ -3,7 +3,7 @@
 #define POLYLIDARHELPER
 #define _USE_MATH_DEFINES
 #include "delaunator.hpp"
-// #define NDEBUG
+// #define NDEBUG // uncommenting this will cause an error in gcc7 with -O3 enabled
 #include <cassert>
 
 namespace polylidar {
@@ -25,8 +25,8 @@ class Matrix {
     
     const double& operator()(size_t i, size_t j) 
     { 
-        // assert(i >= 0 && i < rows);
-        // assert(j >= 0 && j < cols);
+        assert(i >= 0 && i < rows);
+        assert(j >= 0 && j < cols);
 
         return ptr[i * cols + j]; 
     } 
@@ -54,7 +54,7 @@ inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, Matrix &
     size_t &pi2 = pis[2];
     // std::cout << "pi0" << pi0 << " pi1" << pi1 << " pi2" << pi0 << std::endl; 
     // std::cout << "pi0" << points(pi0, 3) << " pi1" << points(pi1, 3) << " pi2" << points(pi2, 3) << std::endl; 
-    auto result = points(pi0, 3_z) == allowedClass && points(pi1, 3_z) == allowedClass && points(pi2, 3_z) == allowedClass;
+    auto result = points(pi0, 3) == allowedClass && points(pi1, 3) == allowedClass && points(pi2, 3) == allowedClass;
     return result;
 
 }
