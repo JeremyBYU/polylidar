@@ -3,6 +3,8 @@ examples/cpp/bin
 archive
 scratch
 solns
+*.txt
+*.optimized
 *.o
 *.swp
 *.swo

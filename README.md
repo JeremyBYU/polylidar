@@ -10,7 +10,7 @@ To reproduce: Go into the folder `examples/cpp`. The program `simple.cpp` will d
 **Demonstrate bug with GCC7**
 
 1. `export CXX=g++-7 && export CC=g++-7` - Just make sure you are compiling with GCC7
-2. `make`
+2. `make CC=$CC CXX=$CXX`
 3. `./bin/simple` - Supposed to finish instantly *but* will go into infinite loop. memory will overfill. use ctrl-c after a few seconds to prevent.
 
 **Remove bug with GCC9**
