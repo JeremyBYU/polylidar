@@ -53,6 +53,25 @@ On lines 465 I begin to do a loop, pulling integers out of the hash map named th
 I have verified these by printing out the content of the hashmap when the bug is being manifest. These issues lead to the infinite loop.
 
 
+## Dumping optimization information
+
+I have tried to dump optimization information from gcc and analyze the difference between nobug/bug case. I used this command:
+
+`g++ -g -O3 -Wall -fopt-info-optimized-optall=opt_not_working.txt -c ../../polylidar/polylidar.cpp -I../../`
+
+However, I have been unsuccessful at understanding what is causing the issues. I see differences in some of the optimizations but nothing really seems to stands out. I have spent hours changing some things (removing createTriHash2/4) and nothing removes the bug.
+
+Note I learned that -O2 will also cause the optimization error in gcc7. However if you compile with O2 the code is always broken with gcc, you cant get some working states like I have shown above with -O3.
+
+## Alternate hashmaps
+
+I have tried to replace robin_hood with [parallel_hashmap](https://github.com/greg7mdp/parallel-hashmap). It has the same issue! They are both using the same technique that google has introduced with absail:flat_hash_map (flat hash map, dense array). 
+This is making me think that GCC7 can run into issues with this technique possibly.
+
+
+
+
+
 
 
 
