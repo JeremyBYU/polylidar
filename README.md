@@ -1,38 +1,85 @@
-# Polylidar V2
+<h1 align="center">
+  Polylidar
+  <br>
+</h1>
 
-Polylidar allows one to extract planar meshes from a point cloud **and** their 2D projected polygons. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and is built as a python plugin.  A Typescript (javascript) version is also created as well and can be found [here](https://github.com/JeremyBYU/polylidarweb).
+<h4 align="center">Polygon Extraction from 2D and 3D Point Clouds</h4>
 
-The image below is polylidar (Typescript/Website version) with a classified point cloud data set.  A point cloud of a building roof (purple dots) and a tarp (green) dots are seen on the left.  The extracted polygon of the roof is seen on the right. The green line represents the concave hull of the extracted mesh, and the orange lines represent *holes* in the polygon.
+<p align="center">
+  <a href="#key-features">Key Features</a> •
+  <a href="#install">Install</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#polylidar-use-cases">Use Cases</a> •
+  <a href="#credits">Credits</a> •
+  <a href="#related">Related</a> •
+  <a href="#license">License</a>
+</p>
 
-![Polylidar Example](assets/polylidar-example.png)
+<p align="middle">
+  <img src="./assets/2D_polygon_text.png" height="100%" />
+  <img src="./assets/combined.png" height="100%" /> 
+</p>
 
 
-Much of this work is possible because of the amazing library called [delaunator](https://github.com/delfrrr/delaunator-cpp).  It provides a very fast 2D delaunay triangulation that outputs a data structure that is perfectly suitable for this work. All the triangles are indexed by [half-edges](https://mapbox.github.io/delaunator/) allowing the quick extraction and polygon generation of any planar meshes.
+## Key Features
 
+* Fast (Multi)Polygon Extraction from 2D and 3D point clouds. 
+  - Written in C++ for portability.
+  - Extremely fast. 100,000 3D point cloud takes ~130ms to process on laptop.
+  - Polygons **with** holes are returned
+* Python3 bindings using PyBind11.
+  - Low overhead for calling python/cpp interface (no copying of point cloud data).
+* Python and C++ Examples
+* Cross platform
+  - Windows, and Linux ready.
 
-## Robust Geometric Predicates
+Polylidar allows one to extract planar meshes from a point cloud **and** their 2D projected polygons. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors.
+
+## Install
+
+### Python
+
+Polylidar is not on PyPI so it must be installed manually.
+
+1. Install [conda](https://conda.io/projects/conda/en/latest/) - [Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)
+2. `conda install shapely` - Use conda because it handles windows binary dependency correctly.
+3. `pip install pybind11`
+4. `pip install -e .`
+5. `pytest` - OPTIONAL, this will run a series of tests and benchmarks.
+
+### C++
+
+See `examples/cpp` for how to build.
+
+### Robust Geometric Predicates
 
 Delaunator does not use [robust geometric predicates](https://github.com/mikolalysenko/robust-arithmetic-notes) for its orientation and incircle tests; [reference](https://github.com/mapbox/delaunator/issues/43).  This means that the triangulation can be incorrect when points are nearly colinear or cocircular. A library developed by Jonathan Richard Shewchuk provides very fast adaptive precision floating point arithmetic for [geometric predicates](https://www.cs.cmu.edu/~quake/robust.html).  This library is released in the public domain and an updated version of it is maintained at this [repository](https://github.com/danshapero/predicates). I have included this source code in the folder `polylidar/predicates`.  
 
-If you desire to have robust geometric predicates built into Polylidar you must set an environment variable, "PL_USE_ROBUST_PREDICATES=1". The python file `setup.py` will read this environment variable and then include the robust geometric predicates into the build process. Without setting this variable none of the `predicates` source code is included in the binary distribution.
+If you desire to have robust geometric predicates built into Polylidar you must set an environment variable, "PL_USE_ROBUST_PREDICATES=1" (-DPL_USE_ROBUST_PREDICATES for C++). The python file `setup.py` will read this environment variable and then include the robust geometric predicates into the build process. Without setting this variable none of the `predicates` source code is included in the python plugin.
 
 
-## Installing
+## How To Use
 
-1. Install [conda](https://conda.io/projects/conda/en/latest/) - [Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)
-2. `conda install -c conda-forge pybind11`
-3. `conda install shapely` - Only needed for windows binary dependency
-3. `pip install -e .`
+You can see a demo in action py running `python examples/python/basic2d.py`. More Python and C++ examples can be found in the `examples` folder.
 
-Please run the tests to ensure everything is working. Pytest should be installed as it is listed as a dependency.
+Function exposed:
 
-1. Simply type `pytest` to run tests
+```python
+from polylidar import extractPlanesAndPolygons, extractPolygons, Delaunator
 
-## Demo
+kwargs = dict(alpha=0.0, lmax=1.0)
 
-You can see a demo in action py running `python tests/visualize.py`. Requires `matplotlib descartes`.
+# You want everything!
+delaunay, planes, polygons = extractPlanesAndPolygons(point_cloud, **kwargs)
 
-## API
+# Show me JUST the polygons!
+polygons = extractPolygons(point_cloud, **kwargs)
+
+# Also if you just want fast 2D delaunay triangulation, no polylidar
+delaunay = Delaunator(point_cloud)
+```
+
+### API (WIP to improve documentation)
 
 What are the inputs to the code?  The input arguments are a **contiguous** numpy array with length N and 2,3,or 4 columns depending on your data.  There are also configuration options as well that you can pass as keyword arguments.
 
@@ -58,60 +105,35 @@ What are the outputs?
 * Delaunay - This is a C++ class data structure that has information about your triangles, half edges, and point indices. Read more [here](https://mapbox.github.io/delaunator/).
 * planes - This is a *list* of C++ *vectors* holding `ints`. Each vector is an extracted plane.  The `ints` correspond to triangle indices.
 * polygons - This is a *list* of C++ `polygon` data structure.
-* polygon - This is a struct that has two fields: shell and holes. Shell is a *vector* of `ints`, where each int represents a *point* index. Holes is a list of a **vector** of `ints`. Each vector represents a hole in the polygon.
-
-Example calls
-```python
-from polylidar import extractPlanesAndPolygons, extractPolygons, Delaunator
-
-# You want everything!
-delaunay, planes, polygons = extractPlanesAndPolygons(point_cloud:ndarray)
-
-# Show me JUST the polygons!
-polygons = extractPolygons(point_cloud:ndarray)
-
-# Also if you just want fast 2D delaunay triangulation, no polylidar
-delaunay = Delaunator(point_cloud:ndarray)
-```
-
-## Examples
-
-Please see `examples/python`. You can also look in the `tests` folder.
+* polygon - This is a struct that has two fields: shell and holes. Shell is a *vector* of `ints`, where each int represents a *point* index. Holes is a list of a *vector* of `ints`. Each vector represents a hole in the polygon.
 
 
-## Benchmark
+## Polylidar Use Cases
 
-```
------------------------------------------------------------------------------------ benchmark: 4 tests ----------------------------------------------------------------------------------
-Name (time in ms)            Min                Max               Mean            StdDev             Median               IQR            Outliers       OPS            Rounds  Iterations
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-test_bad_convex_hull      1.2780 (1.0)       2.0440 (1.0)       1.2879 (1.0)      0.0388 (1.0)       1.2824 (1.0)      0.0034 (1.0)         17;40  776.4774 (1.0)         767           1
-test_building1            2.1215 (1.66)      2.7847 (1.36)      2.1386 (1.66)     0.0397 (1.02)      2.1336 (1.66)     0.0051 (1.48)         8;31  467.5944 (0.60)        404           1
-test_building2            2.4713 (1.93)      3.2301 (1.58)      2.4957 (1.94)     0.0627 (1.61)      2.4811 (1.93)     0.0054 (1.58)        21;62  400.6942 (0.52)        399           1
-test_100k_array          50.2531 (39.32)    52.2024 (25.54)    50.7566 (39.41)    0.4435 (11.42)    50.6749 (39.51)    0.1969 (57.50)         5;5   19.7019 (0.03)         20           1
------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-Legend:
-  Outliers: 1 Standard Deviation from Mean; 1.5 IQR (InterQuartile Range) from 1st Quartile and 3rd Quartile.
-  OPS: Operations Per Second, computed as 1 / Mean
-======================================================================================== 107 passed, 1 warnings in 15.70 seconds =========================================================================================
-```
-
-## Issues
-
-- [X] If there are coincident points then it seems the delaunator cpp library gets stuck in an infinite loop (sometimes?). Add a very small amount of noise to the data (jitter) to ensure this doesn't happen.
-  - Patched delaunator, no need to add jitter. https://github.com/mapbox/delaunator/pull/49
-- [X] Polylidar makes heavy use of hashmaps. Try a better hashmap than std::unordered_map
-  - Add robinhood hashing as direct replacement for std::unorderd_map. Polylidar is now 30% faster.
-- [X] Improper triangulation because of floating point inaccuracies
-  - Added geometric predicates for those have this issue. 20% speed reduction.
-- [X] 3D extension improvement. If 3D point clouds are denser than sensor noise there are issues (zThresh [noise] ~= max(triangle_dx, triangle_dy) [density]). This manifests itself into triangle wall climbing (merging non connected surfaces)
-  - Added additional normThreshMin parameter which if not satisfied will automatically filter triangle.  ZThresh will no have no effect to prevent this.
-  - Drawback, small holes may appear in your mesh for very dense point clouds (very small triangles). Possible ways to resolve on user end:
-    - intelligently downsample to spread out point distribution on plane.
-    - or Buffer outward, then inward extracted polygon by very small amount. This will fill in tiny holes.
-  - Example of dense and noisy point clouds that can aid from normThreshMin - Intel Realsense D435. 
-  - Example of sensor with **non** noisy and **not** dense point clouds - Single Velodyne scan, (beam spacing removes density in a direction leading to long skinny triangles). No need for normThreshMin.
+- [Polylidar-RealSense](https://github.com/JeremyBYU/polylidar-realsense) - Live ground floor detection with Intel RealSense camera using Polylidar
+- [PolylidarWeb](https://github.com/JeremyBYU/polylidarweb). A Typescript (javascript) version with live demos.
+- [Concave-Evaluation](https://github.com/JeremyBYU/concavehull-evaluation) - Evaluates and benchmarks several competing concavehull algorithms.
 
 
+## Credits
 
+This software uses the following open source packages:
+
+- [Delaunator](https://github.com/mapbox/delaunator) - Original triangulation library
+- [DelaunatorCPP](https://github.com/delfrrr/delaunator-cpp) - Delaunator ported to C++ (used)
+- [parallel-hashmap](https://github.com/greg7mdp/parallel-hashmap) - Very fast hashmap library (used)
+- [PyBind11](https://github.com/pybind/pybind11) - Python C++ Binding (used)
+- [geometric predicates](https://www.cs.cmu.edu/~quake/robust.html) - Original Robust Geometric predicates
+- [repository](https://github.com/danshapero/predicates) -Updated geometric predicate library (used)
+
+## Related Methods
+
+- [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets
+
+## License
+
+MIT
+
+---
+
+> GitHub [@jeremybyu](https://github.com/JeremyBYU)
