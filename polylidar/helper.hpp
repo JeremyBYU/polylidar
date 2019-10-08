@@ -2,9 +2,9 @@
 #ifndef POLYLIDARHELPER
 #define POLYLIDARHELPER
 #define _USE_MATH_DEFINES
+#define NDEBUG
 #include "util.hpp"
 #include "delaunator.hpp"
-// #define NDEBUG
 #include <cassert>
 
 namespace polylidar {
@@ -159,15 +159,15 @@ inline std::array<double, 2> getVector(size_t edge, delaunator::Delaunator &dela
     return result; // RVO
 }
 
-inline double determinant(std::array<double, 2> &v1, std::array<double, 2> &v2) {
+inline double determinant(const std::array<double, 2> &v1, const std::array<double, 2> &v2) {
   return v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-inline double dotProduct2(std::array<double, 2> &v1, std::array<double, 2> &v2) {
+inline double dotProduct2(const std::array<double, 2> &v1, const std::array<double, 2> &v2) {
   return v1[0] * v2[0] + v1[1] * v2[1];
 }
 
-inline double get360Angle(std::array<double, 2> &v1, std::array<double, 2> &v2) {
+inline double get360Angle(const std::array<double, 2> &v1, const std::array<double, 2> &v2) {
     auto dot = dotProduct2(v1, v2);
     auto det = determinant(v1, v2);
     auto ang = std::atan2(det, dot);
@@ -211,7 +211,7 @@ inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdg
 }
 
 
-inline size_t getHullEdgeStart(std::array<double, 2> &v1, std::vector<size_t> &outgoingEdges,  delaunator::Delaunator &delaunay, bool isHole=false)
+inline size_t getHullEdgeStart(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges,  delaunator::Delaunator &delaunay, bool isHole=false)
 {
     // std::cout << "v1: " << v1 << std::endl; 
     std::vector<std::array<double, 2>> otherVectors;

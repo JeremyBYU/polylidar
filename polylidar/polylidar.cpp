@@ -1,7 +1,5 @@
 #include "polylidar.hpp"
 
-double DESIRED_VECTOR[3] = {0.0, 0.0, 1.0};
-std::array<double, 2> UP_VECTOR = {0.0, 1.0};
 
 namespace polylidar
 {
@@ -92,7 +90,7 @@ inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay,  Matr
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
-void createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void __attribute__((optimize("O1"))) createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
@@ -106,7 +104,7 @@ void createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunato
     }
 }
 
-void createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void __attribute__((optimize("O1"))) createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
@@ -122,7 +120,7 @@ void createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunato
     }
 }
 
-void createTriHash4(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void __attribute__((optimize("O1"))) createTriHash4(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // std::cout << "Delaunay size " << delaunay.coords.size();
@@ -344,7 +342,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
         // std::cout << "Plane size: " << plane.size() << std::endl;
         // std::cout << "Point Hash size: " << pointHash.size() << std::endl;
         // std::cout << "Edge Hash size: " << edgeHash.size() << std::endl;
-        startingHalfEdge = getHullEdgeStart(UP_VECTOR, nextEdges, delaunay, false);
+        startingHalfEdge = getHullEdgeStart(polylidar::UP_VECTOR, nextEdges, delaunay, false);
     }
     auto startingPointIndex = xPoint.xr_pi;
     auto stopPoint = startingPointIndex;

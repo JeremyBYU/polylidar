@@ -65,6 +65,8 @@ namespace polylidar {
     using unordered_map = std::unordered_map<T,G>;
     #endif
 
+    const std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+    
     struct Config
     {
         // 2D base configuration
