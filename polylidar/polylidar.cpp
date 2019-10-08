@@ -89,7 +89,7 @@ inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay,  Matr
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
-void __attribute__((optimize("O1"))) createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void FORCE_O1_OPTIMIZATION createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
@@ -103,7 +103,7 @@ void __attribute__((optimize("O1"))) createTriHash2(polylidar::unordered_map<siz
     }
 }
 
-void __attribute__((optimize("O1"))) createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void FORCE_O1_OPTIMIZATION createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // TODO static_cast<size_t>
@@ -119,7 +119,7 @@ void __attribute__((optimize("O1"))) createTriHash3(polylidar::unordered_map<siz
     }
 }
 
-void __attribute__((optimize("O1"))) createTriHash4(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void FORCE_O1_OPTIMIZATION createTriHash4(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     // auto points_unchecked = points.unchecked<2>();
     // std::cout << "Delaunay size " << delaunay.coords.size();

@@ -160,6 +160,7 @@ inline void UnalignedStore64(void *p, uint64_t v) { memcpy(p, &v, sizeof v); }
     // using the __forceinline keyword, however this is not perfect. MSVC is
     // much less aggressive about inlining, and even with the __forceinline keyword.
     #define PHMAP_BASE_INTERNAL_FORCEINLINE __forceinline
+    #include <intrin.h>
 #else
     // Use default attribute inline.
     #define PHMAP_BASE_INTERNAL_FORCEINLINE inline PHMAP_ATTRIBUTE_ALWAYS_INLINE
@@ -324,7 +325,6 @@ PHMAP_BASE_INTERNAL_FORCEINLINE int CountTrailingZerosNonZero32(uint32_t n) {
     // GCC will not tail call given inline volatile assembly.
     #define PHMAP_BLOCK_TAIL_CALL_OPTIMIZATION() __asm__ __volatile__("")
 #elif defined(_MSC_VER)
-    #include <intrin.h>
     // The __nop() intrinsic blocks the optimisation.
     #define PHMAP_BLOCK_TAIL_CALL_OPTIMIZATION() __nop()
 #else

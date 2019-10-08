@@ -52,6 +52,12 @@
 
 #define DEBUG 1
 
+#if defined(__GNUC__)
+#define FORCE_O1_OPTIMIZATION __attribute__((optimize("O1")))
+#else
+#define FORCE_O1_OPTIMIZATION 
+#endif
+
 // namespace py = pybind11;
 
 namespace polylidar {
