@@ -14,7 +14,7 @@ Much of this work is possible because of the amazing library called [delaunator]
 
 Delaunator does not use [robust geometric predicates](https://github.com/mikolalysenko/robust-arithmetic-notes) for its orientation and incircle tests; [reference](https://github.com/mapbox/delaunator/issues/43).  This means that the triangulation can be incorrect when points are nearly colinear or cocircular. A library developed by Jonathan Richard Shewchuk provides very fast adaptive precision floating point arithmetic for [geometric predicates](https://www.cs.cmu.edu/~quake/robust.html).  This library is released in the public domain and an updated version of it is maintained at this [repository](https://github.com/danshapero/predicates). I have included this source code in the folder `polylidar/predicates`.  
 
-If you desire to have robust geometric predicates built into Polylidar you must set an environment variable, "USE_ROBUST_PREDICATES=1". The python file `setup.py` will read this environment variable and then include the robust geometric predicates into the build process. Without setting this variable none of the `pedicates` source code is included in the binary distribution.
+If you desire to have robust geometric predicates built into Polylidar you must set an environment variable, "PL_USE_ROBUST_PREDICATES=1". The python file `setup.py` will read this environment variable and then include the robust geometric predicates into the build process. Without setting this variable none of the `predicates` source code is included in the binary distribution.
 
 
 ## Installing

@@ -37,7 +37,7 @@
 #include <utility>
 #include <vector>
 
-#ifdef USE_ROBUST
+#ifdef PL_USE_ROBUST_PREDICATES
 #include "predicates.h"
 #endif
 

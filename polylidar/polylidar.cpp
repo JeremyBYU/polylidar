@@ -1,6 +1,5 @@
 #include "polylidar.hpp"
 
-
 namespace polylidar
 {
 
@@ -427,11 +426,11 @@ std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay,
     {
         createTriHash2(triHash, delaunay, points, config);
     }
-    if (config.dim == 3)
+    else if (config.dim == 3)
     {
         createTriHash3(triHash, delaunay, points, config);
     }
-    if (config.dim == 4)
+    else if (config.dim == 4)
     {
         createTriHash4(triHash, delaunay, points, config);
     }
@@ -460,19 +459,6 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
 {
     config.dim = nparray.cols;
 
-    // std::vector<double> coords2D;
-    // auto size2D = nparray.rows * 2;
-    // if (nparray.cols > 2_z)
-    // {
-    //     coords2D.resize(size2D);
-    //     copy2Ddata(nparray, coords2D);
-    // } else 
-    // {
-    //     double* data = nparray.ptr;
-    //     auto temp = std::vector<double>(data, data + size2D);
-    //     coords2D.swap(temp);
-    // }
-    // std::cout << "Before Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
@@ -500,19 +486,6 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 {
     config.dim = nparray.cols;
 
-    // std::vector<double> coords2D;
-    // auto size2D = nparray.rows * 2;
-    // if (nparray.cols > 2_z)
-    // {
-    //     coords2D.resize(size2D);
-    //     copy2Ddata(nparray, coords2D);
-    // } else 
-    // {
-    //     double* data = nparray.ptr;
-    //     auto temp = std::vector<double>(data, data + size2D);
-    //     coords2D.swap(temp);
-    // }
-    // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
@@ -538,19 +511,6 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, 
 {
     config.dim = nparray.cols;
 
-    std::vector<double> coords2D;
-    // auto size2D = nparray.rows * 2;
-    // if (nparray.cols > 2_z)
-    // {
-    //     coords2D.resize(size2D);
-    //     copy2Ddata(nparray, coords2D);
-    // } else 
-    // {
-    //     double* data = nparray.ptr;
-    //     auto temp = std::vector<double>(data, data + size2D);
-    //     coords2D.swap(temp);
-    // }
-    // std::cout << "Beginning Delaunay" << std::endl;
     auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();

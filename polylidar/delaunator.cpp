@@ -157,7 +157,7 @@ inline bool in_circle_fast(
 }
 
 
-#ifdef USE_ROBUST
+#ifdef PL_USE_ROBUST_PREDICATES
     #define incircle_generic(a, b, c, d) \
         predicates::incircle(a, b,c, d) < 0.0
 

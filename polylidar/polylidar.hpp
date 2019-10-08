@@ -37,7 +37,6 @@
 
 #include "helper.hpp"
 #include "delaunator.hpp"
-#include "robin_hood.h"
 #include <parallel_hashmap/phmap.h>
 
 #define DEFAULT_DIM 2
@@ -57,12 +56,12 @@
 
 namespace polylidar {
     using vvi = std::vector<std::vector<size_t>>;
-    #ifdef USE_ROBINHOOD_UNORDERED_MAP
-    template<typename T, typename G>
-    using unordered_map = phmap::flat_hash_map<T,G>;
-    #else
+    #ifdef PL_USE_STD_UNORDERED_MAP
     template<typename T, typename G>
     using unordered_map = std::unordered_map<T,G>;
+    #else
+    template<typename T, typename G>
+    using unordered_map = phmap::flat_hash_map<T,G>;
     #endif
 
     const std::array<double, 2> UP_VECTOR = {0.0, 1.0};

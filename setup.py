@@ -5,19 +5,19 @@ from setuptools.command.build_ext import build_ext
 import setuptools
 
 
-USE_ROBUST_PREDICATES_NAME = 'USE_ROBUST_PREDICATES'
-USE_ROBUST_PREDICATES = int(os.environ.get(USE_ROBUST_PREDICATES_NAME, 0))
-if USE_ROBUST_PREDICATES:
+PL_USE_ROBUST_PREDICATES_NAME = 'PL_USE_ROBUST_PREDICATES'
+PL_USE_ROBUST_PREDICATES = int(os.environ.get(PL_USE_ROBUST_PREDICATES_NAME, 0))
+if PL_USE_ROBUST_PREDICATES:
     print("Building with robust geometric predicates.")
 else:
     print("NOT building with robust predicates")
 
-USE_ROBINHOOD_UNORDERED_MAP_NAME = 'USE_ROBINHOOD_UNORDERED_MAP'
-USE_ROBINHOOD_UNORDERED_MAP = int(os.environ.get(USE_ROBINHOOD_UNORDERED_MAP_NAME, 0))
-if USE_ROBINHOOD_UNORDERED_MAP:
-    print("Building with fast robinhood::unordered_map. 30% Speedup. Does not work with GCC7. See Wiki.")
+PL_USE_STD_UNORDERED_MAP_NAME = 'PL_USE_STD_UNORDERED_MAP'
+PL_USE_STD_UNORDERED_MAP = int(os.environ.get(PL_USE_STD_UNORDERED_MAP_NAME, 0))
+if PL_USE_STD_UNORDERED_MAP:
+    print("Building with slower std::unordered_map.")
 else:
-    print("Building with slow std::unordered_map.")
+    print("Building with fast flat_hash_map. 30% Speedup. Does not work with GCC7. See Wiki.")
 
 
 __version__ = '0.0.4'
@@ -58,7 +58,7 @@ robust_files = ['polylidar/predicates/constants.c', 'polylidar/predicates/predic
 include_dirs = [get_pybind_include(), get_pybind_include(user=True), get_numpy_include(), 'polylidar/']
 
 # If compiling with robust predicates then add robust c and header files
-if USE_ROBUST_PREDICATES:
+if PL_USE_ROBUST_PREDICATES:
     source_files.extend(robust_files)
     include_dirs.append('polylidar/predicates/')
 
@@ -116,22 +116,18 @@ class BuildExt(build_ext):
         ct = self.compiler.compiler_type
         opts = self.c_opts.get(ct, [])
         opts.append('-DPY_EXTENSION') # inform compiler that we are compiling as a pyextension
+        if PL_USE_ROBUST_PREDICATES:
+            opts.append('-DPL_USE_ROBUST_PREDICATES')
+        if PL_USE_STD_UNORDERED_MAP:
+            opts.append('-DPL_USE_STD_UNORDERED_MAP')
         if ct == 'unix':
             opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append('-Wall')
             opts.append(cpp_flag(self.compiler))
             if has_flag(self.compiler, '-fvisibility=hidden'):
                 opts.append('-fvisibility=hidden')
-            if USE_ROBUST_PREDICATES:
-                opts.append('-DUSE_ROBUST')
-            if USE_ROBINHOOD_UNORDERED_MAP:
-                opts.append('-DUSE_ROBINHOOD_UNORDERED_MAP')
         elif ct == 'msvc':
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
-            if USE_ROBUST_PREDICATES:
-                opts.append('-DUSE_ROBUST')
-            if USE_ROBINHOOD_UNORDERED_MAP:
-                opts.append('-DUSE_ROBINHOOD_UNORDERED_MAP')
         for ext in self.extensions:
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
