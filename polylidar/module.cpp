@@ -13,13 +13,8 @@ PYBIND11_MODULE(polylidar, m)
 
     // xt::import_numpy(); // MUST import numpy here
     m.doc() = R"pbdoc(
-        Pybind11 of polylidar
+        Polylidar - Rapidly extract polygons from points clouds
         -----------------------
-
-        .. currentmodule:: polylidar
-
-        .. autosummary::
-           :toctree: _generate
 
     )pbdoc";
 
@@ -53,21 +48,21 @@ PYBIND11_MODULE(polylidar, m)
         // .def_readonly("holes", &polylidar::Polygon::holes, py::return_value_policy::copy)
         .def_property("holes", &polylidar::Polygon::getHoles, &polylidar::Polygon::setHoles);
     
-    m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons,
+    m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons, "Extracts planar meshes and polygons from a point cloud",
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
         "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
-    m.def("extractPolygons", &polylidar::extractPolygons,
+    m.def("extractPolygons", &polylidar::extractPolygons, "Extracts polygons from a point cloud",
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
         "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
-    m.def("extractPolygonsAndTimings", &polylidar::extractPolygonsAndTimings,
+    m.def("extractPolygonsAndTimings", &polylidar::extractPolygonsAndTimings, "Extracts polygons from a point cloud and returns detailed timings of triangulation, mesh extraction, and polygon extraction", 
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
