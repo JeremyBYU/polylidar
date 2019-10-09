@@ -11,7 +11,7 @@
   <a href="#how-to-use">How To Use</a> •
   <a href="#polylidar-use-cases">Use Cases</a> •
   <a href="#credits">Credits</a> •
-  <a href="#related">Related</a> •
+  <a href="#related-methods">Related</a> •
   <a href="#license">License</a>
 </p>
 
@@ -23,17 +23,17 @@
 
 ## Key Features
 
-* Fast (Multi)Polygon Extraction from 2D and 3D point clouds. 
-  - Written in C++ for portability.
-  - Extremely fast. 100,000 3D point cloud takes ~130ms to process on laptop.
-  - Polygons **with** holes are returned
-* Python3 bindings using PyBind11.
-  - Low overhead for calling python/cpp interface (no copying of point cloud data).
+* Fast (Multi)Polygon Extraction from 2D and 3D point clouds 
+  - Written in C++ for portability
+  - Extremely fast. 100,000 3D point cloud takes ~130ms to process on laptop
+  - Polygons with holes may be returned
+* Python3 bindings using PyBind11
+  - Low overhead for calling python/cpp interface (no copying of point cloud data)
 * Python and C++ Examples
 * Cross platform
-  - Windows, and Linux ready.
+  - Windows and Linux ready.
 
-Polylidar allows one to extract planar meshes from a point cloud **and** their 2D projected polygons. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors.
+Polylidar allows one to extract planar meshes from a point cloud **and** their polygon representations. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors.
 
 ## Install
 
@@ -123,12 +123,15 @@ This software uses the following open source packages:
 - [DelaunatorCPP](https://github.com/delfrrr/delaunator-cpp) - Delaunator ported to C++ (used)
 - [parallel-hashmap](https://github.com/greg7mdp/parallel-hashmap) - Very fast hashmap library (used)
 - [PyBind11](https://github.com/pybind/pybind11) - Python C++ Binding (used)
-- [geometric predicates](https://www.cs.cmu.edu/~quake/robust.html) - Original Robust Geometric predicates
-- [repository](https://github.com/danshapero/predicates) -Updated geometric predicate library (used)
+- [Robust Geometric Predicates](https://www.cs.cmu.edu/~quake/robust.html) - Original Robust Geometric predicates
+- [Updated Predicates](https://github.com/danshapero/predicates) -Updated geometric predicate library (used)
 
 ## Related Methods
 
-- [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets
+- [CGAL Alpha Shapes](https://doc.cgal.org/latest/Alpha_shapes_2/index.html) - MultiPolygon with holes.
+- [PostGIS ConcaveHull](http://postgis.net/docs/ST_ConcaveHull.html) - Single Polygon with holes.
+- [Spatialite ConcaveHull](https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0) - MultiPolygon with holes.
+- [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets.
 
 ## License
 
