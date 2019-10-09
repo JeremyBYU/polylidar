@@ -3,6 +3,7 @@
 archive
 scratch
 solns
+*.prof
 *.o
 *.swp
 *.swo

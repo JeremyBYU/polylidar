@@ -1,11 +1,11 @@
 POLYLIDAR_DIR = ../../polylidar
 ROBUST_DIR = ${POLYLIDAR_DIR}/predicates
 
-CXXFLAGS:=$(CXXFLAGS) -Wall -std=c++14 -O3 
+CXXFLAGS:=$(CXXFLAGS) -Wall -std=c++14 -O3 -g
 CC := cc
 CXX := g++ # Prefer not to use GCC7, use GCC5,6,8,9; Clang; or MSVC. See WIKI for details.
 INCLUDES=-I${POLYLIDAR_DIR} -I${ROBUST_DIR}
-LDFLAGS=-L/usr/local/lib
+LDFLAGS=-L/usr/local/lib # -lprofiler add profiler if you have google-perftools
 
 TARGET=simple
 
