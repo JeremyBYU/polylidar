@@ -113,13 +113,13 @@ inline std::pair<double, double> circumcenter(
 
 struct compare {
 
+    std::vector<double> const& dists;
     polylidar::Matrix const& coords;
-    double cx;
-    double cy;
+
 
     bool operator()(std::size_t i, std::size_t j) {
-        const double d1 = dist(coords(i, 0_z), coords(i, 1_z), cx, cy);
-        const double d2 = dist(coords(j, 0_z), coords(j, 1_z), cx, cy);
+        const double d1 = dists[i];
+        const double d2 = dists[j];
         const double diff1 = d1 - d2;
         const double diff2 = coords(i, 0_z) - coords(j, 0_z);
         const double diff3 = coords(i, 1_z) - coords(j, 1_z);
@@ -285,8 +285,15 @@ void Delaunator::triangulate() {
 
     std::tie(m_center_x, m_center_y) = circumcenter(i0x, i0y, i1x, i1y, i2x, i2y);
 
+    std::vector<double> dists;
+    dists.reserve(ids.size());
+
+	for (auto&& id : ids) {
+        const double d = dist(coords(id, 0), coords(id, 1), m_center_x, m_center_y);
+        dists.push_back(d);
+	}
     // sort the points by distance from the seed triangle circumcenter
-    std::sort(ids.begin(), ids.end(), compare{ coords, m_center_x, m_center_y });
+    std::sort(ids.begin(), ids.end(), compare{ dists, coords });
 
     // initialize a hash table for storing edges of the advancing convex hull
     m_hash_size = static_cast<std::size_t>(std::llround(std::ceil(std::sqrt(n))));
