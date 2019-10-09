@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iomanip>    
 
 #include "polylidar.hpp"
 
@@ -77,15 +78,20 @@ int main(int argc, char *argv[])
   config.lmax = 100.0;
 
   // Extract polygon
+  std::vector<float> timings;
   auto before = std::chrono::high_resolution_clock::now();
-  auto polygons = polylidar::_extractPolygons(points_, config);
+  auto polygons = polylidar::_extractPolygonsAndTimings(points_, config, timings);
   auto after = std::chrono::high_resolution_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-  std::cout << "Polygon extraction took " << elapsed.count() << " milliseconds" << std::endl;
-  std::cout << "Point indices of Polygon Shell: " << std::endl;
+  std::cout << "Polylidar took " << elapsed.count() << " milliseconds processing a " << shape[0] << " point cloud" << std::endl;
+  std::cout << "Point indices of Polygon Shell: ";
   for(auto const& polygon: polygons) {
     std::cout << polygon.shell << std::endl;
   }
+
+  std::cout << std::endl;
+  std::cout << "Detailed timings in milleseconds:" << std::endl;
+  std::cout << std::fixed << std::setprecision(2) << "Delaunay Triangulation: " << timings[0] << "; Mesh Extraction: " << timings[1] << "; Polygon Extraction: " << timings[2] <<std::endl;
 
 
   return 0;
