@@ -22,7 +22,6 @@
 #ifndef POLYLIDAR
 #define POLYLIDAR
 #define _USE_MATH_DEFINES
-#define VERSION_INFO "0.0.4"
 
 #include <array>
 #include <ostream>

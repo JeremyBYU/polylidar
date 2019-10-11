@@ -3,6 +3,7 @@ import os
 
 VENV = 'conda' if os.name == 'nt' else None
 NAME = 'win' if os.name == 'nt' else 'linux'
+DISTS = ['sdist', 'bdist_wheel'] if os.name == 'nt' else ['sdist']
 
 @nox.session(
     python=['3.6', '3.7'],
@@ -11,7 +12,7 @@ NAME = 'win' if os.name == 'nt' else 'linux'
     name='test_' + NAME)
 def test(session):
     if VENV == 'conda':
-        session.conda_install('--channel=conda-forge', 'shapely')
+        session.conda_install('--channel=conda-forge', 'shapely') # needed for windows
     session.install('-e', '.[dev]')
     session.run('pytest')
-    session.run('python', 'setup.py', 'sdist', 'bdist_wheel')
+    session.run('python', 'setup.py', *DISTS)
