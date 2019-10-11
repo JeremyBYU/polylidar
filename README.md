@@ -41,11 +41,10 @@ Polylidar allows one to extract planar meshes from a point cloud **and** their p
 
 Polylidar is not on PyPI so it must be installed manually.
 
-1. Install [conda](https://conda.io/projects/conda/en/latest/) - [Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)
-2. `conda install shapely` - Use conda because it handles windows binary dependency correctly.
-3. `pip install pybind11`
-4. `pip install -e .`
-5. `pytest` - OPTIONAL, this will run a series of tests and benchmarks.
+1. Install [conda](https://conda.io/projects/conda/en/latest/) or create a python virtual envrionment ([Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)). I recommend conda for Windows users.
+2. `conda install shapely` - Only for Windows users because conda handles windows binary dependency correctly.
+3. `pip install -e ".[dev]"`
+4. `pytest` - OPTIONAL, this will run a series of tests and benchmarks.
 
 ### C++
 

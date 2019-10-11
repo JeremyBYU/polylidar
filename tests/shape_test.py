@@ -115,17 +115,11 @@ def test_bad_convex_hull(benchmark, bad_convex_hull, bad_convex_hull_params):
     # Ensure that the polygons returned are valid
     verify_all_polygons_are_valid(polygons, bad_convex_hull)
 
-def test_100k_array_xyThresh(benchmark, np_100K_array, params_xyThresh):
-    polygons = benchmark(extractPolygons, np_100K_array, **params_xyThresh)
-
 def test_100k_array_lmax(benchmark, np_100K_array, params_lmax):
-    polygons = benchmark(extractPolygons, np_100K_array, **params_lmax)
-
-def test_100k_array_alpha(benchmark, np_100K_array, params_alpha):
-    polygons = benchmark(extractPolygons, np_100K_array, **params_alpha)
+    benchmark(extractPolygons, np_100K_array, **params_lmax)
 
 def test_100k_array_3d_lmax(benchmark, np_100K_array_3d, params_lmax):
-    polygons = benchmark(extractPolygons, np_100K_array_3d, **params_lmax)
+    benchmark(extractPolygons, np_100K_array_3d, **params_lmax)
 
 
 ts = range(1000, 100000, 1000)  # This creates 100 numpy arrays frangin from (1000,2) -> (100000,2)

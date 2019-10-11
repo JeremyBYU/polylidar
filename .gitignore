@@ -1,5 +1,6 @@
 # examples/cpp/bin
 .vscode
+.nox
 archive
 scratch
 solns

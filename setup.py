@@ -1,5 +1,6 @@
 import os
 import sys
+from os.path import join
 from setuptools import setup, Extension
 from setuptools.command.build_ext import build_ext
 import setuptools
@@ -29,13 +30,18 @@ class get_pybind_include(object):
     until it is actually installed, so that the ``get_include()``
     method can be invoked. """
 
-    def __init__(self, user=False):
+    def __init__(self, user=False, subdir=False):
         self.user = user
 
     def __str__(self):
         import pybind11
         include_path = os.path.dirname(pybind11.get_include(self.user))
-        return include_path
+        subdir = "python%s.%s" % (sys.version_info.major, sys.version_info.minor)
+        include_path_sub = join(include_path, subdir)
+        if subdir:
+            return include_path_sub
+        else:
+            return include_path
 
 class get_numpy_include(object):
     """Helper class to determine the numpy include path
@@ -55,7 +61,7 @@ source_files = ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/de
 # Source files for robust geometric predicates
 robust_files = ['polylidar/predicates/constants.c', 'polylidar/predicates/predicates.c', 'polylidar/predicates/printing.c', 'polylidar/predicates/random.c']
 # Include directories for polylidar
-include_dirs = [get_pybind_include(), get_pybind_include(user=True), get_numpy_include(), 'polylidar/']
+include_dirs = [get_pybind_include(), get_pybind_include(user=True), get_pybind_include(subdir=True), get_numpy_include(), 'polylidar/']
 
 # If compiling with robust predicates then add robust c and header files
 if PL_USE_ROBUST_PREDICATES:
@@ -132,6 +138,9 @@ class BuildExt(build_ext):
             ext.extra_compile_args = opts
         build_ext.build_extensions(self)
 
+
+DEV = ['pytest', 'pytest-benchmark', 'pylint', 'twine', 'autopep8', 'nox']
+
 setup(
     name='polylidar',
     version=__version__,
@@ -142,7 +151,10 @@ setup(
     description='Polygon extraction from Point Cloud data',
     long_description='',
     ext_modules=ext_modules,
-    install_requires=['pybind11>=2.2', 'numpy', 'pytest', 'shapely', 'pytest-benchmark', 'descartes', 'matplotlib'],
+    install_requires=['pybind11>=2.2', 'numpy', 'shapely', 'matplotlib', 'descartes'],
+    extras_require={
+        'dev': DEV
+    },
     cmdclass={'build_ext': BuildExt},
     zip_safe=False,
 )
