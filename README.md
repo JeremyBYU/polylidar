@@ -16,8 +16,8 @@
 </p>
 
 <p align="middle">
-  <img src="./assets/2D_polygon_text.png" height="100%" />
-  <img src="./assets/combined.png" height="100%" /> 
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/2D_polygon_text.png" height="100%" />
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/combined.png" height="100%" /> 
 </p>
 
 
