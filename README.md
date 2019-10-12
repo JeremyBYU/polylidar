@@ -39,7 +39,15 @@ Polylidar allows one to extract planar meshes from a point cloud **and** their p
 
 ### Python
 
-Polylidar is not on PyPI so it must be installed manually.
+**PIP install**
+
+1. Install [conda](https://conda.io/projects/conda/en/latest/) or create a python virtual envrionment ([Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)). I recommend conda for Windows users.
+2. `conda install shapely` - Only for Windows users because conda handles windows binary dependency correctly.
+3. `pip install polylidar`
+
+Binary wheels are provided only for Windows x64 for Python 3.6-3.7. This means everyone else (Linux, MacOS) will need to have a C++ compiler (GCC or Clang) to compile the source during pip installation.
+
+**Manual build from git clone**
 
 1. Install [conda](https://conda.io/projects/conda/en/latest/) or create a python virtual envrionment ([Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)). I recommend conda for Windows users.
 2. `conda install shapely` - Only for Windows users because conda handles windows binary dependency correctly.
