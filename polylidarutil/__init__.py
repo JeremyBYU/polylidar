@@ -140,9 +140,9 @@ def plot_polygons(polygons, delaunay, points, ax):
             ax.add_patch(outlinePatch)
 
         
-def generate_test_points(num_groups=2, dist=100, group_size=10, seed=1, spread_factor=1.0):
+def generate_test_points(num_groups=2, dist=100, group_size=10, seed=1):
     np.random.seed(seed)
-    sigma = dist / (num_groups + 1) * spread_factor
+    sigma = dist / (num_groups * 2 - 1)
     cov = np.array([[sigma, 0], [0, sigma]])
     a = np.array([0, 0])
     for i in range(0, num_groups):
@@ -151,6 +151,12 @@ def generate_test_points(num_groups=2, dist=100, group_size=10, seed=1, spread_f
         a = np.vstack((a, b))
 
     return a
+
+def get_estimated_lmax(num_groups=2, dist=100, group_size=10, scale_factor=4, **kwargs):
+    clust_radius = math.sqrt(dist / (num_groups * 2 - 1))
+    clust_point_density = (group_size * .50) / (math.pi * clust_radius * clust_radius)
+    lmax = scale_factor / math.sqrt(clust_point_density)
+    return lmax
 
 def get_triangles_from_he(triangles, points):
     triangle_list = []

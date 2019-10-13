@@ -5,18 +5,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from polylidar import extractPlanesAndPolygons
-from polylidarutil import (generate_test_points, plot_points, plot_triangles,
+from polylidarutil import (generate_test_points, plot_points, plot_triangles, get_estimated_lmax,
                             plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
 
-# generate random points, 200 X 2 numpy array.
-kwargs = dict(num_groups=2, group_size=100, dist=100.0)
+kwargs = dict(num_groups=2, group_size=1000, dist=100.0, seed=1)
+# generate random normally distributed clusters of points, 200 X 2 numpy array.
 points = generate_test_points(**kwargs)
-clust_radius = math.sqrt(kwargs['dist'] / kwargs['num_groups'])
-print(clust_radius)
-clust_point_density = (kwargs['group_size'] * .50) / (math.pi * clust_radius * clust_radius)
-print(clust_point_density)
-lmax = 3 / math.sqrt(clust_point_density)
-print(lmax) 
+lmax = get_estimated_lmax(**kwargs)
 
 # Extracts planes and polygons, time
 t1 = time.time()

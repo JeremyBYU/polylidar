@@ -157,7 +157,7 @@ class BuildExt(build_ext):
         build_ext.build_extensions(self)
 
 
-DEV = ['pytest', 'pytest-benchmark', 'pylint', 'twine', 'autopep8', 'nox']
+DEV = ['pytest', 'pytest-xdist', 'pytest-benchmark', 'pylint', 'twine', 'autopep8', 'nox']
 
 this_directory = os.path.abspath(os.path.dirname(__file__))
 with open(join(this_directory, 'README.md'), encoding='utf-8') as f:

@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 from shapely.geometry import Polygon
-from polylidar import extractPlanesAndPolygons
+from polylidar import extractPlanesAndPolygons, extractPolygons
 
 DIR_NAME =path.dirname(path.dirname(__file__))
 FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
@@ -38,15 +38,26 @@ def verify_all_polygons_are_valid(polygons, points):
 
 def verify_valid_polygon(poly, points):
     shell_coords = get_poly_coords(poly.shell, points)
-    hold_coords = [get_poly_coords(hole, points) for hole in poly.holes]
+    hole_coords = [get_poly_coords(hole, points) for hole in poly.holes]
     # Verify polygon outer shell
     shapelyPoly = Polygon(shell=shell_coords)
     assert shapelyPoly.is_valid
     # Verify polygon outer shell and holes
-    shapelyPoly = Polygon(shell=shell_coords, holes=hold_coords)
+    shapelyPoly = Polygon(shell=shell_coords, holes=hole_coords)
 #     if not shapelyPoly.is_valid:
 #         np.save("scratch/error_{}.npy".format(points.shape[0]), points)
     assert shapelyPoly.is_valid
 
+def verify_all(points, polylidar_kwargs):
+    delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
+    # Basic test to ensure no obvious errors occurred
+    basic_polylidar_verification(points, delaunay, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, points)
+    # Ensure that all polygons are as expected
+    # Test just polygon extraction
+    polygons = extractPolygons(points, **polylidar_kwargs)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, points)
 
 
