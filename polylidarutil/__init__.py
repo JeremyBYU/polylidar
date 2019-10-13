@@ -142,7 +142,7 @@ def plot_polygons(polygons, delaunay, points, ax):
         
 def generate_test_points(num_groups=2, dist=100, group_size=10, seed=1, spread_factor=1.0):
     np.random.seed(seed)
-    sigma = math.sqrt(dist / (num_groups)) * spread_factor
+    sigma = dist / (num_groups + 1) * spread_factor
     cov = np.array([[sigma, 0], [0, sigma]])
     a = np.array([0, 0])
     for i in range(0, num_groups):
