@@ -58,7 +58,7 @@ def np_100K_array_3d():
 def bad_convex_hull_params():
     return dict(alpha=0.0, xyThresh=1300.0)
 
-@pytest.fixture(params=range(2, 10))
+@pytest.fixture(params=range(2, 11))
 def num_groups(request):
     return request.param
 

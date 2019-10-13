@@ -89,24 +89,21 @@ inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay,  Matr
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
-void FORCE_O1_OPTIMIZATION createTriHash2(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+
+void createTriSet2(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
-    // auto points_unchecked = points.unchecked<2>();
-    // TODO static_cast<size_t>
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
     {
         if (validateTriangle2D(t, delaunay, points, config))
         {
-            triHash[t] = t;
+            triSet[t] = true;
         }
     }
 }
 
-void FORCE_O1_OPTIMIZATION createTriHash3(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriSet3(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
-    // auto points_unchecked = points.unchecked<2>();
-    // TODO static_cast<size_t>
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
     {
@@ -114,30 +111,22 @@ void FORCE_O1_OPTIMIZATION createTriHash3(polylidar::unordered_map<size_t, size_
         bool valid3D = validateTriangle3D(t, delaunay, points, config);
         if (valid2D && valid3D)
         {
-            triHash[t] = t;
+            triSet[t] = true;
         }
     }
 }
 
-void FORCE_O1_OPTIMIZATION createTriHash4(polylidar::unordered_map<size_t, size_t> &triHash, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriSet4(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
-    // auto points_unchecked = points.unchecked<2>();
-    // std::cout << "Delaunay size " << delaunay.coords.size();
-    // TODO static_cast<size_t>
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
     {
-        // std::cout<< "Beginning 2D validation: " << t << std::endl;
         bool valid2D = validateTriangle2D(t, delaunay, points, config);
-        // std::cout<< "Beginning 3D validation: " << t << std::endl;
         bool valid3D = validateTriangle3D(t, delaunay, points, config);
-        // std::cout<< "Beginning 4D validation: " << t << std::endl;
         bool valid4D = validateTriangle4D(t, delaunay, points, config);
-        // std::cout << "Valid4D: " << valid4D << std::endl;
-        // auto valid4D = true;
         if (valid2D && valid3D && valid4D)
         {
-            triHash[t] = t;
+            triSet[t] = true;
         }
     }
 }
@@ -366,13 +355,14 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
     return polygons;
 }
 
-void extractMeshHash(delaunator::Delaunator &delaunay, polylidar::unordered_map<size_t, size_t> &triHash, size_t seedIdx, std::vector<size_t> &candidates)
+
+void extractMeshSet(delaunator::Delaunator &delaunay, std::vector<bool> &triSet, size_t seedIdx, std::vector<size_t> &candidates)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
     // Add seed index to queue and erase from hash map
     queue.push(seedIdx);
-    triHash.erase(seedIdx);
+    triSet[seedIdx] = false;
 
 
     // std::vector<size_t> candidates;
@@ -387,15 +377,15 @@ void extractMeshHash(delaunator::Delaunator &delaunay, polylidar::unordered_map<
         {
             auto e = tri * 3 + i;
             auto opposite = delaunay.halfedges[e];
-            if (opposite >= 0)
+            if (opposite != INVALID_INDEX)
             {
                 // convert opposite edge to a triangle
                 // TODO static_cast<size_t>
                 size_t tn = std::floor(opposite / 3);
-                if (triHash.find(tn) != triHash.end())
+                if (triSet[tn])
                 {
                     queue.push(tn);
-                    triHash.erase(tn);
+                    triSet[tn] = false;
                 }
             }
         }
@@ -412,45 +402,41 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::Delaunator 
     return true;
 }
 
-std::vector<std::vector<size_t>> extractPlanes(delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+
+std::vector<std::vector<size_t>> extractPlanesSet(delaunator::Delaunator &delaunay, Matrix &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
-    polylidar::unordered_map<size_t, size_t> triHash;
-    // Reserve hash size to hold all possible triangles
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
-    triHash.reserve(max_triangles);
+    std::vector<bool> triSet(max_triangles, false);
 
-    // std::cout << "reserving " << max_triangles << " triangles in hash" << std::endl;
-    // auto before = std::chrono::high_resolution_clock::now();
     if (config.dim == 2)
     {
-        createTriHash2(triHash, delaunay, points, config);
+        createTriSet2(triSet, delaunay, points, config);
     }
     else if (config.dim == 3)
     {
-        createTriHash3(triHash, delaunay, points, config);
+        createTriSet3(triSet, delaunay, points, config);
     }
     else if (config.dim == 4)
     {
-        createTriHash4(triHash, delaunay, points, config);
+        createTriSet4(triSet, delaunay, points, config);
     }
 
-
-    // auto after = std::chrono::high_resolution_clock::now();
-    // double elapsed = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
-    // std::cout << "Tri Hash Creation took " << elapsed << " milliseconds" << std::endl;
-    while (!triHash.empty())
+    for (size_t t = 0; t < max_triangles; t++)
     {
-        planes.emplace_back(); // construct empty vector inside planes
-        auto &planeMesh = planes[planes.size() -1]; // retrieve this newly created vector
-        auto seedIdx = std::begin(triHash)->first;
-        extractMeshHash(delaunay, triHash, seedIdx, planeMesh);
-        // Remove plane if it does not pass constraints
-        if (!passPlaneConstraints(planeMesh, delaunay, config))
+        if (triSet[t])
         {
-            planes.pop_back();
+            planes.emplace_back(); // construct empty vector inside planes
+            auto &planeMesh = planes[planes.size() -1]; // retrieve this newly created vector
+            extractMeshSet(delaunay, triSet, t, planeMesh);
+            // Remove plane if it does not pass constraints
+            if (!passPlaneConstraints(planeMesh, delaunay, config))
+            {
+                planes.pop_back();
+            }
         }
     }
+
     return planes;
 }
 
@@ -467,7 +453,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
-    std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
+    std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
     elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
@@ -494,7 +480,7 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
     // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
-    std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
+    std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
     float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
@@ -519,7 +505,7 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, 
     // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
-    std::vector<std::vector<size_t>> planes = extractPlanes(delaunay, nparray, config);
+    std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
     float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
