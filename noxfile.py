@@ -14,5 +14,5 @@ def test(session):
     if VENV == 'conda':
         session.conda_install('--channel=conda-forge', 'shapely') # needed for windows
     session.install('-e', '.[dev]')
-    session.run('pytest tests/shape_test.py -n 12')
+    session.run('pytest', 'tests/shape_test.py', '-n', '12')
     session.run('python', 'setup.py', *DISTS)
