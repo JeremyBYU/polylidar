@@ -2,7 +2,9 @@
 #ifndef POLYLIDARHELPER
 #define POLYLIDARHELPER
 #define _USE_MATH_DEFINES
-#define NDEBUG
+#ifndef NDEBUG
+    #define NDEBUG
+#endif
 #include "util.hpp"
 #include "delaunator.hpp"
 #include <cassert>

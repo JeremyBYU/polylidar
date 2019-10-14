@@ -139,13 +139,14 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
     auto &triangles = delaunay.triangles;
     auto &halfedges = delaunay.halfedges;
 
-    // all valid triangles
-    polylidar::unordered_map<size_t, size_t> triHash;
+    size_t max_triangles_all = static_cast<size_t>(delaunay.triangles.size() / 3);
+    std::vector<bool> triSet(max_triangles_all, false);
+
 
     // THIS REDUCED THIS FUNCTIONS RUNTIME BY 1/2
     // LESS ALLOCATIONS AND HASH COLLISIONS
     size_t max_triangles = static_cast<size_t>(plane.size());
-    triHash.reserve(max_triangles);
+    // triHash.reserve(max_triangles);
 
     // This does not seem to make much of a difference
     // But it does not hurt it, Perimeter (boundary edges) grows as sqrt of area (triangles)
@@ -154,18 +155,14 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
     edgeHash.reserve(nominal_edges);
 
     // auto before = std::chrono::high_resolution_clock::now();
-    // This for loop takes up about 50% the execution time of constructPointHash
     // create a hash of all triangles in this plane set
     for (auto &&t : plane)
     {
-        triHash[t] = t;
+        triSet[t] = true;
     }
     // auto after = std::chrono::high_resolution_clock::now();
     // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "ConstructPointHash - Time creating triangle Hash (ms): " << elapsed.count() << std::endl;
-
-
-    // auto points_unchecked = points.unchecked<2>();
 
     // Loop through every triangle in the plane
     for (auto &&t : plane)
@@ -177,10 +174,11 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
             auto heIndex = t * 3 + i;
             // get the adjacent edge of this triangle edge
             auto oppHe = halfedges[heIndex];
-            // TODO static_cast<size_t>
-            size_t oppT = std::floor(oppHe / 3);
+            // if (oppHe == INVALID_INDEX)
+            //     continue;
+            size_t oppT = static_cast<size_t>(oppHe / 3);
             // check if this triangle (oppT) is on the convex hull or removed
-            if (triHash.find(oppT) == triHash.end())
+            if (oppHe == INVALID_INDEX || !triSet[oppT])
             {
                 // Record this edge
                 edgeHash[heIndex] = heIndex;
@@ -445,23 +443,23 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
 {
     config.dim = nparray.cols;
 
-    auto before = std::chrono::high_resolution_clock::now();
+    // auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
-    auto after = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // auto after = std::chrono::high_resolution_clock::now();
+    // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
 
-    before = std::chrono::high_resolution_clock::now();
+    // before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
-    after = std::chrono::high_resolution_clock::now();
-    elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // after = std::chrono::high_resolution_clock::now();
+    // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
 
-    before = std::chrono::high_resolution_clock::now();
+    // before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
-    after = std::chrono::high_resolution_clock::now();
-    elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // after = std::chrono::high_resolution_clock::now();
+    // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
     return std::make_tuple(delaunay, planes, polygons);
 
@@ -472,23 +470,23 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 {
     config.dim = nparray.cols;
 
-    auto before = std::chrono::high_resolution_clock::now();
+    // auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
-    auto after = std::chrono::high_resolution_clock::now();
-    float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // auto after = std::chrono::high_resolution_clock::now();
+    // float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
-    before = std::chrono::high_resolution_clock::now();
+    // before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
-    after = std::chrono::high_resolution_clock::now();
-    float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // after = std::chrono::high_resolution_clock::now();
+    // float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
 
-    before = std::chrono::high_resolution_clock::now();
+    // before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
-    after = std::chrono::high_resolution_clock::now();
-    float elapsed_ch = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // after = std::chrono::high_resolution_clock::now();
+    // float elapsed_ch = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
     return polygons;
 }
