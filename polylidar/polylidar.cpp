@@ -196,6 +196,10 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
                 {
                     // point already exists, just append to it
                     pointHash[pi].push_back(heIndex);
+                    // if (pointHash[pi].size() > 3)
+                    // {
+                    //     std::cout << "Point Hash Size: " << pointHash[pi].size() <<std::endl;
+                    // }
                 }
             }
         }
