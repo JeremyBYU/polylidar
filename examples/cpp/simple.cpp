@@ -27,7 +27,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<TElem>& vec) {
 }
 
 // Read in an input file of the point cloud
-bool file_input(std::vector<double> &points, std::string file_path)
+bool file_input(std::vector<double> &points, std::string file_path, size_t &dim)
 {
   std::ifstream is(file_path, std::ios::in);
   if (is.fail())
@@ -38,19 +38,32 @@ bool file_input(std::vector<double> &points, std::string file_path)
 
   std::string line;
   std::getline(is, line); // Skip header
+  dim = std::count(line.begin(), line.end(), ',');
+  dim += 1;
   // std::cout<<line<<std::endl;
   while (std::getline(is, line))
   {
     std::istringstream iss(line);
     char _;
     double a, b, c;
-    if (!(iss >> a >> _ >> b >> _ >> c))
+    if (dim == 3)
     {
-      break;
-    } // error
+      if (!(iss >> a >> _ >> b >> _ >> c))
+      {
+        break;
+      } // error
+    }
+    else
+    {
+      if (!(iss >> a >> _ >> b))
+      {
+        break;
+      } // error
+    }
     points.push_back(a);
     points.push_back(b);
-    points.push_back(c);
+    if (dim == 3)
+      points.push_back(c);
   }
 
   return true;
@@ -61,21 +74,22 @@ int main(int argc, char *argv[])
 
   std::cout << "Simple C++ Example of Polylidar" << std::endl;
   std::vector<double> points;
-  std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
+  size_t dim = 3;
+  std::string file_path = "../../tests/fixtures/ng_100_gs_10000_lmax_0.071.csv";
 
   // N X 3 array as one contigious array
-  auto success = file_input(points, file_path);
+  auto success = file_input(points, file_path, dim);
   if (!success)
     return 0;
 
   // Convert to multidimensional array
-  std::vector<std::size_t> shape = { points.size() / 3, 3 };
+  std::vector<std::size_t> shape = { points.size() / dim, dim };
   polylidar::Matrix points_(points.data(), shape[0], shape[1]);
   // Set configuration parameters
   polylidar::Config config;
   config.xyThresh = 0.0;
   config.alpha = 0.0;
-  config.lmax = 100.0;
+  config.lmax = 0.071;
 
   // Extract polygon
   std::vector<float> timings;
@@ -85,9 +99,9 @@ int main(int argc, char *argv[])
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
   std::cout << "Polylidar took " << elapsed.count() << " milliseconds processing a " << shape[0] << " point cloud" << std::endl;
   std::cout << "Point indices of Polygon Shell: ";
-  for(auto const& polygon: polygons) {
-    std::cout << polygon.shell << std::endl;
-  }
+  // for(auto const& polygon: polygons) {
+  //   std::cout << polygon.shell << std::endl;
+  // }
 
   std::cout << std::endl;
   std::cout << "Detailed timings in milleseconds:" << std::endl;

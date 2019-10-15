@@ -33,6 +33,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <omp.h>
 
 #include "helper.hpp"
 #include "delaunator.hpp"
