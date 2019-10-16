@@ -349,24 +349,23 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
 {
 
     std::vector<Polygon> polygons;
-    size_t plane_size = planes.size();
-    polygons.resize(plane_size);
-    // omp_set_num_threads(10);
-    #pragma omp parallel for schedule(guided)
-    for (size_t i=0; i < planes.size(); i++)
+    int planes_size = planes.size(); // OPENMP 2.0 required iter variable to be signed int
+    polygons.resize(planes_size);
+    auto omp_max_threads = omp_get_max_threads();
+    // std::cout << omp_max_threads << std::endl;
+    auto use_threads = omp_max_threads < MAX_THREADS_CHULL ? omp_max_threads: MAX_THREADS_CHULL;
+    // std::cout << use_threads << std::endl;
+    #pragma omp parallel for num_threads(use_threads) schedule(dynamic)
+    for (int i=0; i < planes_size; i++)
     {
         // int tid = omp_get_thread_num();
+        // auto before = std::chrono::high_resolution_clock::now();
         auto plane = planes[i];
         polygons[i]= extractConcaveHull(plane, delaunay, points, config);
-        // #pragma omp critical
-        // polygons[i] = poly;
-        // std::cout << "tid="<<tid <<std::endl;
+        // auto after = std::chrono::high_resolution_clock::now();
+        // float elapsed_ep = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+        // std::cout << i << "; " << tid << "; " << elapsed_ep << std::endl;
     }
-    // for (auto &&plane : planes)
-    // {
-    //     Polygon poly = extractConcaveHull(plane, delaunay, points, config);
-    //     polygons.push_back(poly);
-    // }
     return polygons;
 }
 

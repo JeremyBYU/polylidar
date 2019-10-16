@@ -34,6 +34,7 @@
 #include <thread>
 #include <iomanip>
 #include <omp.h>
+#define MAX_THREADS_CHULL 4
 
 #include "helper.hpp"
 #include "delaunator.hpp"

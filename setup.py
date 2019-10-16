@@ -139,21 +139,26 @@ class BuildExt(build_ext):
 
         ct = self.compiler.compiler_type
         opts = self.c_opts.get(ct, [])
+        lopts = []
         opts.append('-DPY_EXTENSION') # inform compiler that we are compiling as a pyextension
         if PL_USE_ROBUST_PREDICATES:
             opts.append('-DPL_USE_ROBUST_PREDICATES')
         if PL_USE_STD_UNORDERED_MAP:
             opts.append('-DPL_USE_STD_UNORDERED_MAP')
         if ct == 'unix':
+            opts.append('-fopenmp')
+            lopts.append('-fopenmp')
             opts.append('-DVERSION_INFO="%s"' % self.distribution.get_version())
             opts.append('-Wall')
             opts.append(cpp_flag(self.compiler))
             if has_flag(self.compiler, '-fvisibility=hidden'):
                 opts.append('-fvisibility=hidden')
         elif ct == 'msvc':
+            opts.append('/openmp')
             opts.append('/DVERSION_INFO=\\"%s\\"' % self.distribution.get_version())
         for ext in self.extensions:
             ext.extra_compile_args = opts
+            ext.extra_link_args = lopts
         build_ext.build_extensions(self)
 
 
