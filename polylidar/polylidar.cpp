@@ -335,6 +335,10 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
     auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, false);
     auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay);
 
+    holes.erase(std::remove_if(holes.begin(), holes.end(),
+                [&config](std::vector<size_t> &hole) { return hole.size() < config.minHoleVertices; }),
+                holes.end());
+
     // std::vector<std::vector<size_t>> holes;
     poly.shell = std::move(shell);
     poly.holes = std::move(holes);

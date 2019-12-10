@@ -43,6 +43,7 @@
 #define DEFAULT_XYTHRESH 0.0
 #define DEFAULT_LMAX 0.0
 #define DEFAULT_MINTRIANGLES 20
+#define DEFAULT_MINHOLEVERTICES 3
 #define DEFAULT_MINBBOX 100.0
 #define DEFAULT_ZTHRESH 0.20
 #define DEFAULT_NORMTHRESH 0.90
@@ -79,6 +80,7 @@ namespace polylidar {
         double xyThresh = DEFAULT_XYTHRESH;
         double lmax = DEFAULT_LMAX;
         size_t minTriangles = DEFAULT_MINTRIANGLES;
+        size_t minHoleVertices = DEFAULT_MINHOLEVERTICES;
         double minBboxArea = DEFAULT_MINBBOX;
         // 3D configuration
         double zThresh = DEFAULT_ZTHRESH;
