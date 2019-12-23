@@ -209,11 +209,20 @@ def scale_points(points, z_value=None, z_scale=1.0):
     else:
         return points[:,0], points[:, 1], points[:,2] * z_scale
 
-def plot_planes_3d(lidar_building, triangles, planes, ax, alpha=1.0, z_scale=1.0):
+def set_up_axes(fig, ax, x_label='X', y_label='Y', z_label='Z', axis_equal=True):
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    ax.set_zlabel(z_label)
+    if axis_equal:
+        set_axes_equal(ax)
+
+def plot_planes_3d(lidar_building, triangles, planes, ax, alpha=1.0, z_scale=1.0, color=None):
     ax_planes = []
     for i, plane in enumerate(planes):
         triangles_plane = triangles[plane]
-        ax_plane = ax.plot_trisurf(*scale_points(lidar_building, z_scale=z_scale),triangles=triangles_plane, color=(COLOR_PALETTE[i] + (alpha, )),  edgecolor=(0,0,0,0.3), linewidth=0.5)
+        color_ = COLOR_PALETTE[i] if color is None else color
+        color_ = color_ + (alpha, )
+        ax_plane = ax.plot_trisurf(*scale_points(lidar_building, z_scale=z_scale),triangles=triangles_plane, color=color_,  edgecolor=(0,0,0,0.3), linewidth=0.5)
         ax_planes.append(ax_plane)
     return ax_planes
 
