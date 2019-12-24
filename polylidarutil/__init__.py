@@ -233,7 +233,7 @@ def plot_polygons_3d(points, polygons, ax, color=None, linewidth=6):
         ax.plot(shell[:, 0], shell[:,1], shell[:, 2], c=color_, linewidth=linewidth, label="Polygon Outline")
         for hole in polygon.holes:
             hole = points[np.array(hole), :]
-            ax.plot(shell[:, 0], shell[:,1], shell[:, 2], c='k', linewidth=linewidth)
+            ax.plot(hole[:, 0], hole[:,1], hole[:, 2], c='k', linewidth=linewidth)
 
 def plot_triangle_meshes(plane_triangles, ax):
     for plane in plane_triangles:
@@ -250,4 +250,3 @@ def plot_triangles(triangle_coords, ax, color=COLOR_PALETTE[0], fill=False, ec='
 
 def plot_points(points, ax):
     ax.scatter(points[:, 0], points[:, 1], c='k')
-    # print(triangles_shapely)

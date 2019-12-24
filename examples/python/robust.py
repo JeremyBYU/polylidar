@@ -8,7 +8,7 @@ from polylidarutil import (plot_points, plot_triangles,
 
 # Load point set that for which delaunator generates invalid convex hulls when using non-robust predicates
 # Convex hull should be malformed if polylidar not built with robust predicates
-robust_tests = ['robust_1.csv', 'robust_2.csv']
+robust_tests = ['robust_1.csv']
 for robust_test in robust_tests:
     points = load_csv(robust_test)
 
@@ -18,6 +18,9 @@ for robust_test in robust_tests:
     delaunay, planes, polygons = extractPlanesAndPolygons(points, xyThresh=0.0, alpha=0.0, lmax=1000.0, minTriangles=1)
     t2 = time.time()
     print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
+    print("If Robust Geoemetric Predicates is NOT activated, you should see a malformed concave hull")
+    print("See README.md to activate if desired. ~20% performance penalty when active.")
+    print("")
 
     # Plot Data
     if points.shape[0] < 100000:

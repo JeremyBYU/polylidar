@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from polylidar import extractPlanesAndPolygons
-from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
+from polylidarutil import (generate_test_points, generate_3d_plane, set_axes_equal, plot_planes_3d,
                            scale_points, rotation_matrix, apply_rotation)
 
 np.random.seed(1)
@@ -29,10 +29,15 @@ points = np.concatenate((plane, box_side, box_top))
 # in practice zThresh would probably be 0.1 with this noise level. Set to large 1.0 to try and force issue of triangle wall climbing.
 t1 = time.time()
 delaunay, planes, polygons = extractPlanesAndPolygons(
-    points, xyThresh=0.0, alpha=0.0, lmax=1.0, minTriangles=20, zThresh=0.1, normThresh=0.98)
+    points, xyThresh=0.0, alpha=0.0, lmax=1.0, minTriangles=20, zThresh=1.0, normThresh=0.98, normThreshMin=0.01)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 print("Should see two planes extracted, please rotate.")
+print("The triangles are climbing the wall because their height is less than zThresh bypassing normal filtering (normThresh).")
+print("This was purposefully done (by settting a very high zThresh) to demonstrate this issue.")
+print("The next plot will fix this by using/setting normThreshMin.")
+print("It will force ALL triangles to have a MINIMUM planarity no matter their height (dz).")
+
 
 triangles = np.asarray(delaunay.triangles).reshape(
     int(len(delaunay.triangles) / 3), 3)
@@ -40,10 +45,34 @@ fig, ax = plt.subplots(figsize=(10, 10), nrows=1, ncols=1,
                        subplot_kw=dict(projection='3d'))
 # plot all triangles
 plot_planes_3d(points, triangles, planes, ax)
-plot_polygons_3d(points, polygons, ax)
+ax.view_init(elev=15., azim=-35)
 # plot points
 ax.scatter(*scale_points(points), c='k', s=0.1)
 set_axes_equal(ax)
-ax.view_init(elev=15., azim=-35)
 plt.show()
 print("")
+# This time with normThreshMin. Notice the triangles starting to climb up the wall.
+t1 = time.time()
+delaunay, planes, polygons = extractPlanesAndPolygons(
+    points, xyThresh=0.0, alpha=0.0, lmax=1.0, minTriangles=20, zThresh=1.0, normThresh=0.98, normThreshMin=0.5)
+t2 = time.time()
+print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
+print("Should see two planes extracted with less triangle wall climbing.")
+
+
+
+triangles = np.asarray(delaunay.triangles).reshape(
+    int(len(delaunay.triangles) / 3), 3)
+fig, ax = plt.subplots(figsize=(10, 10), nrows=1, ncols=1,
+                       subplot_kw=dict(projection='3d'))
+# plot all triangles
+plot_planes_3d(points, triangles, planes, ax)
+ax.view_init(elev=15., azim=-35)
+# plot points
+ax.scatter(*scale_points(points), c='k', s=0.1)
+set_axes_equal(ax)
+plt.show()
+
+print()
+print(
+    "Final Note: normThreshMin is only required for dense point clouds that are quite noisy. i.e zThresh [noise] ~= max(triangle_dx, triangle_dy) [density]")
