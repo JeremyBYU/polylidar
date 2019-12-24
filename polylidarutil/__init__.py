@@ -226,6 +226,15 @@ def plot_planes_3d(lidar_building, triangles, planes, ax, alpha=1.0, z_scale=1.0
         ax_planes.append(ax_plane)
     return ax_planes
 
+def plot_polygons_3d(points, polygons, ax, color=None, linewidth=6):
+    for i, polygon in enumerate(polygons):
+        shell = points[np.array(polygon.shell), :]
+        color_ = COLOR_PALETTE[i] if color is None else color
+        ax.plot(shell[:, 0], shell[:,1], shell[:, 2], c=color_, linewidth=linewidth, label="Polygon Outline")
+        for hole in polygon.holes:
+            hole = points[np.array(hole), :]
+            ax.plot(shell[:, 0], shell[:,1], shell[:, 2], c='k', linewidth=linewidth)
+
 def plot_triangle_meshes(plane_triangles, ax):
     for plane in plane_triangles:
         color = plane['color']

@@ -1,3 +1,15 @@
+"""Advanced 3D Polylidar Example
+This example shows the limitations of Polylidar in extracting planes from 3D point clouds.
+The main limitations are:
+    1. Only planes that have normals at roughly [0,0,1] are extracted. 
+       Rotate point cloud prior to sending to Polylidar to resolve issue.
+    2. Planes can not be on top of eachother. More precisely ponint cloud DATA can not be on top of eachother.
+       Resolve by paritioning the planes into seperate point clouds.
+       An example of two planes on top of eachtother where the DATA is NOT on top of eachother is on basic3d.py
+
+Polylidar was primarily designed for finding flat surfaces on rooftops from downward facing sensors 
+where these issues are not as prevalent as seen in this advanced example.
+"""
 import time
 import math
 
@@ -6,7 +18,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 from polylidar import extractPlanesAndPolygons
-from polylidarutil import (generate_test_points, generate_3d_plane, set_axes_equal, plot_planes_3d,
+from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
                            scale_points, rotation_matrix, apply_rotation, set_up_axes, COLOR_PALETTE)
 
 # arguments to polylidar used throughout this example
@@ -45,6 +57,7 @@ delaunay, planes, polygons = extractPlanesAndPolygons(
 triangles = np.asarray(delaunay.triangles).reshape(
     int(len(delaunay.triangles) / 3), 3)
 plot_planes_3d(points, triangles, planes, ax)
+plot_polygons_3d(points, polygons, ax, color=COLOR_PALETTE[0])
 plt.show(block=False)
 input("Press Enter to Continue: ")
 print("")
@@ -63,7 +76,7 @@ input("Press Enter to Continue: ")
 print("")
 
 # Seperate point clouds
-print("Unfortunately these 2 walls will interefere with eachother when projected to the z=0 xy-Plane).")
+print("Unfortunately these 2 walls will interefere with eachother when projected to the z=0 xy-Plane.")
 print("They must be seperated into two different point clouds (orange/green)")
 ax2.clear()
 pc_top = pc_rot[pc_rot[:, 2] > -5.0, :]
@@ -75,7 +88,6 @@ plt.show(block=False)
 input("Press Enter to Continue: ")
 print("")
 # Extract planes from top and bottom
-t1 = time.time()
 delaunay_top, planes_top, polygons_top = extractPlanesAndPolygons(
     pc_top,  **polylidar_kwargs)
 triangles_top = np.asarray(delaunay_top.triangles).reshape(
@@ -84,22 +96,26 @@ delaunay_bot, planes_bot, polygons_bot = extractPlanesAndPolygons(
     pc_bottom,  **polylidar_kwargs)
 triangles_bot = np.asarray(delaunay_bot.triangles).reshape(
     int(len(delaunay_bot.triangles) / 3), 3)
-t2 = time.time()
-
 
 plot_planes_3d(pc_top, triangles_top, planes_top, ax2, color=COLOR_PALETTE[1])
-plot_planes_3d(pc_bottom, triangles_bot, planes_bot, ax2, color=COLOR_PALETTE[2])
+plot_planes_3d(pc_bottom, triangles_bot, planes_bot,
+               ax2, color=COLOR_PALETTE[2])
 plt.show(block=False)
 print("Showing newly extracted top and bottom planes in Rotated Frame.")
 input("Press Enter to Continue: ")
 print("")
 
 
-print("Putting the extracted planes all together back in the Base Frame")
+print("Putting the extracted planes all together back in the Base Frame.")
+print("Also plotting the polygon outline of these planes")
 # just need to rotate the point cloud back to Base Frame
-pc_top = apply_rotation(rm, pc_top) 
+pc_top = apply_rotation(rm, pc_top)
 pc_bottom = apply_rotation(rm, pc_bottom)
 plot_planes_3d(pc_top, triangles_top, planes_top, ax, color=COLOR_PALETTE[1])
-plot_planes_3d(pc_bottom, triangles_bot, planes_bot, ax, color=COLOR_PALETTE[2])
+plot_planes_3d(pc_bottom, triangles_bot, planes_bot,
+               ax, color=COLOR_PALETTE[2])
+plot_polygons_3d(pc_top, polygons_top, ax, color=COLOR_PALETTE[1])
+plot_polygons_3d(pc_bottom, polygons_bot, ax, color=COLOR_PALETTE[2])
+ax.legend()
 fig.show()
 input("Press Enter to Continue: ")
