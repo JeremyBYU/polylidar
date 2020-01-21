@@ -481,6 +481,16 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanes
     return std::make_tuple(planes, polygons);
 }
 
+std::vector<Polygon> extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
+{
+    auto vertices = triangulation.coords;
+    config.dim = vertices.cols;
+
+    std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, vertices, config);
+    std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, vertices, config);
+    return polygons;
+}
+
 std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 {
     config.dim = nparray.cols;

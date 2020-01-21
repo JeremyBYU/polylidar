@@ -44,6 +44,21 @@ namespace polylidar {
         return extractPlanesAndPolygonsFromMesh(triangulation, config);
     }
 
+    std::vector<Polygon> _extractPolygonsFromMesh(py::array_t<double> vertices, py::array_t<double> triangles, py::array_t<double> halfedges,
+                                                double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
+                                                size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
+                                                double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN, 
+                                                double allowedClass = DEFAULT_ALLOWEDCLASS)
+    {
+        // This function allows us to convert keyword arguments into a configuration struct
+        auto info = vertices.request();
+        std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
+        Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin,  allowedClass};
+        Matrix points((double*)info.ptr, shape[0], shape[1]);
+        delaunator::HalfEdgeTriangulation triangulation(points, triangles, halfedges);
+        return extractPolygonsFromMesh(triangulation, config);
+    }
+
 
     std::vector<Polygon> extractPolygons(py::array_t<double> nparray,
                                         double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,

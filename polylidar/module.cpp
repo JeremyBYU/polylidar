@@ -68,6 +68,13 @@ PYBIND11_MODULE(polylidar, m)
         "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
         "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
+    m.def("extract_polygons_from_mesh", &polylidar::_extractPolygonsFromMesh, "Extracts polygons from a half edge triangulated mesh",
+        "vertices"_a, "triangles"_a, "halfedges"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
+        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
+        "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
+        "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+
     m.def("extractPolygons", &polylidar::extractPolygons, "Extracts polygons from a point cloud",
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
