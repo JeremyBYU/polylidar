@@ -24,6 +24,45 @@
 
 namespace delaunator {
 
+// Half Edge Constructors 
+HalfEdgeTriangulation::HalfEdgeTriangulation()
+    : coords(),
+      triangles(),
+      halfedges(){}
+
+HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix &in_coords)
+    : coords(in_coords),
+      triangles(),
+      halfedges(){}
+
+#ifdef PY_EXTENSION
+HalfEdgeTriangulation::HalfEdgeTriangulation(pybind11::array_t<double> nparray)
+    : coords(),
+      triangles(),
+      halfedges(){
+        auto info = nparray.request();
+        std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
+        coords.ptr = (double*)info.ptr;
+        coords.rows = shape[0];
+        coords.cols = shape[1];
+      }
+HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_)
+    : coords(in_coords),
+      triangles(),
+      halfedges(){
+        // Copy to vector
+        // allocate std::vector (to pass to the C++ function)
+        triangles.resize(triangles_.size());
+        std::memcpy(triangles.data(),triangles_.data(),triangles_.size()*sizeof(size_t));
+
+        // allocate std::vector (to pass to the C++ function)
+        halfedges.resize(halfedges_.size());
+        std::memcpy(halfedges.data(),halfedges_.data(),halfedges_.size()*sizeof(size_t));
+      }
+#endif
+
+
+
 constexpr std::size_t operator "" _z ( unsigned long long n )
     { return n; }
 
@@ -417,10 +456,9 @@ void Delaunator::triangulate() {
     }
 }
 
+
 Delaunator::Delaunator(polylidar::Matrix &in_coords)
-    : coords(in_coords),
-      triangles(),
-      halfedges(),
+    : HalfEdgeTriangulation(in_coords),
       hull_prev(),
       hull_next(),
       hull_tri(),
@@ -433,9 +471,7 @@ Delaunator::Delaunator(polylidar::Matrix &in_coords)
     }
 #ifdef PY_EXTENSION
 Delaunator::Delaunator(pybind11::array_t<double> nparray)
-    : coords(),
-      triangles(),
-      halfedges(),
+    : HalfEdgeTriangulation(nparray),
       hull_prev(),
       hull_next(),
       hull_tri(),
@@ -444,15 +480,7 @@ Delaunator::Delaunator(pybind11::array_t<double> nparray)
       m_center_x(),
       m_center_y(),
       m_hash_size(),
-      m_edge_stack() {
-        // std::cout << "Inside Delaunator Numpy Constructor" << std::endl;
-        auto info = nparray.request();
-        std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
-        coords.ptr = (double*)info.ptr;
-        coords.rows = shape[0];
-        coords.cols = shape[1];
-        // coords = polylidar::Matrix((double*)info.ptr, shape[0], shape[1]);
-    }
+      m_edge_stack() {}
 #endif
     
 

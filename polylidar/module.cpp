@@ -42,6 +42,12 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("hull_tri", &delaunator::Delaunator::hull_tri)
         .def_readonly("coords", &delaunator::Delaunator::coords);
 
+    py::class_<delaunator::HalfEdgeTriangulation>(m, "HalfEdgeTriangulation")
+        // .def(py::init<py::array_t<double>>())
+        .def_readonly("triangles", &delaunator::HalfEdgeTriangulation::triangles)
+        .def_readonly("halfedges", &delaunator::HalfEdgeTriangulation::halfedges)
+        .def_readonly("coords", &delaunator::HalfEdgeTriangulation::coords);
+
     py::class_<polylidar::Polygon>(m, "Polygon")
         .def(py::init<>())
         .def_readonly("shell", &polylidar::Polygon::shell, py::return_value_policy::copy)
@@ -50,6 +56,13 @@ PYBIND11_MODULE(polylidar, m)
     
     m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons, "Extracts planar meshes and polygons from a point cloud",
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
+        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
+        "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
+        "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+
+    m.def("extractPlanesAndPolygons2", &polylidar::extractPlanesAndPolygons2, "Extracts planar meshes and polygons from a triangulated point cloud ",
+        "nparray"_a, "triangles"_a, "halfedges"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,

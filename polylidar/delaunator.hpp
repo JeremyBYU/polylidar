@@ -50,12 +50,33 @@
 #endif
 
 namespace delaunator {
-    class Delaunator {
+
+    class HalfEdgeTriangulation {
 
     public:
         polylidar::Matrix coords;
         std::vector<std::size_t> triangles;
         std::vector<std::size_t> halfedges;
+
+        HalfEdgeTriangulation();
+        HalfEdgeTriangulation(polylidar::Matrix &in_coords);
+        #ifdef PY_EXTENSION
+        HalfEdgeTriangulation(pybind11::array_t<double> in_coords);
+        HalfEdgeTriangulation(polylidar::Matrix &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_);
+        #endif
+        // #ifdef PY_EXTENSION
+        // HalfEdgeTriangulation(pybind11::array_t<double> nparray);
+        // #endif
+
+    private:
+    };
+
+    class Delaunator: public HalfEdgeTriangulation {
+
+    public:
+        // polylidar::Matrix coords;
+        // std::vector<std::size_t> triangles;
+        // std::vector<std::size_t> halfedges;
         std::vector<std::size_t> hull_prev;
         std::vector<std::size_t> hull_next;
         std::vector<std::size_t> hull_tri;

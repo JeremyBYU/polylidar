@@ -23,9 +23,9 @@ struct ExtremePoint
 
 };
 
-double circumsribedRadius(size_t t, delaunator::Delaunator &delaunay, Matrix &points);
+double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points);
 
-inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, Matrix &points, double allowedClass)
+inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, double allowedClass)
 {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
@@ -38,7 +38,7 @@ inline bool checkPointClass(size_t t, delaunator::Delaunator &delaunay, Matrix &
     return result;
 
 }
-inline void maxZChangeAndNormal(size_t t, delaunator::Delaunator &delaunay, Matrix &points,
+inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points,
                                 double &diff, std::array<double, 3> &normal) {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
@@ -83,7 +83,7 @@ inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) 
   return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
-inline double getMaxDimTriangle(size_t t, delaunator::Delaunator &delaunay, Matrix &points) {
+inline double getMaxDimTriangle(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points) {
     auto pi0= delaunay.triangles[t * 3];
     auto pi1 = delaunay.triangles[t * 3 + 1];
     auto pi2 = delaunay.triangles[t * 3 + 2];
@@ -104,7 +104,7 @@ inline double l2Norm(double dx, double dy)
     return std::sqrt(dx * dx + dy * dy);
 }
 
-inline double getMaxEdgeLength(size_t t, delaunator::Delaunator &delaunay, Matrix &points) {
+inline double getMaxEdgeLength(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points) {
     auto pi0= delaunay.triangles[t * 3];
     auto pi1 = delaunay.triangles[t * 3 + 1];
     auto pi2 = delaunay.triangles[t * 3 + 2];
@@ -141,7 +141,7 @@ inline size_t nextHalfedge(size_t e) {
   return fast_mod(e, 3) == 2 ? e - 2 : e + 1;
 }
 
-inline std::array<double, 2> getVector(size_t edge, delaunator::Delaunator &delaunay, bool flip=false ){
+inline std::array<double, 2> getVector(size_t edge, delaunator::HalfEdgeTriangulation &delaunay, bool flip=false ){
     auto &coords = delaunay.coords;
     auto &triangles = delaunay.triangles;
     std::array<double, 2> result;
@@ -180,7 +180,7 @@ inline double get360Angle(const std::array<double, 2> &v1, const std::array<doub
 }
 
 
-inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdges,  delaunator::Delaunator &delaunay, bool isHole=false)
+inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdges,  delaunator::HalfEdgeTriangulation &delaunay, bool isHole=false)
 {
     auto v1 = getVector(incomingEdge, delaunay, true);
     // std::cout << "v1: " << v1 << std::endl; 
@@ -213,7 +213,7 @@ inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdg
 }
 
 
-inline size_t getHullEdgeStart(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges,  delaunator::Delaunator &delaunay, bool isHole=false)
+inline size_t getHullEdgeStart(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges,  delaunator::HalfEdgeTriangulation &delaunay, bool isHole=false)
 {
     // std::cout << "v1: " << v1 << std::endl; 
     std::vector<std::array<double, 2>> otherVectors;

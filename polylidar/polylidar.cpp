@@ -43,7 +43,7 @@ void copy2Ddata(Matrix &src, std::vector<double> &dest)
     }
 }
 
-inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
     // std::cout << "Triangle " << t << " Radius: " << radius << std::endl;
@@ -65,7 +65,7 @@ inline bool validateTriangle2D(size_t t, delaunator::Delaunator &delaunay, Matri
 }
 
 
-inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay,  Matrix &points, Config &config)
+inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix &points, Config &config)
 {
     bool passZThresh = false;
     double zDiff = 0.0;
@@ -83,14 +83,14 @@ inline bool validateTriangle3D(size_t t, delaunator::Delaunator &delaunay,  Matr
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
 
-inline bool validateTriangle4D(size_t t, delaunator::Delaunator &delaunay,  Matrix &points, Config &config)
+inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix &points, Config &config)
 {
     // hmm simple for right now
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
 
-void createTriSet2(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
@@ -102,7 +102,7 @@ void createTriSet2(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, 
     }
 }
 
-void createTriSet3(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
@@ -116,7 +116,7 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, 
     }
 }
 
-void createTriSet4(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
@@ -132,7 +132,7 @@ void createTriSet4(std::vector<bool> &triSet, delaunator::Delaunator &delaunay, 
 }
 
 
-void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, Matrix &points,
+void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points,
                         polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash, polylidar::unordered_map<size_t, size_t> &edgeHash,
                         ExtremePoint &xPoint)
 {
@@ -205,7 +205,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::Delaunator &dela
 
 std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash,
                                    polylidar::unordered_map<size_t, size_t> &edgeHash,
-                                   delaunator::Delaunator &delaunay,
+                                   delaunator::HalfEdgeTriangulation &delaunay,
                                    size_t startEdge, size_t stopPoint,
                                    bool isHole)
 {
@@ -271,7 +271,7 @@ std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<
 
 std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<size_t, std::vector<size_t>> pointHash,
                                                       polylidar::unordered_map<size_t, size_t> edgeHash,
-                                                      delaunator::Delaunator &delaunay)
+                                                      delaunator::HalfEdgeTriangulation &delaunay)
 {
     std::vector<std::vector<size_t>> allHoles;
     auto &triangles = delaunay.triangles;
@@ -294,7 +294,7 @@ std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<s
     return allHoles;
 }
 
-Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
     Polygon poly;
     // point hash map
@@ -345,7 +345,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::Delaunator &d
     return poly;
 }
 
-std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
 
     std::vector<Polygon> polygons;
@@ -358,7 +358,7 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
 }
 
 
-void extractMeshSet(delaunator::Delaunator &delaunay, std::vector<bool> &triSet, size_t seedIdx, std::vector<size_t> &candidates)
+void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<bool> &triSet, size_t seedIdx, std::vector<size_t> &candidates)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
@@ -395,7 +395,7 @@ void extractMeshSet(delaunator::Delaunator &delaunay, std::vector<bool> &triSet,
 }
 
 // TODO
-bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::Delaunator &delaunay, Config &config)
+bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::HalfEdgeTriangulation &delaunay, Config &config)
 {
     if (planeMesh.size() < config.minTriangles)
     {
@@ -405,7 +405,7 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::Delaunator 
 }
 
 
-std::vector<std::vector<size_t>> extractPlanesSet(delaunator::Delaunator &delaunay, Matrix &points, Config &config)
+std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
@@ -443,6 +443,7 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::Delaunator &delaun
 }
 
 
+
 std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix &nparray, Config config)
 {
     config.dim = nparray.cols;
@@ -466,6 +467,28 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
     return std::make_tuple(delaunay, planes, polygons);
+
+    // nparray2D is a contigious buffer of (ROWS,2)
+}
+
+std::tuple<delaunator::HalfEdgeTriangulation, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix &nparray, delaunator::HalfEdgeTriangulation &triangulation, Config config)
+{
+    config.dim = nparray.cols;
+
+    // before = std::chrono::high_resolution_clock::now();
+    // std::vector<std::vector<size_t>> planes;
+    // std::vector<Polygon> polygons ;
+    std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, nparray, config);
+    // after = std::chrono::high_resolution_clock::now();
+    // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+
+    // before = std::chrono::high_resolution_clock::now();
+    std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, nparray, config);
+    // after = std::chrono::high_resolution_clock::now();
+    // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+    return std::make_tuple(triangulation, planes, polygons);
 
     // nparray2D is a contigious buffer of (ROWS,2)
 }
@@ -494,6 +517,8 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
     // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
     return polygons;
 }
+
+
 
 std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, std::vector<float> &timings)
 {
