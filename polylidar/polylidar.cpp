@@ -471,26 +471,14 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // nparray2D is a contigious buffer of (ROWS,2)
 }
 
-std::tuple<delaunator::HalfEdgeTriangulation, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix &nparray, delaunator::HalfEdgeTriangulation &triangulation, Config config)
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
 {
-    config.dim = nparray.cols;
+    auto vertices = triangulation.coords;
+    config.dim = vertices.cols;
 
-    // before = std::chrono::high_resolution_clock::now();
-    // std::vector<std::vector<size_t>> planes;
-    // std::vector<Polygon> polygons ;
-    std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, nparray, config);
-    // after = std::chrono::high_resolution_clock::now();
-    // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
-
-    // before = std::chrono::high_resolution_clock::now();
-    std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, nparray, config);
-    // after = std::chrono::high_resolution_clock::now();
-    // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
-    // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
-    return std::make_tuple(triangulation, planes, polygons);
-
-    // nparray2D is a contigious buffer of (ROWS,2)
+    std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, vertices, config);
+    std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, vertices, config);
+    return std::make_tuple(planes, polygons);
 }
 
 std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)

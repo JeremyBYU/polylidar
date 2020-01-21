@@ -111,7 +111,7 @@ namespace polylidar {
 
 
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(Matrix &nparray, Config config);
-    std::tuple<delaunator::HalfEdgeTriangulation, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(Matrix &nparray, delaunator::HalfEdgeTriangulation &triangulation, Config config);
+    std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
     std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config);
     std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, std::vector<float> &timings);
 
