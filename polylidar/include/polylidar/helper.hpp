@@ -5,7 +5,7 @@
 #ifndef NDEBUG
     #define NDEBUG
 #endif
-#include "util.hpp"
+#include "polylidar/util.hpp"
 #include "delaunator.hpp"
 #include <cassert>
 

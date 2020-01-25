@@ -34,7 +34,7 @@
 #include <thread>
 #include <iomanip>
 
-#include "helper.hpp"
+#include "polylidar/helper.hpp"
 #include "delaunator.hpp"
 #include <parallel_hashmap/phmap.h>
 

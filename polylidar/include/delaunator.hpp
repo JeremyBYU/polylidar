@@ -41,7 +41,7 @@
 #include "predicates.h"
 #endif
 
-#include "util.hpp"
+#include "polylidar/util.hpp"
 
 #ifdef PY_EXTENSION
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings

@@ -1,7 +1,7 @@
 // This glues pybind11 to the pure C++ polylidar project
 // Jeremy Castagno
 
-#include "polylidar.hpp"
+#include "polylidar/polylidar.hpp"
 #include "delaunator.hpp"
 
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings

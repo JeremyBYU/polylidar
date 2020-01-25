@@ -1,4 +1,4 @@
-#include "helper.hpp"
+#include "polylidar/helper.hpp"
 
 namespace polylidar {
 

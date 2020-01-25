@@ -10,7 +10,7 @@
 #include <fstream>
 #include <iomanip>    
 
-#include "polylidar.hpp"
+#include "polylidar/polylidar.hpp"
 
 
 // Print arrays
@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 
   std::cout << "Simple C++ Example of Polylidar" << std::endl;
   std::vector<double> points;
-  std::string file_path = "../../tests/fixtures/100K_array_3d.csv";
+  std::string file_path = "./tests/fixtures/100K_array_3d.csv";
 
   // N X 3 array as one contigious array
   auto success = file_input(points, file_path);

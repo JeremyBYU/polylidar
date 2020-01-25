@@ -1,4 +1,4 @@
-// I dont want this file, I wanted this inside helper.hpp. However delaunator.hpp now relies upon this Matrix class
+// I dont want this file, I wanted this inside polylidar/helper.hpp. However delaunator.hpp now relies upon this Matrix class
 // and there was a circular dependency. Breaking this out into its own file was the only way for me to fix it.
 #ifndef POLYLIDARUTIL
 #define POLYLIDARUTIL
