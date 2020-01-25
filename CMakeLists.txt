@@ -14,8 +14,6 @@ set(POLYLIDAR_EXAMPLES_CPP_DIR "${PROJECT_SOURCE_DIR}/examples/cpp")
 set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helper.cpp ${POLYLIDAR_SRC}/delaunator.cpp)
 set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
 
-# message ("POLYLIDAR_SOURCE_FILES = ${POLYLIDAR_SOURCE_FILES}")
-
 add_library(polylidar SHARED
 ${POLYLIDAR_SOURCE_FILES}
 )
@@ -29,12 +27,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 set_target_properties(polylidar PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
-
-get_cmake_property(_variableNames VARIABLES)
-list (SORT _variableNames)
-foreach (_variableName ${_variableNames})
-    message(STATUS "${_variableName}=${${_variableName}}")
-endforeach()
 
 # Add the application sources to the target
 add_executable(polylidar-simple ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple.cpp)
