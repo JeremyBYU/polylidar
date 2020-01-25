@@ -6,9 +6,9 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native -march=native")
 set(CMAKE_BUILD_TYPE "Release")
 
 set(PROJECT_VERSION 0.0.8)
-set(POLYLIDAR_SRC "${CMAKE_SOURCE_DIR}/polylidar")
-set(POLYLIDAR_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/polylidar/include")
-set(POLYLIDAR_EXAMPLES_CPP_DIR "${CMAKE_SOURCE_DIR}/examples/cpp")
+set(POLYLIDAR_SRC "${PROJECT_SOURCE_DIR}/polylidar")
+set(POLYLIDAR_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/polylidar/include")
+set(POLYLIDAR_EXAMPLES_CPP_DIR "${PROJECT_SOURCE_DIR}/examples/cpp")
 
 
 set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helper.cpp ${POLYLIDAR_SRC}/delaunator.cpp)
