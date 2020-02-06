@@ -253,6 +253,8 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
 
     cols_pseudo = math.ceil(cols / stride)
     rows_pseudo = math.ceil(rows / stride)
+    # rows_tri = cols_pseudo - 1
+    # cols_tri = rows_pseudo - 1
     max_triangles = (cols_pseudo-1) * (rows_pseudo-1) * 2
     tri_cnt = 0
     pix_cnt = 0
@@ -282,6 +284,10 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
                 tri_cnt +=1
             pix_cnt +=1
 
+    print("Tri Count: ",tri_cnt)
+    print("Valid Tri Shape: ", valid_tri.shape)
+    print(np.max(valid_tri))
+    print(valid_tri[:100])
     triangles = np.array(triangles)
 
     # for i in range(0, rows - stride, stride):
@@ -306,15 +312,16 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
     #             tri_cnt +=1
     #         pix_cnt +=1
 
-    """
+    
     tri_cnt = 0
     halfedges = np.full(triangles.shape[0] * 3, max_value, dtype=np.uint64)
     print("Triangles shape: ", triangles.shape)
     print("Half edges shape: ", halfedges.shape)
+    # return
     for i in range(rows_pseudo-1):
         for j in range(cols_pseudo-1):
-            t_global_idx_first = (cols_pseudo * i + j) * 2 
-            t_global_idx_second = (cols_pseudo * i + j) * 2 + 1
+            t_global_idx_first = ((cols_pseudo-1) * i + j) * 2 
+            t_global_idx_second = ((cols_pseudo-1) * i + j) * 2 + 1
             # print(t_global_idx_first, t_global_idx_second)
             t_local_idx_first = valid_tri[t_global_idx_first]
             t_local_idx_second = valid_tri[t_global_idx_second]
@@ -332,7 +339,7 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
                     t_global_idx_top = t_global_idx_first - 2 * (cols_pseudo-1) + 1
                     t_local_idx_top = valid_tri[t_global_idx_top]
                 # Check if we are on the right side of the RGBD Image, if so than we have a border on the right
-                if j >= cols_pseudo - 1:
+                if j >= cols_pseudo - 2:
                     t_local_idx_right = max_value
                 else:
                     t_global_idx_right = t_global_idx_first + 3
@@ -347,13 +354,13 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
                 tri_cnt += 1
 
             else:
-                print("Bad triangle: ", t_global_idx_first)
+                print("Bad First triangle: ", t_global_idx_first)
 
             # Second Triangle Half Edges
             if (t_local_idx_second != max_value):
                 # We have a valid second triangle
                 # Check if we are on the bottom of the RGBD Image, if so then we have a border bottom edge
-                if i == rows_pseudo - 1:
+                if i == rows_pseudo - 2:
                     t_local_idx_bottom = max_value
                 else:
                     t_global_idx_bottom = t_global_idx_second + 2 * (cols_pseudo-1) - 1
@@ -374,9 +381,9 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
                 tri_cnt += 1
 
             else:
-                print("Bad triangle: ", t_global_idx_second)
+                print("Bad Second triangle: ", t_global_idx_second)
             # print(t_local_idx_first, t_local_idx_second)
-    """
+    
 
     points = np.array(points)
     points = np.column_stack((points, np.ones(points.shape[0])))
