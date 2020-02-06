@@ -13,7 +13,7 @@ from scipy.spatial import Delaunay
 from scipy.stats import describe
 import open3d as o3d
 
-def create_open_3d_mesh(triangles, vertices, color=[1, 0, 0]):
+def create_open_3d_mesh(triangles, points, color=[1, 0, 0]):
     mesh_2d = o3d.geometry.TriangleMesh()
     mesh_2d.triangles = o3d.utility.Vector3iVector(triangles)
     mesh_2d.vertices = o3d.utility.Vector3dVector(points)
