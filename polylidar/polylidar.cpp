@@ -473,12 +473,19 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
 
 std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
 {
-    auto vertices = triangulation.coords;
+    auto &vertices = triangulation.coords;
     config.dim = vertices.cols;
-
+    // auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, vertices, config);
+    // auto t1 = std::chrono::high_resolution_clock::now();
+    // float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count() * 1e-3;
+    // std::cout << "Plane Extraction took " << elapsed_d << " milliseconds" << std::endl;
     std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, vertices, config);
-    return std::make_tuple(planes, polygons);
+    // auto t2 = std::chrono::high_resolution_clock::now();
+    // elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() * 1e-3;
+    // std::cout << "Polygon Hull Extraction took " << elapsed_d << " milliseconds" << std::endl;
+    // I the std move is what I'm looking for??
+    return std::make_tuple(std::move(planes), std::move(polygons));
 }
 
 std::vector<Polygon> extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)

@@ -3,12 +3,14 @@ import open3d as o3d
 import time
 
 # from kittiground import EXTRINSICS
-# from server.line_mesh import LineMesh
+from .line_mesh import LineMesh
 EXTRINSICS = None
 
 MAX_POLYS = 10
 ORANGE = (255/255, 188/255, 0)
 GREEN = (0, 255/255, 0)
+
+flatten = lambda l: [item for sublist in l for item in sublist]
 
 def update_points(pcd, pc):
     pcd.points = o3d.utility.Vector3dVector(pc)

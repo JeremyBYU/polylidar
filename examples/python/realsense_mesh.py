@@ -12,7 +12,8 @@ from mpl_toolkits.mplot3d import Axes3D
 from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh
 from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
                            scale_points, rotation_matrix, apply_rotation, COLOR_PALETTE)
-from polylidarutil.open3d_util import construct_grid
+from polylidarutil.open3d_util import construct_grid, create_lines, flatten
+from polylidarutil.plane_filtering import filter_planes_and_holes
 
 from scipy.spatial import Delaunay
 from scipy.stats import describe
@@ -141,7 +142,7 @@ def extract_mesh_planes(points, triangles, planes, color=None):
     return meshes
 
 
-def get_colored_point_cloud(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3.0, stride=2):
+def get_frame_data(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3.0, stride=2):
     depth_1 = o3d.io.read_image(depth_files[idx])
     color_1 = o3d.io.read_image(color_files[idx])
 
@@ -149,8 +150,6 @@ def get_colored_point_cloud(idx, color_files, depth_files, traj, intrinsic, dept
     rgbd_image_1 = o3d.geometry.RGBDImage.create_from_color_and_depth(
         color_1, depth_1, convert_rgb_to_intensity=False, depth_trunc=depth_trunc)
 
-    # pcd_1 = o3d.geometry.PointCloud.create_from_rgbd_image(
-    #     rgbd_image_1, intrinsic=intrinsic, extrinsic=extrinsic)
     pcd_1 = o3d.geometry.PointCloud.create_from_depth_image(
         depth_1, intrinsic, extrinsic, stride=stride, depth_trunc=depth_trunc)
     return pcd_1, rgbd_image_1, R_Standard_d400 @ np.linalg.inv(extrinsic)
@@ -165,19 +164,26 @@ def prep_mesh(mesh):
         mesh_.paint_uniform_color(COLOR_PALETTE[0])
 
 
+def filter_and_create_open3d_polygons(points, polygons):
+    config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=0.785), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
+                     positive_buffer=0.01, negative_buffer=0.03, simplify=0.02)
+    planes, obstacles = filter_planes_and_holes(polygons, points, config_pp)
+    all_poly_lines = create_lines(planes, obstacles, line_radius=0.01)
+    return all_poly_lines
+
+
 def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]), poisson=dict(depth=8), callback=None):
     points = np.asarray(pcd.points)
-    t1 = time.perf_counter()
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
-    polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=20,
-                            zThresh=0.03, normThresh=0.98, normThreshMin=0.90)
-    delaunay, planes, polygons = extractPlanesAndPolygons(
-        points, **polylidar_kwargs)
+    polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=100,
+                            zThresh=0.03, normThresh=0.99, normThreshMin=0.95, minHoleVertices=6)
+    t1 = time.perf_counter()
+    delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
     t2 = time.perf_counter()
-    triangles = np.asarray(delaunay.triangles).reshape(
-        int(len(delaunay.triangles) / 3), 3)
-    mesh_2d_polylidar = extract_mesh_planes(
-        points, triangles, planes, COLOR_PALETTE[0])
+    all_poly_lines = filter_and_create_open3d_polygons(points, polygons)
+    triangles = np.asarray(delaunay.triangles).reshape(int(len(delaunay.triangles) / 3), 3)
+    mesh_2d_polylidar = extract_mesh_planes(points, triangles, planes, COLOR_PALETTE[0])
+    mesh_2d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     time_mesh_2d_polylidar = (t2 - t1) * 1000
     polylidar_alg_name = 'Polylidar2D'
     callback(polylidar_alg_name, time_mesh_2d_polylidar, pcd, mesh_2d_polylidar)
@@ -188,18 +194,23 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     t2 = time.perf_counter()
     prep_mesh(mesh_uniform_grid)
     time_mesh_uniform = (t2 - t1) * 1000
-    uniform_alg_name = 'UniformGrid'
+    uniform_alg_name = 'Uniform Grid Mesh'
     callback(uniform_alg_name, time_mesh_uniform, pcd, mesh_uniform_grid)
 
     vertices = polylidar_inputs['vertices']
     triangles = polylidar_inputs['triangles']
     halfedges = polylidar_inputs['halfedges']
-    planes, polygons = extract_planes_and_polygons_from_mesh(
-        vertices, triangles, halfedges, **polylidar_kwargs)
+    print(vertices.dtype, triangles.dtype, halfedges.dtype)
+    t1 = time.perf_counter()
+    planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
+    t2 = time.perf_counter()
+    all_poly_lines = filter_and_create_open3d_polygons(vertices, polygons)
     triangles = triangles.reshape(int(triangles.shape[0] / 3), 3)
     mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes)
-    polylidar_3d_alg_name = 'Polylidar3D'
-    callback(polylidar_3d_alg_name, 0.0,
+    mesh_3d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
+    time_polylidar3D = (t2 - t1) * 1000
+    polylidar_3d_alg_name = 'Polylidar with Uniform Grid Mesh'
+    callback(polylidar_3d_alg_name, time_polylidar3D,
              create_open3d_pc(vertices), mesh_3d_polylidar)
     # print(planes)
 
@@ -323,7 +334,7 @@ def create_uniform_mesh_from_image(rows, cols, points, stride=2):
                 tri_cnt += 1
             pix_cnt += 1
 
-    triangles = np.array(triangles)  # convert to numpy
+    triangles = np.array(triangles, dtype=np.uint64)  # convert to numpy
     return triangles, valid_tri
 
 
@@ -461,7 +472,7 @@ def main():
     for idx in range(len(color_files)):
         if idx < 3:
             continue
-        pcd, rgbd, extrinsics = get_colored_point_cloud(
+        pcd, rgbd, extrinsics = get_frame_data(
             idx, color_files, depth_files, traj, intrinsics)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
         # pcd = pcd.voxel_down_sample(voxel_size=0.02)
