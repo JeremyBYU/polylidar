@@ -10,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_point_cloud_from_float_depth
+from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_point_cloud_from_float_depth, extract_uniform_mesh_from_float_depth
 from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
                            scale_points, rotation_matrix, apply_rotation, COLOR_PALETTE)
 from polylidarutil.open3d_util import construct_grid, create_lines, flatten
@@ -155,24 +155,21 @@ def get_frame_data(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3
     # t1 = time.perf_counter()
     # print(t1-t0)
 
-    
-    depth_np = np.asarray(rgbd_image_1.depth)
     intrinsic_np =  intrinsic.intrinsic_matrix
-    print(depth_np.dtype, depth_np.shape)
-    print(intrinsic_np.dtype, intrinsic_np.shape)
-    print(intrinsic_np)
-    pp = intrinsic.get_principal_point()
-    fl = intrinsic.get_focal_length()
-    print(pp)
-    print(fl)
-
-    points = extract_point_cloud_from_float_depth(depth_np, intrinsic_np)
-    print(points)
-    print(np.asarray(points))
-    sys.exit(0)
+    depth_np = np.asarray(rgbd_image_1.depth)
+    t0 = time.perf_counter()
+    points, triangles, halfedges = extract_uniform_mesh_from_float_depth(depth_np, intrinsic_np)
+    t1 = time.perf_counter()
+    print(t1-t0)
+    points = np.asarray(points)
+    print(points[:10])
+    pointer, read_only_flag = points.__array_interface__['data']
+    print("Data address", hex(pointer))
+    points = points.reshape(int(points.shape[0]/3), 3)
 
     pcd_1 = o3d.geometry.PointCloud.create_from_depth_image(
         depth_1, intrinsic, extrinsic, stride=stride, depth_trunc=depth_trunc)
+    pcd_1.points = o3d.utility.Vector3dVector(points)
     return pcd_1, rgbd_image_1, R_Standard_d400 @ np.linalg.inv(extrinsic)
 
 

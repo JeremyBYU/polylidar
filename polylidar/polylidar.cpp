@@ -557,13 +557,18 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config 
     return polygons;
 }
 
+
 void deproject_points(const size_t i, const size_t j, float depth, const Matrix<double> &intrinsics, double &x, double &y, double &z)
 {
-    
+    z = static_cast<double>(depth);
+    x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0,0);
+    y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1,1);
 }
 
-void extractPointCloudFromFloatDepth(std::vector<double> &points, const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+
+std::vector<double> extractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
 {
+    std::vector<double> points;
     auto rows = im.rows;
     auto cols = im.cols;
     auto cols_stride = ceil(cols / stride);
@@ -574,27 +579,82 @@ void extractPointCloudFromFloatDepth(std::vector<double> &points, const Matrix<f
     {
         for (size_t j=0; j < cols; j+=stride)
         {
-
+            deproject_points(i, j, im(i, j), intrinsics, points[pnt_cnt*3], points[pnt_cnt*3+1], points[pnt_cnt*3+2]);
             pnt_cnt++;   
         }
     }
+    // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+    return points;
 
-
-    // auto cols_stride = math.ceil(cols / stride)
-    // rows_stride = math.ceil(rows / stride)
-    // points = np.zeros((cols_stride * rows_stride, 3))
-    // # Create Point Cloud
-    // # Invalid points (no depth) will still be created and map to [0,0,0]
-    // # These point will NOT exist in the triangulation, but exist in the point array
-    // pnt_cnt = 0
-    // for i in range(0, rows, stride):
-    //     for j in range(0, cols, stride):
-    //         p1 = get_point(i, j, im, intrinsics)
-    //         points[pnt_cnt, :] = p1
-    //         pnt_cnt += 1
-
-    // return points
 }
+
+std::tuple<std::vector<size_t>, std::vector<size_t>> create_uniform_mesh(size_t rows, size_t cols, std::vector<double> &points, size_t stride)
+{
+    Matrix<double> points_2D(points.data(), points.size()/3, 3);
+    std::vector<size_t> triangles;
+    // This represents the number of rows and columns of the downsampled POINT CLOUD
+    auto cols_stride = static_cast<size_t>(ceil(cols / stride));
+    auto rows_stride = static_cast<size_t>(ceil(rows / stride));
+    // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
+    auto cols_tris = cols_stride - 1;
+    auto rows_tris = rows_stride - 1;
+    // These are the maximum number of triangles that can ever be in the mesh
+    auto max_triangles = cols_tris * rows_tris * 2;
+    // This will count valid points and triangles
+    size_t tri_cnt = 0;
+    size_t pix_cnt = 0;
+    // Invalid Triangle Marker
+    constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
+    std::vector<size_t> valid_tri(max_triangles, INVALID_INDEX);
+    // Reserve memory for triangles
+    triangles.reserve(max_triangles);
+    for (size_t i=0; i < rows_tris; i++)
+    {
+        for (size_t j=0; j < cols_tris; j++)
+        {
+            size_t p1_idx = i * cols_stride + j;
+            size_t p2_idx = i * cols_stride + j + 1;
+            size_t p3_idx = (i + 1) * cols_stride + j + 1;
+            size_t p4_idx = (i + 1) * cols_stride + j;
+
+            auto &p1 = points_2D(p1_idx, 2);
+            auto &p2 = points_2D(p2_idx, 2);
+            auto &p3 = points_2D(p3_idx, 2);
+            auto &p4 = points_2D(p4_idx, 2);
+
+            if(p1 > 0 && p2 > 0 and p3 > 0)
+            {   
+                triangles.push_back(p1_idx);
+                triangles.push_back(p2_idx);
+                triangles.push_back(p3_idx);
+                valid_tri[pix_cnt * 2] = tri_cnt;
+                tri_cnt++;
+            }
+            if(p3 > 0 && p4 > 0 and p1 > 0)
+            {   
+                triangles.push_back(p3_idx);
+                triangles.push_back(p4_idx);
+                triangles.push_back(p1_idx);
+                valid_tri[pix_cnt * 2 + 1] = tri_cnt;
+                tri_cnt++;
+            }
+            pix_cnt++;
+        }
+    }
+    return std::make_tuple(std::move(triangles), std::move(valid_tri));
+}
+
+std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> extractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+{
+    std::vector<size_t> triangles;
+    std::vector<size_t> valid_tri;
+    std::vector<size_t> halfedges;
+    std::vector<double> points = extractPointCloudFromFloatDepth(im, intrinsics, stride);
+    std::tie(triangles, valid_tri) = create_uniform_mesh(im.rows, im.cols, points, stride);
+    std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+    return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
+}
+
 
 
 } // namespace polylidar

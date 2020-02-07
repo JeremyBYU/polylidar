@@ -45,21 +45,42 @@ namespace polylidar {
     }
 
     std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, size_t stride=DEFAULT_STRIDE)
-    {   
-        // Will hold the point cloud
-        std::vector<double> points;
+    {          
         // Create Image Wrapper
         auto info_im = image.request();
-        Matrix<float> im((float*)info_im.ptr, info_im.shape[0], info_im.shape[0]);
+        Matrix<float> im((float*)info_im.ptr, info_im.shape[0], info_im.shape[1]);
         // Create Extrinsics Wrapper
         auto info_int = intrinsics.request();
-        Matrix<double> intrinsics_((double*)info_int.ptr, info_int.shape[0], info_int.shape[0]);
-        // Extract point cloud, will fill in points
-        extractPointCloudFromFloatDepth(points, im, intrinsics_, stride);
-
+        Matrix<double> intrinsics_((double*)info_int.ptr, info_int.shape[0], info_int.shape[1]);
+        // Extract point cloud
+        std::vector<double> points = extractPointCloudFromFloatDepth(im, intrinsics_, stride);
+        // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
 
         return points;
     }
+
+    std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> _extractUniformMeshFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, size_t stride=DEFAULT_STRIDE)
+    {   
+        // Will hold the point cloud
+        std::vector<double> points;
+        std::vector<size_t> triangles;
+        std::vector<size_t> halfedges;
+        // Create Image Wrapper
+        auto info_im = image.request();
+        Matrix<float> im((float*)info_im.ptr, info_im.shape[0], info_im.shape[1]);
+        // Create Extrinsics Wrapper
+        auto info_int = intrinsics.request();
+        Matrix<double> intrinsics_((double*)info_int.ptr, info_int.shape[0], info_int.shape[1]);
+
+        // Get Data
+        std::tie(points, triangles, halfedges) = extractUniformMeshFromFloatDepth(im, intrinsics_, stride);
+        std::cout << "_extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+        
+
+        return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
+
+    }
+
 
         // m.def("extract_point_cloud_from_float_depth", &polylidar::_extractPointCloudFromFloatDepth, "Extracts point cloud from a float depth image",
         // "image"_a, "intrinsics"_a, "stride"_a=DEFAULT_STRIDE);
