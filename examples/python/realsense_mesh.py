@@ -196,11 +196,10 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     time_mesh_uniform = (t2 - t1) * 1000
     uniform_alg_name = 'Uniform Grid Mesh'
     callback(uniform_alg_name, time_mesh_uniform, pcd, mesh_uniform_grid)
-
+    # Polylidar3D with Uniform Mesh Grid
     vertices = polylidar_inputs['vertices']
     triangles = polylidar_inputs['triangles']
     halfedges = polylidar_inputs['halfedges']
-    print(vertices.dtype, triangles.dtype, halfedges.dtype)
     t1 = time.perf_counter()
     planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
     t2 = time.perf_counter()
@@ -212,7 +211,6 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     polylidar_3d_alg_name = 'Polylidar with Uniform Grid Mesh'
     callback(polylidar_3d_alg_name, time_polylidar3D,
              create_open3d_pc(vertices), mesh_3d_polylidar)
-    # print(planes)
 
     # Estimate Point Cloud Normals
     t3 = time.perf_counter()
@@ -430,12 +428,9 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
     im = np.asarray(rgbd_image.depth)
     rows = im.shape[0]
     cols = im.shape[1]
-    points = create_point_cloud_from_rgbd_image(
-        im, rows, cols, intrinsics, stride=stride)
-    triangles, valid_tri = create_uniform_mesh_from_image(
-        rows, cols, points, stride=stride)
-    halfedges = extract_halfedges_from_uniform_mesh(
-        rows, cols, triangles, valid_tri, stride=stride)
+    points = create_point_cloud_from_rgbd_image(im, rows, cols, intrinsics, stride=stride)
+    triangles, valid_tri = create_uniform_mesh_from_image(rows, cols, points, stride=stride)
+    halfedges = extract_halfedges_from_uniform_mesh(rows, cols, triangles, valid_tri, stride=stride)
 
     # Rotate Point Cloud
     points = np.column_stack((points, np.ones(points.shape[0])))

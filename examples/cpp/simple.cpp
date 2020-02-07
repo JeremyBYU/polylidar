@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
   // Convert to multidimensional array
   std::vector<std::size_t> shape = { points.size() / 3, 3 };
-  polylidar::Matrix points_(points.data(), shape[0], shape[1]);
+  polylidar::Matrix<double> points_(points.data(), shape[0], shape[1]);
   // Set configuration parameters
   polylidar::Config config;
   config.xyThresh = 0.0;

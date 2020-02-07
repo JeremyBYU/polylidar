@@ -21,8 +21,8 @@ PYBIND11_MODULE(polylidar, m)
     py::bind_vector<std::vector<std::size_t>>(m, "VectorInts", py::buffer_protocol());
     py::bind_vector<std::vector<double>>(m, "VectorDouble", py::buffer_protocol());
 
-    py::class_<polylidar::Matrix>(m, "Matrix", py::buffer_protocol())
-   .def_buffer([](polylidar::Matrix &m) -> py::buffer_info {
+    py::class_<polylidar::Matrix<double>>(m, "Matrix<double>", py::buffer_protocol())
+   .def_buffer([](polylidar::Matrix<double> &m) -> py::buffer_info {
         return py::buffer_info(
             m.ptr,                               /* Pointer to buffer */
             sizeof(double),                          /* Size of one scalar */

@@ -25,7 +25,7 @@ namespace polylidar {
         auto info = nparray.request();
         std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
         Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin,  allowedClass};
-        Matrix points((double*)info.ptr, shape[0], shape[1]);
+        Matrix<double> points((double*)info.ptr, shape[0], shape[1]);
         return _extractPlanesAndPolygons(points, config);
     }
 
@@ -39,7 +39,7 @@ namespace polylidar {
         auto info = vertices.request();
         std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
         Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin,  allowedClass};
-        Matrix points((double*)info.ptr, shape[0], shape[1]);
+        Matrix<double> points((double*)info.ptr, shape[0], shape[1]);
         delaunator::HalfEdgeTriangulation triangulation(points, triangles, halfedges);
         return extractPlanesAndPolygonsFromMesh(triangulation, config);
     }
@@ -54,7 +54,7 @@ namespace polylidar {
         auto info = vertices.request();
         std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
         Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin,  allowedClass};
-        Matrix points((double*)info.ptr, shape[0], shape[1]);
+        Matrix<double> points((double*)info.ptr, shape[0], shape[1]);
         delaunator::HalfEdgeTriangulation triangulation(points, triangles, halfedges);
         return extractPolygonsFromMesh(triangulation, config);
     }
@@ -70,7 +70,7 @@ namespace polylidar {
         auto info = nparray.request();
         std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
         Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass};
-        Matrix points((double*)info.ptr, shape[0], shape[1]);
+        Matrix<double> points((double*)info.ptr, shape[0], shape[1]);
         return _extractPolygons(points, config);
     }
 
@@ -83,7 +83,7 @@ namespace polylidar {
         std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
         // This function allows us to convert keyword arguments into a configuration struct
         Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, 0.5, allowedClass};
-        Matrix points((double*)info.ptr, shape[0], shape[1]);
+        Matrix<double> points((double*)info.ptr, shape[0], shape[1]);
         std::vector<float> timings;
         auto polygons = _extractPolygonsAndTimings(points, config, timings);
         

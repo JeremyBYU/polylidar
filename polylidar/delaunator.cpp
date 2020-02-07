@@ -30,7 +30,7 @@ HalfEdgeTriangulation::HalfEdgeTriangulation()
       triangles(),
       halfedges(){}
 
-HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix &in_coords)
+HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords)
     : coords(in_coords),
       triangles(),
       halfedges(){}
@@ -46,7 +46,7 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(pybind11::array_t<double> nparray)
         coords.rows = shape[0];
         coords.cols = shape[1];
       }
-HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_)
+HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_)
     : coords(in_coords),
       triangles(),
       halfedges(){
@@ -153,7 +153,7 @@ inline std::pair<double, double> circumcenter(
 struct compare {
 
     std::vector<double> const& dists;
-    polylidar::Matrix const& coords;
+    polylidar::Matrix<double> const& coords;
 
 
     bool operator()(std::size_t i, std::size_t j) {
@@ -457,7 +457,7 @@ void Delaunator::triangulate() {
 }
 
 
-Delaunator::Delaunator(polylidar::Matrix &in_coords)
+Delaunator::Delaunator(polylidar::Matrix<double> &in_coords)
     : HalfEdgeTriangulation(in_coords),
       hull_prev(),
       hull_next(),

@@ -7,7 +7,7 @@ namespace polylidar {
         return std::sqrt(a * a + b * b);
     }
 
-    double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points){
+    double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points){
         auto pa = delaunay.triangles[t * 3];
         auto pb = delaunay.triangles[t * 3 + 1];
         auto pc = delaunay.triangles[t * 3 + 2];

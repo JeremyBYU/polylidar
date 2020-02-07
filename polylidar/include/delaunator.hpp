@@ -54,15 +54,15 @@ namespace delaunator {
     class HalfEdgeTriangulation {
 
     public:
-        polylidar::Matrix coords;
+        polylidar::Matrix<double> coords;
         std::vector<std::size_t> triangles;
         std::vector<std::size_t> halfedges;
 
         HalfEdgeTriangulation();
-        HalfEdgeTriangulation(polylidar::Matrix &in_coords);
+        HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords);
         #ifdef PY_EXTENSION
         HalfEdgeTriangulation(pybind11::array_t<double> in_coords);
-        HalfEdgeTriangulation(polylidar::Matrix &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_);
+        HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_);
         #endif
         // #ifdef PY_EXTENSION
         // HalfEdgeTriangulation(pybind11::array_t<double> nparray);
@@ -74,7 +74,7 @@ namespace delaunator {
     class Delaunator: public HalfEdgeTriangulation {
 
     public:
-        // polylidar::Matrix coords;
+        // polylidar::Matrix<double> coords;
         // std::vector<std::size_t> triangles;
         // std::vector<std::size_t> halfedges;
         std::vector<std::size_t> hull_prev;
@@ -82,7 +82,7 @@ namespace delaunator {
         std::vector<std::size_t> hull_tri;
         std::size_t hull_start;
 
-        Delaunator(polylidar::Matrix &in_coords);
+        Delaunator(polylidar::Matrix<double> &in_coords);
         #ifdef PY_EXTENSION
         Delaunator(pybind11::array_t<double> nparray);
         #endif

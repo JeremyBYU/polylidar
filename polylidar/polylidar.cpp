@@ -32,7 +32,7 @@ std::ostream &operator<<(std::ostream &os, const ExtremePoint &values)
     return os;
 }
 
-void copy2Ddata(Matrix &src, std::vector<double> &dest)
+void copy2Ddata(Matrix<double> &src, std::vector<double> &dest)
 {
     size_t rows = src.rows;
 
@@ -43,7 +43,7 @@ void copy2Ddata(Matrix &src, std::vector<double> &dest)
     }
 }
 
-inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
     // std::cout << "Triangle " << t << " Radius: " << radius << std::endl;
@@ -65,7 +65,7 @@ inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &dela
 }
 
 
-inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix &points, Config &config)
+inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix<double> &points, Config &config)
 {
     bool passZThresh = false;
     double zDiff = 0.0;
@@ -83,14 +83,14 @@ inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &dela
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
 
-inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix &points, Config &config)
+inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix<double> &points, Config &config)
 {
     // hmm simple for right now
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
 
-void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
@@ -102,7 +102,7 @@ void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     }
 }
 
-void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
@@ -116,7 +116,7 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     }
 }
 
-void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
     for (size_t t = 0; t < numTriangles; t++)
@@ -132,7 +132,7 @@ void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
 }
 
 
-void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points,
+void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                         polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash, polylidar::unordered_map<size_t, size_t> &edgeHash,
                         ExtremePoint &xPoint)
 {
@@ -294,7 +294,7 @@ std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<s
     return allHoles;
 }
 
-Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     Polygon poly;
     // point hash map
@@ -345,7 +345,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
     return poly;
 }
 
-std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
 
     std::vector<Polygon> polygons;
@@ -405,7 +405,7 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::HalfEdgeTri
 }
 
 
-std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix &points, Config &config)
+std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
@@ -444,7 +444,7 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
 
 
 
-std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix &nparray, Config config)
+std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix<double> &nparray, Config config)
 {
     config.dim = nparray.cols;
 
@@ -498,7 +498,7 @@ std::vector<Polygon> extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &
     return polygons;
 }
 
-std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
+std::vector<Polygon> _extractPolygons(Matrix<double> &nparray, Config config)
 {
     config.dim = nparray.cols;
 
@@ -525,7 +525,7 @@ std::vector<Polygon> _extractPolygons(Matrix &nparray, Config config)
 
 
 
-std::vector<Polygon> _extractPolygonsAndTimings(Matrix &nparray, Config config, std::vector<float> &timings)
+std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings)
 {
     config.dim = nparray.cols;
 
