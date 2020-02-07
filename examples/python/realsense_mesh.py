@@ -226,7 +226,7 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     ]
     return results
 
-def get_point(i, j, im, intrinsics, extrinsics):
+def get_point(i, j, im, intrinsics):
     z = im[i,j]
     pp = intrinsics.get_principal_point()
     fl = intrinsics.get_focal_length()
@@ -236,33 +236,20 @@ def get_point(i, j, im, intrinsics, extrinsics):
     # point = (extrinsics @ np.array([[x,y,z,1]]).T)[:3,0].tolist()
     # return point, z
 
-def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
-    """Create a Unifrom Grid Mesh from an RGBD Image
-    
-    Arguments:
-        rgbd_image {rgdb} -- Open3D RGBD Image
-        intrinsics {intrinsics} -- Open3D Intrinsics
-        extrinsics {ndarray} -- 4X4 Numpy array
-    
-    Keyword Arguments:
-        stride {int} -- Stride for creating point cloud (default: {2})
-    
-    Returns:
-        tuple(mesh, dict) -- Open3D mesh and Polylidar Inputs
-    """
-    im = np.asarray(rgbd_image.depth)
-    rows = im.shape[0]
-    cols = im.shape[1]
-    triangles = []
+
+def create_point_cloud_from_rgbd_image(im, rows, cols, intrinsics, stride=2):
     points = []
     # Create Point Cloud
     # Invalid points (no depth) will still be created and map to [0,0,0]
     # These point will NOT exist in the triangulation, but exist in the point array
     for i in range(0,rows, stride):
         for j in range(0, cols, stride):
-            p1 = get_point(i,j,im, intrinsics, extrinsics)
+            p1 = get_point(i,j,im, intrinsics)
             points.append(p1)
+    return np.array(points)
 
+def create_uniform_mesh_from_image(rows, cols, points, stride=2):
+    triangles = []
     # This represents the number of rows and columns of the downsampled POINT CLOUD
     cols_stride = math.ceil(cols / stride)
     rows_stride = math.ceil(rows / stride)
@@ -292,17 +279,17 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
             p3_idx = (i+1) * cols_stride + j + 1
             p4_idx =  (i+1) * cols_stride + j
 
-            p1 = points[p1_idx]
-            p2 = points[p2_idx]
-            p3 = points[p3_idx]
-            p4 = points[p4_idx]
+            p1 = points[p1_idx, 2]
+            p2 = points[p2_idx, 2]
+            p3 = points[p3_idx, 2]
+            p4 = points[p4_idx, 2]
             
-            if p1[2] > 0 and p2[2] > 0 and p3[2] > 0:
+            if p1 > 0 and p2 > 0 and p3 > 0:
                 # Create the first triangle in the square (borders on right)
                 triangles.append([p1_idx, p2_idx, p3_idx])
                 valid_tri[pix_cnt*2] = tri_cnt
                 tri_cnt +=1
-            if p3[2] > 0 and p4[2] > 0 and p1[2] > 0:
+            if p3 > 0 and p4 > 0 and p1 > 0:
                 # Create the second triangle in the square (borders on left)
                 triangles.append([p3_idx, p4_idx, p1_idx])
                 valid_tri[pix_cnt*2 + 1] = tri_cnt
@@ -311,12 +298,19 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
 
 
     triangles = np.array(triangles) # convert to numpy
-    # Create the halfedges datastructure using the implicit structure of the image
-    # as well as valid_tri, the record of valid triangles
+    return triangles, valid_tri
+
+def extract_halfedges_from_uniform_mesh(rows, cols, triangles, valid_tri, stride=2):
+    cols_stride = math.ceil(cols / stride)
+    rows_stride = math.ceil(rows / stride)
+    # This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
+    cols_tris = cols_stride -1
+    rows_tris = rows_stride - 1
+
+    # Invalid triangle marker
+    max_value = np.iinfo(np.uint64).max
     halfedges = np.full(triangles.shape[0] * 3, max_value, dtype=np.uint64)
 
-    # Construct the halfedges array. No hashmaps needed because of implicit datastructure
-    # Loop through every 4 pont square again and determin if neighboring triangles are valid
     for i in range(rows_tris):
         for j in range(cols_tris):
             # These are the triangle indexes in the global full mesh
@@ -373,9 +367,31 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
                     halfedges[int(t_valid_idx_second*3 + 1)] = t_valid_idx_left * 3 + 1
                 if t_valid_idx_first != max_value:
                     halfedges[int(t_valid_idx_second*3 + 2)] = t_valid_idx_first * 3 + 2
-                tri_cnt += 1
-    # Create numpy array pont cloud and rotate
-    points = np.array(points)
+    return halfedges
+    
+
+def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
+    """Create a Unifrom Grid Mesh from an RGBD Image
+    
+    Arguments:
+        rgbd_image {rgdb} -- Open3D RGBD Image
+        intrinsics {intrinsics} -- Open3D Intrinsics
+        extrinsics {ndarray} -- 4X4 Numpy array
+    
+    Keyword Arguments:
+        stride {int} -- Stride for creating point cloud (default: {2})
+    
+    Returns:
+        tuple(mesh, dict) -- Open3D mesh and Polylidar Inputs
+    """
+    im = np.asarray(rgbd_image.depth)
+    rows = im.shape[0]
+    cols = im.shape[1]
+    points = create_point_cloud_from_rgbd_image(im, rows, cols, intrinsics, stride=stride)
+    triangles, valid_tri = create_uniform_mesh_from_image(rows, cols, points, stride=stride)
+    halfedges = extract_halfedges_from_uniform_mesh(rows, cols, triangles, valid_tri, stride=stride)
+
+    # Rotate Point Cloud
     points = np.column_stack((points, np.ones(points.shape[0])))
     points = np.ascontiguousarray(((extrinsics @ points.T).T)[:,:3])
     # Create open3D mesh
