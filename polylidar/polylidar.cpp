@@ -557,5 +557,44 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config 
     return polygons;
 }
 
+void deproject_points(const size_t i, const size_t j, float depth, const Matrix<double> &intrinsics, double &x, double &y, double &z)
+{
+    
+}
+
+void extractPointCloudFromFloatDepth(std::vector<double> &points, const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+{
+    auto rows = im.rows;
+    auto cols = im.cols;
+    auto cols_stride = ceil(cols / stride);
+    auto rows_stride = ceil(rows / stride);
+    points.resize(cols_stride * rows_stride * 3);
+    size_t pnt_cnt = 0;
+    for (size_t i=0; i < rows; i+=stride)
+    {
+        for (size_t j=0; j < cols; j+=stride)
+        {
+
+            pnt_cnt++;   
+        }
+    }
+
+
+    // auto cols_stride = math.ceil(cols / stride)
+    // rows_stride = math.ceil(rows / stride)
+    // points = np.zeros((cols_stride * rows_stride, 3))
+    // # Create Point Cloud
+    // # Invalid points (no depth) will still be created and map to [0,0,0]
+    // # These point will NOT exist in the triangulation, but exist in the point array
+    // pnt_cnt = 0
+    // for i in range(0, rows, stride):
+    //     for j in range(0, cols, stride):
+    //         p1 = get_point(i, j, im, intrinsics)
+    //         points[pnt_cnt, :] = p1
+    //         pnt_cnt += 1
+
+    // return points
+}
+
 
 } // namespace polylidar

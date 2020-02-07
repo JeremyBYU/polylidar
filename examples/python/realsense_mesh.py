@@ -1,5 +1,6 @@
 import time
 import math
+import sys
 from os import path, listdir
 from os.path import exists, isfile, join, splitext
 import re
@@ -9,7 +10,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh
+from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_point_cloud_from_float_depth
 from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
                            scale_points, rotation_matrix, apply_rotation, COLOR_PALETTE)
 from polylidarutil.open3d_util import construct_grid, create_lines, flatten
@@ -146,9 +147,29 @@ def get_frame_data(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3
     depth_1 = o3d.io.read_image(depth_files[idx])
     color_1 = o3d.io.read_image(color_files[idx])
 
+
     extrinsic = traj[idx]
+    # t0 = time.perf_counter()
     rgbd_image_1 = o3d.geometry.RGBDImage.create_from_color_and_depth(
         color_1, depth_1, convert_rgb_to_intensity=False, depth_trunc=depth_trunc)
+    # t1 = time.perf_counter()
+    # print(t1-t0)
+
+    
+    depth_np = np.asarray(rgbd_image_1.depth)
+    intrinsic_np =  intrinsic.intrinsic_matrix
+    print(depth_np.dtype, depth_np.shape)
+    print(intrinsic_np.dtype, intrinsic_np.shape)
+    print(intrinsic_np)
+    pp = intrinsic.get_principal_point()
+    fl = intrinsic.get_focal_length()
+    print(pp)
+    print(fl)
+
+    points = extract_point_cloud_from_float_depth(depth_np, intrinsic_np)
+    print(points)
+    print(np.asarray(points))
+    sys.exit(0)
 
     pcd_1 = o3d.geometry.PointCloud.create_from_depth_image(
         depth_1, intrinsic, extrinsic, stride=stride, depth_trunc=depth_trunc)

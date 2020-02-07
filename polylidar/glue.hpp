@@ -44,6 +44,26 @@ namespace polylidar {
         return extractPlanesAndPolygonsFromMesh(triangulation, config);
     }
 
+    std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, size_t stride=DEFAULT_STRIDE)
+    {   
+        // Will hold the point cloud
+        std::vector<double> points;
+        // Create Image Wrapper
+        auto info_im = image.request();
+        Matrix<float> im((float*)info_im.ptr, info_im.shape[0], info_im.shape[0]);
+        // Create Extrinsics Wrapper
+        auto info_int = intrinsics.request();
+        Matrix<double> intrinsics_((double*)info_int.ptr, info_int.shape[0], info_int.shape[0]);
+        // Extract point cloud, will fill in points
+        extractPointCloudFromFloatDepth(points, im, intrinsics_, stride);
+
+
+        return points;
+    }
+
+        // m.def("extract_point_cloud_from_float_depth", &polylidar::_extractPointCloudFromFloatDepth, "Extracts point cloud from a float depth image",
+        // "image"_a, "intrinsics"_a, "stride"_a=DEFAULT_STRIDE);
+
     std::vector<Polygon> _extractPolygonsFromMesh(py::array_t<double> vertices, py::array_t<size_t> triangles, py::array_t<size_t> halfedges,
                                                 double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax=DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                                 size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,

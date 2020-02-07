@@ -49,6 +49,7 @@
 #define DEFAULT_NORMTHRESH 0.90
 #define DEFAULT_NORMTHRESH_MIN 0.1
 #define DEFAULT_ALLOWEDCLASS 4.0
+#define DEFAULT_STRIDE 2
 
 #define DEBUG 1
 
@@ -113,6 +114,7 @@ namespace polylidar {
     std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(Matrix<double> &nparray, Config config);
     std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
     std::vector<Polygon>  extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
+    void extractPointCloudFromFloatDepth(std::vector<double> &points, const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
     std::vector<Polygon> _extractPolygons(Matrix<double> &nparray, Config config);
     std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
 
