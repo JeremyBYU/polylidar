@@ -128,13 +128,10 @@ def extract_mesh_planes(points, triangles, planes, color=None):
     meshes = []
     color_ = color
     for i, plane in enumerate(planes):
-        # print(i)
         if color is None:
-            color_ = COLOR_PALETTE[i]
+            color_ = COLOR_PALETTE[i % (len(COLOR_PALETTE)-1)]
         else:
             color_ = COLOR_PALETTE[0]
-        #     print("New color")
-        # print(color_)
         tris = np.ascontiguousarray(np.flip(triangles[plane, :], 1))
         mesh = create_open_3d_mesh(tris, points, color_)
         meshes.append(mesh)
@@ -239,35 +236,61 @@ def get_point(i, j, im, intrinsics, extrinsics):
     # point = (extrinsics @ np.array([[x,y,z,1]]).T)[:3,0].tolist()
     # return point, z
 
-def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
-    depth = rgbd_image.depth
-    im = np.asarray(depth)
+def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
+    """Create a Unifrom Grid Mesh from an RGBD Image
+    
+    Arguments:
+        rgbd_image {rgdb} -- Open3D RGBD Image
+        intrinsics {intrinsics} -- Open3D Intrinsics
+        extrinsics {ndarray} -- 4X4 Numpy array
+    
+    Keyword Arguments:
+        stride {int} -- Stride for creating point cloud (default: {2})
+    
+    Returns:
+        tuple(mesh, dict) -- Open3D mesh and Polylidar Inputs
+    """
+    im = np.asarray(rgbd_image.depth)
     rows = im.shape[0]
     cols = im.shape[1]
     triangles = []
     points = []
+    # Create Point Cloud
+    # Invalid points (no depth) will still be created and map to [0,0,0]
+    # These point will NOT exist in the triangulation, but exist in the point array
     for i in range(0,rows, stride):
         for j in range(0, cols, stride):
             p1 = get_point(i,j,im, intrinsics, extrinsics)
             points.append(p1)
 
-    cols_pseudo = math.ceil(cols / stride)
-    rows_pseudo = math.ceil(rows / stride)
-    # rows_tri = cols_pseudo - 1
-    # cols_tri = rows_pseudo - 1
-    max_triangles = (cols_pseudo-1) * (rows_pseudo-1) * 2
+    # This represents the number of rows and columns of the downsampled POINT CLOUD
+    cols_stride = math.ceil(cols / stride)
+    rows_stride = math.ceil(rows / stride)
+    # This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
+    cols_tris = cols_stride -1
+    rows_tris = rows_stride - 1
+    # These are the maximum number of triangles that can ever be in the mesh
+    max_triangles = cols_tris * rows_tris * 2
+    # This will count valid points and triangles
     tri_cnt = 0
     pix_cnt = 0
+    # Invalid triangle marker
     max_value = np.iinfo(np.uint64).max
+    # Create an array representing the full mesh. The *position* of each element is 
+    # the triangles global index. The *value* is its TRUE index in the triangles mesh array
+    # These are the same if no invalid triangles occur
     valid_tri = np.full(max_triangles, max_value, dtype=np.uint64)
 
-
-    for i in range(0, rows_pseudo-1):
-        for j in range(0, cols_pseudo-1):
-            p1_idx = i * cols_pseudo + j
-            p2_idx = i * cols_pseudo + j + 1
-            p3_idx = (i+1) * cols_pseudo + j + 1
-            p4_idx =  (i+1) * cols_pseudo + j
+    # Create the triangles array for the mesh
+    # Loop through every 4 point square collection of points and create two triangles
+    # Each triangle holds 3 point INDICES representing its vertices
+    # A triangle can only be created if a valid point exists (depth > 0)
+    for i in range(0, rows_tris):
+        for j in range(0, cols_tris):
+            p1_idx = i * cols_stride + j
+            p2_idx = i * cols_stride + j + 1
+            p3_idx = (i+1) * cols_stride + j + 1
+            p4_idx =  (i+1) * cols_stride + j
 
             p1 = points[p1_idx]
             p2 = points[p2_idx]
@@ -275,124 +298,90 @@ def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=3):
             p4 = points[p4_idx]
             
             if p1[2] > 0 and p2[2] > 0 and p3[2] > 0:
+                # Create the first triangle in the square (borders on right)
                 triangles.append([p1_idx, p2_idx, p3_idx])
                 valid_tri[pix_cnt*2] = tri_cnt
                 tri_cnt +=1
             if p3[2] > 0 and p4[2] > 0 and p1[2] > 0:
+                # Create the second triangle in the square (borders on left)
                 triangles.append([p3_idx, p4_idx, p1_idx])
                 valid_tri[pix_cnt*2 + 1] = tri_cnt
                 tri_cnt +=1
             pix_cnt +=1
 
-    print("Tri Count: ",tri_cnt)
-    print("Valid Tri Shape: ", valid_tri.shape)
-    print(np.max(valid_tri))
-    print(valid_tri[:100])
-    triangles = np.array(triangles)
 
-    # for i in range(0, rows - stride, stride):
-    #     for j in range(0, cols - stride, stride):
-    #         p1_idx = (i//stride) * cols_pseudo + (j//stride)
-    #         p2_idx = (i//stride) * cols_pseudo + ((j+stride)//stride)
-    #         p3_idx = ((i+stride)//stride) * cols_pseudo + ((j+stride)//stride)
-    #         p4_idx = ((i+stride)//stride) * cols_pseudo + (j//stride)
-
-    #         p1 = points[p1_idx]
-    #         p2 = points[p2_idx]
-    #         p3 = points[p3_idx]
-    #         p4 = points[p4_idx]
-            
-    #         if p1[2] > 0 and p2[2] > 0 and p3[2] > 0:
-    #             triangles.append([p1_idx, p2_idx, p3_idx])
-    #             valid_tri[pix_cnt*2] = tri_cnt
-    #             tri_cnt +=1
-    #         if p3[2] > 0 and p4[2] > 0 and p1[2] > 0:
-    #             triangles.append([p3_idx, p4_idx, p1_idx])
-    #             valid_tri[pix_cnt*2 + 1] = tri_cnt
-    #             tri_cnt +=1
-    #         pix_cnt +=1
-
-    
-    tri_cnt = 0
+    triangles = np.array(triangles) # convert to numpy
+    # Create the halfedges datastructure using the implicit structure of the image
+    # as well as valid_tri, the record of valid triangles
     halfedges = np.full(triangles.shape[0] * 3, max_value, dtype=np.uint64)
-    print("Triangles shape: ", triangles.shape)
-    print("Half edges shape: ", halfedges.shape)
-    # return
-    for i in range(rows_pseudo-1):
-        for j in range(cols_pseudo-1):
-            t_global_idx_first = ((cols_pseudo-1) * i + j) * 2 
-            t_global_idx_second = ((cols_pseudo-1) * i + j) * 2 + 1
-            # print(t_global_idx_first, t_global_idx_second)
-            t_local_idx_first = valid_tri[t_global_idx_first]
-            t_local_idx_second = valid_tri[t_global_idx_second]
-            # if 2194 == t_local_idx_first or 2194 == t_local_idx_second:
-            #     import ipdb; ipdb.set_trace()
-            #     print("Error here")
-            # First Triangle Half Edges
-            if (t_local_idx_first != max_value):
-                # print(t_local_idx_first, type(t_local_idx_first), type(t_local_idx_first * 3 + 1))
+
+    # Construct the halfedges array. No hashmaps needed because of implicit datastructure
+    # Loop through every 4 pont square again and determin if neighboring triangles are valid
+    for i in range(rows_tris):
+        for j in range(cols_tris):
+            # These are the triangle indexes in the global full mesh
+            t_global_idx_first = (cols_tris * i + j) * 2 
+            t_global_idx_second = (cols_tris * i + j) * 2 + 1
+            # We convert these global meshes to our valid mesh indices
+            t_valid_idx_first = valid_tri[t_global_idx_first]
+            t_valid_idx_second = valid_tri[t_global_idx_second]
+            # Check if first triangle is valid, if so extract half edges
+            if (t_valid_idx_first != max_value):
                 # We have a valid first triangle
                 # Check if we are on the top of the RGBD Image, if so then we have a border top edge
                 if i == 0:
-                    t_local_idx_top = max_value
+                    t_valid_idx_top = max_value # indicates this edge has no border
                 else:
-                    t_global_idx_top = t_global_idx_first - 2 * (cols_pseudo-1) + 1
-                    t_local_idx_top = valid_tri[t_global_idx_top]
+                    # Gets the triangle one row up from this one, math is from implicit structure
+                    t_global_idx_top = t_global_idx_first - 2 * cols_tris + 1
+                    # Convert to valid mesh index
+                    t_valid_idx_top = valid_tri[t_global_idx_top]
                 # Check if we are on the right side of the RGBD Image, if so than we have a border on the right
-                if j >= cols_pseudo - 2:
-                    t_local_idx_right = max_value
+                if j >= cols_tris - 1:
+                    t_valid_idx_right = max_value # indicates this edge has no border
                 else:
+                    # Gets the triangle one cell to the right, math is from implicit structure
                     t_global_idx_right = t_global_idx_first + 3
-                    t_local_idx_right = valid_tri[t_global_idx_right]
-                # Add Edges
-                if t_local_idx_top != max_value:
-                    halfedges[int(t_local_idx_first*3)] = t_local_idx_top * 3
-                if t_local_idx_right != max_value:
-                    halfedges[int(t_local_idx_first*3 + 1)] = t_local_idx_right * 3 + 1
-                if t_local_idx_second != max_value:
-                    halfedges[int(t_local_idx_first*3 + 2)] = t_local_idx_second * 3 + 2
-                tri_cnt += 1
+                    t_valid_idx_right = valid_tri[t_global_idx_right]
+                # SET edges if valid
+                if t_valid_idx_top != max_value:
+                    halfedges[int(t_valid_idx_first*3)] = t_valid_idx_top * 3
+                if t_valid_idx_right != max_value:
+                    halfedges[int(t_valid_idx_first*3 + 1)] = t_valid_idx_right * 3 + 1
+                if t_valid_idx_second != max_value:
+                    halfedges[int(t_valid_idx_first*3 + 2)] = t_valid_idx_second * 3 + 2
 
-            else:
-                print("Bad First triangle: ", t_global_idx_first)
-
-            # Second Triangle Half Edges
-            if (t_local_idx_second != max_value):
+            # Check if second triangle is valid, if so extract half edges
+            if (t_valid_idx_second != max_value):
                 # We have a valid second triangle
                 # Check if we are on the bottom of the RGBD Image, if so then we have a border bottom edge
-                if i == rows_pseudo - 2:
-                    t_local_idx_bottom = max_value
+                if i == rows_tris - 1:
+                    t_valid_idx_bottom = max_value
                 else:
-                    t_global_idx_bottom = t_global_idx_second + 2 * (cols_pseudo-1) - 1
-                    t_local_idx_bottom = valid_tri[t_global_idx_bottom]
+                    t_global_idx_bottom = t_global_idx_second + 2 * cols_tris - 1
+                    t_valid_idx_bottom = valid_tri[t_global_idx_bottom]
                 # Check if we are on the left side of the RGBD Image, if so than we have a border on the left
                 if j == 0:
-                    t_local_idx_left = max_value
+                    t_valid_idx_left = max_value
                 else:
                     t_global_idx_left = t_global_idx_second - 3
-                    t_local_idx_left = valid_tri[t_global_idx_left]
-                # Add Edges
-                if t_local_idx_bottom != max_value:
-                    halfedges[int(t_local_idx_second*3)] = t_local_idx_bottom * 3
-                if t_local_idx_left != max_value:
-                    halfedges[int(t_local_idx_second*3 + 1)] = t_local_idx_left * 3 + 1
-                if t_local_idx_first != max_value:
-                    halfedges[int(t_local_idx_second*3 + 2)] = t_local_idx_first * 3 + 2
+                    t_valid_idx_left = valid_tri[t_global_idx_left]
+                # Set Edges
+                if t_valid_idx_bottom != max_value:
+                    halfedges[int(t_valid_idx_second*3)] = t_valid_idx_bottom * 3
+                if t_valid_idx_left != max_value:
+                    halfedges[int(t_valid_idx_second*3 + 1)] = t_valid_idx_left * 3 + 1
+                if t_valid_idx_first != max_value:
+                    halfedges[int(t_valid_idx_second*3 + 2)] = t_valid_idx_first * 3 + 2
                 tri_cnt += 1
-
-            else:
-                print("Bad Second triangle: ", t_global_idx_second)
-            # print(t_local_idx_first, t_local_idx_second)
-    
-
+    # Create numpy array pont cloud and rotate
     points = np.array(points)
     points = np.column_stack((points, np.ones(points.shape[0])))
     points = np.ascontiguousarray(((extrinsics @ points.T).T)[:,:3])
-
+    # Create open3D mesh
     mesh = create_open_3d_mesh(triangles, points)
-    halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
-    # np.savetxt("halfedges_broken.txt", halfedges, fmt='%i')
-
+    # halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
+    # Also create the polylidar desired representation of the mesh
     polylidar_inputs = dict(vertices=points, triangles=triangles.flatten(), halfedges=halfedges)
     return mesh, polylidar_inputs
 
@@ -415,7 +404,7 @@ def main():
     axis_frame.translate([0, 0.8, -0.7])
     grid_ls = construct_grid(size=2, n=200, plane_offset=-0.8, translate=[0, 1.0, 0.0])
     for idx in range(len(color_files)):
-        if idx < 2:
+        if idx < 3:
             continue
         pcd, rgbd, extrinsics = get_colored_point_cloud(
             idx, color_files, depth_files, traj, intrinsics)
