@@ -3,46 +3,6 @@
 namespace polylidar
 {
 
-std::ostream &operator<<(std::ostream &os, const Config &config)
-{
-    os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThresh=" << config.xyThresh << " lmax=" << config.xyThresh << " minTriangles=" << config.minTriangles
-       << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
-       << " allowedClass=" << config.allowedClass
-       << " desiredVector= [" << (config.desiredVector)[0] << ", " << (config.desiredVector)[1] << ", " << (config.desiredVector)[2] << "]";
-
-    return os;
-}
-
-std::ostream &operator<<(std::ostream &os, const std::vector<size_t> &values)
-{
-    os << "[";
-    for (auto &&val : values)
-    {
-        os << val << ", ";
-    }
-    os << "]";
-
-    return os;
-}
-
-std::ostream &operator<<(std::ostream &os, const ExtremePoint &values)
-{
-    os << "xr_he" << values.xr_he << " xr_pi" << values.xr_pi << " xr_val" << values.xr_val;
-
-    return os;
-}
-
-void copy2Ddata(Matrix<double> &src, std::vector<double> &dest)
-{
-    size_t rows = src.rows;
-
-    for (size_t i = 0; i < rows; i++)
-    {
-        dest[2*i] = src(i,0);
-        dest[2*i+1] = src(i,1);
-    }
-}
-
 inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
@@ -59,13 +19,11 @@ inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &dela
     {
         return false;
     }
-    
-    
+
     return true;
 }
 
-
-inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix<double> &points, Config &config)
+inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     bool passZThresh = false;
     double zDiff = 0.0;
@@ -83,12 +41,11 @@ inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &dela
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
 
-inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay,  Matrix<double> &points, Config &config)
+inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     // hmm simple for right now
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
-
 
 void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
@@ -131,7 +88,6 @@ void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     }
 }
 
-
 void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                         polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash, polylidar::unordered_map<size_t, size_t> &edgeHash,
                         ExtremePoint &xPoint)
@@ -141,7 +97,6 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangul
 
     size_t max_triangles_all = static_cast<size_t>(delaunay.triangles.size() / 3);
     std::vector<bool> triSet(max_triangles_all, false);
-
 
     // THIS REDUCED THIS FUNCTIONS RUNTIME BY 1/2
     // LESS ALLOCATIONS AND HASH COLLISIONS
@@ -200,7 +155,6 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangul
             }
         }
     }
-
 }
 
 std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash,
@@ -242,7 +196,7 @@ std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<
 
         if (nextEdges.size() == 0)
         {
-            std::cerr<< "ERROR! Found a broken edge when extracting a concave section (most likely during hole extraction). Possible that delaunator mislabeled an edge as part of the convex hull" << std::endl;
+            std::cerr << "ERROR! Found a broken edge when extracting a concave section (most likely during hole extraction). Possible that delaunator mislabeled an edge as part of the convex hull" << std::endl;
             // return empty hull
             return std::vector<size_t>();
         }
@@ -286,7 +240,8 @@ std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<s
         // auto startingPointIndex = triangles[startEdge];
         auto stopPoint = triangles[startEdge];
         auto hole = concaveSection(pointHash, edgeHash, delaunay, startEdge, stopPoint, false);
-        if (hole.size() > 0){
+        if (hole.size() > 0)
+        {
             allHoles.push_back(hole);
         }
     }
@@ -312,7 +267,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
     // std::cout << "ConstructPointHash - Total (ms): " << elapsed.count() << std::endl;
 
     // std::vector<size_t> bucket_sizes;
-    // for(auto i = 0; i < edgeHash.bucket_count(); ++i) 
+    // for(auto i = 0; i < edgeHash.bucket_count(); ++i)
     // {
     //   auto bucket_size = edgeHash.bucket_size(i);
     //   bucket_sizes.push_back(bucket_size);
@@ -322,7 +277,8 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
     auto startingHalfEdge = xPoint.xr_he;
     // Error checking, just in case the extreme right point has a hole connected to it
     auto &nextEdges = pointHash[xPoint.xr_pi];
-    if (nextEdges.size() > 1) {
+    if (nextEdges.size() > 1)
+    {
         // std::cout << "Right extreme point is connected to a hole. Determining correct edge..." << std::endl;
         // std::cout << "xPoint: " << xPoint << std::endl;
         // std::cout << "Plane size: " << plane.size() << std::endl;
@@ -336,7 +292,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
     auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay);
 
     holes.erase(std::remove_if(holes.begin(), holes.end(),
-                [&config](std::vector<size_t> &hole) { return hole.size() < config.minHoleVertices; }),
+                               [&config](std::vector<size_t> &hole) { return hole.size() < config.minHoleVertices; }),
                 holes.end());
 
     // std::vector<std::vector<size_t>> holes;
@@ -357,7 +313,6 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
     return polygons;
 }
 
-
 void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<bool> &triSet, size_t seedIdx, std::vector<size_t> &candidates)
 {
     // Construct queue for triangle neighbor expansion
@@ -365,7 +320,6 @@ void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<boo
     // Add seed index to queue and erase from hash map
     queue.push(seedIdx);
     triSet[seedIdx] = false;
-
 
     // std::vector<size_t> candidates;
     while (!queue.empty())
@@ -375,14 +329,13 @@ void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<boo
         candidates.push_back(tri);
         // Get all neighbors that are inside our triangle hash map
         // Loop through every edge of this triangle and get adjacent triangle of this edge
-        for (size_t i=0; i < 3; ++i)
+        for (size_t i = 0; i < 3; ++i)
         {
             auto e = tri * 3 + i;
             auto opposite = delaunay.halfedges[e];
             if (opposite != INVALID_INDEX)
             {
                 // convert opposite edge to a triangle
-                // TODO static_cast<size_t>
                 size_t tn = std::floor(opposite / 3);
                 if (triSet[tn])
                 {
@@ -403,7 +356,6 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::HalfEdgeTri
     }
     return true;
 }
-
 
 std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
@@ -428,8 +380,8 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
     {
         if (triSet[t])
         {
-            planes.emplace_back(); // construct empty vector inside planes
-            auto &planeMesh = planes[planes.size() -1]; // retrieve this newly created vector
+            planes.emplace_back();                       // construct empty vector inside planes
+            auto &planeMesh = planes[planes.size() - 1]; // retrieve this newly created vector
             extractMeshSet(delaunay, triSet, t, planeMesh);
             // Remove plane if it does not pass constraints
             if (!passPlaneConstraints(planeMesh, delaunay, config))
@@ -442,9 +394,7 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
     return planes;
 }
 
-
-
-std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygons(Matrix<double> &nparray, Config config)
+std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config)
 {
     config.dim = nparray.cols;
 
@@ -471,7 +421,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // nparray2D is a contigious buffer of (ROWS,2)
 }
 
-std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
 {
     auto &vertices = triangulation.coords;
     config.dim = vertices.cols;
@@ -488,7 +438,7 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> extractPlanes
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
 
-std::vector<Polygon> extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
+std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
 {
     auto vertices = triangulation.coords;
     config.dim = vertices.cols;
@@ -498,7 +448,7 @@ std::vector<Polygon> extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &
     return polygons;
 }
 
-std::vector<Polygon> _extractPolygons(Matrix<double> &nparray, Config config)
+std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config)
 {
     config.dim = nparray.cols;
 
@@ -523,9 +473,7 @@ std::vector<Polygon> _extractPolygons(Matrix<double> &nparray, Config config)
     return polygons;
 }
 
-
-
-std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings)
+std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings)
 {
     config.dim = nparray.cols;
 
@@ -557,16 +505,14 @@ std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config 
     return polygons;
 }
 
-
 void deproject_points(const size_t i, const size_t j, float depth, const Matrix<double> &intrinsics, double &x, double &y, double &z)
 {
     z = static_cast<double>(depth);
-    x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0,0);
-    y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1,1);
+    x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0, 0);
+    y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1, 1);
 }
 
-
-std::vector<double> extractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
 {
     std::vector<double> points;
     auto rows = im.rows;
@@ -575,20 +521,19 @@ std::vector<double> extractPointCloudFromFloatDepth(const Matrix<float> &im, con
     auto rows_stride = ceil(rows / stride);
     points.resize(cols_stride * rows_stride * 3);
     size_t pnt_cnt = 0;
-    for (size_t i=0; i < rows; i+=stride)
+    for (size_t i = 0; i < rows; i += stride)
     {
-        for (size_t j=0; j < cols; j+=stride)
+        for (size_t j = 0; j < cols; j += stride)
         {
-            deproject_points(i, j, im(i, j), intrinsics, points[pnt_cnt*3], points[pnt_cnt*3+1], points[pnt_cnt*3+2]);
-            pnt_cnt++;   
+            deproject_points(i, j, im(i, j), intrinsics, points[pnt_cnt * 3], points[pnt_cnt * 3 + 1], points[pnt_cnt * 3 + 2]);
+            pnt_cnt++;
         }
     }
-    std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+    // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return points;
-
 }
 
-std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, std::vector<size_t> &triangles, 
+std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, std::vector<size_t> &triangles,
                                                     std::vector<size_t> &valid_tri, size_t stride)
 {
     constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
@@ -600,9 +545,9 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
     auto cols_tris = cols_stride - 1;
     auto rows_tris = rows_stride - 1;
 
-    for (size_t i=0; i < rows_tris; i++)
+    for (size_t i = 0; i < rows_tris; i++)
     {
-        for (size_t j=0; j < cols_tris; j++)
+        for (size_t j = 0; j < cols_tris; j++)
         {
             // These are the triangle indexes in the global full mesh
             size_t t_global_idx_first = (cols_tris * i + j) * 2;
@@ -649,7 +594,6 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
                     halfedges[size_t(t_valid_idx_first * 3 + 1)] = t_valid_idx_right * 3 + 1;
                 if (t_valid_idx_second != INVALID_INDEX)
                     halfedges[size_t(t_valid_idx_first * 3 + 2)] = t_valid_idx_second * 3 + 2;
-
             }
             // Check if second triangle is valid, if invalid its not in our mesh
             if (t_valid_idx_second != INVALID_INDEX)
@@ -682,7 +626,6 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
                     halfedges[size_t(t_valid_idx_second * 3 + 1)] = t_valid_idx_left * 3 + 1;
                 if (t_valid_idx_first != INVALID_INDEX)
                     halfedges[size_t(t_valid_idx_second * 3 + 2)] = t_valid_idx_first * 3 + 2;
-                
             }
         }
     }
@@ -691,7 +634,7 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
 
 std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t rows, size_t cols, std::vector<double> &points, size_t stride)
 {
-    Matrix<double> points_2D(points.data(), points.size()/3, 3);
+    Matrix<double> points_2D(points.data(), points.size() / 3, 3);
     std::vector<size_t> triangles;
     // This represents the number of rows and columns of the downsampled POINT CLOUD
     auto cols_stride = static_cast<size_t>(ceil(cols / stride));
@@ -709,9 +652,9 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
     std::vector<size_t> valid_tri(max_triangles, INVALID_INDEX);
     // Reserve memory for triangles
     triangles.reserve(max_triangles);
-    for (size_t i=0; i < rows_tris; i++)
+    for (size_t i = 0; i < rows_tris; i++)
     {
-        for (size_t j=0; j < cols_tris; j++)
+        for (size_t j = 0; j < cols_tris; j++)
         {
             size_t p1_idx = i * cols_stride + j;
             size_t p2_idx = i * cols_stride + j + 1;
@@ -723,16 +666,16 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
             auto &p3 = points_2D(p3_idx, 2);
             auto &p4 = points_2D(p4_idx, 2);
 
-            if(p1 > 0 && p2 > 0 and p3 > 0)
-            {   
+            if (p1 > 0 && p2 > 0 and p3 > 0)
+            {
                 triangles.push_back(p1_idx);
                 triangles.push_back(p2_idx);
                 triangles.push_back(p3_idx);
                 valid_tri[pix_cnt * 2] = tri_cnt;
                 tri_cnt++;
             }
-            if(p3 > 0 && p4 > 0 and p1 > 0)
-            {   
+            if (p3 > 0 && p4 > 0 and p1 > 0)
+            {
                 triangles.push_back(p3_idx);
                 triangles.push_back(p4_idx);
                 triangles.push_back(p1_idx);
@@ -745,18 +688,16 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
     return std::make_tuple(std::move(triangles), std::move(valid_tri));
 }
 
-std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> extractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
 {
     std::vector<size_t> triangles;
     std::vector<size_t> valid_tri;
-    std::vector<double> points = extractPointCloudFromFloatDepth(im, intrinsics, stride);
+    std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics, stride);
     std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points, stride);
     std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(im.rows, im.cols, triangles, valid_tri, stride);
-    
+
     // std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
 }
-
-
 
 } // namespace polylidar

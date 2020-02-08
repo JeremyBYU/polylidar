@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
   // Extract polygon
   std::vector<float> timings;
   auto before = std::chrono::high_resolution_clock::now();
-  auto polygons = polylidar::_extractPolygonsAndTimings(points_, config, timings);
+  auto polygons = polylidar::ExtractPolygonsAndTimings(points_, config, timings);
   auto after = std::chrono::high_resolution_clock::now();
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
   std::cout << "Polylidar took " << elapsed.count() << " milliseconds processing a " << shape[0] << " point cloud" << std::endl;

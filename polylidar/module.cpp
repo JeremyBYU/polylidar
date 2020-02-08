@@ -54,12 +54,25 @@ PYBIND11_MODULE(polylidar, m)
         // .def_readonly("holes", &polylidar::Polygon::holes, py::return_value_policy::copy)
         .def_property("holes", &polylidar::Polygon::getHoles, &polylidar::Polygon::setHoles);
     
-    m.def("extractPlanesAndPolygons", &polylidar::extractPlanesAndPolygons, "Extracts planar meshes and polygons from a point cloud",
+    m.def("extractPlanesAndPolygons", &polylidar::_extractPlanesAndPolygons, "Extracts planar meshes and polygons from a point cloud",
         "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
         "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
         "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
         "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
         "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+
+    m.def("extractPolygons", &polylidar::_extractPolygons, "Extracts polygons from a point cloud",
+        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
+        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
+        "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
+        "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
+
+    m.def("extractPolygonsAndTimings", &polylidar::_extractPolygonsAndTimings, "Extracts polygons from a point cloud and returns detailed timings of triangulation, mesh extraction, and polygon extraction", 
+        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
+        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
+        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
+        "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     m.def("extract_planes_and_polygons_from_mesh", &polylidar::_extractPlanesAndPolygonsFromMesh, "Extracts planar meshes and polygons from a half edge triangulated mesh",
         "vertices"_a, "triangles"_a, "halfedges"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
@@ -80,19 +93,6 @@ PYBIND11_MODULE(polylidar, m)
 
     m.def("extract_uniform_mesh_from_float_depth", &polylidar::_extractUniformMeshFromFloatDepth, "Extracts a uniform mesh from a float depth image",
         "image"_a, "intrinsics"_a, "stride"_a=DEFAULT_STRIDE);
-
-    m.def("extractPolygons", &polylidar::extractPolygons, "Extracts polygons from a point cloud",
-        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
-        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
-        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
-        "normThresh"_a=DEFAULT_NORMTHRESH, "normThreshMin"_a=DEFAULT_NORMTHRESH_MIN,
-        "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
-
-    m.def("extractPolygonsAndTimings", &polylidar::extractPolygonsAndTimings, "Extracts polygons from a point cloud and returns detailed timings of triangulation, mesh extraction, and polygon extraction", 
-        "nparray"_a, "alpha"_a=DEFAULT_ALPHA, "xyThresh"_a=DEFAULT_XYTHRESH,
-        "lmax"_a=DEFAULT_LMAX, "minTriangles"_a=DEFAULT_MINTRIANGLES, "minHoleVertices"_a=DEFAULT_MINHOLEVERTICES,
-        "minBboxArea"_a=DEFAULT_MINBBOX, "zThresh"_a=DEFAULT_ZTHRESH,
-        "normThresh"_a=DEFAULT_NORMTHRESH, "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
 
 #ifdef VERSION_INFO

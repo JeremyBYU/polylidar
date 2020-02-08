@@ -20,26 +20,25 @@
   <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/combined.png" height="100%" /> 
 </p>
 
-
 ## Key Features
 
-* Fast (Multi)Polygon Extraction from 2D and 3D point clouds 
-  - Written in C++ for portability
-  - Extremely fast. 100,000 3D point cloud takes ~130ms to process on laptop
-  - Polygons with holes may be returned
+* Fast (Multi)Polygon Extraction from 2D and 3D point clouds
+  * Written in C++ for portability
+  * Extremely fast. 100,000 3D point cloud takes ~130ms to process on laptop
+  * Polygons with holes may be returned
 * Python3 bindings using PyBind11
-  - Low overhead for calling python/cpp interface (no copying of point cloud data)
+  * Low overhead for calling python/cpp interface (no copying of point cloud data)
 * Python and C++ Examples
 * Cross platform
-  - Windows and Linux ready.
+  * Windows and Linux ready.
 
 Polylidar allows one to extract planar meshes from a point cloud **and** their polygon representations. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors.
 
 ## Install
 
-### Python
+### Python Projects
 
-**PIP install**
+#### Pip install
 
 1. Install [conda](https://conda.io/projects/conda/en/latest/) or create a python virtual envrionment ([Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)). I recommend conda for Windows users.
 2. `conda install shapely` - Only for Windows users because conda handles windows binary dependency correctly.
@@ -47,23 +46,44 @@ Polylidar allows one to extract planar meshes from a point cloud **and** their p
 
 Binary wheels are provided only for Windows x64 for Python 3.6-3.7. This means everyone else (Linux, MacOS) will need to have a C++ compiler (GCC or Clang) to compile the source during pip installation.
 
-**Manual build from git clone**
+#### Manual build from git clone
 
 1. Install [conda](https://conda.io/projects/conda/en/latest/) or create a python virtual envrionment ([Why?](https://medium.freecodecamp.org/why-you-need-python-environments-and-how-to-manage-them-with-conda-85f155f4353c)). I recommend conda for Windows users.
 2. `conda install shapely` - Only for Windows users because conda handles windows binary dependency correctly.
 3. `pip install -e ".[dev]"`
 4. `pytest` - OPTIONAL, this will run a series of tests and benchmarks.
 
-### C++
+### C++ Projects
+
+#### Simple Makefile
 
 See `examples/cpp` for how to build.
 
+#### CMake
+
+You can build with an example C++ project with CMake.
+
+1. `mkdir build && cd build`
+2. `cmake .. && make -j && cd ..`
+3. `./build/polylidar-simple`
+
+To integrate with a *different* CMake Project do the following:
+
+1. Add as a submodule into your repo: `git submodule add https://github.com/JeremyBYU/polylidar thirdparty/polylidar`
+2. Add the following to your CMakeLists.txt file:
+
+```CMakeList.txt
+add_subdirectory("thirdparty/polylidar")
+....
+target_link_libraries(MY_BINARY polylidar)
+
+```
+
 ### Robust Geometric Predicates
 
-Delaunator does not use [robust geometric predicates](https://github.com/mikolalysenko/robust-arithmetic-notes) for its orientation and incircle tests; [reference](https://github.com/mapbox/delaunator/issues/43).  This means that the triangulation can be incorrect when points are nearly colinear or cocircular. A library developed by Jonathan Richard Shewchuk provides very fast adaptive precision floating point arithmetic for [geometric predicates](https://www.cs.cmu.edu/~quake/robust.html).  This library is released in the public domain and an updated version of it is maintained at this [repository](https://github.com/danshapero/predicates). I have included this source code in the folder `polylidar/predicates`.  
+Delaunator (the 2D triangulation library used) does not use [robust geometric predicates](https://github.com/mikolalysenko/robust-arithmetic-notes) for its orientation and incircle tests; [reference](https://github.com/mapbox/delaunator/issues/43).  This means that the triangulation can be incorrect when points are nearly colinear or cocircular. A library developed by Jonathan Richard Shewchuk provides very fast adaptive precision floating point arithmetic for [geometric predicates](https://www.cs.cmu.edu/~quake/robust.html).  This library is released in the public domain and an updated version of it is maintained at this [repository](https://github.com/danshapero/predicates). I have included this source code in the folder `polylidar/predicates`.  
 
 If you desire to have robust geometric predicates built into Polylidar you must set an environment variable, "PL_USE_ROBUST_PREDICATES=1" (-DPL_USE_ROBUST_PREDICATES for C++). The python file `setup.py` will read this environment variable and then include the robust geometric predicates into the build process. Without setting this variable none of the `predicates` source code is included in the python plugin.
-
 
 ## How To Use
 
@@ -89,7 +109,6 @@ delaunay = Delaunator(point_cloud)
 ### API (WIP to improve documentation)
 
 What are the inputs to the code?  The input arguments are a **contiguous** numpy array with length N and 2,3,or 4 columns depending on your data.  There are also configuration options as well that you can pass as keyword arguments.
-
 
 What are the inputs?
 
@@ -117,28 +136,41 @@ What are the outputs?
 
 ## Polylidar Use Cases
 
-- [Polylidar-RealSense](https://github.com/JeremyBYU/polylidar-realsense) - Live ground floor detection with Intel RealSense camera using Polylidar
-- [PolylidarWeb](https://github.com/JeremyBYU/polylidarweb). A Typescript (javascript) version with live demos.
-- [Concave-Evaluation](https://github.com/JeremyBYU/concavehull-evaluation) - Evaluates and benchmarks several competing concavehull algorithms.
+* [Polylidar-RealSense](https://github.com/JeremyBYU/polylidar-realsense) - Live ground floor detection with Intel RealSense camera using Polylidar
+* [PolylidarWeb](https://github.com/JeremyBYU/polylidarweb). A Typescript (javascript) version with live demos.
+* [Concave-Evaluation](https://github.com/JeremyBYU/concavehull-evaluation) - Evaluates and benchmarks several competing concavehull algorithms.
 
 
 ## Credits
 
 This software uses the following open source packages:
 
-- [Delaunator](https://github.com/mapbox/delaunator) - Original triangulation library
-- [DelaunatorCPP](https://github.com/delfrrr/delaunator-cpp) - Delaunator ported to C++ (used)
-- [parallel-hashmap](https://github.com/greg7mdp/parallel-hashmap) - Very fast hashmap library (used)
-- [PyBind11](https://github.com/pybind/pybind11) - Python C++ Binding (used)
-- [Robust Geometric Predicates](https://www.cs.cmu.edu/~quake/robust.html) - Original Robust Geometric predicates
-- [Updated Predicates](https://github.com/danshapero/predicates) -Updated geometric predicate library (used)
+* [Delaunator](https://github.com/mapbox/delaunator) - Original triangulation library
+* [DelaunatorCPP](https://github.com/delfrrr/delaunator-cpp) - Delaunator ported to C++ (used)
+* [parallel-hashmap](https://github.com/greg7mdp/parallel-hashmap) - Very fast hashmap library (used)
+* [PyBind11](https://github.com/pybind/pybind11) - Python C++ Binding (used)
+* [Robust Geometric Predicates](https://www.cs.cmu.edu/~quake/robust.html) - Original Robust Geometric predicates
+* [Updated Predicates](https://github.com/danshapero/predicates) -Updated geometric predicate library (used)
 
 ## Related Methods
 
-- [CGAL Alpha Shapes](https://doc.cgal.org/latest/Alpha_shapes_2/index.html) - MultiPolygon with holes.
-- [PostGIS ConcaveHull](http://postgis.net/docs/ST_ConcaveHull.html) - Single Polygon with holes.
-- [Spatialite ConcaveHull](https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0) - MultiPolygon with holes.
-- [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets.
+* [CGAL Alpha Shapes](https://doc.cgal.org/latest/Alpha_shapes_2/index.html) - MultiPolygon with holes.
+* [PostGIS ConcaveHull](http://postgis.net/docs/ST_ConcaveHull.html) - Single Polygon with holes.
+* [Spatialite ConcaveHull](https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0) - MultiPolygon with holes.
+* [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets.
+
+## Contributing
+
+Any help or suggestions would be appreciated! Some tools you may find useful when you install from `git clone` and build for development
+
+1. `pytest` - Run a series of tests and benchmarks.
+2. `nox` - Build environment for testing and build wheels.
+
+### Packaging
+
+1. `bash ./package.sh`
+
+TODO
 
 ## License
 

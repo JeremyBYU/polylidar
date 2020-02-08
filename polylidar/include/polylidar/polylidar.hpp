@@ -105,28 +105,14 @@ namespace polylidar {
     };
 
 
-    // std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygons(pybind11::array_t<double> nparray,
-    //                             double alpha, double xyThresh, double lmax, size_t minTriangles,
-    //                             double minBboxArea, double zThresh, 
-    //                             double normThresh, double normThreshMin, double allowedClass);
+    std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config);
+    std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config);
+    std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
+    std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>>  ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
+    std::vector<Polygon>  ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
+    std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
+    std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
 
-
-    std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  _extractPlanesAndPolygons(Matrix<double> &nparray, Config config);
-    std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>>  extractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
-    std::vector<Polygon>  extractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
-    std::vector<double> extractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
-    std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> extractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
-    std::vector<Polygon> _extractPolygons(Matrix<double> &nparray, Config config);
-    std::vector<Polygon> _extractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
-
-    // std::vector<Polygon>  extractPolygons(pybind11::array_t<double> nparray,
-    //                             double alpha, double xyThresh, double lamx, size_t minTriangles,
-    //                             double minBboxArea, double zThresh, 
-    //                             double normThresh, double normThreshMin, double allowedClass);
-    // std::tuple<std::vector<Polygon>, std::vector<float>>  extractPolygonsAndTimings(pybind11::array_t<double> nparray,
-    //                             double alpha, double xyThresh, double lmax, size_t minTriangles,
-    //                             double minBboxArea, double zThresh, 
-    //                             double normThresh, double allowedClass);
 }
 
 

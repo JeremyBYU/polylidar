@@ -6,7 +6,7 @@ NAME = 'win' if os.name == 'nt' else 'linux'
 DISTS = ['sdist', 'bdist_wheel'] if os.name == 'nt' else ['sdist']
 
 @nox.session(
-    python=['3.6', '3.7'],
+    python=['3.6', '3.7', '3.8'],
     reuse_venv=True,
     venv_backend=VENV,
     name='test_' + NAME)

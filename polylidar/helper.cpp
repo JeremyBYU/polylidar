@@ -1,4 +1,5 @@
 #include "polylidar/helper.hpp"
+#include "polylidar/polylidar.hpp"
 
 namespace polylidar {
 
@@ -35,6 +36,35 @@ namespace polylidar {
         for (auto &&val : values) {
             os << val << ", ";
         }
+
+        return os;
+    }
+
+        std::ostream &operator<<(std::ostream &os, const Config &config)
+    {
+        os << "Dim=" << config.dim << " alpha=" << config.alpha << " xyThresh=" << config.xyThresh << " lmax=" << config.xyThresh << " minTriangles=" << config.minTriangles
+        << " minBboxArea=" << config.minBboxArea << " zThresh=" << config.zThresh << " normThresh=" << config.normThresh
+        << " allowedClass=" << config.allowedClass
+        << " desiredVector= [" << (config.desiredVector)[0] << ", " << (config.desiredVector)[1] << ", " << (config.desiredVector)[2] << "]";
+
+        return os;
+    }
+
+    std::ostream &operator<<(std::ostream &os, const std::vector<size_t> &values)
+    {
+        os << "[";
+        for (auto &&val : values)
+        {
+            os << val << ", ";
+        }
+        os << "]";
+
+        return os;
+    }
+
+    std::ostream &operator<<(std::ostream &os, const ExtremePoint &values)
+    {
+        os << "xr_he" << values.xr_he << " xr_pi" << values.xr_pi << " xr_val" << values.xr_val;
 
         return os;
     }

@@ -193,4 +193,7 @@ setup(
     },
     cmdclass={'build_ext': BuildExt},
     zip_safe=False,
+    project_urls={
+        'Source': 'https://github.com/JeremyBYU/polylidar',
+    },
 )

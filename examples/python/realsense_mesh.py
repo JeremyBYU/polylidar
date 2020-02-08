@@ -31,12 +31,14 @@ REALSENSE_INTRINSICS = path.join(
     REALSENSE_DIR, 'camera_intrinsic_rgb_424.json')
 
 
+# Conversion between D400 to T265
 H_t265_d400 = np.array([
     [1, 0, 0, 0],
     [0, -1.0, 0, 0],
     [0, 0, -1.0, 0],
     [0, 0, 0, 1]])
 
+# Conversion from D400 frame to "Standard" frame (z-axis= to [0,0,1])
 R_Standard_d400 = np.array([
     [1, 0, 0, 0],
     [0, 0.0, 1.0, 0],
@@ -45,10 +47,10 @@ R_Standard_d400 = np.array([
 
 
 logging.basicConfig(level=logging.INFO)
+
+
 ### Read Saved Data from Realsense Directory ###
 # Some of this code is pulled from Open3D to read saved RGBD Files
-
-
 def sorted_alphanum(file_list_ordered):
     def convert(text): return int(text) if text.isdigit() else text
     def alphanum_key(key): return [convert(c)
@@ -114,15 +116,30 @@ def get_realsense_data(color_dir=REALSENSE_COLOR_DIR, depth_dir=REALSENSE_DEPTH_
 
 
 def create_open3d_pc(points):
+    """ Creates an Open3D point cloud """
     pcd = o3d.geometry.PointCloud()
     pcd.points = o3d.utility.Vector3dVector(points)
     return pcd
 
 
-def create_open_3d_mesh(triangles, points, color=[1, 0, 0]):
+def create_open_3d_mesh(triangles, points, color=COLOR_PALETTE[0]):
+    """Create an Open3D Mesh given triangles vertices
+
+    Arguments:
+        triangles {ndarray} -- Triangles array
+        points {ndarray} -- Points array
+
+    Keyword Arguments:
+        color {list} -- RGB COlor (default: {[1, 0, 0]})
+
+    Returns:
+        mesh -- Open3D Mesh
+    """
     mesh_2d = o3d.geometry.TriangleMesh()
     if triangles.ndim == 1:
         triangles = triangles.reshape((int(triangles.shape[0] / 3), 3))
+        # Open 3D expects triangles to be counter clockwise
+        triangles = np.ascontiguousarray(np.flip(triangles, 1))
     mesh_2d.triangles = o3d.utility.Vector3iVector(triangles)
     mesh_2d.vertices = o3d.utility.Vector3dVector(points)
     mesh_2d.compute_vertex_normals()
@@ -132,6 +149,8 @@ def create_open_3d_mesh(triangles, points, color=[1, 0, 0]):
 
 
 def extract_mesh_planes(points, triangles, planes, color=None):
+    " Converts Polylidar Mesh Planes into Open3D format "
+
     meshes = []
     color_ = color
     for i, plane in enumerate(planes):
@@ -146,28 +165,28 @@ def extract_mesh_planes(points, triangles, planes, color=None):
 
 
 def get_frame_data(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3.0, stride=2):
+    """Gets Frame Data
+
+    Arguments:
+        idx {int} -- Index of frame
+        color_files {list} -- list of color images
+        depth_files {list} -- list of depth images
+        traj {list} -- list of extrinsic matrices corresponding to frames
+        intrinsic {Open3D intrisics} -- Open3D intrinsics array
+
+    Keyword Arguments:
+        depth_trunc {float} -- How much to truncate depth image in meters (default: {3.0})
+        stride {int} -- stride for downsampling pont cloud (default: {2})
+
+    Returns:
+        tuple -- PointCloud, RGBD Image, extrinsics (D4XX Frame -> Global Standard Frame)
+    """
     depth_1 = o3d.io.read_image(depth_files[idx])
     color_1 = o3d.io.read_image(color_files[idx])
-
 
     extrinsic = traj[idx]
     rgbd_image_1 = o3d.geometry.RGBDImage.create_from_color_and_depth(
         color_1, depth_1, convert_rgb_to_intensity=False, depth_trunc=depth_trunc)
-
-    # intrinsic_np =  np.ascontiguousarray(np.asarray(intrinsic.intrinsic_matrix))
-    # print(intrinsic_np.dtype, intrinsic_np.shape, intrinsic_np.flags)
-    # print(intrinsic_np)
-    # depth_np = np.asarray(rgbd_image_1.depth)
-    # t0 = time.perf_counter()
-    # points = extract_point_cloud_from_float_depth(depth_np, intrinsic_np)
-    # t1 = time.perf_counter()
-    # print(t1-t0)
-    # points = np.asarray(points)
-    # print(points[:10])
-    # pointer, read_only_flag = points.__array_interface__['data']
-    # print("Data address", hex(pointer))
-    # points = points.reshape(int(points.shape[0]/3), 3)
-    # sys.exit(0)
 
     pcd_1 = o3d.geometry.PointCloud.create_from_depth_image(
         depth_1, intrinsic, extrinsic, stride=stride, depth_trunc=depth_trunc)
@@ -175,6 +194,7 @@ def get_frame_data(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3
 
 
 def prep_mesh(mesh):
+    " Prepares mesh for visualization "
     mesh_list = mesh
     if not isinstance(mesh_list, list):
         mesh_list = [mesh]
@@ -184,6 +204,7 @@ def prep_mesh(mesh):
 
 
 def filter_and_create_open3d_polygons(points, polygons):
+    " Apply polygon filtering algorithm, return Open3D Mesh Lines "
     config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=0.785), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
                      positive_buffer=0.01, negative_buffer=0.03, simplify=0.02)
     planes, obstacles = filter_planes_and_holes(polygons, points, config_pp)
@@ -207,9 +228,9 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     polylidar_alg_name = 'Polylidar2D'
     callback(polylidar_alg_name, time_mesh_2d_polylidar, pcd, mesh_2d_polylidar)
     # Uniform Mesh Grid
-    polylidar_inputs, timings = make_uniform_grid_mesh(np.asarray(rgbd.depth), np.ascontiguousarray(intrinsics.intrinsic_matrix), extrinsics, stride=2)
+    polylidar_inputs, timings = make_uniform_grid_mesh(np.asarray(
+        rgbd.depth), np.ascontiguousarray(intrinsics.intrinsic_matrix), extrinsics, stride=2)
     mesh_uniform_grid = create_open_3d_mesh(polylidar_inputs['triangles'], polylidar_inputs['vertices'])
-    prep_mesh(mesh_uniform_grid)
     time_mesh_uniform = timings['mesh_creation']
     uniform_alg_name = 'Uniform Grid Mesh'
     callback(uniform_alg_name, time_mesh_uniform, pcd, mesh_uniform_grid)
@@ -272,161 +293,6 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     return results
 
 
-# def get_point(i, j, im, intrinsics):
-#     z = im[i, j]
-#     pp = intrinsics.get_principal_point()
-#     fl = intrinsics.get_focal_length()
-#     x = (j - pp[0]) * z / fl[0]
-#     y = (i - pp[1]) * z / fl[1]
-#     return [x, y, z]
-#     # point = (extrinsics @ np.array([[x,y,z,1]]).T)[:3,0].tolist()
-#     # return point, z
-
-
-# def create_point_cloud_from_rgbd_image(im, rows, cols, intrinsics, stride=2):
-#     points = []
-#     cols_stride = math.ceil(cols / stride)
-#     rows_stride = math.ceil(rows / stride)
-#     points = np.zeros((cols_stride * rows_stride, 3))
-#     # Create Point Cloud
-#     # Invalid points (no depth) will still be created and map to [0,0,0]
-#     # These point will NOT exist in the triangulation, but exist in the point array
-#     pnt_cnt = 0
-#     for i in range(0, rows, stride):
-#         for j in range(0, cols, stride):
-#             p1 = get_point(i, j, im, intrinsics)
-#             points[pnt_cnt, :] = p1
-#             pnt_cnt += 1
-
-#     return points
-
-
-# def create_uniform_mesh_from_image(rows, cols, points, stride=2):
-#     triangles = []
-#     # This represents the number of rows and columns of the downsampled POINT CLOUD
-#     cols_stride = math.ceil(cols / stride)
-#     rows_stride = math.ceil(rows / stride)
-#     # This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
-#     cols_tris = cols_stride - 1
-#     rows_tris = rows_stride - 1
-#     # These are the maximum number of triangles that can ever be in the mesh
-#     max_triangles = cols_tris * rows_tris * 2
-#     # This will count valid points and triangles
-#     tri_cnt = 0
-#     pix_cnt = 0
-#     # Invalid triangle marker
-#     max_value = np.iinfo(np.uint64).max
-#     # Create an array representing the full mesh. The *position* of each element is
-#     # the triangles global index. The *value* is its TRUE index in the triangles mesh array
-#     # These are the same if no invalid triangles occur
-#     valid_tri = np.full(max_triangles, max_value, dtype=np.uint64)
-
-#     # Create the triangles array for the mesh
-#     # Loop through every 4 point square collection of points and create two triangles
-#     # Each triangle holds 3 point INDICES representing its vertices
-#     # A triangle can only be created if a valid point exists (depth > 0)
-#     for i in range(0, rows_tris):
-#         for j in range(0, cols_tris):
-#             p1_idx = i * cols_stride + j
-#             p2_idx = i * cols_stride + j + 1
-#             p3_idx = (i + 1) * cols_stride + j + 1
-#             p4_idx = (i + 1) * cols_stride + j
-
-#             p1 = points[p1_idx, 2]
-#             p2 = points[p2_idx, 2]
-#             p3 = points[p3_idx, 2]
-#             p4 = points[p4_idx, 2]
-
-#             if p1 > 0 and p2 > 0 and p3 > 0:
-#                 # Create the first triangle in the square (borders on right)
-#                 triangles.append([p1_idx, p2_idx, p3_idx])
-#                 valid_tri[pix_cnt * 2] = tri_cnt
-#                 tri_cnt += 1
-#             if p3 > 0 and p4 > 0 and p1 > 0:
-#                 # Create the second triangle in the square (borders on left)
-#                 triangles.append([p3_idx, p4_idx, p1_idx])
-#                 valid_tri[pix_cnt * 2 + 1] = tri_cnt
-#                 tri_cnt += 1
-#             pix_cnt += 1
-
-#     triangles = np.array(triangles, dtype=np.uint64)  # convert to numpy
-#     return triangles, valid_tri
-
-
-# def extract_halfedges_from_uniform_mesh(rows, cols, triangles, valid_tri, stride=2):
-#     cols_stride = math.ceil(cols / stride)
-#     rows_stride = math.ceil(rows / stride)
-#     # This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
-#     cols_tris = cols_stride - 1
-#     rows_tris = rows_stride - 1
-
-#     # Invalid triangle marker
-#     max_value = np.iinfo(np.uint64).max
-#     halfedges = np.full(triangles.shape[0] * 3, max_value, dtype=np.uint64)
-
-#     for i in range(rows_tris):
-#         for j in range(cols_tris):
-#             # These are the triangle indexes in the global full mesh
-#             t_global_idx_first = (cols_tris * i + j) * 2
-#             t_global_idx_second = (cols_tris * i + j) * 2 + 1
-#             # We convert these global meshes to our valid mesh indices
-#             t_valid_idx_first = valid_tri[t_global_idx_first]
-#             t_valid_idx_second = valid_tri[t_global_idx_second]
-#             # Check if first triangle is valid, if so extract half edges
-#             if (t_valid_idx_first != max_value):
-#                 # We have a valid first triangle
-#                 # Check if we are on the top of the RGBD Image, if so then we have a border top edge
-#                 if i == 0:
-#                     t_valid_idx_top = max_value  # indicates this edge has no border
-#                 else:
-#                     # Gets the triangle one row up from this one, math is from implicit structure
-#                     t_global_idx_top = t_global_idx_first - 2 * cols_tris + 1
-#                     # Convert to valid mesh index
-#                     t_valid_idx_top = valid_tri[t_global_idx_top]
-#                 # Check if we are on the right side of the RGBD Image, if so than we have a border on the right
-#                 if j >= cols_tris - 1:
-#                     t_valid_idx_right = max_value  # indicates this edge has no border
-#                 else:
-#                     # Gets the triangle one cell to the right, math is from implicit structure
-#                     t_global_idx_right = t_global_idx_first + 3
-#                     t_valid_idx_right = valid_tri[t_global_idx_right]
-#                 # SET edges if valid
-#                 if t_valid_idx_top != max_value:
-#                     halfedges[int(t_valid_idx_first * 3)] = t_valid_idx_top * 3
-#                 if t_valid_idx_right != max_value:
-#                     halfedges[int(t_valid_idx_first * 3 + 1)
-#                               ] = t_valid_idx_right * 3 + 1
-#                 if t_valid_idx_second != max_value:
-#                     halfedges[int(t_valid_idx_first * 3 + 2)
-#                               ] = t_valid_idx_second * 3 + 2
-
-#             # Check if second triangle is valid, if so extract half edges
-#             if (t_valid_idx_second != max_value):
-#                 # We have a valid second triangle
-#                 # Check if we are on the bottom of the RGBD Image, if so then we have a border bottom edge
-#                 if i == rows_tris - 1:
-#                     t_valid_idx_bottom = max_value
-#                 else:
-#                     t_global_idx_bottom = t_global_idx_second + 2 * cols_tris - 1
-#                     t_valid_idx_bottom = valid_tri[t_global_idx_bottom]
-#                 # Check if we are on the left side of the RGBD Image, if so than we have a border on the left
-#                 if j == 0:
-#                     t_valid_idx_left = max_value
-#                 else:
-#                     t_global_idx_left = t_global_idx_second - 3
-#                     t_valid_idx_left = valid_tri[t_global_idx_left]
-#                 # Set Edges
-#                 if t_valid_idx_bottom != max_value:
-#                     halfedges[int(t_valid_idx_second * 3)
-#                               ] = t_valid_idx_bottom * 3
-#                 if t_valid_idx_left != max_value:
-#                     halfedges[int(t_valid_idx_second * 3 + 1)
-#                               ] = t_valid_idx_left * 3 + 1
-#                 if t_valid_idx_first != max_value:
-#                     halfedges[int(t_valid_idx_second * 3 + 2)
-#                               ] = t_valid_idx_first * 3 + 2
-#     return halfedges
-
 def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
     """Create a Unifrom Grid Mesh from an RGBD Image
 
@@ -441,8 +307,6 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
     Returns:
         tuple(dict, dict) - Mesh and timings
     """
-    # im = np.asarray(rgbd_image.depth)
-    # intrinsics_ = np.ascontiguousarray(intrinsics.intrinsic_matrix)
     t0 = time.perf_counter()
     points, triangles, halfedges = extract_uniform_mesh_from_float_depth(im, intrinsics, stride=stride)
     t1 = time.perf_counter()
@@ -456,46 +320,15 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
     t2 = time.perf_counter()
     polylidar_inputs = dict(
         vertices=points, triangles=triangles, halfedges=halfedges)
-    timings = dict(mesh_creation=(t1-t0)*1000, pc_rotation=(t2-t1)*1000)
+    timings = dict(mesh_creation=(t1 - t0) * 1000, pc_rotation=(t2 - t1) * 1000)
     return polylidar_inputs, timings
-
-# def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2):
-#     """Create a Unifrom Grid Mesh from an RGBD Image
-
-#     Arguments:
-#         im {ndarray} -- MXN Float Depth Image
-#         intrinsics {intrinsics} -- 3X3 Intrinsics
-#         extrinsics {ndarray} -- 4X4 Numpy array
-
-#     Keyword Arguments:
-#         stride {int} -- Stride for creating point cloud (default: {2})
-
-#     Returns:
-#         tuple(mesh, dict) -- Open3D mesh and Polylidar Inputs
-#     """
-#     # im = np.asarray(rgbd_image.depth)
-#     rows = im.shape[0]
-#     cols = im.shape[1]
-#     points = create_point_cloud_from_rgbd_image(im, rows, cols, intrinsics, stride=stride)
-#     triangles, valid_tri = create_uniform_mesh_from_image(rows, cols, points, stride=stride)
-#     halfedges = extract_halfedges_from_uniform_mesh(rows, cols, triangles, valid_tri, stride=stride)
-
-#     # Rotate Point Cloud
-#     points = np.column_stack((points, np.ones(points.shape[0])))
-#     points = np.ascontiguousarray(((extrinsics @ points.T).T)[:, :3])
-#     # halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
-#     # Also create the polylidar desired representation of the mesh
-#     polylidar_inputs = dict(
-#         vertices=points, triangles=triangles.flatten(), halfedges=halfedges)
-#     return polylidar_inputs
 
 
 def callback(alg_name, execution_time, pcd, mesh=None):
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -0.7])
-    grid_ls = construct_grid(
-        size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
-    logging.info("%r took %.2f milliseconds", alg_name, execution_time)
+    grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
+    logging.info("%s took %.2f milliseconds", alg_name, execution_time)
     if mesh:
         if isinstance(mesh, list):
             o3d.visualization.draw_geometries(
@@ -508,21 +341,16 @@ def main():
     color_files, depth_files, traj, intrinsics = get_realsense_data()
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -0.7])
-    grid_ls = construct_grid(
-        size=2, n=200, plane_offset=-0.8, translate=[0, 1.0, 0.0])
+    grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
     for idx in range(len(color_files)):
         if idx < 3:
             continue
-        pcd, rgbd, extrinsics = get_frame_data(
-            idx, color_files, depth_files, traj, intrinsics)
+        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
-        # pcd = pcd.voxel_down_sample(voxel_size=0.02)
 
-        logging.info("File %r - Point Cloud; Size: %r",
-                     idx, np.asarray(pcd.points).shape[0])
+        logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])
-        results = run_test(pcd, rgbd, intrinsics,
-                           extrinsics, callback=callback)
+        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback)
 
 
 if __name__ == "__main__":
