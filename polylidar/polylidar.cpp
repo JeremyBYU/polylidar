@@ -588,7 +588,108 @@ std::vector<double> extractPointCloudFromFloatDepth(const Matrix<float> &im, con
 
 }
 
-std::tuple<std::vector<size_t>, std::vector<size_t>> create_uniform_mesh(size_t rows, size_t cols, std::vector<double> &points, size_t stride)
+std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, std::vector<size_t> &triangles, 
+                                                    std::vector<size_t> &valid_tri, size_t stride)
+{
+    constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
+    std::vector<size_t> halfedges(triangles.size(), INVALID_INDEX);
+    // This represents the number of rows and columns of the downsampled POINT CLOUD
+    auto cols_stride = static_cast<size_t>(ceil(cols / stride));
+    auto rows_stride = static_cast<size_t>(ceil(rows / stride));
+    // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
+    auto cols_tris = cols_stride - 1;
+    auto rows_tris = rows_stride - 1;
+
+    for (size_t i=0; i < rows_tris; i++)
+    {
+        for (size_t j=0; j < cols_tris; j++)
+        {
+            // These are the triangle indexes in the global full mesh
+            size_t t_global_idx_first = (cols_tris * i + j) * 2;
+            size_t t_global_idx_second = (cols_tris * i + j) * 2 + 1;
+            // We convert these global meshes to our valid mesh indices
+            auto t_valid_idx_first = valid_tri[t_global_idx_first];
+            auto t_valid_idx_second = valid_tri[t_global_idx_second];
+            // Valid triangles indices bordering the first triangle
+            size_t t_valid_idx_top = 0;
+            size_t t_valid_idx_right = 0;
+            // valid triangle indices bordering the second triangle
+            size_t t_valid_idx_bottom = 0;
+            size_t t_valid_idx_left = 0;
+            // Check if first triangle is valid, if invalid its not in our mesh
+            if (t_valid_idx_first != INVALID_INDEX)
+            {
+                // Check if we are on the top of the depth image
+                if (i == 0)
+                {
+                    t_valid_idx_top = INVALID_INDEX; // indicates this edge has no border
+                }
+                else
+                {
+                    // gets the triangle one row up from this one, math is from implicit structure
+                    size_t t_global_idx_top = t_global_idx_first - 2 * cols_tris + 1;
+                    // convert to valid mesh index
+                    t_valid_idx_top = valid_tri[t_global_idx_top];
+                }
+                // check if we are on the right side of the depth Image
+                if (j >= cols_tris - 1)
+                {
+                    t_valid_idx_right = INVALID_INDEX; // indicates this edge has no border
+                }
+                else
+                {
+                    // gets the triangle one cell to the right, math is from implicit structure
+                    size_t t_global_idx_right = t_global_idx_first + 3;
+                    t_valid_idx_right = valid_tri[t_global_idx_right];
+                }
+                // Set the edges if they are valid
+                if (t_valid_idx_top != INVALID_INDEX)
+                    halfedges[size_t(t_valid_idx_first * 3)] = t_valid_idx_top * 3;
+                if (t_valid_idx_right != INVALID_INDEX)
+                    halfedges[size_t(t_valid_idx_first * 3 + 1)] = t_valid_idx_right * 3 + 1;
+                if (t_valid_idx_second != INVALID_INDEX)
+                    halfedges[size_t(t_valid_idx_first * 3 + 2)] = t_valid_idx_second * 3 + 2;
+
+            }
+            // Check if second triangle is valid, if invalid its not in our mesh
+            if (t_valid_idx_second != INVALID_INDEX)
+            {
+                // We have a valid second triangle
+                // Check if we are on the bottom of the depth image
+                if (i == rows_tris - 1)
+                {
+                    t_valid_idx_bottom = INVALID_INDEX;
+                }
+                else
+                {
+                    size_t t_global_idx_bottom = t_global_idx_second + 2 * cols_tris - 1;
+                    t_valid_idx_bottom = valid_tri[t_global_idx_bottom];
+                }
+                // Check if we are on the left side of the RGBD Image, if so than we have a border on the left
+                if (j == 0)
+                {
+                    t_valid_idx_left = INVALID_INDEX;
+                }
+                else
+                {
+                    size_t t_global_idx_left = t_global_idx_second - 3;
+                    t_valid_idx_left = valid_tri[t_global_idx_left];
+                }
+                // Set Edges
+                if (t_valid_idx_bottom != INVALID_INDEX)
+                    halfedges[size_t(t_valid_idx_second * 3)] = t_valid_idx_bottom * 3;
+                if (t_valid_idx_left != INVALID_INDEX)
+                    halfedges[size_t(t_valid_idx_second * 3 + 1)] = t_valid_idx_left * 3 + 1;
+                if (t_valid_idx_first != INVALID_INDEX)
+                    halfedges[size_t(t_valid_idx_second * 3 + 2)] = t_valid_idx_first * 3 + 2;
+                
+            }
+        }
+    }
+    return halfedges;
+}
+
+std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t rows, size_t cols, std::vector<double> &points, size_t stride)
 {
     Matrix<double> points_2D(points.data(), points.size()/3, 3);
     std::vector<size_t> triangles;
@@ -648,10 +749,11 @@ std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> extrac
 {
     std::vector<size_t> triangles;
     std::vector<size_t> valid_tri;
-    std::vector<size_t> halfedges;
     std::vector<double> points = extractPointCloudFromFloatDepth(im, intrinsics, stride);
-    std::tie(triangles, valid_tri) = create_uniform_mesh(im.rows, im.cols, points, stride);
-    std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+    std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points, stride);
+    std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(im.rows, im.cols, triangles, valid_tri, stride);
+    
+    // std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
 }
 

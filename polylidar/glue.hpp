@@ -74,7 +74,7 @@ namespace polylidar {
 
         // Get Data
         std::tie(points, triangles, halfedges) = extractUniformMeshFromFloatDepth(im, intrinsics_, stride);
-        std::cout << "_extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+        // std::cout << "_extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
         
 
         return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
