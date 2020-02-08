@@ -149,27 +149,26 @@ def get_frame_data(idx, color_files, depth_files, traj, intrinsic, depth_trunc=3
 
 
     extrinsic = traj[idx]
-    # t0 = time.perf_counter()
     rgbd_image_1 = o3d.geometry.RGBDImage.create_from_color_and_depth(
         color_1, depth_1, convert_rgb_to_intensity=False, depth_trunc=depth_trunc)
+
+    # intrinsic_np =  np.ascontiguousarray(np.asarray(intrinsic.intrinsic_matrix))
+    # print(intrinsic_np.dtype, intrinsic_np.shape, intrinsic_np.flags)
+    # print(intrinsic_np)
+    # depth_np = np.asarray(rgbd_image_1.depth)
+    # t0 = time.perf_counter()
+    # points = extract_point_cloud_from_float_depth(depth_np, intrinsic_np)
     # t1 = time.perf_counter()
     # print(t1-t0)
-
-    intrinsic_np =  intrinsic.intrinsic_matrix
-    depth_np = np.asarray(rgbd_image_1.depth)
-    t0 = time.perf_counter()
-    points, triangles, halfedges = extract_uniform_mesh_from_float_depth(depth_np, intrinsic_np)
-    t1 = time.perf_counter()
-    print(t1-t0)
-    points = np.asarray(points)
-    print(points[:10])
-    pointer, read_only_flag = points.__array_interface__['data']
-    print("Data address", hex(pointer))
-    points = points.reshape(int(points.shape[0]/3), 3)
+    # points = np.asarray(points)
+    # print(points[:10])
+    # pointer, read_only_flag = points.__array_interface__['data']
+    # print("Data address", hex(pointer))
+    # points = points.reshape(int(points.shape[0]/3), 3)
+    # sys.exit(0)
 
     pcd_1 = o3d.geometry.PointCloud.create_from_depth_image(
         depth_1, intrinsic, extrinsic, stride=stride, depth_trunc=depth_trunc)
-    pcd_1.points = o3d.utility.Vector3dVector(points)
     return pcd_1, rgbd_image_1, R_Standard_d400 @ np.linalg.inv(extrinsic)
 
 
@@ -207,7 +206,7 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     callback(polylidar_alg_name, time_mesh_2d_polylidar, pcd, mesh_2d_polylidar)
     # Uniform Mesh Grid
     t1 = time.perf_counter()
-    mesh_uniform_grid, polylidar_inputs = make_uniform_grid_mesh(
+    mesh_uniform_grid, polylidar_inputs = make_uniform_grid_mesh2(
         rgbd, intrinsics, extrinsics)
     t2 = time.perf_counter()
     prep_mesh(mesh_uniform_grid)
@@ -428,6 +427,45 @@ def extract_halfedges_from_uniform_mesh(rows, cols, triangles, valid_tri, stride
                               ] = t_valid_idx_first * 3 + 2
     return halfedges
 
+def make_uniform_grid_mesh2(rgbd_image, intrinsics, extrinsics, stride=2):
+    """Create a Unifrom Grid Mesh from an RGBD Image
+
+    Arguments:
+        rgbd_image {rgdb} -- Open3D RGBD Image
+        intrinsics {intrinsics} -- Open3D Intrinsics
+        extrinsics {ndarray} -- 4X4 Numpy array
+
+    Keyword Arguments:
+        stride {int} -- Stride for creating point cloud (default: {2})
+
+    Returns:
+        tupl
+    """
+    im = np.asarray(rgbd_image.depth)
+    rows = im.shape[0]
+    cols = im.shape[1]
+    intrinsics_ = np.ascontiguousarray(intrinsics.intrinsic_matrix)
+    t0 = time.perf_counter()
+    points, triangles, halfedges = extract_uniform_mesh_from_float_depth(im, intrinsics_, stride=stride)
+    t1 = time.perf_counter()
+    print(t1 - t0)
+    points = np.asarray(points)
+    triangles = np.asarray(triangles)
+    halfedges = np.asarray(halfedges)
+    points = points.reshape((int(points.shape[0] / 3), 3))
+    # TODO Need to create half edges STILL
+    # Rotate Point Cloud
+    points = np.column_stack((points, np.ones(points.shape[0])))
+    points = np.ascontiguousarray(((extrinsics @ points.T).T)[:, :3])
+    t2 = time.perf_counter()
+    print(t2 - t1)
+    # Create open3D mesh
+    mesh = create_open_3d_mesh(triangles.reshape((int(triangles.shape[0] / 3), 3)), points)
+    # halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
+    # Also create the polylidar desired representation of the mesh
+    polylidar_inputs = dict(
+        vertices=points, triangles=triangles, halfedges=halfedges)
+    return mesh, polylidar_inputs
 
 def make_uniform_grid_mesh(rgbd_image, intrinsics, extrinsics, stride=2):
     """Create a Unifrom Grid Mesh from an RGBD Image

@@ -49,7 +49,7 @@ namespace polylidar {
         // Create Image Wrapper
         auto info_im = image.request();
         Matrix<float> im((float*)info_im.ptr, info_im.shape[0], info_im.shape[1]);
-        // Create Extrinsics Wrapper
+        // Create intrinsics wrapper
         auto info_int = intrinsics.request();
         Matrix<double> intrinsics_((double*)info_int.ptr, info_int.shape[0], info_int.shape[1]);
         // Extract point cloud
@@ -68,7 +68,7 @@ namespace polylidar {
         // Create Image Wrapper
         auto info_im = image.request();
         Matrix<float> im((float*)info_im.ptr, info_im.shape[0], info_im.shape[1]);
-        // Create Extrinsics Wrapper
+        // Create intrinsics wrapper
         auto info_int = intrinsics.request();
         Matrix<double> intrinsics_((double*)info_int.ptr, info_int.shape[0], info_int.shape[1]);
 

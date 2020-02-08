@@ -583,7 +583,7 @@ std::vector<double> extractPointCloudFromFloatDepth(const Matrix<float> &im, con
             pnt_cnt++;   
         }
     }
-    // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+    std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return points;
 
 }
