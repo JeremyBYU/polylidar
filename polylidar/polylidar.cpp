@@ -517,8 +517,8 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
     std::vector<double> points;
     auto rows = im.rows;
     auto cols = im.cols;
-    auto cols_stride = ceil(cols / stride);
-    auto rows_stride = ceil(rows / stride);
+    size_t cols_stride = ceil(cols / float(stride));
+    size_t rows_stride = ceil(rows / float(stride));
     points.resize(cols_stride * rows_stride * 3);
     size_t pnt_cnt = 0;
     for (size_t i = 0; i < rows; i += stride)
@@ -529,6 +529,7 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
             pnt_cnt++;
         }
     }
+    // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
     // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return points;
 }
@@ -539,11 +540,11 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
     constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
     std::vector<size_t> halfedges(triangles.size(), INVALID_INDEX);
     // This represents the number of rows and columns of the downsampled POINT CLOUD
-    auto cols_stride = static_cast<size_t>(ceil(cols / stride));
-    auto rows_stride = static_cast<size_t>(ceil(rows / stride));
+    size_t cols_stride = ceil(cols / float(stride));
+    size_t rows_stride = ceil(rows / float(stride));
     // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
-    auto cols_tris = cols_stride - 1;
-    auto rows_tris = rows_stride - 1;
+    size_t cols_tris = cols_stride - 1;
+    size_t rows_tris = rows_stride - 1;
 
     for (size_t i = 0; i < rows_tris; i++)
     {
@@ -637,13 +638,13 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
     Matrix<double> points_2D(points.data(), points.size() / 3, 3);
     std::vector<size_t> triangles;
     // This represents the number of rows and columns of the downsampled POINT CLOUD
-    auto cols_stride = static_cast<size_t>(ceil(cols / stride));
-    auto rows_stride = static_cast<size_t>(ceil(rows / stride));
+    size_t cols_stride = ceil(cols / float(stride));
+    size_t rows_stride = ceil(rows / float(stride));
     // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
-    auto cols_tris = cols_stride - 1;
-    auto rows_tris = rows_stride - 1;
+    size_t cols_tris = cols_stride - 1;
+    size_t rows_tris = rows_stride - 1;
     // These are the maximum number of triangles that can ever be in the mesh
-    auto max_triangles = cols_tris * rows_tris * 2;
+    size_t max_triangles = cols_tris * rows_tris * 2;
     // This will count valid points and triangles
     size_t tri_cnt = 0;
     size_t pix_cnt = 0;
