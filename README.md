@@ -32,7 +32,7 @@
 * Cross platform
   * Windows and Linux ready.
 
-Polylidar allows one to extract planar meshes from a point cloud **and** their polygon representations. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors.
+Polylidar allows one to extract planar meshes from a point cloud **and** their polygon representations. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors. Click here for a basic demo in the browser: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jeremybyu/polylidar/master?filepath=examples%2Fpython%2FBasicDemo.ipynb)
 
 ## Install
 
@@ -61,11 +61,11 @@ See `examples/cpp` for how to build.
 
 #### CMake
 
-You can build with an example C++ project with CMake.
+You can build Polylidar and an example project with CMake.
 
 1. `mkdir build && cd build`
 2. `cmake .. && make -j && cd ..`
-3. `./build/polylidar-simple`
+3. `./build/polylidar-simple` - Simple test program.
 
 To integrate with a *different* CMake Project do the following:
 
