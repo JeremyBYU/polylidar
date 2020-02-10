@@ -26,7 +26,6 @@ box_side = apply_rotation(rm, box_side) + [5, 3, 0]
 points = np.concatenate((plane, box_side, box_top))
 
 # Extracts planes and polygons, time
-# in practice zThresh would probably be 0.1 with this noise level. Set to large 1.0 to try and force issue of triangle wall climbing.
 t1 = time.time()
 delaunay, planes, polygons = extractPlanesAndPolygons(
     points, xyThresh=0.0, alpha=0.0, lmax=1.0, minTriangles=20, zThresh=0.1, normThresh=0.98)

@@ -15,7 +15,7 @@ lmax = get_estimated_lmax(**kwargs)
 
 # Extracts planes and polygons, time
 t1 = time.time()
-delaunay, planes, polygons = extractPlanesAndPolygons(points, xyThresh=0.0, alpha=0.0, lmax=lmax, minTriangles=5)
+delaunay, planes, polygons = extractPlanesAndPolygons(points, alpha=0.0, lmax=lmax, minTriangles=5)
 t2 = time.time()
 print("Took {:.2f} milliseconds".format((t2 - t1) * 1000))
 
