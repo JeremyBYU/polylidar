@@ -1,11 +1,16 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(polylidar)
-include(CheckIPOSupported)
-check_ipo_supported(RESULT supported OUTPUT error)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -std=c++14 -Wno-narrowing -Wno-register -g")
+# include(CheckIPOSupported)
+# check_ipo_supported(RESULT supported OUTPUT error)
+
+set(CMAKE_CXX_STANDARD 14)
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native -march=native")
-set(CMAKE_BUILD_TYPE "Release")
 
 set(PROJECT_VERSION 0.0.8)
 set(POLYLIDAR_SRC "${PROJECT_SOURCE_DIR}/polylidar")

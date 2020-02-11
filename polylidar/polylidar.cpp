@@ -1,5 +1,4 @@
 #include "polylidar/polylidar.hpp"
-
 namespace polylidar
 {
 
@@ -667,7 +666,7 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
             auto &p3 = points_2D(p3_idx, 2);
             auto &p4 = points_2D(p4_idx, 2);
 
-            if (p1 > 0 && p2 > 0 and p3 > 0)
+            if (p1 > 0 && p2 > 0 && p3 > 0)
             {
                 triangles.push_back(p1_idx);
                 triangles.push_back(p2_idx);
@@ -675,7 +674,7 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
                 valid_tri[pix_cnt * 2] = tri_cnt;
                 tri_cnt++;
             }
-            if (p3 > 0 && p4 > 0 and p1 > 0)
+            if (p3 > 0 && p4 > 0 && p1 > 0)
             {
                 triangles.push_back(p3_idx);
                 triangles.push_back(p4_idx);

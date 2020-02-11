@@ -5,6 +5,7 @@
     @version 05/20/19 
 */
 #include <iostream>
+#include <sstream>      // std::istringstream
 #include <vector>
 #include <string>
 #include <fstream>

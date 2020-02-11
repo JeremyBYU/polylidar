@@ -8,6 +8,7 @@
 #include "polylidar/util.hpp"
 #include "delaunator.hpp"
 #include <cassert>
+#include <array>
 
 namespace polylidar {
 
