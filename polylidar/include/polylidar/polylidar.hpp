@@ -61,6 +61,8 @@
 
 // namespace py = pybind11;
 
+static std::array<double, 3> DEFAULT_DESIRED_VECTOR{{0,0,1}}; 
+
 namespace polylidar {
     using vvi = std::vector<std::vector<size_t>>;
     #ifdef PL_USE_STD_UNORDERED_MAP
@@ -89,7 +91,7 @@ namespace polylidar {
         double normThreshMin = DEFAULT_NORMTHRESH_MIN;
         // 4D configuration
         double allowedClass = DEFAULT_ALLOWEDCLASS;
-        std::array<double, 3> desiredVector = std::array<double, 3>{0.0, 0.0, 1.0};
+        std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR;
     };
 
     struct Polygon {

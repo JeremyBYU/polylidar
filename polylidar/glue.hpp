@@ -32,12 +32,12 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlane
                                                                                                      double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax = DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                                                                                      size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
                                                                                                      double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN,
-                                                                                                     double allowedClass = DEFAULT_ALLOWEDCLASS)
+                                                                                                     double allowedClass = DEFAULT_ALLOWEDCLASS, std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR)
 {
     // This function allows us to convert keyword arguments into a configuration struct
     auto info = vertices.request();
     std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
-    Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass};
+    Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass, desiredVector};
     Matrix<double> points((double *)info.ptr, shape[0], shape[1]);
     delaunator::HalfEdgeTriangulation triangulation(points, triangles, halfedges);
     return ExtractPlanesAndPolygonsFromMesh(triangulation, config);

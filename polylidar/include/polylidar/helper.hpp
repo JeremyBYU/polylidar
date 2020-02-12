@@ -26,6 +26,15 @@ struct ExtremePoint
 
 double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points);
 
+inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) {
+  return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+}
+
+//     Create rotation matrix given an axis and angle
+//     https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToMatrix/
+std::array<double, 9> axisAngleRotationMatrix(std::array<double, 3> axis, double angle);
+
+
 inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, double allowedClass)
 {
     auto &triangles = delaunay.triangles;
@@ -39,35 +48,28 @@ inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delauna
     return result;
 
 }
+
 inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
-                                double &diff, std::array<double, 3> &normal) {
+                                double &diff, std::array<double, 3> &normal, std::array<double, 3> &desiredVector) {
     auto &triangles = delaunay.triangles;
     // Get reference to point indices
     auto &pi0 = triangles[t * 3];
     auto &pi1 = triangles[t * 3 + 1];
     auto &pi2 = triangles[t * 3 + 2];
-    // get max Z dimension change in a triangle
-    auto zMin = std::min(std::min(points(pi0, 2), points(pi1, 2)), points(pi2, 2));
-    auto zMax = std::max(std::max(points(pi0, 2), points(pi1, 2)), points(pi2, 2));
-    diff = zMax - zMin;
 
     std::array<double, 3> vv1 = {points(pi0, 0),points(pi0, 1),points(pi0, 2)};
     std::array<double, 3> vv2 = {points(pi1, 0),points(pi1, 1),points(pi1, 2)};
     std::array<double, 3> vv3 = {points(pi2, 0),points(pi2, 1),points(pi2, 2)};
 
     // two lines of triangle
-    auto u1 = vv2[0] - vv1[0];
-    auto u2 = vv2[1] - vv1[1];
-    auto u3 = vv2[2] - vv1[2];
-
-    auto v1 = vv3[0] - vv1[0];
-    auto v2 = vv3[1] - vv1[1];
-    auto v3 = vv3[2] - vv1[2];
+    // V1 is starting index
+    std::array<double, 3> u{{vv2[0] - vv1[0], vv2[1] - vv1[1], vv2[2] - vv1[2]}};
+    std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
     // cross product
-    normal[0] = u2 * v3 - u3 * v2;
-    normal[1] = u3 * v1 - u1 * v3;
-    normal[2] = u1 * v2 - u2 * v1;
+    normal[0] = u[1] * v[2] - u[2] * v[1];
+    normal[1] = u[2] * v[0] - u[0] * v[2];
+    normal[2] = u[0] * v[1] - u[1] * v[0];
 
     auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
 
@@ -75,12 +77,18 @@ inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &del
     normal[1] /= norm;
     normal[2] /= norm;
 
+    // Calculate the noise amt from the desired vector
+    auto u_z = dotProduct3(u, desiredVector);
+    auto v_z = dotProduct3(v, desiredVector);
+    auto s_z = 0.0;
+
+    // get max dimension change in a triangle
+    auto zMin = std::min(std::min(u_z, v_z), s_z);
+    auto zMax = std::max(std::max(u_z, v_z), s_z);
+    diff = zMax - zMin;
+
 }
 
-
-inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) {
-  return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
-}
 
 inline double getMaxDimTriangle(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points) {
     auto pi0= delaunay.triangles[t * 3];

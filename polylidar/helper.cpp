@@ -8,6 +8,36 @@ namespace polylidar {
         return std::sqrt(a * a + b * b);
     }
 
+    std::array<double, 9> axisAngleRotationMatrix(std::array<double, 3> axis, double angle)
+    {
+        std::array<double, 9> rm{{1,0,0,
+                                0,1,0,
+                                0,0,1}};
+        // TODO Research what is the proper way to handle this
+        if (angle < 0.0001)
+            return rm;
+        auto c = cos(angle);
+        auto s = sin(angle);
+        auto t = 1 -c;
+        auto &x = axis[0];
+        auto &z = axis[1];
+        auto &y = axis[2];
+        // Creat matrix
+        rm[0] = t*x*x + c;
+        rm[1] = t*x*y - z*s;
+        rm[2] = t*x*z + y*s;
+
+        rm[3] = t*x*y + z*s;
+        rm[4] = t*y*y + c;
+        rm[5] = t*y*z - x*s;
+
+        rm[6] = t*x*z - y*s;
+        rm[7] = t*y*z + x*s;
+        rm[8] = t*z*z + c;
+
+        return rm;
+    }
+
     double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points){
         auto pa = delaunay.triangles[t * 3];
         auto pb = delaunay.triangles[t * 3 + 1];

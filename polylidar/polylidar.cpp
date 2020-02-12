@@ -1,4 +1,6 @@
 #include "polylidar/polylidar.hpp"
+
+
 namespace polylidar
 {
 
@@ -27,7 +29,7 @@ inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &dela
     double zDiff = 0.0;
     std::array<double, 3> normal;
     // get zDiff and normal of triangle
-    maxZChangeAndNormal(t, delaunay, points, zDiff, normal);
+    maxZChangeAndNormal(t, delaunay, points, zDiff, normal, config.desiredVector);
     // get dot product of triangle
     auto prod = std::abs(dotProduct3(normal, config.desiredVector));
 
@@ -83,7 +85,7 @@ void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
 
 void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                         polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash, polylidar::unordered_map<size_t, size_t> &edgeHash,
-                        ExtremePoint &xPoint)
+                        ExtremePoint &xPoint, Config &config)
 {
     auto &triangles = delaunay.triangles;
     auto &halfedges = delaunay.halfedges;
@@ -254,7 +256,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
 
     // 99.6% of the time inside extractConcaveHull is inside constructPointHash
     // auto before = std::chrono::high_resolution_clock::now();
-    constructPointHash(plane, delaunay, points, pointHash, edgeHash, xPoint);
+    constructPointHash(plane, delaunay, points, pointHash, edgeHash, xPoint, config);
     // auto after = std::chrono::high_resolution_clock::now();
     // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "ConstructPointHash - Total (ms): " << elapsed.count() << std::endl;
