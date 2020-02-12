@@ -21,8 +21,9 @@ set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helpe
 set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
 
 option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
-set(LIB_TYPE STATIC)
+option(WITH_PROFILE "Enable Profiling" ON)
 
+set(LIB_TYPE STATIC)
 add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
 if (PL_USE_ROBUST_PREDICATES)
@@ -36,12 +37,13 @@ if (PL_USE_ROBUST_PREDICATES)
 endif()
 
 
+
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC
-    $<BUILD_INTERFACE:${POLYLIDAR_INCLUDE_DIR}>
-    $<INSTALL_INTERFACE:include>
-    PRIVATE src)
+$<BUILD_INTERFACE:${POLYLIDAR_INCLUDE_DIR}>
+$<INSTALL_INTERFACE:include>
+PRIVATE src)
 
 set_target_properties(polylidar PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
@@ -50,4 +52,14 @@ set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILE
 add_executable(polylidar-simple ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple.cpp)
 target_link_libraries(polylidar-simple polylidar)
 target_include_directories(polylidar-simple PUBLIC ${POLYLIDAR_INCLUDE_DIR})
+if (WITH_PROFILE)
+    MESSAGE(STATUS "Building with Profiling Enabled")
+    set (Gperftools_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake/")
+    find_package(Gperftools REQUIRED)
+
+    add_executable(polylidar-profile ${POLYLIDAR_EXAMPLES_CPP_DIR}/profile.cpp)
+    target_link_libraries(polylidar-profile polylidar)
+    target_include_directories(polylidar-profile PUBLIC ${POLYLIDAR_INCLUDE_DIR})
+    target_link_libraries(polylidar-profile ${GPERFTOOLS_PROFILER})
+endif()
 

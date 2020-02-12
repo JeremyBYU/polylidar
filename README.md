@@ -133,13 +133,11 @@ What are the outputs?
 * polygons - This is a *list* of C++ `polygon` data structure.
 * polygon - This is a struct that has two fields: shell and holes. Shell is a *vector* of `ints`, where each int represents a *point* index. Holes is a list of a *vector* of `ints`. Each vector represents a hole in the polygon.
 
-
 ## Polylidar Use Cases
 
 * [Polylidar-RealSense](https://github.com/JeremyBYU/polylidar-realsense) - Live ground floor detection with Intel RealSense camera using Polylidar
 * [PolylidarWeb](https://github.com/JeremyBYU/polylidarweb). A Typescript (javascript) version with live demos.
 * [Concave-Evaluation](https://github.com/JeremyBYU/concavehull-evaluation) - Evaluates and benchmarks several competing concavehull algorithms.
-
 
 ## Credits
 

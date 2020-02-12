@@ -24,7 +24,6 @@ inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &dela
 
 inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
-    bool passZThresh = false;
     double zDiff = 0.0;
     std::array<double, 3> normal;
     // get zDiff and normal of triangle
@@ -32,10 +31,7 @@ inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &dela
     // get dot product of triangle
     auto prod = std::abs(dotProduct3(normal, config.desiredVector));
 
-    if (config.zThresh > 0 && zDiff < config.zThresh)
-    {
-        passZThresh = true;
-    }
+    bool passZThresh = config.zThresh > 0 && zDiff < config.zThresh;
 
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
@@ -65,10 +61,8 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     {
         bool valid2D = validateTriangle2D(t, delaunay, points, config);
         bool valid3D = validateTriangle3D(t, delaunay, points, config);
-        if (valid2D && valid3D)
-        {
-            triSet[t] = true;
-        }
+        triSet[t] = valid2D && valid3D;
+        // triSet[t] = points(delaunay.triangles[t *3], 2) < 100.0;
     }
 }
 
@@ -307,7 +301,7 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
     for (auto &&plane : planes)
     {
         Polygon poly = extractConcaveHull(plane, delaunay, points, config);
-        polygons.push_back(poly);
+        polygons.push_back(std::move(poly));
     }
     return polygons;
 }

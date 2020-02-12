@@ -42,16 +42,14 @@ inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delauna
 inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                                 double &diff, std::array<double, 3> &normal) {
     auto &triangles = delaunay.triangles;
-    std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
-    auto &pi0 = pis[0];
-    auto &pi1 = pis[1];
-    auto &pi2 = pis[2];
+    // Get reference to point indices
+    auto &pi0 = triangles[t * 3];
+    auto &pi1 = triangles[t * 3 + 1];
+    auto &pi2 = triangles[t * 3 + 2];
     // get max Z dimension change in a triangle
     auto zMin = std::min(std::min(points(pi0, 2), points(pi1, 2)), points(pi2, 2));
     auto zMax = std::max(std::max(points(pi0, 2), points(pi1, 2)), points(pi2, 2));
     diff = zMax - zMin;
-
-    
 
     std::array<double, 3> vv1 = {points(pi0, 0),points(pi0, 1),points(pi0, 2)};
     std::array<double, 3> vv2 = {points(pi1, 0),points(pi1, 1),points(pi1, 2)};
