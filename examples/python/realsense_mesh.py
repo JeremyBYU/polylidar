@@ -5,6 +5,7 @@ from os import path, listdir
 from os.path import exists, isfile, join, splitext
 import re
 import logging
+import pickle
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -212,7 +213,7 @@ def filter_and_create_open3d_polygons(points, polygons):
     return all_poly_lines
 
 
-def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]), poisson=dict(depth=8), callback=None):
+def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]), poisson=dict(depth=8), callback=None, stride=2):
     points = np.asarray(pcd.points)
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=100,
@@ -229,12 +230,13 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     callback(polylidar_alg_name, time_mesh_2d_polylidar, pcd, mesh_2d_polylidar)
     # Uniform Mesh Grid
     polylidar_inputs, timings = make_uniform_grid_mesh(np.asarray(
-        rgbd.depth), np.ascontiguousarray(intrinsics.intrinsic_matrix), extrinsics, stride=2)
+        rgbd.depth), np.ascontiguousarray(intrinsics.intrinsic_matrix), extrinsics, stride=stride)
     mesh_uniform_grid = create_open_3d_mesh(polylidar_inputs['triangles'], polylidar_inputs['vertices'])
     time_mesh_uniform = timings['mesh_creation']
     uniform_alg_name = 'Uniform Grid Mesh'
     callback(uniform_alg_name, time_mesh_uniform, pcd, mesh_uniform_grid)
     # Polylidar3D with Uniform Mesh Grid
+    # pickle.dump(polylidar_inputs, open('realsense_mesh.pkl', 'wb'))
     vertices = polylidar_inputs['vertices']
     triangles = polylidar_inputs['triangles']
     halfedges = polylidar_inputs['halfedges']
@@ -345,12 +347,12 @@ def main():
     for idx in range(len(color_files)):
         if idx < 3:
             continue
-        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics)
+        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
 
         logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])
-        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback)
+        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback, stride=2)
 
 
 if __name__ == "__main__":
