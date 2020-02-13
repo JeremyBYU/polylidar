@@ -157,17 +157,4 @@ all_poly_lines = filter_and_create_open3d_polygons(points, polygons, rm=rm)
 mesh_planes.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
 axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
 
-
-# polylidar_marker = o3d.geometry.TriangleMesh.create_icosahedron(0.05)
-# polylidar_marker.translate(points[418, :])
-
-# polylidar_marker2 = o3d.geometry.TriangleMesh.create_icosahedron(0.05)
-# polylidar_marker2.translate(points[427, :])
-# polylidar_marker2.paint_uniform_color([0, 1.0, 0])
-
-# polylidar_junction = o3d.geometry.TriangleMesh.create_icosahedron(0.02)
-# polylidar_junction.translate(points[442, :])
-# polylidar_junction.paint_uniform_color([1, 0, 0])
-
-
 o3d.visualization.draw_geometries([pcd, axis_frame, *mesh_planes])
