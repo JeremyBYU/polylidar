@@ -146,7 +146,7 @@ mesh.triangles = o3d.utility.Vector3iVector(np.reshape(triangles, (num_triangles
 halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
 
 desiredVector = [0, 0, 1]
-polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0, normThresh=0.98, desiredVector=desiredVector, normThreshMin=0.93, minHoleVertices=6)
+polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.06, normThresh=0.98, desiredVector=desiredVector, normThreshMin=0.93, minHoleVertices=6)
 planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
 # for poly in polygons:
 #     print(poly.shell)
