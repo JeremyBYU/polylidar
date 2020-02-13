@@ -4,8 +4,10 @@ import numpy as np
 from scipy import spatial
 from scipy.spatial.transform import Rotation as R
 from shapely.geometry import Polygon, JOIN_STYLE
+import logging
 
 IDENTITY = R.identity()
+logging.basicConfig(level=logging.DEBUG)
 
 def get_points(point_idxs, points):
     return points[point_idxs, :]
@@ -14,8 +16,8 @@ def get_points(point_idxs, points):
 def create_kd_tree(shell_coords, hole_coords):
     hole_coords.append(shell_coords)
     all_vertices = np.vstack(hole_coords)
-    # print("KD Tree Size: ", all_vertices.shape)
-    kd_tree = spatial.KDTree(all_vertices, leafsize=100)
+    logging.debug("KD Tree Size: %s", all_vertices.shape)
+    kd_tree = spatial.cKDTree(all_vertices, leafsize=10)
     return kd_tree
 
 
@@ -136,9 +138,9 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
             poly_shape = sorted(
                 all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
 
-        # print("Rotation: {:.2f}; Polygon Creation: {:.2f}; Simplify 1: {:.2f}; Positive Buffer: {:.2f}; Negative Buffer: {:.2f}; Simplify 2: {:.2f}".format(
-        #     (t1-t0) * 1000, (t2-t1) * 1000, (t4-t3) * 1000, (t5-t4) * 1000, (t6-t5) * 1000, (t7-t6) * 1000
-        # ))
+        logging.debug("Rotation: {:.2f}; Polygon Creation: {:.2f}; Simplify 1: {:.2f}; Positive Buffer: {:.2f}; Negative Buffer: {:.2f}; Simplify 2: {:.2f}".format(
+            (t1-t0) * 1000, (t2-t1) * 1000, (t4-t3) * 1000, (t5-t4) * 1000, (t6-t5) * 1000, (t7-t6) * 1000
+        ))
 
         # Its possible that our polygon has no broken into a multipolygon
         # Check for this situation and handle it
@@ -159,9 +161,9 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
                     t9 = time.perf_counter()
                     poly_shape = recover_3d(poly_shape, kd_tree, z_value)
                     t10 = time.perf_counter()
-                    # print("Create KD Tree: {:.2f}; Recover Polygon 3D Coordinates: {:.2f}".format(
-                    #     (t9-t8) * 1000, (t10-t9) * 1000
-                    # ))
+                    logging.debug("Create KD Tree: {:.2f}; Recover Polygon 3D Coordinates: {:.2f}".format(
+                        (t9-t8) * 1000, (t10-t9) * 1000
+                    ))
 
                 # Capture the polygon as well as its z height
                 new_plane_polygon = Polygon(shell=poly_shape.exterior)
@@ -177,6 +179,7 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
                             z_value = hole_lr.coords[0][2]
                             obstacles.append((hole_poly, z_value))
     if rm is not None:
+        t11 = time.perf_counter()
         rm_inv = rm.inv()
         for i, (poly, z_value) in enumerate(planes):
             points = np.asarray(poly.exterior)
@@ -187,4 +190,6 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
             points = np.asarray(poly.exterior)
             new_poly =  Polygon(rm_inv.apply(points))
             obstacles[i] = (new_poly, z_value)
+        t12 = time.perf_counter()
+        logging.debug("Revert Rotation and Create New Polygons: {:2f}".format((t12-t11) * 1000))
     return planes, obstacles
