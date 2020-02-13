@@ -7,7 +7,7 @@ from shapely.geometry import Polygon, JOIN_STYLE
 import logging
 
 IDENTITY = R.identity()
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 def get_points(point_idxs, points):
     return points[point_idxs, :]

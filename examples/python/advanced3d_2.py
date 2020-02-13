@@ -76,7 +76,7 @@ def filter_and_create_open3d_polygons(points, polygons, rm):
     return all_poly_lines
 
 
-def generate_point_cloud(max_size=100):
+def generate_point_cloud(max_size=200):
     np.random.seed(1)
     # generate random plane with hole
     # plane = generate_3d_plane(bounds_x=[0, max_size, 0.5], bounds_y=[0, max_size, 0.5], holes=[], #holes=[[[3, 5], [3, 5]]], 
@@ -106,7 +106,7 @@ def create_open3d_pc(points):
 points = generate_point_cloud()
 
 
-polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.2, normThresh=0.98, normThreshMin=0.95)
+polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.06, normThresh=0.98, normThreshMin=0.93, minHoleVertices=6)
 t1 = time.perf_counter()
 # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
 delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
@@ -114,9 +114,12 @@ t2 = time.perf_counter()
 print("Point Size: {}".format(points.shape[0]))
 print("2D Delaunay Triangulation and Plane Extraction; Mesh Creation {:.2f} milliseconds".format((t2 - t1) * 1000))
 
+
 # Visualize
 # Create Open3D Mesh
 mesh_planes = extract_mesh_planes(points, np.asarray(delaunay.triangles), planes)
+all_poly_lines = filter_and_create_open3d_polygons(points, polygons, rm=None)
+mesh_planes.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
 # Create Open 3D Point Cloud
 pcd = create_open3d_pc(points)
 o3d.visualization.draw_geometries([pcd, *mesh_planes])
@@ -142,14 +145,14 @@ triangles = np.ascontiguousarray(np.flip(np.asarray(mesh.triangles), 1)).flatten
 mesh.triangles = o3d.utility.Vector3iVector(np.reshape(triangles, (num_triangles, 3)))
 halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
 
-desiredVector = [1, 0, 0]
-polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.2/4, normThresh=0.98, desiredVector=desiredVector, normThreshMin=0.95, minHoleVertices=3)
+desiredVector = [0, 0, 1]
+polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0, normThresh=0.98, desiredVector=desiredVector, normThreshMin=0.93, minHoleVertices=6)
 planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
 # for poly in polygons:
 #     print(poly.shell)
 #     print(poly.holes)
 # Convert to Open3D Geometries
-rm, _ = R.align_vectors([[0,0, 1]], [[1, 0, 0]]) if desiredVector[2] == 0 else None
+rm, _ = R.align_vectors([[0,0, 1]], [[1, 0, 0]]) if desiredVector[2] == 0 else None, None
 mesh_planes = extract_mesh_planes(points, triangles, planes)
 all_poly_lines = filter_and_create_open3d_polygons(points, polygons, rm=rm)
 # print(all_poly_lines)
