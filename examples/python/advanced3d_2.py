@@ -1,5 +1,8 @@
 import time
 import math
+import warnings
+#ignore scipy warning
+warnings.filterwarnings("ignore", message="Optimal rotation is not uniquely or poorly defined ")
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -61,11 +64,14 @@ def extract_mesh_planes(points, triangles, planes, color=None):
         meshes.append(mesh)
     return meshes
 
-def filter_and_create_open3d_polygons(points, polygons):
+def filter_and_create_open3d_polygons(points, polygons, rm):
     " Apply polygon filtering algorithm, return Open3D Mesh Lines "
     config_pp = dict(filter=dict(hole_area=dict(min=0, max=10.0), hole_vertices=dict(min=3), plane_area=dict(min=0.0)),
-                     positive_buffer=0.00, negative_buffer=0.00, simplify=0.00)
-    planes, obstacles = filter_planes_and_holes(polygons, points, config_pp)
+                     positive_buffer=0.0, negative_buffer=0.15, simplify=0.1)
+    t0 = time.perf_counter()
+    planes, obstacles = filter_planes_and_holes(polygons, points, config_pp, rm=rm)
+    t1 = time.perf_counter()
+    print("Polygon Filtering took {:.2f}".format((t1-t0) * 1000))
     all_poly_lines = create_lines(planes, obstacles, line_radius=0.015)
     return all_poly_lines
 
@@ -73,22 +79,23 @@ def filter_and_create_open3d_polygons(points, polygons):
 def generate_point_cloud(max_size=100):
     np.random.seed(1)
     # generate random plane with hole
-    plane = generate_3d_plane(bounds_x=[0, max_size, 0.5], bounds_y=[0, max_size, 0.5], holes=[], #holes=[[[3, 5], [3, 5]]], 
-                            height_noise=0.05, planar_noise=0.02)
+    # plane = generate_3d_plane(bounds_x=[0, max_size, 0.5], bounds_y=[0, max_size, 0.5], holes=[], #holes=[[[3, 5], [3, 5]]], 
+    #                         height_noise=0.05, planar_noise=0.02)
     # Add double plane to simulate extra noise
     # plane2 = plane + [0.1, 0.1, 0.05]
     # plane = np.vstack((plane, plane2))
     # Generate top of box (causing the hole that we see)
-    box_top = generate_3d_plane(bounds_x=[3, 5, 0.2], bounds_y=[3, 5, 0.2], holes=[
-    ], height_noise=0.02, height=2, planar_noise=0.02)
+    box_top = generate_3d_plane(bounds_x=[3, max_size // 4, 0.2], bounds_y=[3, max_size // 4, 0.2], holes=[
+    ], height_noise=0.05/3, height=max_size // 4, planar_noise=0.02)
     # Generate side of box (causing the hole that we see)
-    box_side = generate_3d_plane(bounds_x=[0, 2, 0.2], bounds_y=[
-                                0, 2, 0.2], holes=[], height_noise=0.05, planar_noise=0.02)
+    box_side = generate_3d_plane(bounds_x=[0, max_size // 4, 0.2], bounds_y=[
+                                0, max_size //4 - 3, 0.2], holes=[], height_noise=0.05/3, planar_noise=0.01, height=3)
     rm = rotation_matrix([0,1,0], -math.pi/2.0)
     box_side = apply_rotation(rm, box_side) + [5, 3, 0]
     # box_side = r.apply(box_side) + [5, 3, 0]
     # All points joined together
-    points = np.ascontiguousarray(np.concatenate((plane, box_side, box_top)))
+    points = np.ascontiguousarray(np.concatenate((box_side, box_top)))
+    # points = np.ascontiguousarray(np.concatenate((plane, box_side, box_top)))
     return points
 
 def create_open3d_pc(points):
@@ -112,7 +119,7 @@ print("2D Delaunay Triangulation and Plane Extraction; Mesh Creation {:.2f} mill
 mesh_planes = extract_mesh_planes(points, np.asarray(delaunay.triangles), planes)
 # Create Open 3D Point Cloud
 pcd = create_open3d_pc(points)
-# o3d.visualization.draw_geometries([pcd, *mesh_planes])
+o3d.visualization.draw_geometries([pcd, *mesh_planes])
 
 # Estimate Point Cloud Normals
 t0 = time.perf_counter()
@@ -125,7 +132,7 @@ mesh.paint_uniform_color(COLOR_PALETTE[0])
 t2 = time.perf_counter()
 print("3D Triangulation using Ball Pivot: Normal Estimation took: {:.2f}, Mesh Creation: {:.2f}".format((t1-t0) * 1000,(t2-t1) * 1000))
 # Visualize
-# o3d.visualization.draw_geometries([pcd, mesh])
+o3d.visualization.draw_geometries([pcd, mesh])
 
 print("Sending Mesh to Polylidar to Extract Planes")
 num_triangles = np.asarray(mesh.triangles).shape[0]
@@ -135,16 +142,17 @@ triangles = np.ascontiguousarray(np.flip(np.asarray(mesh.triangles), 1)).flatten
 mesh.triangles = o3d.utility.Vector3iVector(np.reshape(triangles, (num_triangles, 3)))
 halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
 
-
-polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.15, normThresh=0.98, desiredVector=[1, 0, 0], normThreshMin=0.95)
+desiredVector = [1, 0, 0]
+polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.2/4, normThresh=0.98, desiredVector=desiredVector, normThreshMin=0.95, minHoleVertices=3)
 planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
-for poly in polygons:
-    print(poly.shell)
-    print(poly.holes)
+# for poly in polygons:
+#     print(poly.shell)
+#     print(poly.holes)
 # Convert to Open3D Geometries
+rm, _ = R.align_vectors([[0,0, 1]], [[1, 0, 0]]) if desiredVector[2] == 0 else None
 mesh_planes = extract_mesh_planes(points, triangles, planes)
-all_poly_lines = filter_and_create_open3d_polygons(points, polygons)
-print(all_poly_lines)
+all_poly_lines = filter_and_create_open3d_polygons(points, polygons, rm=rm)
+# print(all_poly_lines)
 
 mesh_planes.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
 axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
