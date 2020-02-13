@@ -40,14 +40,14 @@ inline double dotProduct3(const std::array<double, 3> &v1, const std::array<doub
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
-inline void crossProduct3(const std::array<double, 3> &u, const std::array<double, 3> &v, std::array<double, 3> &normal) {
+inline void crossProduct3(const std::array<double, 3> &u, const std::array<double, 3> &v, double *normal) {
     // cross product
     normal[0] = u[1] * v[2] - u[2] * v[1];
     normal[1] = u[2] * v[0] - u[0] * v[2];
     normal[2] = u[0] * v[1] - u[1] * v[0];
 }
 
-inline void normalize3(std::array<double, 3> &normal) {
+inline void normalize3(double *normal) {
     auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
     normal[0] /= norm;
     normal[1] /= norm;
@@ -95,9 +95,9 @@ inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &del
     std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
     // cross product
-    crossProduct3(u, v, normal);
+    crossProduct3(u, v, normal.data());
     // normalize
-    normalize3(normal);
+    normalize3(normal.data());
 
 
     // Calculate the noise amt from the desired vector
@@ -266,6 +266,8 @@ inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<siz
     }
 
 }
+
+std::vector<double> ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles);
 
 }
 

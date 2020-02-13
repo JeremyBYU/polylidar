@@ -41,8 +41,8 @@ namespace polylidar {
     std::tuple<std::array<double, 3>, double> axisAngleFromVectors(const std::array<double, 3> &v1, const std::array<double, 3> &v2)
     {
         std::array<double, 3> axis;
-        crossProduct3(v1, v2, axis);
-        normalize3(axis);
+        crossProduct3(v1, v2, axis.data());
+        normalize3(axis.data());
         double angle = acos(dotProduct3(v1, v2));
 
         return std::make_tuple(axis, angle);
@@ -118,6 +118,36 @@ namespace polylidar {
         os << "xr_he" << values.xr_he << " xr_pi" << values.xr_pi << " xr_val" << values.xr_val;
 
         return os;
+    }
+
+    std::vector<double> ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles)
+    {
+        auto num_triangles = static_cast<size_t>(triangles.size() / 3);
+        std::vector<double> triangle_normals(num_triangles * 3);
+
+        for (size_t i = 0; i < triangles.size(); i+=3) {
+            auto &pi0 = triangles[i];
+            auto &pi1 = triangles[i+1];
+            auto &pi2 = triangles[i+2];
+
+            std::array<double, 3> vv1 = {vertices(pi0, 0),vertices(pi0, 1),vertices(pi0, 2)};
+            std::array<double, 3> vv2 = {vertices(pi1, 0),vertices(pi1, 1),vertices(pi1, 2)};
+            std::array<double, 3> vv3 = {vertices(pi2, 0),vertices(pi2, 1),vertices(pi2, 2)};
+
+            // two lines of triangle
+            // V1 is starting index
+            std::array<double, 3> u{{vv2[0] - vv1[0], vv2[1] - vv1[1], vv2[2] - vv1[2]}};
+            std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
+
+            // cross product
+            crossProduct3(u, v, &triangle_normals[i]);
+            // normalize
+            normalize3(&triangle_normals[i]);
+            
+            // triangle_normals_[i] = v01.cross(v02);
+        }
+
+        return triangle_normals;
     }
 
 }

@@ -206,8 +206,8 @@ def prep_mesh(mesh):
 
 def filter_and_create_open3d_polygons(points, polygons):
     " Apply polygon filtering algorithm, return Open3D Mesh Lines "
-    config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=0.785), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
-                     positive_buffer=0.01, negative_buffer=0.03, simplify=0.02)
+    config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
+                     positive_buffer=0.00, negative_buffer=0.02, simplify=0.01)
     planes, obstacles = filter_planes_and_holes(polygons, points, config_pp)
     all_poly_lines = create_lines(planes, obstacles, line_radius=0.01)
     return all_poly_lines
@@ -347,12 +347,12 @@ def main():
     for idx in range(len(color_files)):
         if idx < 3:
             continue
-        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
+        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=3)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
 
         logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])
-        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback, stride=2)
+        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback, stride=3)
 
 
 if __name__ == "__main__":

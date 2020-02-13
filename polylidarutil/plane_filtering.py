@@ -131,7 +131,7 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
             # poly_shape = poly_shape.buffer(distance=config_pp['negative_buffer'], resolution=4)
         if config_pp['simplify']:
             poly_shape = poly_shape.simplify(
-                tolerance=config_pp['simplify'], preserve_topology=False)
+                tolerance=config_pp['simplify'], preserve_topology=True) # False makes fast, but can cause invalid polygons
         t7 = time.perf_counter()
         if poly_shape.geom_type == 'MultiPolygon':
             all_poly_shapes = list(poly_shape.geoms)

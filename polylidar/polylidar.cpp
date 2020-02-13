@@ -536,13 +536,15 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
     size_t cols_stride = ceil(cols / float(stride));
     size_t rows_stride = ceil(rows / float(stride));
     points.resize(cols_stride * rows_stride * 3);
-    size_t pnt_cnt = 0;
+    // size_t pnt_cnt = 0;
+    // #pragma omp parallel for schedule(static) // no speedup??
     for (size_t i = 0; i < rows; i += stride)
     {
         for (size_t j = 0; j < cols; j += stride)
         {
-            deproject_points(i, j, im(i, j), intrinsics, points[pnt_cnt * 3], points[pnt_cnt * 3 + 1], points[pnt_cnt * 3 + 2]);
-            pnt_cnt++;
+            size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
+            deproject_points(i, j, im(i, j), intrinsics, points[p_idx], points[p_idx + 1], points[p_idx + 2]);
+            // pnt_cnt++;
         }
     }
     // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
@@ -561,9 +563,11 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
     // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
     size_t cols_tris = cols_stride - 1;
     size_t rows_tris = rows_stride - 1;
-
+    // #pragma omp parallel for schedule(static) // No speedup, tried many settings
     for (size_t i = 0; i < rows_tris; i++)
     {
+        // int tid = omp_get_thread_num();
+        // std::cout << "Hello from " << tid << std::endl;
         for (size_t j = 0; j < cols_tris; j++)
         {
             // These are the triangle indexes in the global full mesh
@@ -709,12 +713,24 @@ std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> Extrac
 {
     std::vector<size_t> triangles;
     std::vector<size_t> valid_tri;
+    auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics, stride);
+    auto t1 = std::chrono::high_resolution_clock::now();
+    float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(t1 - t0).count() * 1e-3;
+    std::cout << "Point Cloud Extraction took " << elapsed_d << " milliseconds" << std::endl;
     std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points, stride);
+    auto t2 = std::chrono::high_resolution_clock::now();
+    elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count() * 1e-3;
+    std::cout << "Create Uniform Mesh took " << elapsed_d << " milliseconds" << std::endl;
     std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(im.rows, im.cols, triangles, valid_tri, stride);
+    auto t3 = std::chrono::high_resolution_clock::now();
+    elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(t3 - t2).count() * 1e-3;
+    std::cout << "Extract Half Edge took " << elapsed_d << " milliseconds" << std::endl;
 
     // std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
 }
+
+
 
 } // namespace polylidar

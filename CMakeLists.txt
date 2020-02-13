@@ -24,6 +24,7 @@ option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
 option(WITH_PROFILE "Enable Profiling" ON)
 
 set(LIB_TYPE STATIC)
+
 add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
 if (PL_USE_ROBUST_PREDICATES)
@@ -36,7 +37,8 @@ if (PL_USE_ROBUST_PREDICATES)
     # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 endif()
 
-
+find_package(OpenMP)
+target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
 
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
 
