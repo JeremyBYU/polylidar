@@ -12,6 +12,7 @@ from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, 
 from polylidarutil.open3d_util import construct_grid, create_lines, flatten
 
 from scipy.spatial import Delaunay
+from scipy.spatial.transform import Rotation as R
 from scipy.stats import describe
 import open3d as o3d
 
@@ -62,14 +63,14 @@ def extract_mesh_planes(points, triangles, planes, color=None):
 
 def filter_and_create_open3d_polygons(points, polygons):
     " Apply polygon filtering algorithm, return Open3D Mesh Lines "
-    config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=10.0), hole_vertices=dict(min=3), plane_area=dict(min=0.5)),
-                     positive_buffer=0.01, negative_buffer=0.03, simplify=0.02)
+    config_pp = dict(filter=dict(hole_area=dict(min=0, max=10.0), hole_vertices=dict(min=3), plane_area=dict(min=0.0)),
+                     positive_buffer=0.00, negative_buffer=0.00, simplify=0.00)
     planes, obstacles = filter_planes_and_holes(polygons, points, config_pp)
-    all_poly_lines = create_lines(planes, obstacles, line_radius=0.01)
+    all_poly_lines = create_lines(planes, obstacles, line_radius=0.015)
     return all_poly_lines
 
 
-def generate_point_cloud(max_size=10):
+def generate_point_cloud(max_size=100):
     np.random.seed(1)
     # generate random plane with hole
     plane = generate_3d_plane(bounds_x=[0, max_size, 0.5], bounds_y=[0, max_size, 0.5], holes=[], #holes=[[[3, 5], [3, 5]]], 
@@ -97,7 +98,8 @@ def create_open3d_pc(points):
 
 points = generate_point_cloud()
 
-polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=20, zThresh=0.2, normThresh=0.98, normThreshMin=0.95)
+
+polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.2, normThresh=0.98, normThreshMin=0.95)
 t1 = time.perf_counter()
 # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
 delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
@@ -110,7 +112,7 @@ print("2D Delaunay Triangulation and Plane Extraction; Mesh Creation {:.2f} mill
 mesh_planes = extract_mesh_planes(points, np.asarray(delaunay.triangles), planes)
 # Create Open 3D Point Cloud
 pcd = create_open3d_pc(points)
-o3d.visualization.draw_geometries([pcd, *mesh_planes])
+# o3d.visualization.draw_geometries([pcd, *mesh_planes])
 
 # Estimate Point Cloud Normals
 t0 = time.perf_counter()
@@ -123,17 +125,41 @@ mesh.paint_uniform_color(COLOR_PALETTE[0])
 t2 = time.perf_counter()
 print("3D Triangulation using Ball Pivot: Normal Estimation took: {:.2f}, Mesh Creation: {:.2f}".format((t1-t0) * 1000,(t2-t1) * 1000))
 # Visualize
-o3d.visualization.draw_geometries([pcd, mesh])
+# o3d.visualization.draw_geometries([pcd, mesh])
 
 print("Sending Mesh to Polylidar to Extract Planes")
+num_triangles = np.asarray(mesh.triangles).shape[0]
 vertices = np.asarray(mesh.vertices)
-triangles = np.ascontiguousarray(np.asarray(mesh.triangles)).flatten()
+# triangles produced by open3d are in counter clockwise order, polylidar expects clockwise
+triangles = np.ascontiguousarray(np.flip(np.asarray(mesh.triangles), 1)).flatten()
+mesh.triangles = o3d.utility.Vector3iVector(np.reshape(triangles, (num_triangles, 3)))
 halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
 
-polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=20, zThresh=0.15, normThresh=0.98, desiredVector=[1, 0, 0], normThreshMin=0.95)
+
+polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.15, normThresh=0.98, desiredVector=[1, 0, 0], normThreshMin=0.95)
 planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
-mesh_planes = extract_mesh_planes(points, np.asarray(mesh.triangles), planes)
+for poly in polygons:
+    print(poly.shell)
+    print(poly.holes)
+# Convert to Open3D Geometries
+mesh_planes = extract_mesh_planes(points, triangles, planes)
 all_poly_lines = filter_and_create_open3d_polygons(points, polygons)
+print(all_poly_lines)
 
 mesh_planes.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
-o3d.visualization.draw_geometries([pcd, *mesh_planes])
+axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
+
+
+# polylidar_marker = o3d.geometry.TriangleMesh.create_icosahedron(0.05)
+# polylidar_marker.translate(points[418, :])
+
+# polylidar_marker2 = o3d.geometry.TriangleMesh.create_icosahedron(0.05)
+# polylidar_marker2.translate(points[427, :])
+# polylidar_marker2.paint_uniform_color([0, 1.0, 0])
+
+# polylidar_junction = o3d.geometry.TriangleMesh.create_icosahedron(0.02)
+# polylidar_junction.translate(points[442, :])
+# polylidar_junction.paint_uniform_color([1, 0, 0])
+
+
+o3d.visualization.draw_geometries([pcd, axis_frame, *mesh_planes])

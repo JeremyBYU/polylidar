@@ -79,7 +79,7 @@ def filter_planes_and_holes(polygons, points, config_pp):
         poly_shape = Polygon(shell=shell_coords, holes=hole_coords)
         area = poly_shape.area
         # logging.info("Got a plane!")
-        if area < post_filter['plane_area']['min']:
+        if post_filter['plane_area']['min'] and area < post_filter['plane_area']['min']:
             # logging.info("Skipping Plane")
             continue
         z_value = shell_coords[0][2]
@@ -114,7 +114,7 @@ def filter_planes_and_holes(polygons, points, config_pp):
         for poly_shape in all_poly_shapes:
             area = poly_shape.area
             # logging.info("Plane is big enough still")
-            if area >= post_filter['plane_area']['min']:
+            if post_filter['plane_area']['min'] <= 0 or area >= post_filter['plane_area']['min']:
                 # logging.info("Plane is big enough still")
                 if config_pp['negative_buffer'] or config_pp['simplify'] or config_pp['positive_buffer']:
                     # convert back to 3D coordinates
@@ -131,7 +131,7 @@ def filter_planes_and_holes(polygons, points, config_pp):
                         hole_poly = Polygon(shell=hole_lr)
                         area = hole_poly.area
                         # filter by area
-                        if area >= post_filter['hole_area']['min'] and area < post_filter['hole_area']['max']:
+                        if post_filter['hole_area']['min'] <= 0.0 or area >= post_filter['hole_area']['min'] and area < post_filter['hole_area']['max']:
                             z_value = hole_lr.coords[0][2]
                             obstacles.append((hole_poly, z_value))
     return planes, obstacles

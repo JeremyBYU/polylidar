@@ -50,6 +50,7 @@
 #define DEFAULT_NORMTHRESH_MIN 0.1
 #define DEFAULT_ALLOWEDCLASS 4.0
 #define DEFAULT_STRIDE 2
+#define EPS_RADIAN 0.001
 
 #define DEBUG 1
 
@@ -60,8 +61,8 @@
 #endif
 
 // namespace py = pybind11;
-
-static std::array<double, 3> DEFAULT_DESIRED_VECTOR{{0,0,1}}; 
+const static std::array<double, 3> DEFAULT_DESIRED_VECTOR{{0,0,1}}; 
+const static std::array<double, 9> DEFAULT_IDENTITY_RM{{1,0,0,0,1,0,0,0,1}}; 
 
 namespace polylidar {
     using vvi = std::vector<std::vector<size_t>>;
@@ -73,7 +74,8 @@ namespace polylidar {
     using unordered_map = phmap::flat_hash_map<T,G>;
     #endif
 
-    const std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+    const static std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+    const static std::array<double, 2> DOWN_VECTOR = {0.0, -1.0};
     
     struct Config
     {
@@ -91,7 +93,10 @@ namespace polylidar {
         double normThreshMin = DEFAULT_NORMTHRESH_MIN;
         // 4D configuration
         double allowedClass = DEFAULT_ALLOWEDCLASS;
+        // extra needed for 3D
         std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR;
+        std::array<double, 9> rotationMatrix = DEFAULT_IDENTITY_RM;
+        bool needRotation = false;
     };
 
     struct Polygon {

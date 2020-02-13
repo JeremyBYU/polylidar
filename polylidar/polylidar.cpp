@@ -134,7 +134,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangul
                 edgeHash[heIndex] = heIndex;
                 // get point index of this half edge, this is an edge leaving from this pi
                 auto pi = triangles[heIndex];
-                trackExtremePoint(pi, points, xPoint, heIndex);
+                trackExtremePoint(pi, points, xPoint, heIndex, config.rotationMatrix, config.needRotation);
                 // Check if the point has already been indexed
                 if (pointHash.find(pi) == pointHash.end())
                 {
@@ -155,7 +155,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangul
 std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash,
                                    polylidar::unordered_map<size_t, size_t> &edgeHash,
                                    delaunator::HalfEdgeTriangulation &delaunay,
-                                   size_t startEdge, size_t stopPoint,
+                                   size_t startEdge, size_t stopPoint, Config &config,
                                    bool isHole)
 {
 
@@ -210,8 +210,12 @@ std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<
         else
         {
             // We have a junction of outgoing edges at this point
-            auto newEdge = getHullEdge(workingEdge, nextEdges, delaunay, isHole);
-            workingEdge = newEdge;
+            // std::cout << "Multiple Outgoing Edges. At Working Edge: " << workingEdge << "; At nextPi: " << nextPi << std::endl;
+            auto workingEdgeVector = getVector(workingEdge, delaunay, config.rotationMatrix, config.needRotation, true);
+            // std::cout << "Working Edge Vector " << PL_PRINT_ARRAY2(workingEdgeVector) << std::endl;
+            workingEdge = getHullEdge(workingEdgeVector, nextEdges, delaunay, config.rotationMatrix, config.needRotation, isHole);
+            // workingEdge = newEdge;
+            // std::cout << "New Edge: " << newEdge << "; Next PI will be: " << triangles[newEdge] << std::endl;
         }
     }
 
@@ -220,7 +224,7 @@ std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<
 
 std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<size_t, std::vector<size_t>> pointHash,
                                                       polylidar::unordered_map<size_t, size_t> edgeHash,
-                                                      delaunator::HalfEdgeTriangulation &delaunay)
+                                                      delaunator::HalfEdgeTriangulation &delaunay, Config &config)
 {
     std::vector<std::vector<size_t>> allHoles;
     auto &triangles = delaunay.triangles;
@@ -234,7 +238,7 @@ std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<s
         auto startEdge = std::begin(edgeHash)->first;
         // auto startingPointIndex = triangles[startEdge];
         auto stopPoint = triangles[startEdge];
-        auto hole = concaveSection(pointHash, edgeHash, delaunay, startEdge, stopPoint, false);
+        auto hole = concaveSection(pointHash, edgeHash, delaunay, startEdge, stopPoint, config, false);
         if (hole.size() > 0)
         {
             allHoles.push_back(hole);
@@ -274,17 +278,19 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
     auto &nextEdges = pointHash[xPoint.xr_pi];
     if (nextEdges.size() > 1)
     {
+        // std::cout << "Starting half edge has a hole on it " << std::endl;
         // std::cout << "Right extreme point is connected to a hole. Determining correct edge..." << std::endl;
         // std::cout << "xPoint: " << xPoint << std::endl;
         // std::cout << "Plane size: " << plane.size() << std::endl;
         // std::cout << "Point Hash size: " << pointHash.size() << std::endl;
         // std::cout << "Edge Hash size: " << edgeHash.size() << std::endl;
-        startingHalfEdge = getHullEdgeStart(polylidar::UP_VECTOR, nextEdges, delaunay, false);
+        startingHalfEdge = getHullEdge(polylidar::UP_VECTOR, nextEdges, delaunay, config.rotationMatrix, config.needRotation, false);
     }
     auto startingPointIndex = xPoint.xr_pi;
+    // std::cout << "Staring point index " << startingPointIndex << std::endl;;
     auto stopPoint = startingPointIndex;
-    auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, false);
-    auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay);
+    auto shell = concaveSection(pointHash, edgeHash, delaunay, startingHalfEdge, stopPoint, config, false);
+    auto holes = extractInteriorHoles(pointHash, edgeHash, delaunay, config);
 
     holes.erase(std::remove_if(holes.begin(), holes.end(),
                                [&config](std::vector<size_t> &hole) { return hole.size() < config.minHoleVertices; }),
@@ -416,10 +422,25 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // nparray2D is a contigious buffer of (ROWS,2)
 }
 
+
 std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
 {
     auto &vertices = triangulation.coords;
     config.dim = vertices.cols;
+    // Create rotation matrix
+    std::array<double,3> axis;
+    double angle;
+    // std::cout << "Normal to Extract: " << PL_PRINT_ARRAY(config.desiredVector) << "; Z Axis: " << PL_PRINT_ARRAY(DEFAULT_DESIRED_VECTOR) << std::endl;
+    std::tie(axis, angle) = axisAngleFromVectors(config.desiredVector, DEFAULT_DESIRED_VECTOR);
+    if (std::abs(angle) > EPS_RADIAN)
+    {
+        config.needRotation = true;
+        config.rotationMatrix = axisAngleToRotationMatrix(axis, angle);
+    }
+    // std::cout << "Axis: " << PL_PRINT_ARRAY(axis) <<  "; angle: " << angle << std::endl;
+    // print_matrix(config.rotationMatrix);
+
+
     auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, vertices, config);
     auto t1 = std::chrono::high_resolution_clock::now();

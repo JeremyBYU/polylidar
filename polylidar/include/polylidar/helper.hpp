@@ -10,6 +10,9 @@
 #include <cassert>
 #include <array>
 
+#define PL_PRINT_ARRAY(a)  a[0] << ", " << a[1] << ", "  << a[2]
+#define PL_PRINT_ARRAY2(a)  a[0] << ", " << a[1]
+
 namespace polylidar {
 
 
@@ -24,15 +27,40 @@ struct ExtremePoint
 
 };
 
+inline void print_matrix(std::array<double, 9> &mat)
+{
+    std::cout<< mat[0] << ", " << mat[1] << ", "  << mat[2] << ", " << std::endl;
+    std::cout<< mat[3] << ", " << mat[4] << ", "  << mat[5] << ", " << std::endl;
+    std::cout<< mat[6] << ", " << mat[7] << ", "  << mat[8] << ", " << std::endl;
+}
+
 double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points);
 
-inline double dotProduct3(std::array<double, 3> &v1, std::array<double, 3> &v2) {
-  return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+inline double dotProduct3(const std::array<double, 3> &v1, const std::array<double, 3> &v2) {
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+}
+
+inline void crossProduct3(const std::array<double, 3> &u, const std::array<double, 3> &v, std::array<double, 3> &normal) {
+    // cross product
+    normal[0] = u[1] * v[2] - u[2] * v[1];
+    normal[1] = u[2] * v[0] - u[0] * v[2];
+    normal[2] = u[0] * v[1] - u[1] * v[0];
+}
+
+inline void normalize3(std::array<double, 3> &normal) {
+    auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+    normal[0] /= norm;
+    normal[1] /= norm;
+    normal[2] /= norm;
 }
 
 //     Create rotation matrix given an axis and angle
 //     https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToMatrix/
-std::array<double, 9> axisAngleRotationMatrix(std::array<double, 3> axis, double angle);
+std::array<double, 9> axisAngleToRotationMatrix(const std::array<double, 3> &axis, const double angle);
+// Create Axis Angle
+std::tuple<std::array<double, 3>, double> axisAngleFromVectors(const std::array<double, 3> &v1, const std::array<double, 3> &v2);
+// Rotate Vector
+std::array<double, 3> rotateVector(const double *v1, const std::array<double, 9> &rm);
 
 
 inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, double allowedClass)
@@ -67,15 +95,10 @@ inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &del
     std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
     // cross product
-    normal[0] = u[1] * v[2] - u[2] * v[1];
-    normal[1] = u[2] * v[0] - u[0] * v[2];
-    normal[2] = u[0] * v[1] - u[1] * v[0];
+    crossProduct3(u, v, normal);
+    // normalize
+    normalize3(normal);
 
-    auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
-
-    normal[0] /= norm;
-    normal[1] /= norm;
-    normal[2] /= norm;
 
     // Calculate the noise amt from the desired vector
     auto u_z = dotProduct3(u, desiredVector);
@@ -127,16 +150,21 @@ double norm(double a, double b);
 std::ostream& operator<<(std::ostream& os, const std::array<double, 2ul>& values);
 std::ostream& operator<<(std::ostream& os, const std::vector<double>& values);
 
-inline void trackExtremePoint(size_t pi, Matrix<double> &points, ExtremePoint &exPoint, size_t he){
-    if (points(pi,0) > exPoint.xr_val) {
+inline void trackExtremePoint(size_t pi, Matrix<double> &points, ExtremePoint &exPoint, size_t he, std::array<double, 9> &rm, bool &need_rotation){
+    double x_val = points(pi, 0);
+    if (need_rotation)
+    {
+        auto rotated_point = rotateVector(&points(pi,0), rm);
+        x_val = rotated_point[0];
+    }
+    
+    if (x_val > exPoint.xr_val) {
+        // std::cout<< "Updating extreme point" << std::endl;
         exPoint.xr_he = he;
         exPoint.xr_pi = pi;
-        exPoint.xr_val = points(pi, 0);
-    } else if(points(pi,1) < exPoint.xl_val) {
-        exPoint.xl_he = he;
-        exPoint.xl_pi = pi;
-        exPoint.xl_val = points(pi, 1);
+        exPoint.xr_val = x_val;
     }
+
 }
 
 inline size_t fast_mod(const size_t i, const size_t c) {
@@ -148,16 +176,36 @@ inline size_t nextHalfedge(size_t e) {
   return fast_mod(e, 3) == 2 ? e - 2 : e + 1;
 }
 
-inline std::array<double, 2> getVector(size_t edge, delaunator::HalfEdgeTriangulation &delaunay, bool flip=false ){
+inline std::array<double, 2> getVector(size_t edge, delaunator::HalfEdgeTriangulation &delaunay, 
+                                       std::array<double, 9> &rm, bool &need_rotation, bool flip=false ){
     auto &coords = delaunay.coords;
     auto &triangles = delaunay.triangles;
+    auto pi = triangles[edge];
+    auto piNext = triangles[nextHalfedge(edge)];
+    
+    // Points projected on 2D plane, assumes normal is [0,0,1]
+    std::array<double, 2> p0 = {coords(pi, 0_z), coords(pi, 1_z)};
+    std::array<double, 2> p1 = {coords(piNext, 0_z), coords(piNext, 1_z)};
     std::array<double, 2> result;
 
-    auto pi = triangles[edge];
-    std::array<double, 2> p0 = {coords(pi, 0_z), coords(pi, 1_z)};
+    // Check if points need to be projected onto a different plane
+    if (need_rotation)
+    {
+        // std::cout<< "rotating points for edge: " << edge << std::endl;
+        // print_matrix(rm);
+        auto rotated_point = rotateVector(&coords(pi,0), rm);
+        // std::cout<< "p0 before: " << PL_PRINT_ARRAY2(p0) << std::endl;
+        p0[0] = rotated_point[0];
+        p0[1] = rotated_point[1];
+        // std::cout<< "p0 after: " << PL_PRINT_ARRAY2(p0) << std::endl;
+        auto rotated_point_2 = rotateVector(&coords(piNext,0), rm);
+        // std::cout<< "p1 before: " << PL_PRINT_ARRAY2(p1) << std::endl;
+        p1[0] = rotated_point_2[0];
+        p1[1] = rotated_point_2[1];
+        // std::cout<< "p1 after: " << PL_PRINT_ARRAY2(p1) << std::endl;
+    }
 
-    auto piNext = triangles[nextHalfedge(edge)];
-    std::array<double, 2> p1 = {coords(piNext, 0_z), coords(piNext, 1_z)};
+
     if (flip) {
         result[0] = p0[0] - p1[0];
         result[1] = p0[1] - p1[1];
@@ -187,46 +235,14 @@ inline double get360Angle(const std::array<double, 2> &v1, const std::array<doub
 }
 
 
-inline size_t getHullEdge(size_t &incomingEdge, std::vector<size_t> &outgoingEdges,  delaunator::HalfEdgeTriangulation &delaunay, bool isHole=false)
-{
-    auto v1 = getVector(incomingEdge, delaunay, true);
-    // std::cout << "v1: " << v1 << std::endl; 
-    std::vector<std::array<double, 2>> otherVectors;
-    // Gosh everything is so verbose with c++, even with the c11+ stdlib
-    std::transform(outgoingEdges.begin(), outgoingEdges.end(), std::back_inserter(otherVectors), 
-                    [&delaunay](size_t edge) -> std::array<double,2> {return getVector(edge, delaunay, false);});
-
-    // for (auto &&vecs : otherVectors) {
-    //     std::cout << "other vec " << vecs << std::endl;
-    // }
-    
-    std::vector<double> angleDist;
-    std::transform(otherVectors.begin(), otherVectors.end(), std::back_inserter(angleDist), 
-                [&v1](std::array<double,2> &outVector) -> double {return get360Angle(v1, outVector);});
-    
-    // for (auto &&angle : angleDist) {
-    //     std::cout << "angle " << angle << std::endl;
-    // }
-
-    // YOUR SELECTING ANGLE
-    if (isHole) {
-        auto min_pos = std::distance(angleDist.begin(),std::min_element(angleDist.begin(),angleDist.end()));
-        return outgoingEdges[min_pos];
-    } else {
-        auto max_pos = std::distance(angleDist.begin(),std::max_element(angleDist.begin(),angleDist.end()));
-        return outgoingEdges[max_pos];
-    }
-
-}
-
-
-inline size_t getHullEdgeStart(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges,  delaunator::HalfEdgeTriangulation &delaunay, bool isHole=false)
+inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges, delaunator::HalfEdgeTriangulation &delaunay, 
+                          std::array<double, 9> &rm, bool &need_rotation, bool isHole=false)
 {
     // std::cout << "v1: " << v1 << std::endl; 
     std::vector<std::array<double, 2>> otherVectors;
     // Gosh everything is so verbose with c++, even with the c11+ stdlib
     std::transform(outgoingEdges.begin(), outgoingEdges.end(), std::back_inserter(otherVectors), 
-                    [&delaunay](size_t edge) -> std::array<double,2> {return getVector(edge, delaunay, false);});
+                    [&delaunay, &rm, &need_rotation](size_t edge) -> std::array<double,2> {return getVector(edge, delaunay, rm, need_rotation, false);});
 
     // for (auto &&vecs : otherVectors) {
     //     std::cout << "other vec " << vecs << std::endl;

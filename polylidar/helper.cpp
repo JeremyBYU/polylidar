@@ -8,20 +8,20 @@ namespace polylidar {
         return std::sqrt(a * a + b * b);
     }
 
-    std::array<double, 9> axisAngleRotationMatrix(std::array<double, 3> axis, double angle)
+    std::array<double, 9> axisAngleToRotationMatrix(const std::array<double, 3> &axis, const double angle)
     {
         std::array<double, 9> rm{{1,0,0,
                                 0,1,0,
                                 0,0,1}};
         // TODO Research what is the proper way to handle this
-        if (angle < 0.0001)
+        if (std::abs(angle) < EPS_RADIAN)
             return rm;
         auto c = cos(angle);
         auto s = sin(angle);
         auto t = 1 -c;
         auto &x = axis[0];
-        auto &z = axis[1];
-        auto &y = axis[2];
+        auto &y = axis[1];
+        auto &z = axis[2];
         // Creat matrix
         rm[0] = t*x*x + c;
         rm[1] = t*x*y - z*s;
@@ -36,6 +36,27 @@ namespace polylidar {
         rm[8] = t*z*z + c;
 
         return rm;
+    }
+    // Should be unit vectors
+    std::tuple<std::array<double, 3>, double> axisAngleFromVectors(const std::array<double, 3> &v1, const std::array<double, 3> &v2)
+    {
+        std::array<double, 3> axis;
+        crossProduct3(v1, v2, axis);
+        normalize3(axis);
+        double angle = acos(dotProduct3(v1, v2));
+
+        return std::make_tuple(axis, angle);
+    }
+
+    // Rotate Vector
+    std::array<double, 3> rotateVector(const double *v1, const std::array<double, 9> &rm)
+    {
+        std::array<double,3> rv1;
+        rv1[0] = rm[0] * v1[0] + rm[1] * v1[1] + rm[2] * v1[2];
+        rv1[1] = rm[3] * v1[0] + rm[4] * v1[1] + rm[5] * v1[2];
+        rv1[2] = rm[6] * v1[0] + rm[7] * v1[1] + rm[8] * v1[2];
+
+        return rv1;
     }
 
     double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points){
