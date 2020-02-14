@@ -38,6 +38,7 @@
 #include <omp.h>
 #define PL_OMP_CHUNK_SIZE_TRISET 64
 #define PL_OMP_ELEM_PER_THREAD_TRISET 12800
+#define PL_OMP_MAX_THREAD_DEPTH_TO_PC 8
 #endif
 
 #include "polylidar/helper.hpp"

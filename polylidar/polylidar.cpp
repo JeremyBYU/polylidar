@@ -556,15 +556,16 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
     size_t cols_stride = ceil(cols / float(stride));
     size_t rows_stride = ceil(rows / float(stride));
     points.resize(cols_stride * rows_stride * 3);
-    // size_t pnt_cnt = 0;
-    // #pragma omp parallel for schedule(static) // no speedup??
+    #if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
+    #pragma omp parallel for schedule(static) num_threads(num_threads)
+    #endif
     for (size_t i = 0; i < rows; i += stride)
     {
         for (size_t j = 0; j < cols; j += stride)
         {
             size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
             deproject_points(i, j, im(i, j), intrinsics, points[p_idx], points[p_idx + 1], points[p_idx + 2]);
-            // pnt_cnt++;
         }
     }
     // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
