@@ -73,10 +73,10 @@ endif()
 # Build Profiing Binary
 if (WITH_BENCHMARKS)
     MESSAGE(STATUS "Building bechmarks binary")
+    add_subdirectory("thirdparty/googletest")
     add_subdirectory("thirdparty/benchmark")
-    find_package(benchmark REQUIRED)
-
+    
     add_executable(parallel-test ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/parallelism_test.cpp)
-    target_link_libraries(parallel-test benchmark::benchmark OpenMP::OpenMP_CXX)
+    target_link_libraries(parallel-test benchmark::benchmark OpenMP::OpenMP_CXX polylidar)
 endif()
 
