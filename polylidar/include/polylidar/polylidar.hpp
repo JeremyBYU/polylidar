@@ -34,7 +34,11 @@
 #include <thread>
 #include <iomanip>
 
-// #include <omp.h>
+#if defined(_OPENMP)
+#include <omp.h>
+#define PL_OMP_CHUNK_SIZE_TRISET 64
+#define PL_OMP_ELEM_PER_THREAD_TRISET 12800
+#endif
 
 #include "polylidar/helper.hpp"
 #include "delaunator.hpp"

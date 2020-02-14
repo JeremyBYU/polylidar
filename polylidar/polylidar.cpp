@@ -47,6 +47,12 @@ inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &dela
 void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
+    // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
+    // Experimentation has found that too many threads will kill this loop if not enough work is presetn
+    #if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
+    #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+    #endif
     for (size_t t = 0; t < numTriangles; t++)
     {
         if (validateTriangle2D(t, delaunay, points, config))
@@ -59,6 +65,13 @@ void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
 void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
+
+    // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
+    // Experimentation has found that too many threads will kill this loop if not enough work is presetn
+    #if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
+    #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+    #endif
     for (size_t t = 0; t < numTriangles; t++)
     {
         bool valid2D = validateTriangle2D(t, delaunay, points, config);
@@ -71,6 +84,10 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
 void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
+    #if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
+    #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+    #endif
     for (size_t t = 0; t < numTriangles; t++)
     {
         bool valid2D = validateTriangle2D(t, delaunay, points, config);
@@ -363,7 +380,7 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
     std::vector<std::vector<size_t>> planes;
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
     std::vector<bool> triSet(max_triangles, false);
-
+    auto before = std::chrono::high_resolution_clock::now();
     if (config.dim == 2)
     {
         createTriSet2(triSet, delaunay, points, config);
@@ -376,6 +393,9 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
     {
         createTriSet4(triSet, delaunay, points, config);
     }
+    auto after = std::chrono::high_resolution_clock::now();
+    float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // std::cout << "CreateTriSet took " << elapsed_d << " milliseconds" << std::endl;
 
     for (size_t t = 0; t < max_triangles; t++)
     {
