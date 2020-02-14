@@ -22,9 +22,10 @@ set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${PO
 
 option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
 option(WITH_PROFILE "Enable Profiling" ON)
+option(WITH_BENCHMARKS "Build Benchmarking" ON)
+option(WITH_OPENMP "Build with OpenMP Support" ON)
 
 set(LIB_TYPE STATIC)
-
 add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
 if (PL_USE_ROBUST_PREDICATES)
@@ -37,23 +38,27 @@ if (PL_USE_ROBUST_PREDICATES)
     # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 endif()
 
-find_package(OpenMP)
-target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
+# Build with OpenMP Support
+if (WITH_OPENMP)
+  find_package(OpenMP)
+  target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
+endif()
 
+# Set Header and Properties of Polylidar Library
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
-
 target_include_directories(${PROJECT_NAME} PUBLIC
 $<BUILD_INTERFACE:${POLYLIDAR_INCLUDE_DIR}>
 $<INSTALL_INTERFACE:include>
 PRIVATE src)
-
 set_target_properties(polylidar PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
 
-# Add the application sources to the target
+# Build Simple Example
 add_executable(polylidar-simple ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple.cpp)
 target_link_libraries(polylidar-simple polylidar)
 target_include_directories(polylidar-simple PUBLIC ${POLYLIDAR_INCLUDE_DIR})
+
+# Build Profiing Binary
 if (WITH_PROFILE)
     MESSAGE(STATUS "Building with Profiling Enabled")
     set (Gperftools_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake/")
@@ -63,5 +68,15 @@ if (WITH_PROFILE)
     target_link_libraries(polylidar-profile polylidar)
     target_include_directories(polylidar-profile PUBLIC ${POLYLIDAR_INCLUDE_DIR})
     target_link_libraries(polylidar-profile ${GPERFTOOLS_PROFILER})
+endif()
+
+# Build Profiing Binary
+if (WITH_BENCHMARKS)
+    MESSAGE(STATUS "Building bechmarks binary")
+    add_subdirectory("thirdparty/benchmark")
+    find_package(benchmark REQUIRED)
+
+    add_executable(parallel-test ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/parallelism_test.cpp)
+    target_link_libraries(parallel-test benchmark::benchmark OpenMP::OpenMP_CXX)
 endif()
 
