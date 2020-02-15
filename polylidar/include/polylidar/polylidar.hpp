@@ -33,6 +33,7 @@
 #include <chrono>
 #include <thread>
 #include <iomanip>
+#include <ratio>
 
 #if defined(_OPENMP)
 #include <omp.h>
