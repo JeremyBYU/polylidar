@@ -72,7 +72,7 @@ inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delauna
     size_t &pi2 = pis[2];
     // std::cout << "pi0" << pi0 << " pi1" << pi1 << " pi2" << pi0 << std::endl; 
     // std::cout << "pi0" << points(pi0, 3) << " pi1" << points(pi1, 3) << " pi2" << points(pi2, 3) << std::endl; 
-    auto result = points(pi0, 3_z) == allowedClass && points(pi1, 3_z) == allowedClass && points(pi2, 3_z) == allowedClass;
+    auto result = static_cast<int>(points(pi0, 3_z)) == static_cast<int>(allowedClass) && static_cast<int>(points(pi1, 3_z)) == static_cast<int>(allowedClass) && static_cast<int>(points(pi2, 3_z)) == static_cast<int>(allowedClass);
     return result;
 
 }

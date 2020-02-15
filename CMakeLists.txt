@@ -29,9 +29,13 @@ set(LIB_TYPE STATIC)
 add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
 # Enable warnings and Error on them
+set(MAXIMAL_DESIRED_WARNINGS "-Wall -Wextra -Wconversion -Wunreachable-code -Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wshadow -Wfloat-equal -Weffc++")
+set(MINIMAL_DESIRED_WARNINGS "-Wall -Wextra -pedantic-errors -Werror")
+separate_arguments(MAXIMAL_DESIRED_WARNINGS)
+separate_arguments(MINIMAL_DESIRED_WARNINGS)
 target_compile_options(polylidar PRIVATE
      $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
-          -Werror -Wall -Wextra -Wpedantic>
+          ${MINIMAL_DESIRED_WARNINGS}>
      $<$<CXX_COMPILER_ID:MSVC>:
           /W4>)
 

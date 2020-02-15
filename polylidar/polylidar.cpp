@@ -46,7 +46,7 @@ inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &dela
 
 void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
-    size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
+    size_t numTriangles = delaunay.triangles.size() / 3;
     // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
     // Experimentation has found that too many threads will kill this loop if not enough work is presetn
     #if defined(_OPENMP)
@@ -64,7 +64,7 @@ void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
 
 void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
-    size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
+    size_t numTriangles = delaunay.triangles.size() / 3;
 
     // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
     // Experimentation has found that too many threads will kill this loop if not enough work is presetn
@@ -83,7 +83,7 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
 
 void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
-    size_t numTriangles = std::floor(delaunay.triangles.size() / 3);
+    size_t numTriangles = delaunay.triangles.size() / 3;
     #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
     #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
@@ -354,7 +354,7 @@ void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<boo
             if (opposite != INVALID_INDEX)
             {
                 // convert opposite edge to a triangle
-                size_t tn = std::floor(opposite / 3);
+                size_t tn = opposite / 3;
                 if (triSet[tn])
                 {
                     queue.push(tn);
@@ -365,15 +365,11 @@ void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<boo
     }
 }
 
-// TODO Implement Plane Constraints
-// bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::HalfEdgeTriangulation &delaunay, Config &config)
-// {
-//     if (planeMesh.size() < config.minTriangles)
-//     {
-//         return false;
-//     }
-//     return true;
-// }
+bool passPlaneConstraints(std::vector<size_t> planeMesh, Config &config)
+{
+    return planeMesh.size() >= config.minTriangles;
+
+}
 
 std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
@@ -394,7 +390,7 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
         createTriSet4(triSet, delaunay, points, config);
     }
     // auto after = std::chrono::high_resolution_clock::now();
-    // float elapsed_d = ((std::chrono::duration<float, std::milli>)(after - before).count();
+    // float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "CreateTriSet took " << elapsed_d << " milliseconds" << std::endl;
 
     for (size_t t = 0; t < max_triangles; t++)
@@ -404,11 +400,10 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
             planes.emplace_back();                       // construct empty vector inside planes
             auto &planeMesh = planes[planes.size() - 1]; // retrieve this newly created vector
             extractMeshSet(delaunay, triSet, t, planeMesh);
-            // TODO Remove plane if it does not pass constraints
-            // if (!passPlaneConstraints(planeMesh, delaunay, config))
-            // {
-            //     planes.pop_back();
-            // }
+            if (!passPlaneConstraints(planeMesh, config))
+            {
+                planes.pop_back();
+            }
         }
     }
 
@@ -464,11 +459,11 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanes
     auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, vertices, config);
     auto t1 = std::chrono::high_resolution_clock::now();
-    float elapsed_d = ((std::chrono::duration<float, std::milli>)(t1 - t0)).count();
+    float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
     std::cout << "Plane Extraction took " << elapsed_d << " milliseconds" << std::endl;
     std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, vertices, config);
     auto t2 = std::chrono::high_resolution_clock::now();
-    elapsed_d = ((std::chrono::duration<float, std::milli>)(t2 - t1)).count();
+    elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
     std::cout << "Polygon Hull Extraction took " << elapsed_d << " milliseconds" << std::endl;
     // I think the std move is what I'm looking for??
     return std::make_tuple(std::move(planes), std::move(polygons));
@@ -492,19 +487,19 @@ std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config)
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
     // auto after = std::chrono::high_resolution_clock::now();
-    // float elapsed_d = ((std::chrono::duration<float, std::milli>)(after - before).count();
+    // float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
     // before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
     // after = std::chrono::high_resolution_clock::now();
-    // float elapsed_ep = ((std::chrono::duration<float, std::milli>)(after - before).count();
+    // float elapsed_ep = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
 
     // before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
     // after = std::chrono::high_resolution_clock::now();
-    // float elapsed_ch = ((std::chrono::duration<float, std::milli>)(after - before).count();
+    // float elapsed_ch = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
     return polygons;
 }
@@ -517,13 +512,13 @@ std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config c
     delaunator::Delaunator delaunay(nparray);
     delaunay.triangulate();
     auto after = std::chrono::high_resolution_clock::now();
-    float elapsed_d = ((std::chrono::duration<float, std::milli>)(after - before)).count();
+    float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "Delaunay took " << elapsed_d << " milliseconds" << std::endl;
 
     before = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
-    float elapsed_ep = ((std::chrono::duration<float, std::milli>)(after - before)).count();
+    float elapsed_ep = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "Plane Extraction took " << elapsed_ep << " milliseconds" << std::endl;
 
     // std::vector<Polygon> polygons;
@@ -532,7 +527,7 @@ std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config c
     before = std::chrono::high_resolution_clock::now();
     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
     after = std::chrono::high_resolution_clock::now();
-    float elapsed_ch = ((std::chrono::duration<float, std::milli>)(after - before)).count();
+    float elapsed_ch = static_cast<std::chrono::duration<float, std::milli>>(after - before).count();
     // std::cout << "Polygon Hull Extraction took " << elapsed_ch << " milliseconds" << std::endl;
     timings.push_back(elapsed_d);
     timings.push_back(elapsed_ep);
@@ -553,8 +548,8 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
     std::vector<double> points;
     auto rows = im.rows;
     auto cols = im.cols;
-    size_t cols_stride = ceil(cols / float(stride));
-    size_t rows_stride = ceil(rows / float(stride));
+    size_t cols_stride = (cols + stride - 1) / stride;         
+    size_t rows_stride = (rows + stride - 1) / stride;  
     points.resize(cols_stride * rows_stride * 3);
     #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
@@ -576,11 +571,11 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
 std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, std::vector<size_t> &triangles,
                                                     std::vector<size_t> &valid_tri, size_t stride)
 {
-    constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
+    // constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
     std::vector<size_t> halfedges(triangles.size(), INVALID_INDEX);
     // This represents the number of rows and columns of the downsampled POINT CLOUD
-    size_t cols_stride = ceil(cols / float(stride));
-    size_t rows_stride = ceil(rows / float(stride));
+    size_t cols_stride = (cols + stride - 1) / stride;         
+    size_t rows_stride = (rows + stride - 1) / stride;  
     // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
     size_t cols_tris = cols_stride - 1;
     size_t rows_tris = rows_stride - 1;
@@ -679,8 +674,10 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
     Matrix<double> points_2D(points.data(), points.size() / 3, 3);
     std::vector<size_t> triangles;
     // This represents the number of rows and columns of the downsampled POINT CLOUD
-    size_t cols_stride = ceil(cols / float(stride));
-    size_t rows_stride = ceil(rows / float(stride));
+    // size_t cols_stride = static_cast<size_t>(ceil(cols / static_cast<float>(stride)));
+    size_t cols_stride = (cols + stride - 1) / stride;         
+    size_t rows_stride = (rows + stride - 1) / stride;  
+    // size_t rows_stride = static_cast<size_t>(ceil(rows / static_cast<float>(stride)));
     // This represent the number of rows and columns of the UNIFORM TRIANGULAR MESH
     size_t cols_tris = cols_stride - 1;
     size_t rows_tris = rows_stride - 1;
@@ -690,7 +687,7 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
     size_t tri_cnt = 0;
     size_t pix_cnt = 0;
     // Invalid Triangle Marker
-    constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
+    // constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
     std::vector<size_t> valid_tri(max_triangles, INVALID_INDEX);
     // Reserve memory for triangles
     triangles.reserve(max_triangles);
@@ -737,15 +734,15 @@ std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> Extrac
     auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics, stride);
     auto t1 = std::chrono::high_resolution_clock::now();
-    float elapsed_d = ((std::chrono::duration<float, std::milli>)(t1 - t0)).count();
+    float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
     std::cout << "Point Cloud Extraction took " << elapsed_d << " milliseconds" << std::endl;
     std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points, stride);
     auto t2 = std::chrono::high_resolution_clock::now();
-    elapsed_d = ((std::chrono::duration<float, std::milli>)(t2 - t1)).count();
+    elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
     std::cout << "Create Uniform Mesh took " << elapsed_d << " milliseconds" << std::endl;
     std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(im.rows, im.cols, triangles, valid_tri, stride);
     auto t3 = std::chrono::high_resolution_clock::now();
-    elapsed_d = ((std::chrono::duration<float, std::milli>)(t3 - t2)).count();
+    elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t3 - t2).count();
     std::cout << "Extract Half Edge took " << elapsed_d << " milliseconds" << std::endl;
 
     // std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
