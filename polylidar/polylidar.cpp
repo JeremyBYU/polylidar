@@ -365,22 +365,22 @@ void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<boo
     }
 }
 
-// TODO
-bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::HalfEdgeTriangulation &delaunay, Config &config)
-{
-    if (planeMesh.size() < config.minTriangles)
-    {
-        return false;
-    }
-    return true;
-}
+// TODO Implement Plane Constraints
+// bool passPlaneConstraints(std::vector<size_t> planeMesh, delaunator::HalfEdgeTriangulation &delaunay, Config &config)
+// {
+//     if (planeMesh.size() < config.minTriangles)
+//     {
+//         return false;
+//     }
+//     return true;
+// }
 
 std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
     std::vector<bool> triSet(max_triangles, false);
-    auto before = std::chrono::high_resolution_clock::now();
+    // auto before = std::chrono::high_resolution_clock::now();
     if (config.dim == 2)
     {
         createTriSet2(triSet, delaunay, points, config);
@@ -393,8 +393,8 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
     {
         createTriSet4(triSet, delaunay, points, config);
     }
-    auto after = std::chrono::high_resolution_clock::now();
-    float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
+    // auto after = std::chrono::high_resolution_clock::now();
+    // float elapsed_d = std::chrono::duration_cast<std::chrono::microseconds>(after - before).count() * 1e-3;
     // std::cout << "CreateTriSet took " << elapsed_d << " milliseconds" << std::endl;
 
     for (size_t t = 0; t < max_triangles; t++)
@@ -404,11 +404,11 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
             planes.emplace_back();                       // construct empty vector inside planes
             auto &planeMesh = planes[planes.size() - 1]; // retrieve this newly created vector
             extractMeshSet(delaunay, triSet, t, planeMesh);
-            // Remove plane if it does not pass constraints
-            if (!passPlaneConstraints(planeMesh, delaunay, config))
-            {
-                planes.pop_back();
-            }
+            // TODO Remove plane if it does not pass constraints
+            // if (!passPlaneConstraints(planeMesh, delaunay, config))
+            // {
+            //     planes.pop_back();
+            // }
         }
     }
 

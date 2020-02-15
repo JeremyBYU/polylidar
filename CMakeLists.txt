@@ -28,6 +28,14 @@ option(WITH_OPENMP "Build with OpenMP Support" ON)
 set(LIB_TYPE STATIC)
 add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
+# Enable warnings and Error on them
+target_compile_options(polylidar PRIVATE
+     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
+          -Werror -Wall -Wextra -Wpedantic>
+     $<$<CXX_COMPILER_ID:MSVC>:
+          /W4>)
+
+# Build with Robust Predicates
 if (PL_USE_ROBUST_PREDICATES)
     MESSAGE(STATUS "Building with Robust Geometric Predicates")
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/polylidar/predicates")
