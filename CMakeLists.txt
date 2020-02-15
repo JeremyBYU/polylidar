@@ -3,32 +3,30 @@ project(polylidar)
 
 # include(CheckIPOSupported)
 # check_ipo_supported(RESULT supported OUTPUT error)
-
 set(CMAKE_CXX_STANDARD 14)
 if(NOT CMAKE_BUILD_TYPE)
   set(CMAKE_BUILD_TYPE Release)
 endif()
-
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native -march=native")
-
+# Project Version and File
 set(PROJECT_VERSION 0.0.8)
 set(POLYLIDAR_SRC "${PROJECT_SOURCE_DIR}/polylidar")
 set(POLYLIDAR_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/polylidar/include")
 set(POLYLIDAR_EXAMPLES_CPP_DIR "${PROJECT_SOURCE_DIR}/examples/cpp")
-
 set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helper.cpp ${POLYLIDAR_SRC}/delaunator.cpp)
-set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
-
+set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/helper.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
+# Options for CMake
 option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
 option(WITH_PROFILE "Enable Profiling" ON)
 option(WITH_BENCHMARKS "Build Benchmarking" ON)
 option(WITH_OPENMP "Build with OpenMP Support" ON)
+# CMake Flags
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native -march=native")
 
 set(LIB_TYPE STATIC)
 add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
-# Enable warnings and Error on them
+# Enable warnings and error on them
 set(MAXIMAL_DESIRED_WARNINGS "-Wall -Wextra -Wconversion -Wunreachable-code -Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wshadow -Wfloat-equal -Weffc++")
 set(MINIMAL_DESIRED_WARNINGS "-Wall -Wextra -pedantic-errors -Werror")
 separate_arguments(MAXIMAL_DESIRED_WARNINGS)
@@ -39,7 +37,7 @@ target_compile_options(polylidar PRIVATE
      $<$<CXX_COMPILER_ID:MSVC>:
           /W4>)
 
-# Build with Robust Predicates
+# OPTION Build with Robust Predicates
 if (PL_USE_ROBUST_PREDICATES)
     MESSAGE(STATUS "Building with Robust Geometric Predicates")
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/polylidar/predicates")
@@ -50,27 +48,27 @@ if (PL_USE_ROBUST_PREDICATES)
     # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
 endif()
 
-# Build with OpenMP Support
+# OPTON Build with OpenMP Support
 if (WITH_OPENMP)
   find_package(OpenMP)
   target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
 # Set Header and Properties of Polylidar Library
-set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
+set_target_properties(polylidar PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")
 target_include_directories(${PROJECT_NAME} PUBLIC
 $<BUILD_INTERFACE:${POLYLIDAR_INCLUDE_DIR}>
 $<INSTALL_INTERFACE:include>
 PRIVATE src)
 set_target_properties(polylidar PROPERTIES VERSION ${PROJECT_VERSION})
-set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
+# set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
 
 # Build Simple Example
 add_executable(polylidar-simple ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple.cpp)
 target_link_libraries(polylidar-simple polylidar)
 target_include_directories(polylidar-simple PUBLIC ${POLYLIDAR_INCLUDE_DIR})
 
-# Build Profiing Binary
+# OPTION Build Profiing Binary
 if (WITH_PROFILE)
     MESSAGE(STATUS "Building with Profiling Enabled")
     set (Gperftools_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake/")
@@ -82,7 +80,7 @@ if (WITH_PROFILE)
     target_link_libraries(polylidar-profile ${GPERFTOOLS_PROFILER})
 endif()
 
-# Build Profiing Binary
+# OPTION Build Benchmarks Binary
 if (WITH_BENCHMARKS)
     MESSAGE(STATUS "Building bechmarks binary")
     add_subdirectory("thirdparty/googletest")
