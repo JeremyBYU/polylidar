@@ -558,10 +558,6 @@ inline void deproject_points(const size_t i, const size_t j, float depth, const 
     x = extrinsics(0,0) * x1 + extrinsics(0,1) * y1 + extrinsics(0,2) * z1 + extrinsics(0,3);
     y = extrinsics(1,0) * x1 + extrinsics(1,1) * y1 + extrinsics(1,2) * z1 + extrinsics(1,3);
     z = extrinsics(2,0) * x1 + extrinsics(2,1) * y1 + extrinsics(2,2) * z1 + extrinsics(2,3);
-
-    // x = x1;
-    // y = y1;
-    // z = z1;
 }
 
 std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride)
@@ -583,10 +579,6 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
             size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
             if (im(i, j) > 0)
                 deproject_points(i, j, im(i, j), intrinsics, extrinsics, points[p_idx], points[p_idx + 1], points[p_idx + 2]);
-            else
-            {
-                // std::cout<< "Nan" << std::endl;
-            }
             
         }
     }
@@ -595,50 +587,56 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
     return points;
 }
 
-std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride)
-{
-    //                 Eigen::Vector4d point =
-    //                     camera_pose * Eigen::Vector4d(x, y, z, 1.0);
-    // pointcloud->points_[cnt++] = point.block<3, 1>(0, 0);
-    std::vector<double> points;
-    // const Eigen::Matrix3d &intrinsics, const Eigen::Matrix4d &extrinsic, const size_t stride
+// std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride)
+// {
+//     //                 Eigen::Vector4d point =
+//     //                     camera_pose * Eigen::Vector4d(x, y, z, 1.0);
+//     // pointcloud->points_[cnt++] = point.block<3, 1>(0, 0);
+//     std::vector<double> points;
+//     // const Eigen::Matrix3d &intrinsics, const Eigen::Matrix4d &extrinsic, const size_t stride
 
-    // Eigen::Map<const Eigen::Matrix3d> intrinsics_mat(intrinsics.ptr,3,3);
-    Eigen::Map<const Eigen::Matrix4d> extrinsics_mat(extrinsics.ptr,4,4);
-    // Eigen::MatrixX3d points;
-    auto rows = im.rows;
-    auto cols = im.cols;
-    size_t cols_stride = (cols + stride - 1) / stride;         
-    size_t rows_stride = (rows + stride - 1) / stride;  
-    // points.resize(cols_stride * rows_stride, 3);
-    points.resize(cols_stride * rows_stride * 3);
-    // std::cout<< "Here" << std::endl;
-    #if defined(_OPENMP)
-    int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
-    #pragma omp parallel for schedule(static) num_threads(num_threads)
-    #endif
-    for (size_t i = 0; i < rows; i += stride)
-    {
-        for (size_t j = 0; j < cols; j += stride)
-        {
-            double z = static_cast<double>(im(i,j));
-            double x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0, 0);
-            double y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1, 1);
-            // std::cout << z << x << y << std::endl;
-            Eigen::Vector4d point = extrinsics_mat * Eigen::Vector4d(x, y, z, 1.0);
-            size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
-            // int p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride));
-            // points.block<1,3>(p_idx,0) = point.block<3, 1>(0, 0);
-            points[p_idx] = point(0);
-            points[p_idx + 1] = point(1);
-            points[p_idx + 2] = point(2);
-            // std::cout << "assigned" <<  std::endl;
-        }
-    }
-    // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
-    // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
-    return points;
-}
+//     // Eigen::Map<const Eigen::Matrix3d> intrinsics_mat(intrinsics.ptr,3,3);
+//     Eigen::Map<const Eigen::Matrix4d> extrinsics_mat(extrinsics.ptr,4,4);
+//     // Eigen::MatrixX3d points;
+//     auto rows = im.rows;
+//     auto cols = im.cols;
+//     size_t cols_stride = (cols + stride - 1) / stride;         
+//     size_t rows_stride = (rows + stride - 1) / stride;  
+//     // points.resize(cols_stride * rows_stride, 3);
+//     points.resize(cols_stride * rows_stride * 3, PL_NAN);
+//     // std::cout<< "Here" << std::endl;
+//     #if defined(_OPENMP)
+//     int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
+//     #pragma omp parallel for schedule(static) num_threads(num_threads)
+//     #endif
+//     for (size_t i = 0; i < rows; i += stride)
+//     {
+//         for (size_t j = 0; j < cols; j += stride)
+//         {
+//             double z = static_cast<double>(im(i,j));
+//             double x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0, 0);
+//             double y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1, 1);
+
+//             Eigen::Vector4d point = extrinsics_mat * Eigen::Vector4d(x, y, z, 1.0);
+//             size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
+//             // int p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride));
+//             // points.block<1,3>(p_idx,0) = point.block<3, 1>(0, 0);
+//             points[p_idx] = point(0);
+//             points[p_idx + 1] = point(1);
+//             points[p_idx + 2] = point(2);
+//             if (z < 0)
+//             {
+//                 x = PL_NAN;
+//                 y = PL_NAN;
+//                 z = PL_NAN;
+//             }
+//             // std::cout << "assigned" <<  std::endl;
+//         }
+//     }
+//     // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
+//     // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+//     return points;
+// }
 
 std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, std::vector<size_t> &triangles,
                                                     std::vector<size_t> &valid_tri, size_t stride)

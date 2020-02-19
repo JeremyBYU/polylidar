@@ -270,7 +270,7 @@ inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<siz
 }
 
 void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
-void ComputeTriangleNormals2(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
+// void ComputeTriangleNormals2(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
 
 }
 

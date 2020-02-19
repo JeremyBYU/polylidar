@@ -39,18 +39,8 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, stride=2):
     triangle_normals = np.asarray(tri_mesh.triangle_normals)
 
     vertices = vertices.reshape((int(vertices.shape[0] / 3), 3))
-
-    # test = vertices[triangles, :]
-    # print(triangles)
-    # print("Nans in point cloud: ", np.count_nonzero(np.isnan(vertices)))
-    # print("Nans in Mesh: ", np.count_nonzero(np.isnan(test)))
-    # print("Nans in vertices ", np.count_nonzero(np.isnan(vertices[triangles, :])))
     triangle_normals = triangle_normals.reshape((int(triangle_normals.shape[0] / 3), 3))
 
-    # print(vertices.shape)
-    # print(triangles.shape)
-    # print(triangle_normals.shape)
-    # print(vertices)
     mesh = create_open_3d_mesh(triangles, vertices)
     show_geoms(pcd, mesh=mesh)
     return triangle_normals, mesh
@@ -74,9 +64,6 @@ def plot_normals(triangle_normals_1, triangle_normals_2):
 
     quiver1 = get_quiver(triangle_normals_1)
     quiver2 = get_quiver(triangle_normals_2)
-    # print(triangle_normals_1)
-    print("Nans in 1 ", np.count_nonzero(np.isnan(triangle_normals_1)))
-    print("Nans in 2 ", np.count_nonzero(np.isnan(triangle_normals_2)))
 
     ax.set_xlim3d(-1.5, 1.5)
     ax.set_ylim3d(-1.5,1.5)
@@ -84,12 +71,10 @@ def plot_normals(triangle_normals_1, triangle_normals_2):
     ax.set_xlabel("X")
     ax.set_ylabel("Y")
     ax.set_zlabel("Z")
-    # print("Starting quiver")
-    # ax.quiver(*quiver1, length=0.1, normalize=True, colors='r')
+    ax.quiver(*quiver1, length=0.1, normalize=True, colors='r')
     ax.quiver(*quiver2, length=0.1, normalize=False, colors='b')
 
     plt.show()
-    # print("After Quiver")
 
 def main():
     color_files, depth_files, traj, intrinsics = get_realsense_data()
