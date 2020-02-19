@@ -2,7 +2,7 @@ from pathlib import Path
 from os import path
 import pickle
 
-from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_point_cloud_from_float_depth, extract_uniform_mesh_from_float_depth
+from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_point_cloud_from_float_depth
 
 DIR_NAME = path.dirname(__file__)
 FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')

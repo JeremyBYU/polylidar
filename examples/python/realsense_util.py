@@ -156,7 +156,7 @@ def extract_mesh_planes(points, triangles, planes, color=None):
         else:
             color_ = COLOR_PALETTE[0]
         tris = np.ascontiguousarray(np.flip(triangles[plane, :], 1))
-        mesh = create_open_3d_mesh(tris, points, color_)
+        mesh = create_open_3d_mesh(tris, points, color=color_)
         meshes.append(mesh)
     return meshes
 
@@ -198,5 +198,3 @@ def prep_mesh(mesh):
     for mesh_ in mesh_list:
         mesh_.compute_triangle_normals()
         mesh_.paint_uniform_color(COLOR_PALETTE[0])
-
-

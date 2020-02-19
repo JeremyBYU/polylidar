@@ -9,7 +9,7 @@ namespace polylidar
 
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 
-constexpr std::size_t operator "" _z ( unsigned long long n ){ return n; }
+constexpr std::size_t operator"" _z(unsigned long long n) { return n; }
 
 template <class T>
 class Matrix

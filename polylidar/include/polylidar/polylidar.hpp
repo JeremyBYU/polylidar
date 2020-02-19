@@ -67,72 +67,71 @@
 #if defined(__GNUC__)
 #define FORCE_O1_OPTIMIZATION __attribute__((optimize("O1")))
 #else
-#define FORCE_O1_OPTIMIZATION 
+#define FORCE_O1_OPTIMIZATION
 #endif
 
 // namespace py = pybind11;
-const static std::array<double, 3> DEFAULT_DESIRED_VECTOR{{0,0,1}}; 
-const static std::array<double, 9> DEFAULT_IDENTITY_RM{{1,0,0,0,1,0,0,0,1}}; 
+const static std::array<double, 3> DEFAULT_DESIRED_VECTOR{{0, 0, 1}};
+const static std::array<double, 9> DEFAULT_IDENTITY_RM{{1, 0, 0, 0, 1, 0, 0, 0, 1}};
 
-namespace polylidar {
-    using vvi = std::vector<std::vector<size_t>>;
-    #ifdef PL_USE_STD_UNORDERED_MAP
-    template<typename T, typename G>
-    using unordered_map = std::unordered_map<T,G>;
-    #else
-    template<typename T, typename G>
-    using unordered_map = phmap::flat_hash_map<T,G>;
-    #endif
+namespace polylidar
+{
+using vvi = std::vector<std::vector<size_t>>;
+#ifdef PL_USE_STD_UNORDERED_MAP
+template <typename T, typename G>
+using unordered_map = std::unordered_map<T, G>;
+#else
+template <typename T, typename G>
+using unordered_map = phmap::flat_hash_map<T, G>;
+#endif
 
-    const static std::array<double, 2> UP_VECTOR = {0.0, 1.0};
-    const static std::array<double, 2> DOWN_VECTOR = {0.0, -1.0};
-    
-    struct Config
-    {
-        // 2D base configuration
-        size_t dim = DEFAULT_DIM;
-        double alpha = DEFAULT_ALPHA;
-        double xyThresh = DEFAULT_XYTHRESH;
-        double lmax = DEFAULT_LMAX;
-        size_t minTriangles = DEFAULT_MINTRIANGLES;
-        size_t minHoleVertices = DEFAULT_MINHOLEVERTICES;
-        double minBboxArea = DEFAULT_MINBBOX;
-        // 3D configuration
-        double zThresh = DEFAULT_ZTHRESH;
-        double normThresh = DEFAULT_NORMTHRESH;
-        double normThreshMin = DEFAULT_NORMTHRESH_MIN;
-        // 4D configuration
-        double allowedClass = DEFAULT_ALLOWEDCLASS;
-        // extra needed for 3D
-        std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR;
-        std::array<double, 9> rotationMatrix = DEFAULT_IDENTITY_RM;
-        bool needRotation = false;
-    };
+const static std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+const static std::array<double, 2> DOWN_VECTOR = {0.0, -1.0};
 
-    struct Polygon {
-        std::vector<size_t> shell;
-        std::vector<std::vector<size_t>> holes;
-        // I know this looks crazy
-        // but for some reason I need this to allow the polygon to have holes
-        // without it I could access the holes, but only ONCE. Then they would be gone
-        // i.e in python "polygon.holes" <- Now its dead the next time you acces it
-        // So I think this now makes a copy on every access. but whatever
-        vvi getHoles() const {return holes;}
-        void setHoles(vvi x) {holes = x;}
-    };
+struct Config
+{
+    // 2D base configuration
+    size_t dim = DEFAULT_DIM;
+    double alpha = DEFAULT_ALPHA;
+    double xyThresh = DEFAULT_XYTHRESH;
+    double lmax = DEFAULT_LMAX;
+    size_t minTriangles = DEFAULT_MINTRIANGLES;
+    size_t minHoleVertices = DEFAULT_MINHOLEVERTICES;
+    double minBboxArea = DEFAULT_MINBBOX;
+    // 3D configuration
+    double zThresh = DEFAULT_ZTHRESH;
+    double normThresh = DEFAULT_NORMTHRESH;
+    double normThreshMin = DEFAULT_NORMTHRESH_MIN;
+    // 4D configuration
+    double allowedClass = DEFAULT_ALLOWEDCLASS;
+    // extra needed for 3D
+    std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR;
+    std::array<double, 9> rotationMatrix = DEFAULT_IDENTITY_RM;
+    bool needRotation = false;
+};
 
+struct Polygon
+{
+    std::vector<size_t> shell;
+    std::vector<std::vector<size_t>> holes;
+    // I know this looks crazy
+    // but for some reason I need this to allow the polygon to have holes
+    // without it I could access the holes, but only ONCE. Then they would be gone
+    // i.e in python "polygon.holes" <- Now its dead the next time you acces it
+    // So I think this now makes a copy on every access. but whatever
+    vvi getHoles() const { return holes; }
+    void setHoles(vvi x) { holes = x; }
+};
 
-    std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>  ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config);
-    std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config);
-    std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
-    std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>>  ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
-    std::vector<Polygon>  ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
-    std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
-    std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
-    delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals=DEFAULT_CALC_NORMALS);
-    std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
-    // std::tuple<std::vector<double>, std::vector<bool>> ExtractPointCloudFromFloatDepth3(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
-}
-
+std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config);
+std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config);
+std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
+std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
+std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals = DEFAULT_CALC_NORMALS);
+std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+} // namespace polylidar
 
 #endif

@@ -7,7 +7,7 @@ from examples.python.realsense_util import (get_realsense_data, get_frame_data, 
                                             create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
 
 from polylidar import (extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_tri_mesh_from_float_depth,
-                      extract_point_cloud_from_float_depth, extract_uniform_mesh_from_float_depth)
+                      extract_point_cloud_from_float_depth)
 
 from polylidarutil.open3d_util import construct_grid, create_lines, flatten
 from polylidarutil.plane_filtering import filter_planes_and_holes
@@ -121,16 +121,13 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
         tuple(dict, dict) - Mesh and timings
     """
     t0 = time.perf_counter()
-    # points, triangles, halfedges = extract_uniform_mesh_from_float_depth(im, intrinsics, stride=stride)
-    tri_mesh = extract_tri_mesh_from_float_depth(im, intrinsics, stride=stride)
+    tri_mesh = extract_tri_mesh_from_float_depth(im, intrinsics, extrinsics, stride=stride)
     t1 = time.perf_counter()
     points = np.asarray(tri_mesh.vertices)
     triangles = np.asarray(tri_mesh.triangles)
     halfedges = np.asarray(tri_mesh.halfedges)
     points = points.reshape((int(points.shape[0] / 3), 3))
-    # Rotate Point Cloud
-    points = np.column_stack((points, np.ones(points.shape[0])))
-    points = np.ascontiguousarray(((extrinsics @ points.T).T)[:, :3])
+
     t2 = time.perf_counter()
     polylidar_inputs = dict(
         vertices=points, triangles=triangles, halfedges=halfedges)
