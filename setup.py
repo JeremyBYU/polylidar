@@ -67,7 +67,7 @@ source_files = ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/de
 # Source files for robust geometric predicates
 robust_files = ['polylidar/predicates/constants.c', 'polylidar/predicates/predicates.c', 'polylidar/predicates/printing.c', 'polylidar/predicates/random.c']
 # Include directories for polylidar
-include_dirs = ['polylidar/', 'polylidar/include']
+include_dirs = ['polylidar/', 'polylidar/include', 'thirdparty/eigen']
 
 # If compiling with robust predicates then add robust c and header files
 if PL_USE_ROBUST_PREDICATES:

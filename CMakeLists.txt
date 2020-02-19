@@ -1,4 +1,6 @@
 cmake_minimum_required(VERSION 3.10.0)
+include(CMakePrintHelpers)
+
 project(polylidar)
 
 # include(CheckIPOSupported)
@@ -28,7 +30,7 @@ add_library(polylidar ${LIB_TYPE} ${POLYLIDAR_SOURCE_FILES})
 
 # Enable warnings and error on them
 set(MAXIMAL_DESIRED_WARNINGS "-Wall -Wextra -Wconversion -Wunreachable-code -Wuninitialized -pedantic-errors -Wold-style-cast -Wno-error=unused-variable -Wshadow -Wfloat-equal -Weffc++")
-set(MINIMAL_DESIRED_WARNINGS "-Wall -Wextra -pedantic-errors -Werror")
+set(MINIMAL_DESIRED_WARNINGS "-Wall -Wextra -pedantic-errors")
 separate_arguments(MAXIMAL_DESIRED_WARNINGS)
 separate_arguments(MINIMAL_DESIRED_WARNINGS)
 target_compile_options(polylidar PRIVATE
@@ -53,6 +55,17 @@ if (WITH_OPENMP)
   find_package(OpenMP)
   target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
 endif()
+
+
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
+target_link_libraries(polylidar PRIVATE Eigen3::Eigen)
+target_include_directories(polylidar PUBLIC ${EIGEN3_INCLUDE_DIR})
+cmake_print_variables(EIGEN3_INCLUDE_DIR)
+# get_cmake_property(_variableNames VARIABLES)
+# list (SORT _variableNames)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
 
 # Set Header and Properties of Polylidar Library
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")
@@ -85,8 +98,14 @@ if (WITH_BENCHMARKS)
     MESSAGE(STATUS "Building bechmarks binary")
     add_subdirectory("thirdparty/googletest")
     add_subdirectory("thirdparty/benchmark")
-    
+    find_package(Open3D REQUIRED)
+    set(BENCH_DEPENDENCIES benchmark::benchmark OpenMP::OpenMP_CXX Eigen3::Eigen polylidar ${Open3D_LIBRARIES})
+
     add_executable(parallel-test ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/parallelism_test.cpp)
-    target_link_libraries(parallel-test benchmark::benchmark OpenMP::OpenMP_CXX polylidar)
+    target_link_libraries(parallel-test ${BENCH_DEPENDENCIES})
+
+    add_executable(bench-mesh ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/bench_mesh.cpp)
+    target_include_directories(bench-mesh PRIVATE ${Open3D_INCLUDE_DIRS})
+    target_link_libraries(bench-mesh ${BENCH_DEPENDENCIES})
 endif()
 

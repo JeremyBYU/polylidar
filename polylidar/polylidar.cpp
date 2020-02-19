@@ -4,6 +4,8 @@
 namespace polylidar
 {
 
+auto PL_NAN = std::numeric_limits<double>::quiet_NaN();
+
 inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
@@ -438,6 +440,17 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
 }
 
 
+std::vector<double> ExtractNormalsFromMesh(delaunator::TriMesh &triangulation, Config &config)
+{
+    auto &vertices = triangulation.coords;
+    std::vector<double> triangle_normals;
+    config.dim = vertices.cols;
+    ComputeTriangleNormals(vertices, triangulation.triangles, triangle_normals);
+    triangulation.triangle_normals.swap(triangle_normals);
+    return triangle_normals;
+}
+
+
 std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
 {
     auto &vertices = triangulation.coords;
@@ -536,21 +549,29 @@ std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config c
     return polygons;
 }
 
-void deproject_points(const size_t i, const size_t j, float depth, const Matrix<double> &intrinsics, double &x, double &y, double &z)
+inline void deproject_points(const size_t i, const size_t j, float depth, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics,  double &x, double &y, double &z)
 {
-    z = static_cast<double>(depth);
-    x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0, 0);
-    y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1, 1);
+    double z1 = static_cast<double>(depth);
+    double x1 = (static_cast<double>(j) - intrinsics(0, 2)) * z1 / intrinsics(0, 0);
+    double y1 = (static_cast<double>(i) - intrinsics(1, 2)) * z1 / intrinsics(1, 1);
+    // Rotate
+    x = extrinsics(0,0) * x1 + extrinsics(0,1) * y1 + extrinsics(0,2) * z1 + extrinsics(0,3);
+    y = extrinsics(1,0) * x1 + extrinsics(1,1) * y1 + extrinsics(1,2) * z1 + extrinsics(1,3);
+    z = extrinsics(2,0) * x1 + extrinsics(2,1) * y1 + extrinsics(2,2) * z1 + extrinsics(2,3);
+
+    // x = x1;
+    // y = y1;
+    // z = z1;
 }
 
-std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride)
 {
     std::vector<double> points;
     auto rows = im.rows;
     auto cols = im.cols;
     size_t cols_stride = (cols + stride - 1) / stride;         
     size_t rows_stride = (rows + stride - 1) / stride;  
-    points.resize(cols_stride * rows_stride * 3);
+    points.resize(cols_stride * rows_stride * 3, PL_NAN);
     #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
     #pragma omp parallel for schedule(static) num_threads(num_threads)
@@ -560,7 +581,58 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
         for (size_t j = 0; j < cols; j += stride)
         {
             size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
-            deproject_points(i, j, im(i, j), intrinsics, points[p_idx], points[p_idx + 1], points[p_idx + 2]);
+            if (im(i, j) > 0)
+                deproject_points(i, j, im(i, j), intrinsics, extrinsics, points[p_idx], points[p_idx + 1], points[p_idx + 2]);
+            else
+            {
+                // std::cout<< "Nan" << std::endl;
+            }
+            
+        }
+    }
+    // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
+    // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+    return points;
+}
+
+std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride)
+{
+    //                 Eigen::Vector4d point =
+    //                     camera_pose * Eigen::Vector4d(x, y, z, 1.0);
+    // pointcloud->points_[cnt++] = point.block<3, 1>(0, 0);
+    std::vector<double> points;
+    // const Eigen::Matrix3d &intrinsics, const Eigen::Matrix4d &extrinsic, const size_t stride
+
+    // Eigen::Map<const Eigen::Matrix3d> intrinsics_mat(intrinsics.ptr,3,3);
+    Eigen::Map<const Eigen::Matrix4d> extrinsics_mat(extrinsics.ptr,4,4);
+    // Eigen::MatrixX3d points;
+    auto rows = im.rows;
+    auto cols = im.cols;
+    size_t cols_stride = (cols + stride - 1) / stride;         
+    size_t rows_stride = (rows + stride - 1) / stride;  
+    // points.resize(cols_stride * rows_stride, 3);
+    points.resize(cols_stride * rows_stride * 3);
+    // std::cout<< "Here" << std::endl;
+    #if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
+    #pragma omp parallel for schedule(static) num_threads(num_threads)
+    #endif
+    for (size_t i = 0; i < rows; i += stride)
+    {
+        for (size_t j = 0; j < cols; j += stride)
+        {
+            double z = static_cast<double>(im(i,j));
+            double x = (static_cast<double>(j) - intrinsics(0, 2)) * z / intrinsics(0, 0);
+            double y = (static_cast<double>(i) - intrinsics(1, 2)) * z / intrinsics(1, 1);
+            // std::cout << z << x << y << std::endl;
+            Eigen::Vector4d point = extrinsics_mat * Eigen::Vector4d(x, y, z, 1.0);
+            size_t p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride) * 3);
+            // int p_idx = static_cast<size_t>((cols_stride * i/stride + j/stride));
+            // points.block<1,3>(p_idx,0) = point.block<3, 1>(0, 0);
+            points[p_idx] = point(0);
+            points[p_idx + 1] = point(1);
+            points[p_idx + 2] = point(2);
+            // std::cout << "assigned" <<  std::endl;
         }
     }
     // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
@@ -705,7 +777,7 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
             auto &p3 = points_2D(p3_idx, 2);
             auto &p4 = points_2D(p4_idx, 2);
 
-            if (p1 > 0 && p2 > 0 && p3 > 0)
+            if (!std::isnan(p1) && !std::isnan(p2) && !std::isnan(p3))
             {
                 triangles.push_back(p1_idx);
                 triangles.push_back(p2_idx);
@@ -713,7 +785,7 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
                 valid_tri[pix_cnt * 2] = tri_cnt;
                 tri_cnt++;
             }
-            if (p3 > 0 && p4 > 0 && p1 > 0)
+            if (!std::isnan(p3) &&  !std::isnan(p4) && !std::isnan(p1))
             {
                 triangles.push_back(p3_idx);
                 triangles.push_back(p4_idx);
@@ -727,26 +799,39 @@ std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t ro
     return std::make_tuple(std::move(triangles), std::move(valid_tri));
 }
 
-std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride)
+std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride)
 {
     std::vector<size_t> triangles;
     std::vector<size_t> valid_tri;
-    auto t0 = std::chrono::high_resolution_clock::now();
-    std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics, stride);
-    auto t1 = std::chrono::high_resolution_clock::now();
-    float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
-    std::cout << "Point Cloud Extraction took " << elapsed_d << " milliseconds" << std::endl;
+    // auto t0 = std::chrono::high_resolution_clock::now();
+    std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics, extrinsics, stride);
+    // auto t1 = std::chrono::high_resolution_clock::now();
+    // float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
+    // std::cout << "Point Cloud Extraction took " << elapsed_d << " milliseconds" << std::endl;
     std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points, stride);
-    auto t2 = std::chrono::high_resolution_clock::now();
-    elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
-    std::cout << "Create Uniform Mesh took " << elapsed_d << " milliseconds" << std::endl;
+    // auto t2 = std::chrono::high_resolution_clock::now();
+    // elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
+    // std::cout << "Create Uniform Mesh took " << elapsed_d << " milliseconds" << std::endl;
     std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(im.rows, im.cols, triangles, valid_tri, stride);
-    auto t3 = std::chrono::high_resolution_clock::now();
-    elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t3 - t2).count();
-    std::cout << "Extract Half Edge took " << elapsed_d << " milliseconds" << std::endl;
-
+    // auto t3 = std::chrono::high_resolution_clock::now();
+    // elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t3 - t2).count();
+    // std::cout << "Extract Half Edge took " << elapsed_d << " milliseconds" << std::endl;
     // std::cout << "extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
+}
+
+delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals)
+{
+    std::vector<double> vertices;
+    std::vector<size_t> triangles;
+    std::vector<size_t> halfedges;
+    std::tie(vertices, triangles, halfedges) = ExtractUniformMeshFromFloatDepth(im, intrinsics, extrinsics, stride);
+    delaunator::TriMesh triangulation(vertices, triangles, halfedges);
+    if (calc_normals)
+    {
+        ComputeTriangleNormals(triangulation.coords, triangulation.triangles, triangulation.triangle_normals);
+    }
+    return triangulation;
 }
 
 

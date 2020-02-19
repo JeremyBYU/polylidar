@@ -34,6 +34,7 @@
 #include <thread>
 #include <iomanip>
 #include <ratio>
+#include <limits>
 
 #if defined(_OPENMP)
 #include <omp.h>
@@ -58,6 +59,7 @@
 #define DEFAULT_NORMTHRESH_MIN 0.1
 #define DEFAULT_ALLOWEDCLASS 4.0
 #define DEFAULT_STRIDE 2
+#define DEFAULT_CALC_NORMALS true
 #define EPS_RADIAN 0.001
 
 #define DEBUG 1
@@ -125,9 +127,10 @@ namespace polylidar {
     std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
     std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>>  ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
     std::vector<Polygon>  ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
-    std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
-    std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const size_t stride);
-
+    std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+    std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+    delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals=DEFAULT_CALC_NORMALS);
+    std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 }
 
 

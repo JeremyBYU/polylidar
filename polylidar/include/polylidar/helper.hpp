@@ -9,6 +9,8 @@
 #include "delaunator.hpp"
 #include <cassert>
 #include <array>
+#include <Eigen/Core>
+#include <Eigen/Dense>
 
 #define PL_PRINT_ARRAY(a)  a[0] << ", " << a[1] << ", "  << a[2]
 #define PL_PRINT_ARRAY2(a)  a[0] << ", " << a[1]
@@ -267,7 +269,8 @@ inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<siz
 
 }
 
-std::vector<double> ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles);
+void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
+void ComputeTriangleNormals2(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
 
 }
 

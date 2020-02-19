@@ -10,6 +10,7 @@
 #define VECTOR_SIZE_START 1024
 #define VECTOR_SIZE_END 1048576
 
+
 template<class T>
 void Fill_Random(std::vector<T> &a)
 {
@@ -40,8 +41,12 @@ void BM_Create_PointCloud(benchmark::State& state)
     std::vector<double> intr_{307, 0, 0, 0, 307, 0, 204, 121, 1};
     polylidar::Matrix<double> intr(intr_.data(), 3, 3);
 
+    // Create Extrinsics Data
+    std::vector<double> extr_{1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0};
+    polylidar::Matrix<double> extr(intr_.data(), 4, 4);
+
     for (auto _ : state) {
-        ExtractPointCloudFromFloatDepth(im, intr, 1);
+        ExtractPointCloudFromFloatDepth(im, intr, extr, 1);
     }
 }
 

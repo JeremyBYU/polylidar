@@ -43,7 +43,7 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlane
     return ExtractPlanesAndPolygonsFromMesh(triangulation, config);
 }
 
-std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, size_t stride = DEFAULT_STRIDE)
+std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, py::array_t<double> extrinsics, size_t stride = DEFAULT_STRIDE)
 {
     // Create Image Wrapper
     auto info_im = image.request();
@@ -51,14 +51,17 @@ std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, p
     // Create intrinsics wrapper
     auto info_int = intrinsics.request();
     Matrix<double> intrinsics_((double *)info_int.ptr, info_int.shape[0], info_int.shape[1]);
+    // Create extrinsics wrapper
+    auto info_ext = extrinsics.request();
+    Matrix<double> extrinsics_((double *)info_ext.ptr, info_ext.shape[0], info_ext.shape[1]);
     // Extract point cloud
-    std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics_, stride);
+    std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics_, extrinsics_, stride);
     // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
 
     return points;
 }
 
-std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> _extractUniformMeshFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, size_t stride = DEFAULT_STRIDE)
+std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> _extractUniformMeshFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, py::array_t<double> extrinsics, size_t stride = DEFAULT_STRIDE)
 {
     // Will hold the point cloud
     std::vector<double> points;
@@ -70,12 +73,37 @@ std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> _extra
     // Create intrinsics wrapper
     auto info_int = intrinsics.request();
     Matrix<double> intrinsics_((double *)info_int.ptr, info_int.shape[0], info_int.shape[1]);
+    auto info_ext = extrinsics.request();
+    Matrix<double> extrinsics_((double *)info_ext.ptr, info_ext.shape[0], info_ext.shape[1]);
 
     // Get Data
-    std::tie(points, triangles, halfedges) = ExtractUniformMeshFromFloatDepth(im, intrinsics_, stride);
+    std::tie(points, triangles, halfedges) = ExtractUniformMeshFromFloatDepth(im, intrinsics_, extrinsics_,stride);
     // std::cout << "_extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
 
     return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
+}
+
+delaunator::TriMesh _extractTriMeshFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, py::array_t<double> extrinsics, size_t stride = DEFAULT_STRIDE, const bool calc_normals = DEFAULT_CALC_NORMALS)
+{
+    // Will hold the point cloud
+    std::vector<double> points;
+    std::vector<size_t> triangles;
+    std::vector<size_t> halfedges;
+    // Create Image Wrapper
+    auto info_im = image.request();
+    Matrix<float> im((float *)info_im.ptr, info_im.shape[0], info_im.shape[1]);
+    // Create intrinsics wrapper
+    auto info_int = intrinsics.request();
+    Matrix<double> intrinsics_((double *)info_int.ptr, info_int.shape[0], info_int.shape[1]);
+    // Create extrinsics wrapper
+    auto info_ext = extrinsics.request();
+    Matrix<double> extrinsics_((double *)info_ext.ptr, info_ext.shape[0], info_ext.shape[1]);
+
+    // Get Data
+    auto triMesh = ExtractTriMeshFromFloatDepth(im, intrinsics_, extrinsics_, stride, calc_normals);
+    // std::cout << "_extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
+
+    return triMesh;
 }
 
 std::vector<Polygon> _extractPolygonsFromMesh(py::array_t<double> vertices, py::array_t<size_t> triangles, py::array_t<size_t> halfedges,

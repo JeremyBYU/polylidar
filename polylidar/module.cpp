@@ -48,6 +48,14 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("halfedges", &delaunator::HalfEdgeTriangulation::halfedges)
         .def_readonly("coords", &delaunator::HalfEdgeTriangulation::coords);
 
+    py::class_<delaunator::TriMesh>(m, "TriMesh")
+        // .def(py::init<py::array_t<double>>())
+        .def_readonly("vertices", &delaunator::TriMesh::vertices)
+        .def_readonly("triangles", &delaunator::TriMesh::triangles)
+        .def_readonly("halfedges", &delaunator::TriMesh::halfedges)
+        .def_readonly("triangle_normals", &delaunator::TriMesh::triangle_normals)
+        .def_readonly("coords", &delaunator::TriMesh::coords);
+
     py::class_<polylidar::Polygon>(m, "Polygon")
         .def(py::init<>())
         .def_readonly("shell", &polylidar::Polygon::shell, py::return_value_policy::copy)
@@ -89,10 +97,13 @@ PYBIND11_MODULE(polylidar, m)
         "allowedClass"_a=DEFAULT_ALLOWEDCLASS);
 
     m.def("extract_point_cloud_from_float_depth", &polylidar::_extractPointCloudFromFloatDepth, "Extracts point cloud from a float depth image",
-        "image"_a, "intrinsics"_a, "stride"_a=DEFAULT_STRIDE);
+        "image"_a, "intrinsics"_a, "extrinsics"_a, "stride"_a=DEFAULT_STRIDE);
 
     m.def("extract_uniform_mesh_from_float_depth", &polylidar::_extractUniformMeshFromFloatDepth, "Extracts a uniform mesh from a float depth image",
-        "image"_a, "intrinsics"_a, "stride"_a=DEFAULT_STRIDE);
+        "image"_a, "intrinsics"_a, "extrinsics"_a, "stride"_a=DEFAULT_STRIDE);
+
+    m.def("extract_tri_mesh_from_float_depth", &polylidar::_extractTriMeshFromFloatDepth, "Extracts a uniform triangular mesh from a float depth image",
+        "image"_a, "intrinsics"_a, "extrinsics"_a, "stride"_a=DEFAULT_STRIDE, "calc_normals"_a=DEFAULT_CALC_NORMALS);
 
 
 

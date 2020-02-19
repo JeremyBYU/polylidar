@@ -51,6 +51,7 @@
 
 namespace delaunator {
 
+
     class HalfEdgeTriangulation {
 
     public:
@@ -60,6 +61,7 @@ namespace delaunator {
 
         HalfEdgeTriangulation();
         HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords);
+        HalfEdgeTriangulation(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> & in_halfedges);
         #ifdef PY_EXTENSION
         HalfEdgeTriangulation(pybind11::array_t<double> in_coords);
         HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_);
@@ -69,6 +71,16 @@ namespace delaunator {
         // #endif
 
     private:
+    };
+
+    class TriMesh: public HalfEdgeTriangulation {
+    public:
+        polylidar::Matrix<double> triangle_normals_matrix;
+        std::vector<double> vertices;
+        std::vector<double> triangle_normals;
+        TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges);
+        void UpdateTriangleNormalMatrix();
+        
     };
 
     class Delaunator: public HalfEdgeTriangulation {

@@ -120,10 +120,10 @@ namespace polylidar {
         return os;
     }
 
-    std::vector<double> ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles)
+    void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals)
     {
-        auto num_triangles = static_cast<size_t>(triangles.size() / 3);
-        std::vector<double> triangle_normals(num_triangles * 3);
+        size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
+        triangle_normals.resize(num_triangles * 3);
 
         for (size_t i = 0; i < triangles.size(); i+=3) {
             auto &pi0 = triangles[i];
@@ -146,8 +146,26 @@ namespace polylidar {
             
             // triangle_normals_[i] = v01.cross(v02);
         }
+    }
 
-        return triangle_normals;
+    void ComputeTriangleNormals2(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals)
+    {
+        // std::cout << "Eigen Test" << std::endl;
+        size_t num_points = vertices.rows;
+        size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
+        triangle_normals.resize(num_triangles * 3);
+        
+        Eigen::Map<const Eigen::MatrixX3d> vertices_mat(vertices.ptr,(int)num_points,3);
+        Eigen::Map<const Eigen::Matrix<size_t, Eigen::Dynamic, 3>> triangles_mat(triangles.data(),(int)num_triangles,3);
+        Eigen::Map<Eigen::Matrix<double, Eigen::Dynamic, 3>> triangle_normals_mat(triangle_normals.data(),(int)num_triangles,3);
+
+        for (size_t i = 0; i < num_triangles; i+=1) {
+            auto triangle = triangles_mat.block<1,3>(i, 0);
+            Eigen::Vector3d v01 = vertices_mat.block<1,3>(triangle(0,1), 0) - vertices_mat.block<1,3>(triangle(0,0), 0);
+            Eigen::Vector3d v02 = vertices_mat.block<1,3>(triangle(0,2), 0) - vertices_mat.block<1,3>(triangle(0,0), 0);
+            triangle_normals_mat.block<1,3>(i,0) = v01.cross(v02);
+            triangle_normals_mat.block<1,3>(i,0).normalize();
+        }
     }
 
 }

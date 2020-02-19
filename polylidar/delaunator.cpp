@@ -22,61 +22,84 @@
 
 #include "delaunator.hpp"
 
-namespace delaunator {
+namespace delaunator
+{
 
-// Half Edge Constructors 
+// Half Edge Constructors
 HalfEdgeTriangulation::HalfEdgeTriangulation()
     : coords(),
       triangles(),
-      halfedges(){}
+      halfedges() {}
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords)
     : coords(in_coords),
       triangles(),
-      halfedges(){}
+      halfedges() {}
 
 #ifdef PY_EXTENSION
 HalfEdgeTriangulation::HalfEdgeTriangulation(pybind11::array_t<double> nparray)
     : coords(),
       triangles(),
-      halfedges(){
-        auto info = nparray.request();
-        std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
-        coords.ptr = (double*)info.ptr;
-        coords.rows = shape[0];
-        coords.cols = shape[1];
-      }
+      halfedges()
+{
+    auto info = nparray.request();
+    std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
+    coords.ptr = (double *)info.ptr;
+    coords.rows = shape[0];
+    coords.cols = shape[1];
+}
 HalfEdgeTriangulation::HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_)
     : coords(in_coords),
       triangles(),
-      halfedges(){
-        // Copy to vector
-        // allocate std::vector (to pass to the C++ function)
-        triangles.resize(triangles_.size());
-        std::memcpy(triangles.data(),triangles_.data(),triangles_.size()*sizeof(size_t));
+      halfedges()
+{
+    // Copy to vector
+    // allocate std::vector (to pass to the C++ function)
+    triangles.resize(triangles_.size());
+    std::memcpy(triangles.data(), triangles_.data(), triangles_.size() * sizeof(size_t));
 
-        // allocate std::vector (to pass to the C++ function)
-        halfedges.resize(halfedges_.size());
-        std::memcpy(halfedges.data(),halfedges_.data(),halfedges_.size()*sizeof(size_t));
-      }
+    // allocate std::vector (to pass to the C++ function)
+    halfedges.resize(halfedges_.size());
+    std::memcpy(halfedges.data(), halfedges_.data(), halfedges_.size() * sizeof(size_t));
+}
 #endif
 
+// This class is a specialization of HalfEdgeTriangulation
+// This class will actually own the memory of the vertices and will always be Three Dimensional
+// This constructor is destructive towards the input data, meaning the data is now owned by the TriMesh
+TriMesh::TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges)
+    : HalfEdgeTriangulation(),
+      vertices(),
+      triangle_normals()
+{
+    vertices.swap(in_vertices);
+    triangles.swap(in_triangles);
+    halfedges.swap(in_halfedges);
+    // Point the 2D coords Matrix to vertices data;
+    coords.cols = 3;
+    coords.rows = vertices.size() / 3;
+    coords.ptr = vertices.data();
+}
 
-
-constexpr std::size_t operator "" _z ( unsigned long long n )
-    { return n; }
+constexpr std::size_t operator"" _z(unsigned long long n)
+{
+    return n;
+}
 
 //@see https://stackoverflow.com/questions/33333363/built-in-mod-vs-custom-mod-function-improve-the-performance-of-modulus-op/33333636#33333636
-inline size_t fast_mod(const size_t i, const size_t c) {
+inline size_t fast_mod(const size_t i, const size_t c)
+{
     return i >= c ? i % c : i;
 }
 
 // Kahan and Babuska summation, Neumaier variant; accumulates less FP error
-inline double sum(const std::vector<double>& x) {
+inline double sum(const std::vector<double> &x)
+{
     double sum = x[0];
     double err = 0.0;
 
-    for (size_t i = 1; i < x.size(); i++) {
+    for (size_t i = 1; i < x.size(); i++)
+    {
         const double k = x[i];
         const double m = sum + k;
         err += std::fabs(sum) >= std::fabs(k) ? sum - m + k : k - m + sum;
@@ -89,7 +112,8 @@ inline double dist(
     const double ax,
     const double ay,
     const double bx,
-    const double by) {
+    const double by)
+{
     const double dx = ax - bx;
     const double dy = ay - by;
     return dx * dx + dy * dy;
@@ -101,7 +125,8 @@ inline double circumradius(
     const double bx,
     const double by,
     const double cx,
-    const double cy) {
+    const double cy)
+{
     const double dx = bx - ax;
     const double dy = by - ay;
     const double ex = cx - ax;
@@ -114,17 +139,21 @@ inline double circumradius(
     const double x = (ey * bl - dy * cl) * 0.5 / d;
     const double y = (dx * cl - ex * bl) * 0.5 / d;
 
-    if ((bl > 0.0 || bl < 0.0) && (cl > 0.0 || cl < 0.0) && (d > 0.0 || d < 0.0)) {
+    if ((bl > 0.0 || bl < 0.0) && (cl > 0.0 || cl < 0.0) && (d > 0.0 || d < 0.0))
+    {
         return x * x + y * y;
-    } else {
+    }
+    else
+    {
         return std::numeric_limits<double>::max();
     }
 }
 
 inline bool orient_fast(
-    const double * p,
-    const double * q,
-    const double * r) {
+    const double *p,
+    const double *q,
+    const double *r)
+{
     return (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1]) < 0.0;
 }
 
@@ -134,7 +163,8 @@ inline std::pair<double, double> circumcenter(
     const double bx,
     const double by,
     const double cx,
-    const double cy) {
+    const double cy)
+{
     const double dx = bx - ax;
     const double dy = by - ay;
     const double ex = cx - ax;
@@ -150,34 +180,41 @@ inline std::pair<double, double> circumcenter(
     return std::make_pair(x, y);
 }
 
-struct compare {
+struct compare
+{
 
-    std::vector<double> const& dists;
-    polylidar::Matrix<double> const& coords;
+    std::vector<double> const &dists;
+    polylidar::Matrix<double> const &coords;
 
-
-    bool operator()(std::size_t i, std::size_t j) {
+    bool operator()(std::size_t i, std::size_t j)
+    {
         const double d1 = dists[i];
         const double d2 = dists[j];
         const double diff1 = d1 - d2;
         const double diff2 = coords(i, 0_z) - coords(j, 0_z);
         const double diff3 = coords(i, 1_z) - coords(j, 1_z);
 
-        if (diff1 > 0.0 || diff1 < 0.0) {
+        if (diff1 > 0.0 || diff1 < 0.0)
+        {
             return diff1 < 0;
-        } else if (diff2 > 0.0 || diff2 < 0.0) {
+        }
+        else if (diff2 > 0.0 || diff2 < 0.0)
+        {
             return diff2 < 0;
-        } else {
+        }
+        else
+        {
             return diff3 < 0;
         }
     }
 };
 
 inline bool in_circle_fast(
-    const double * a,
-    const double * b,
-    const double * c,
-    const double * p) {
+    const double *a,
+    const double *b,
+    const double *c,
+    const double *p)
+{
 
     const double dx = a[0] - p[0];
     const double dy = a[1] - p[1];
@@ -195,38 +232,38 @@ inline bool in_circle_fast(
             ap * (ex * fy - ey * fx)) < 0.0;
 }
 
-
 #ifdef PL_USE_ROBUST_PREDICATES
-    #define incircle_generic(a, b, c, d) \
-        predicates::incircle(a, b,c, d) < 0.0
+#define incircle_generic(a, b, c, d) \
+    predicates::incircle(a, b, c, d) < 0.0
 
-    #define orient_generic(a, b, c) \
-        (predicates::orient2d(a, b, c) > 0.0)
+#define orient_generic(a, b, c) \
+    (predicates::orient2d(a, b, c) > 0.0)
 #else
-    #define incircle_generic(a, b, c, d) \
-        in_circle_fast(a, b,c, d)
+#define incircle_generic(a, b, c, d) \
+    in_circle_fast(a, b, c, d)
 
-    #define orient_generic(a, b, c) \
-        orient_fast(a, b, c)
+#define orient_generic(a, b, c) \
+    orient_fast(a, b, c)
 #endif
-
-
 
 constexpr double EPSILON = std::numeric_limits<double>::epsilon();
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 
-inline bool check_pts_equal(double x1, double y1, double x2, double y2) {
+inline bool check_pts_equal(double x1, double y1, double x2, double y2)
+{
     return std::fabs(x1 - x2) <= EPSILON &&
            std::fabs(y1 - y2) <= EPSILON;
 }
 
 // monotonically increases with real angle, but doesn't need expensive trigonometry
-inline double pseudo_angle(const double dx, const double dy) {
+inline double pseudo_angle(const double dx, const double dy)
+{
     const double p = dx / (std::abs(dx) + std::abs(dy));
     return (dy > 0.0 ? 3.0 - p : 1.0 + p) / 4.0; // [0..1)
 }
 
-struct DelaunatorPoint {
+struct DelaunatorPoint
+{
     std::size_t i;
     double x;
     double y;
@@ -238,7 +275,8 @@ struct DelaunatorPoint {
 
 // Delaunator::Delaunator(pybind11::array_t<double> nparray)
 
-void Delaunator::triangulate() {
+void Delaunator::triangulate()
+{
     std::size_t n = coords.rows;
 
     double max_x = std::numeric_limits<double>::min();
@@ -248,14 +286,19 @@ void Delaunator::triangulate() {
     std::vector<std::size_t> ids;
     ids.reserve(n);
 
-    for (std::size_t i = 0; i < n; i++) {
+    for (std::size_t i = 0; i < n; i++)
+    {
         const double x = coords(i, 0);
         const double y = coords(i, 1);
 
-        if (x < min_x) min_x = x;
-        if (y < min_y) min_y = y;
-        if (x > max_x) max_x = x;
-        if (y > max_y) max_y = y;
+        if (x < min_x)
+            min_x = x;
+        if (y < min_y)
+            min_y = y;
+        if (x > max_x)
+            max_x = x;
+        if (y > max_y)
+            max_y = y;
 
         ids.push_back(i);
     }
@@ -268,9 +311,11 @@ void Delaunator::triangulate() {
     std::size_t i2 = INVALID_INDEX;
 
     // pick a seed point close to the centroid
-    for (std::size_t i = 0; i < n; i++) {
+    for (std::size_t i = 0; i < n; i++)
+    {
         const double d = dist(cx, cy, coords(i, 0), coords(i, 1));
-        if (d < min_dist) {
+        if (d < min_dist)
+        {
             i0 = i;
             min_dist = d;
         }
@@ -282,10 +327,13 @@ void Delaunator::triangulate() {
     min_dist = std::numeric_limits<double>::max();
 
     // find the point closest to the seed
-    for (std::size_t i = 0; i < n; i++) {
-        if (i == i0) continue;
+    for (std::size_t i = 0; i < n; i++)
+    {
+        if (i == i0)
+            continue;
         const double d = dist(i0x, i0y, coords(i, 0), coords(i, 1));
-        if (d < min_dist && d > 0.0) {
+        if (d < min_dist && d > 0.0)
+        {
             i1 = i;
             min_dist = d;
         }
@@ -297,26 +345,31 @@ void Delaunator::triangulate() {
     double min_radius = std::numeric_limits<double>::max();
 
     // find the third point which forms the smallest circumcircle with the first two
-    for (std::size_t i = 0; i < n; i++) {
-        if (i == i0 || i == i1) continue;
+    for (std::size_t i = 0; i < n; i++)
+    {
+        if (i == i0 || i == i1)
+            continue;
 
         const double r = circumradius(
             i0x, i0y, i1x, i1y, coords(i, 0), coords(i, 1));
 
-        if (r < min_radius) {
+        if (r < min_radius)
+        {
             i2 = i;
             min_radius = r;
         }
     }
 
-    if (!(min_radius < std::numeric_limits<double>::max())) {
+    if (!(min_radius < std::numeric_limits<double>::max()))
+    {
         throw std::runtime_error("not triangulation");
     }
 
     double i2x = coords(i2, 0);
     double i2y = coords(i2, 1);
 
-    if (orient_generic(&coords(i0, 0), &coords(i1, 0), &coords(i2, 0))) {
+    if (orient_generic(&coords(i0, 0), &coords(i1, 0), &coords(i2, 0)))
+    {
         std::swap(i1, i2);
         std::swap(i1x, i2x);
         std::swap(i1y, i2y);
@@ -327,12 +380,13 @@ void Delaunator::triangulate() {
     std::vector<double> dists;
     dists.reserve(ids.size());
 
-	for (auto&& id : ids) {
+    for (auto &&id : ids)
+    {
         const double d = dist(coords(id, 0), coords(id, 1), m_center_x, m_center_y);
         dists.push_back(d);
-	}
+    }
     // sort the points by distance from the seed triangle circumcenter
-    std::sort(ids.begin(), ids.end(), compare{ dists, coords });
+    std::sort(ids.begin(), ids.end(), compare{dists, coords});
 
     // initialize a hash table for storing edges of the advancing convex hull
     m_hash_size = static_cast<std::size_t>(std::llround(std::ceil(std::sqrt(n))));
@@ -366,13 +420,15 @@ void Delaunator::triangulate() {
     add_triangle(i0, i1, i2, INVALID_INDEX, INVALID_INDEX, INVALID_INDEX);
     double xp = std::numeric_limits<double>::quiet_NaN();
     double yp = std::numeric_limits<double>::quiet_NaN();
-    for (std::size_t k = 0; k < n; k++) {
+    for (std::size_t k = 0; k < n; k++)
+    {
         const std::size_t i = ids[k];
         const double x = coords(i, 0);
         const double y = coords(i, 1);
 
         // skip near-duplicate points
-        if (k > 0 && check_pts_equal(x, y, xp, yp)) continue;
+        if (k > 0 && check_pts_equal(x, y, xp, yp))
+            continue;
         xp = x;
         yp = y;
 
@@ -380,30 +436,36 @@ void Delaunator::triangulate() {
         if (
             check_pts_equal(x, y, i0x, i0y) ||
             check_pts_equal(x, y, i1x, i1y) ||
-            check_pts_equal(x, y, i2x, i2y)) continue;
+            check_pts_equal(x, y, i2x, i2y))
+            continue;
 
         // find a visible edge on the convex hull using edge hash
         std::size_t start = 0;
 
         size_t key = hash_key(x, y);
-        for (size_t j = 0; j < m_hash_size; j++) {
+        for (size_t j = 0; j < m_hash_size; j++)
+        {
             start = m_hash[fast_mod(key + j, m_hash_size)];
-            if (start != INVALID_INDEX && start != hull_next[start]) break;
+            if (start != INVALID_INDEX && start != hull_next[start])
+                break;
         }
 
         start = hull_prev[start];
         size_t e = start;
         size_t q;
 
-        while (q = hull_next[e], !orient_generic(&coords(i, 0), &coords(e, 0), &coords(q, 0))) { //TODO: does it works in a same way as in JS
+        while (q = hull_next[e], !orient_generic(&coords(i, 0), &coords(e, 0), &coords(q, 0)))
+        { //TODO: does it works in a same way as in JS
             e = q;
-            if (e == start) {
+            if (e == start)
+            {
                 e = INVALID_INDEX;
                 break;
             }
         }
 
-        if (e == INVALID_INDEX) continue; // likely a near-duplicate point; skip it
+        if (e == INVALID_INDEX)
+            continue; // likely a near-duplicate point; skip it
 
         // add the first triangle from the point
         std::size_t t = add_triangle(
@@ -422,7 +484,8 @@ void Delaunator::triangulate() {
         std::size_t next = hull_next[e];
         while (
             q = hull_next[next],
-            orient_generic(&coords(i, 0), &coords(next, 0), &coords(q, 0))) {
+            orient_generic(&coords(i, 0), &coords(next, 0), &coords(q, 0)))
+        {
             t = add_triangle(next, i, q, hull_tri[i], INVALID_INDEX, hull_tri[next]);
             hull_tri[i] = legalize(t + 2);
             hull_next[next] = next; // mark as removed
@@ -431,10 +494,12 @@ void Delaunator::triangulate() {
         }
 
         // walk backward from the other side, adding more triangles and flipping
-        if (e == start) {
+        if (e == start)
+        {
             while (
                 q = hull_prev[e],
-                orient_generic(&coords(i, 0), &coords(q, 0), &coords(e, 0))) {
+                orient_generic(&coords(i, 0), &coords(q, 0), &coords(e, 0)))
+            {
                 t = add_triangle(q, i, e, INVALID_INDEX, hull_tri[e], hull_tri[q]);
                 legalize(t + 2);
                 hull_tri[q] = t;
@@ -456,7 +521,6 @@ void Delaunator::triangulate() {
     }
 }
 
-
 Delaunator::Delaunator(polylidar::Matrix<double> &in_coords)
     : HalfEdgeTriangulation(in_coords),
       hull_prev(),
@@ -467,8 +531,9 @@ Delaunator::Delaunator(polylidar::Matrix<double> &in_coords)
       m_center_x(),
       m_center_y(),
       m_hash_size(),
-      m_edge_stack() {
-    }
+      m_edge_stack()
+{
+}
 #ifdef PY_EXTENSION
 Delaunator::Delaunator(pybind11::array_t<double> nparray)
     : HalfEdgeTriangulation(nparray),
@@ -480,27 +545,32 @@ Delaunator::Delaunator(pybind11::array_t<double> nparray)
       m_center_x(),
       m_center_y(),
       m_hash_size(),
-      m_edge_stack() {}
+      m_edge_stack()
+{
+}
 #endif
-    
 
-double Delaunator::get_hull_area() {
+double Delaunator::get_hull_area()
+{
     std::vector<double> hull_area;
     size_t e = hull_start;
-    do {
+    do
+    {
         hull_area.push_back((coords(e, 0) - coords(hull_prev[e], 0)) * (coords(e, 1) + coords(hull_prev[e], 1)));
         e = hull_next[e];
     } while (e != hull_start);
     return sum(hull_area);
 }
 
-std::size_t Delaunator::legalize(std::size_t a) {
+std::size_t Delaunator::legalize(std::size_t a)
+{
     std::size_t i = 0;
     std::size_t ar = 0;
     m_edge_stack.clear();
 
     // recursion eliminated with a fixed-size stack
-    while (true) {
+    while (true)
+    {
         const size_t b = halfedges[a];
 
         /* if the pair of triangles doesn't satisfy the Delaunay condition
@@ -521,12 +591,16 @@ std::size_t Delaunator::legalize(std::size_t a) {
         const size_t a0 = 3 * (a / 3);
         ar = a0 + (a + 2) % 3;
 
-        if (b == INVALID_INDEX) {
-            if (i > 0) {
+        if (b == INVALID_INDEX)
+        {
+            if (i > 0)
+            {
                 i--;
                 a = m_edge_stack[i];
                 continue;
-            } else {
+            }
+            else
+            {
                 //i = INVALID_INDEX;
                 break;
             }
@@ -547,17 +621,21 @@ std::size_t Delaunator::legalize(std::size_t a) {
             &coords(pl, 0),
             &coords(p1, 0));
 
-        if (illegal) {
+        if (illegal)
+        {
             triangles[a] = p1;
             triangles[b] = p0;
 
             auto hbl = halfedges[bl];
 
             // edge swapped on the other side of the hull (rare); fix the halfedge reference
-            if (hbl == INVALID_INDEX) {
+            if (hbl == INVALID_INDEX)
+            {
                 std::size_t e = hull_start;
-                do {
-                    if (hull_tri[e] == bl) {
+                do
+                {
+                    if (hull_tri[e] == bl)
+                    {
                         hull_tri[e] = a;
                         break;
                     }
@@ -569,19 +647,26 @@ std::size_t Delaunator::legalize(std::size_t a) {
             link(ar, bl);
             std::size_t br = b0 + (b + 1) % 3;
 
-            if (i < m_edge_stack.size()) {
+            if (i < m_edge_stack.size())
+            {
                 m_edge_stack[i] = br;
-            } else {
+            }
+            else
+            {
                 m_edge_stack.push_back(br);
             }
             i++;
-
-        } else {
-            if (i > 0) {
+        }
+        else
+        {
+            if (i > 0)
+            {
                 i--;
                 a = m_edge_stack[i];
                 continue;
-            } else {
+            }
+            else
+            {
                 break;
             }
         }
@@ -589,7 +674,8 @@ std::size_t Delaunator::legalize(std::size_t a) {
     return ar;
 }
 
-inline std::size_t Delaunator::hash_key(const double x, const double y) const {
+inline std::size_t Delaunator::hash_key(const double x, const double y) const
+{
     const double dx = x - m_center_x;
     const double dy = y - m_center_y;
     return fast_mod(
@@ -603,7 +689,8 @@ std::size_t Delaunator::add_triangle(
     std::size_t i2,
     std::size_t a,
     std::size_t b,
-    std::size_t c) {
+    std::size_t c)
+{
     std::size_t t = triangles.size();
     triangles.push_back(i0);
     triangles.push_back(i1);
@@ -614,27 +701,37 @@ std::size_t Delaunator::add_triangle(
     return t;
 }
 
-void Delaunator::link(const std::size_t a, const std::size_t b) {
+void Delaunator::link(const std::size_t a, const std::size_t b)
+{
     std::size_t s = halfedges.size();
-    if (a == s) {
+    if (a == s)
+    {
         halfedges.push_back(b);
-    } else if (a < s) {
+    }
+    else if (a < s)
+    {
         halfedges[a] = b;
-    } else {
+    }
+    else
+    {
         throw std::runtime_error("Cannot link edge");
     }
-    if (b != INVALID_INDEX) {
+    if (b != INVALID_INDEX)
+    {
         std::size_t s2 = halfedges.size();
-        if (b == s2) {
+        if (b == s2)
+        {
             halfedges.push_back(a);
-        } else if (b < s2) {
+        }
+        else if (b < s2)
+        {
             halfedges[b] = a;
-        } else {
+        }
+        else
+        {
             throw std::runtime_error("Cannot link edge");
         }
     }
 }
-
-
 
 } //namespace delaunator
