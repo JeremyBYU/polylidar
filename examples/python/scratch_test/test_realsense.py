@@ -36,6 +36,7 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, stride=2):
     tri_mesh = extract_tri_mesh_from_float_depth(im, intrinsics, extrinsics, stride=stride)
     triangles = np.asarray(tri_mesh.triangles)
     vertices = np.asarray(tri_mesh.vertices)
+    halfedges = np.asarray(tri_mesh.halfedges)
     triangle_normals = np.asarray(tri_mesh.triangle_normals)
 
     vertices = vertices.reshape((int(vertices.shape[0] / 3), 3))
@@ -84,12 +85,12 @@ def main():
     for idx in range(len(color_files)):
         if idx < 2:
             continue
-        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=3)
+        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
 
         logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         # o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])
-        triangle_normals, mesh = run_test(pcd, rgbd, intrinsics, extrinsics, stride=3)
+        triangle_normals, mesh = run_test(pcd, rgbd, intrinsics, extrinsics, stride=2)
         plot_normals(triangle_normals,np.asarray(mesh.triangle_normals))
 
 if __name__ == "__main__":

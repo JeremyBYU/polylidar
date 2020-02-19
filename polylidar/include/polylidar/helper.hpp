@@ -42,6 +42,11 @@ inline double dotProduct3(const std::array<double, 3> &v1, const std::array<doub
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
+inline double dotProduct3(const double *v1, const std::array<double, 3> &v2)
+{
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
+}
+
 inline void crossProduct3(const std::array<double, 3> &u, const std::array<double, 3> &v, double *normal)
 {
     // cross product
@@ -77,6 +82,37 @@ inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delauna
     // std::cout << "pi0" << points(pi0, 3) << " pi1" << points(pi1, 3) << " pi2" << points(pi2, 3) << std::endl;
     auto result = static_cast<int>(points(pi0, 3_z)) == static_cast<int>(allowedClass) && static_cast<int>(points(pi1, 3_z)) == static_cast<int>(allowedClass) && static_cast<int>(points(pi2, 3_z)) == static_cast<int>(allowedClass);
     return result;
+}
+
+// Determines if the triangles noise (dz from normal) is below a configurable zThrsh
+inline bool checkZThresh(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
+                         std::array<double, 3> &desiredVector, double zThresh)
+{
+    auto &triangles = delaunay.triangles;
+        // Get reference to point indices
+    auto &pi0 = triangles[t * 3];
+    auto &pi1 = triangles[t * 3 + 1];
+    auto &pi2 = triangles[t * 3 + 2];
+
+    std::array<double, 3> vv1 = {points(pi0, 0), points(pi0, 1), points(pi0, 2)};
+    std::array<double, 3> vv2 = {points(pi1, 0), points(pi1, 1), points(pi1, 2)};
+    std::array<double, 3> vv3 = {points(pi2, 0), points(pi2, 1), points(pi2, 2)};
+
+    // two lines of triangle
+    // V1 is starting index
+    std::array<double, 3> u{{vv2[0] - vv1[0], vv2[1] - vv1[1], vv2[2] - vv1[2]}};
+    std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
+
+    // Calculate the noise amt from the desired vector
+    auto u_z = dotProduct3(u, desiredVector);
+    auto v_z = dotProduct3(v, desiredVector);
+    auto s_z = 0.0;
+
+    // get max dimension change in a triangle
+    auto zMin = std::min(std::min(u_z, v_z), s_z);
+    auto zMax = std::max(std::max(u_z, v_z), s_z);
+    double zDiff = zMax - zMin;
+    return zThresh > 0.0 && zDiff < zThresh;
 }
 
 inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,

@@ -34,9 +34,23 @@ inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &dela
     // get dot product of triangle
     auto prod = std::abs(dotProduct3(normal, config.desiredVector));
 
-    bool passZThresh = config.zThresh > 0 && zDiff < config.zThresh;
+    bool passZThresh = config.zThresh > 0.0 && zDiff < config.zThresh;
 
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
+}
+
+inline bool validTriangle3D_Opt(size_t t, delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config)
+{
+
+    auto &normals = delaunay.triangle_normals;
+    auto normal = &normals[t*3];
+
+    auto prod = std::abs(dotProduct3(normal, config.desiredVector));
+    if (prod < config.normThreshMin)
+        return false;
+
+    auto passZThresh = checkZThresh(t, delaunay, points, config.desiredVector, config.zThresh);
+    return prod > config.normThresh || passZThresh;
 }
 
 inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
@@ -77,6 +91,25 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     {
         bool valid2D = validateTriangle2D(t, delaunay, points, config);
         bool valid3D = validateTriangle3D(t, delaunay, points, config);
+        triSet[t] = valid2D && valid3D;
+        // triSet[t] = points(delaunay.triangles[t *3], 2) < 100.0;
+    }
+}
+
+void createTriSet3_Opt(std::vector<bool> &triSet, delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config)
+{
+    size_t numTriangles = delaunay.triangles.size() / 3;
+
+// Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
+// Experimentation has found that too many threads will kill this loop if not enough work is presetn
+#if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
+#pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+#endif
+    for (size_t t = 0; t < numTriangles; t++)
+    {
+        bool valid2D = validateTriangle2D(t, delaunay, points, config);
+        bool valid3D = validTriangle3D_Opt(t, delaunay, points, config);
         triSet[t] = valid2D && valid3D;
         // triSet[t] = points(delaunay.triangles[t *3], 2) < 100.0;
     }
@@ -410,6 +443,37 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
     return planes;
 }
 
+// Slightly more optimized Plane Extraction for 3D triangular meshes
+// Triangle normals are already computed, or computed in bulk before creating the TriSet - triangles passing set consraints
+std::vector<std::vector<size_t>> extractPlanesSet(delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config)
+{
+    std::vector<std::vector<size_t>> planes;
+    size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
+    std::vector<bool> triSet(max_triangles, false);
+    if (delaunay.triangle_normals.size() <= 0)
+    {
+        ComputeTriangleNormals(delaunay.coords, delaunay.triangles, delaunay.triangle_normals);
+    }
+    createTriSet3_Opt(triSet, delaunay, points, config);
+
+    for (size_t t = 0; t < max_triangles; t++)
+    {
+        if (triSet[t])
+        {
+
+            planes.emplace_back();                       // construct empty vector inside planes
+            auto &planeMesh = planes[planes.size() - 1]; // retrieve this newly created vector
+            extractMeshSet(delaunay, triSet, t, planeMesh);
+            if (!passPlaneConstraints(planeMesh, config))
+            {
+                planes.pop_back();
+            }
+        }
+    }
+
+    return planes;
+}
+
 std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config)
 {
     config.dim = nparray.cols;
@@ -447,7 +511,7 @@ std::vector<double> ExtractNormalsFromMesh(delaunator::TriMesh &triangulation, C
     return triangle_normals;
 }
 
-std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::TriMesh &triangulation, Config config)
 {
     auto &vertices = triangulation.coords;
     config.dim = vertices.cols;
@@ -477,7 +541,7 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanes
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
 
-std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config)
+std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::TriMesh &triangulation, Config config)
 {
     auto vertices = triangulation.coords;
     config.dim = vertices.cols;

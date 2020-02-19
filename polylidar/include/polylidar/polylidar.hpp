@@ -126,8 +126,8 @@ struct Polygon
 std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config);
 std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config);
 std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
-std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
-std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::HalfEdgeTriangulation &triangulation, Config config);
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::TriMesh &triangulation, Config config);
+std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::TriMesh &triangulation, Config config);
 std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals = DEFAULT_CALC_NORMALS);

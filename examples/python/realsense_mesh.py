@@ -51,8 +51,9 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     vertices = polylidar_inputs['vertices']
     triangles = polylidar_inputs['triangles']
     halfedges = polylidar_inputs['halfedges']
+    tri_mesh = polylidar_inputs['tri_mesh']
     t1 = time.perf_counter()
-    planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
+    planes, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
     t2 = time.perf_counter()
     all_poly_lines = filter_and_create_open3d_polygons(vertices, polygons)
     triangles = triangles.reshape(int(triangles.shape[0] / 3), 3)
@@ -130,7 +131,7 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
 
     t2 = time.perf_counter()
     polylidar_inputs = dict(
-        vertices=points, triangles=triangles, halfedges=halfedges)
+        vertices=points, triangles=triangles, halfedges=halfedges, tri_mesh=tri_mesh)
     timings = dict(mesh_creation=(t1 - t0) * 1000, pc_rotation=(t2 - t1) * 1000)
     return polylidar_inputs, timings
 
@@ -156,12 +157,12 @@ def main():
     for idx in range(len(color_files)):
         if idx < 3:
             continue
-        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=3)
+        pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
 
         logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])
-        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback, stride=3)
+        results = run_test(pcd, rgbd, intrinsics, extrinsics, callback=callback, stride=2)
 
 
 if __name__ == "__main__":
