@@ -145,7 +145,7 @@ void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<si
         std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
         // cross product
-        crossProduct3(u, v, &triangle_normals[i]);
+        crossProduct3(v, u, &triangle_normals[i]);
         // normalize
         normalize3(&triangle_normals[i]);
     }

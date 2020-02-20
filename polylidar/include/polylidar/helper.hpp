@@ -134,7 +134,7 @@ inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &del
     std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
     // cross product
-    crossProduct3(u, v, normal.data());
+    crossProduct3(v, u, normal.data());
     // normalize
     normalize3(normal.data());
 

@@ -132,6 +132,9 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, con
 std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals = DEFAULT_CALC_NORMALS);
 std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+
+std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config);
+std::vector<std::vector<size_t>> extractPlanesSet(delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config);
 } // namespace polylidar
 
 #endif

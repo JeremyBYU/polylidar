@@ -525,18 +525,16 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanes
         config.needRotation = true;
         config.rotationMatrix = axisAngleToRotationMatrix(axis, angle);
     }
-    // std::cout << "Axis: " << PL_PRINT_ARRAY(axis) <<  "; angle: " << angle << std::endl;
-    // print_matrix(config.rotationMatrix);
 
-    auto t0 = std::chrono::high_resolution_clock::now();
+    // auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(triangulation, vertices, config);
-    auto t1 = std::chrono::high_resolution_clock::now();
-    float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
-    std::cout << "Plane Extraction took " << elapsed_d << " milliseconds" << std::endl;
+    // auto t1 = std::chrono::high_resolution_clock::now();
+    // float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
+    // std::cout << "Plane Extraction took " << elapsed_d << " milliseconds" << std::endl;
     std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, vertices, config);
-    auto t2 = std::chrono::high_resolution_clock::now();
-    elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
-    std::cout << "Polygon Hull Extraction took " << elapsed_d << " milliseconds" << std::endl;
+    // auto t2 = std::chrono::high_resolution_clock::now();
+    // elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
+    // std::cout << "Polygon Hull Extraction took " << elapsed_d << " milliseconds" << std::endl;
     // I think the std move is what I'm looking for??
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
