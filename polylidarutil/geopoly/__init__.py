@@ -3,6 +3,7 @@ import time
 import open3d as o3d
 import numpy as np
 from scipy.spatial import cKDTree
+from scipy.spatial.transform import Rotation as R
 import matplotlib.pyplot as plt
 
 from examples.python.realsense_util import create_open_3d_mesh
@@ -18,7 +19,7 @@ EXAMPLE_MESH_2 = './scratch/dense_first_floor_map.ply'
 EXAMPLE_MESH_3 = './scratch/sparse_basement.ply'
 
 ALL_MESHES = [EXAMPLE_MESH_1, EXAMPLE_MESH_2, EXAMPLE_MESH_3]
-
+ALL_MESHES_ROTATIONS = [np.identity(3), R.from_rotvec(-np.pi/2 * np.array([1, 0, 0])), R.from_rotvec(-np.pi/2 * np.array([1, 0, 0]))]
 
 def get_colors(inp, colormap, vmin=None, vmax=None):
     norm = plt.Normalize(vmin, vmax)
@@ -32,6 +33,7 @@ class GaussianAccumulator(object):
         self.kdtree = cKDTree(gaussian_normals, leafsize=leafsize)
         self.accumulator = np.zeros(self.nbuckets, dtype=np.float64)
         self.colors = np.zeros_like(gaussian_normals)
+        self.gaussian_normals = gaussian_normals
 
     def integrate(self, normals):
         query_size = normals.shape[0]
@@ -178,7 +180,7 @@ def draw_normals(normals, line_length=0.05):
     return line_set
 
 
-def visualize_refinement(ico, level=2):
+def visualize_refinement(ico, level=2, plot=False):
     vertices, triangles = refine_icosahedron(np.asarray(
         ico.triangles), np.asarray(ico.vertices), level=level)
     new_mesh = create_open_3d_mesh(triangles, vertices)
@@ -192,8 +194,8 @@ def visualize_refinement(ico, level=2):
     pcd_normals = o3d.geometry.PointCloud(
         o3d.utility.Vector3dVector(top_normals))
     pcd_normals.paint_uniform_color([0.5, 0.5, 0.5])
-
-    plot_meshes(new_mesh, line_set, pcd_normals, shift=False)
+    if plot:
+        plot_meshes(new_mesh, line_set, pcd_normals, shift=False)
     return new_mesh, top_normals
 
 
@@ -245,7 +247,7 @@ def assign_vertex_colors(mesh, normal_colors):
     return split_mesh
 
 
-def visualize_gaussian_integration(refined_icosahedron_mesh, gaussian_normals, mesh, ds=10):
+def visualize_gaussian_integration(refined_icosahedron_mesh, gaussian_normals, mesh, ds=10, plot=False):
     to_integrate_normals = np.asarray(mesh.triangle_normals)
     num_normals = to_integrate_normals.shape[0]
     to_integrate_normals = to_integrate_normals[np.random.choice(
@@ -253,11 +255,94 @@ def visualize_gaussian_integration(refined_icosahedron_mesh, gaussian_normals, m
     ga = GaussianAccumulator(gaussian_normals)
     ga.integrate(to_integrate_normals)
     ga.normalize()
-    colred_icosahedron = assign_vertex_colors(
+    colored_icosahedron = assign_vertex_colors(
         refined_icosahedron_mesh, ga.colors)
-    plot_meshes(colred_icosahedron, mesh)
+    if plot:
+        plot_meshes(colored_icosahedron, mesh)
 
+    return ga, colored_icosahedron
 
+def convert_phi_theta(normals, top_half=True):   
+    phi_theta = np.zeros((normals.shape[0], 2))
+    xy = normals[:,0]**2 + normals[:,1]**2
+    phi_theta[:,0] = np.arctan2(np.sqrt(xy), normals[:,2]) # for elevation angle defined from Z-axis down
+    phi_theta[:,1] = np.arctan2(normals[:,1], normals[:,0])
+    mask = phi_theta[:, 0] < np.pi/2.0
+    phi_theta = phi_theta[mask, :]
+    return phi_theta, mask
+
+def convert_stereographic(normals, top_half=True):
+    mask = normals[:, 2] > 0
+    normals_new = normals[mask,:]
+    projection = np.zeros((normals_new.shape[0], 2))
+    projection[:, 0] = normals_new[:,0] / (1 - normals_new[:, 2])
+    projection[:, 1] = normals_new[:,1] / (1 - normals_new[:, 2])
+    return projection, mask
+
+def convert_phi_theta_cetered(normals, top_half=True):
+    mask = normals[:, 2] > 0
+    normals_new = normals[mask,:]
+    projection = np.zeros((normals_new.shape[0], 2))
+    xy = normals_new[:,0]**2 + normals_new[:,1]**2
+    for i in range(normals_new.shape[0]):
+        normal = normals_new[i, :]
+        phi = np.arccos(normal[2])
+        phi = -phi if normal[1] < 0 else phi
+        theta = np.arctan2(normal[1], normal[0])
+        theta = theta + np.pi/2.0
+        theta = theta - np.pi if theta > np.pi/2.0 else theta
+        projection[i, :] = [phi, theta]
+
+    return projection, mask
+
+def down_proj(normals, top_half=True):
+    mask = normals[:, 2] > 0
+    normals_new = normals[mask,:]
+    projection = np.zeros((normals_new.shape[0], 2))
+    projection = normals_new[:, :2]
+
+    return projection, mask
+
+def azimuth_equidistant(normals, top_half=True):
+    mask = normals[:, 2] > 0
+    normals_new = normals[mask,:]
+    projection = np.zeros((normals_new.shape[0], 2))
+    xy = normals_new[:,0]**2 + normals_new[:,1]**2
+    r_proj = np.sqrt(xy)
+    theta = np.arctan2(normals_new[:,1], normals_new[:,0])
+    phi = np.zeros_like(theta)
+    for i in range(normals_new.shape[0]):
+        normal = normals_new[i, :]
+        phi_ = np.arccos(normal[2])
+        # phi_ = -phi_ if normal[1] < 0 else phi_
+        phi[i] = phi_
+
+    projection[:, 0] = phi * np.sin(theta)
+    projection[:, 1] = - phi * np.cos(theta)
+
+    return projection, mask
+
+def plot_projection(ga):
+    
+    projections = [("Spherical Coordinates", "phi", "theta", "convert_phi_theta"), 
+                    ("Spherical Coordinates Centered", "phi", "theta", "convert_phi_theta_cetered"),
+                    ("Steographic Projection", "x*", "y*", "convert_stereographic"), 
+                    ("Project To Plane", "x", "y", "down_proj"),
+                    ("Azimuth Equidistant", "x*", "y*", "azimuth_equidistant"),
+                    ]
+    fig, axs = plt.subplots(3, 2, figsize=(5,7))
+    axs = axs.reshape(-1)
+    for i, (title_name, xlabel, ylabel, function_name) in enumerate(projections):
+        ax = axs[i]
+        proj, mask = globals()[function_name](ga.gaussian_normals)
+        ax.scatter(proj[:,0], proj[:, 1], c=ga.colors[mask,:])
+        ax.set_title(title_name)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
+        ax.axis('equal')
+    fig.tight_layout()
+
+    plt.show(block=True)
 def main():
 
     ico, sphere = generate_sphere_examples()
@@ -272,27 +357,33 @@ def main():
         print("Refinement Level: {}; Number of Triangles: {}, Angle Difference: {:.1f}".format(
             level, np.array(mesh.triangles).shape[0], angle_diff))
     meshes.insert(0, sphere)
-    plot_meshes(*meshes)
+    # plot_meshes(*meshes)
     # Show our chosen refined example
     refined_icosphere, gaussian_normals = visualize_refinement(
         ico_copy, level=3)
     # Get an Example Mesh
-    for i, mesh_fpath in enumerate(ALL_MESHES):
+    for i, (mesh_fpath, r) in enumerate(zip(ALL_MESHES, ALL_MESHES_ROTATIONS)):
         if i < 1:
             continue
         example_mesh = o3d.io.read_triangle_mesh(mesh_fpath)
+        example_mesh = example_mesh.rotate(r.as_matrix())
         example_mesh.compute_triangle_normals()
-        plot_meshes(example_mesh)
-        # 'filter_smooth_laplacian', 'filter_smooth_simple', 
-        # for smooth_alg in ['filter_smooth_taubin']:
-        #     new_mesh = o3d.geometry.TriangleMesh(example_mesh)
-        #     func = getattr(new_mesh, smooth_alg)
-        #     new_mesh = func()
-        #     plot_meshes(new_mesh)
-        # Visualize Guassiant Integration
-        visualize_gaussian_integration(
+        # plot_meshes(example_mesh)
+
+        ga, colored_icosahedron = visualize_gaussian_integration(
             refined_icosphere, gaussian_normals, example_mesh)
+        plot_projection(ga)
+        plot_meshes(colored_icosahedron, example_mesh)
 
 
 if __name__ == "__main__":
     main()
+
+
+# 'filter_smooth_laplacian', 'filter_smooth_simple', 
+# for smooth_alg in ['filter_smooth_taubin']:
+#     new_mesh = o3d.geometry.TriangleMesh(example_mesh)
+#     func = getattr(new_mesh, smooth_alg)
+#     new_mesh = func()
+#     plot_meshes(new_mesh)
+# Visualize Guassiant Integration
