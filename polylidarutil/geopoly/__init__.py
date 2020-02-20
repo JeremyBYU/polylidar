@@ -9,6 +9,8 @@ ICOSAHEDRON_TRUE_RADIUS = np.sqrt(1 + np.power(GOLDEN_RATIO, 2))
 ICOSAHEDRON_SCALING = 1.0 / ICOSAHEDRON_TRUE_RADIUS
 ICOSAHEDRON_SCALED_EDGE_LENGTH = ICOSAHEDRON_SCALING * 2.0
 
+EXAMPLE_MESH = './tests/fixtures/realsense/example_mesh.ply'
+
 
 def cantor_mapping(k1, k2):
     return int(((k1 + k2) * (k1 + k2 + 1)) / 2.0 + k2)
@@ -41,12 +43,15 @@ def get_point_idx(p1_idx, p2_idx, point_to_idx_map, vertices):
         return point_to_idx_map[point_key]
 
 
-def plot_meshes(*meshes):
+def plot_meshes(*meshes, shift=True):
     axis = o3d.geometry.TriangleMesh.create_coordinate_frame()
     axis.translate([-2, 0, 0])
     translate_meshes = []
-    for i, mesh in enumerate(meshes):
-        translate_meshes.append(mesh.translate([i * 2.0, 0, 0]))
+    if shift:
+        for i, mesh in enumerate(meshes):
+            translate_meshes.append(mesh.translate([i * 2.0, 0, 0]))
+    else:
+        translate_meshes = meshes
 
     o3d.visualization.draw_geometries([axis, *translate_meshes])
 
@@ -105,8 +110,6 @@ def generate_family_of_icosahedron(triangles, vertices, family=[1, 2, 3, 4]):
 
 
 def calc_angle_delta(mesh, level):
-    vertices = np.asarray(mesh.vertices)
-    triangles = np.asarray(mesh.triangles)
     normals = np.asarray(mesh.triangle_normals)
     v1 = normals[0, :]
     if level == 0:
@@ -117,6 +120,41 @@ def calc_angle_delta(mesh, level):
     deg = np.rad2deg(np.arccos(diff))
     return deg
 
+def draw_normals(normals, line_length=0.05):
+    normal_tips = normals * (1 + line_length)
+    num_lines = normals.shape[0]
+    all_points = np.vstack((normals, normal_tips))
+    lines = [[i, i + num_lines] for i in range(num_lines)]
+    line_set = o3d.geometry.LineSet(
+        points=o3d.utility.Vector3dVector(all_points),
+        lines=o3d.utility.Vector2iVector(lines),
+    )
+
+    return line_set
+
+
+def visualize_refinement(ico, level=2):
+    vertices, triangles = refine_icosahedron(np.asarray(ico.triangles), np.asarray(ico.vertices), level=level)
+    new_mesh = create_open_3d_mesh(triangles, vertices)
+    # create lineset of normals
+    top_normals = np.asarray(new_mesh.triangle_normals)
+    top_normals = np.ascontiguousarray(top_normals[top_normals[:, 2] >= 0.0, :])
+
+    line_set = draw_normals(top_normals)
+    pcd_normals = o3d.geometry.PointCloud(o3d.utility.Vector3dVector(top_normals))
+    pcd_normals.paint_uniform_color([0.5, 0.5, 0.5])
+
+    plot_meshes(new_mesh, line_set, pcd_normals, shift=False)
+    return new_mesh, top_normals
+    
+
+def visualize_gaussian_integration(refined_icosahedron_mesh, gaussian_normals, mesh):
+    plot_meshes(refined_icosahedron_mesh, mesh)
+
+    to_integrate_normals = np.asarray(mesh.triangle_normals)
+
+    # print(repr(gaussian_normals))
+    # print(repr(to_integrate_normals))
 
 def main():
 
@@ -129,8 +167,13 @@ def main():
         angle_diff = calc_angle_delta(mesh, level)
         print("Refinement Level: {}; Number of Triangles: {}, Angle Difference: {:.1f}".format(
             level, np.array(mesh.triangles).shape[0], angle_diff))
-    meshes.insert(0, sphere)
-    plot_meshes(*meshes)
+    meshes.insert(0, ico)
+    # plot_meshes(*meshes)
+    refined_icosphere, gaussian_normals = visualize_refinement(ico)
+    example_mesh = o3d.io.read_triangle_mesh(EXAMPLE_MESH)
+    example_mesh.compute_triangle_normals()
+
+    visualize_gaussian_integration(refined_icosphere, gaussian_normals, example_mesh)
 
 
 if __name__ == "__main__":

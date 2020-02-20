@@ -43,6 +43,7 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     polylidar_inputs, timings = make_uniform_grid_mesh(np.asarray(
         rgbd.depth), np.ascontiguousarray(intrinsics.intrinsic_matrix), extrinsics, stride=stride)
     mesh_uniform_grid = create_open_3d_mesh(polylidar_inputs['triangles'], polylidar_inputs['vertices'])
+    # o3d.io.write_triangle_mesh("./tests/fixtures/realsense/example_mesh.ply", mesh_uniform_grid)
     time_mesh_uniform = timings['mesh_creation']
     uniform_alg_name = 'Uniform Grid Mesh'
     callback(uniform_alg_name, time_mesh_uniform, pcd, mesh_uniform_grid)
