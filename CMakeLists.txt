@@ -21,6 +21,7 @@ option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
 option(WITH_PROFILE "Enable Profiling" ON)
 option(WITH_BENCHMARKS "Build Benchmarking" ON)
 option(WITH_OPENMP "Build with OpenMP Support" ON)
+option(WITH_FAST_GA "Build with FastGA" ON)
 # CMake Flags
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mtune=native -march=native")
@@ -56,6 +57,12 @@ if (WITH_OPENMP)
   target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
+# OPTON Build with OpenMP Support
+if (WITH_FAST_GA)
+  add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/GaussianAccumulator")
+  target_link_libraries(polylidar PRIVATE FastGA::GA)
+endif()
+
 # Set Header and Properties of Polylidar Library
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -85,8 +92,10 @@ endif()
 # OPTION Build Benchmarks Binary
 if (WITH_BENCHMARKS)
     MESSAGE(STATUS "Building bechmarks binary")
-    add_subdirectory("thirdparty/googletest")
-    add_subdirectory("thirdparty/benchmark")
+    # add_subdirectory_if_not_exists(gtest_main "thirdparty/googletest")
+    add_subdirectory_if_not_exists(benchmark::benchmark "thirdparty/benchmark")
+    # add_subdirectory("thirdparty/googletest")
+    # add_subdirectory("thirdparty/benchmark")
     find_package(Open3D REQUIRED)
     set(BENCH_DEPENDENCIES benchmark::benchmark OpenMP::OpenMP_CXX polylidar ${Open3D_LIBRARIES})
 
