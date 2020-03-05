@@ -8,7 +8,6 @@
 #include <Open3D/IO/ClassIO/ImageIO.h>
 #include <Open3D/Geometry/Image.h>
 #include <omp.h>
-#include <Eigen/Core>
 
 const std::string DEFAULT_DEPTH_IMAGE = "./tests/fixtures/realsense/depth/00000003_1580908154939.png";
 

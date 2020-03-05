@@ -9,8 +9,6 @@
 #include "delaunator.hpp"
 #include <cassert>
 #include <array>
-// #include <Eigen/Core>
-// #include <Eigen/Dense>
 
 #define PL_PRINT_ARRAY(a) a[0] << ", " << a[1] << ", " << a[2]
 #define PL_PRINT_ARRAY2(a) a[0] << ", " << a[1]

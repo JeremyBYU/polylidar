@@ -56,17 +56,6 @@ if (WITH_OPENMP)
   target_link_libraries(polylidar PUBLIC OpenMP::OpenMP_CXX)
 endif()
 
-
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
-target_link_libraries(polylidar PRIVATE Eigen3::Eigen)
-target_include_directories(polylidar PUBLIC ${EIGEN3_INCLUDE_DIR})
-cmake_print_variables(EIGEN3_INCLUDE_DIR)
-# get_cmake_property(_variableNames VARIABLES)
-# list (SORT _variableNames)
-# foreach (_variableName ${_variableNames})
-#     message(STATUS "${_variableName}=${${_variableName}}")
-# endforeach()
-
 # Set Header and Properties of Polylidar Library
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")
 target_include_directories(${PROJECT_NAME} PUBLIC
@@ -99,7 +88,7 @@ if (WITH_BENCHMARKS)
     add_subdirectory("thirdparty/googletest")
     add_subdirectory("thirdparty/benchmark")
     find_package(Open3D REQUIRED)
-    set(BENCH_DEPENDENCIES benchmark::benchmark OpenMP::OpenMP_CXX Eigen3::Eigen polylidar ${Open3D_LIBRARIES})
+    set(BENCH_DEPENDENCIES benchmark::benchmark OpenMP::OpenMP_CXX polylidar ${Open3D_LIBRARIES})
 
     add_executable(parallel-test ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/parallelism_test.cpp)
     target_link_libraries(parallel-test ${BENCH_DEPENDENCIES})
