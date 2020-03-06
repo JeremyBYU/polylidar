@@ -48,7 +48,7 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("coords", &delaunator::HalfEdgeTriangulation::coords);
 
     py::class_<delaunator::TriMesh>(m, "TriMesh")
-        // .def(py::init<py::array_t<double>>())
+        // .def(py::init<std::vector<double>, std::vector<double>, std::vector<size_t>>())
         .def_readonly("vertices", &delaunator::TriMesh::vertices)
         .def_readonly("triangles", &delaunator::TriMesh::triangles)
         .def_readonly("halfedges", &delaunator::TriMesh::halfedges)
@@ -100,6 +100,9 @@ PYBIND11_MODULE(polylidar, m)
 
     m.def("extract_tri_mesh_from_float_depth", &polylidar::_extractTriMeshFromFloatDepth, "Extracts a uniform triangular mesh from a float depth image",
           "image"_a, "intrinsics"_a, "extrinsics"_a, "stride"_a = DEFAULT_STRIDE, "calc_normals"_a = DEFAULT_CALC_NORMALS);
+
+    m.def("create_tri_mesh_copy", &polylidar::CreateTriMeshCopy, "Creates a copy of a triangular mesh",
+          "vertices"_a, "triangles"_a);
 
 #ifdef VERSION_INFO
     m.attr("__version__") = VERSION_INFO;

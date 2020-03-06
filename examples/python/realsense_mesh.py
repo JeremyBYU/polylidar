@@ -3,7 +3,7 @@ import logging
 
 import numpy as np
 
-from examples.python.realsense_util import (get_realsense_data, get_frame_data, R_Standard_d400, prep_mesh,
+from examples.python.util.realsense_util import (get_realsense_data, get_frame_data, R_Standard_d400, prep_mesh,
                                             create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
 
 from polylidar import (extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_tri_mesh_from_float_depth,

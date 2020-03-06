@@ -21,6 +21,8 @@
 // SOFTWARE.
 
 #include "delaunator.hpp"
+#include "polylidar/Mesh/MeshHelper.hpp"
+
 
 namespace delaunator
 {
@@ -79,6 +81,28 @@ TriMesh::TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_trian
     coords.cols = 3;
     coords.rows = vertices.size() / 3;
     coords.ptr = vertices.data();
+}
+
+TriMesh::TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles)
+    : HalfEdgeTriangulation(),
+      vertices(),
+      triangle_normals()
+{
+    vertices.swap(in_vertices);
+    triangles.swap(in_triangles);
+    auto halfedges_ = MeshHelper::ExtractHalfEdges(triangles);
+    halfedges.swap(halfedges_);
+    // Point the 2D coords Matrix to vertices data;
+    coords.cols = 3;
+    coords.rows = vertices.size() / 3;
+    coords.ptr = vertices.data();
+}
+
+TriMesh::TriMesh()
+    : HalfEdgeTriangulation(),
+      vertices(),
+      triangle_normals()
+{
 }
 
 constexpr std::size_t operator"" _z(unsigned long long n)

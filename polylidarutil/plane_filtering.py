@@ -137,6 +137,8 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
             all_poly_shapes = list(poly_shape.geoms)
             poly_shape = sorted(
                 all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
+        else:
+            all_poly_shapes = [poly_shape]
 
         logging.debug("Rotation: {:.2f}; Polygon Creation: {:.2f}; Simplify 1: {:.2f}; Positive Buffer: {:.2f}; Negative Buffer: {:.2f}; Simplify 2: {:.2f}".format(
             (t1-t0) * 1000, (t2-t1) * 1000, (t4-t3) * 1000, (t5-t4) * 1000, (t6-t5) * 1000, (t7-t6) * 1000
@@ -144,7 +146,7 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
 
         # Its possible that our polygon has no broken into a multipolygon
         # Check for this situation and handle it
-        all_poly_shapes = [poly_shape]
+        # all_poly_shapes = [poly_shape]
 
         # iterate through every polygons and check for plane extraction
         for poly_shape in all_poly_shapes:

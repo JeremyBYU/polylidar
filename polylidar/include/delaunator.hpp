@@ -79,6 +79,8 @@ namespace delaunator {
         std::vector<double> vertices;
         std::vector<double> triangle_normals;
         TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges);
+        TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles);
+        TriMesh();
         void UpdateTriangleNormalMatrix();
         
     };

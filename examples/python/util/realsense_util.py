@@ -11,7 +11,7 @@ from polylidarutil import COLOR_PALETTE
 import open3d as o3d
 
 DIR_NAME = path.dirname(__file__)
-FIXTURES_DIR = path.join(DIR_NAME, '../../tests', 'fixtures')
+FIXTURES_DIR = path.join(DIR_NAME, '../../../tests', 'fixtures')
 REALSENSE_DIR = path.join(FIXTURES_DIR, 'realsense')
 REALSENSE_COLOR_DIR = path.join(REALSENSE_DIR, 'color')
 REALSENSE_DEPTH_DIR = path.join(REALSENSE_DIR, 'depth')

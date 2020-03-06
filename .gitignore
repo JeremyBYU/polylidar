@@ -1,4 +1,6 @@
 scratch
+assets/scratch
+tests/fixtures/meshes
 # examples/cpp/bin
 .vscode
 .nox

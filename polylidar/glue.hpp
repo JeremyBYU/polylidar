@@ -138,4 +138,24 @@ std::tuple<std::vector<Polygon>, std::vector<float>> _extractPolygonsAndTimings(
     return std::make_tuple(polygons, timings);
 }
 
+delaunator::TriMesh CreateTriMeshCopy(py::array_t<double> vertices,
+                                      py::array_t<size_t> triangles)
+{
+    auto vertices_info = vertices.request();
+    std::vector<size_t> vertices_shape({(size_t)vertices_info.shape[0], (size_t)vertices_info.shape[1]});
+    double* vertices_ptr = reinterpret_cast<double*>(vertices_info.ptr);
+    auto vertices_elements = vertices_shape[0] * vertices_shape[1];
+
+    auto triangles_info = triangles.request();
+    std::vector<size_t> triangles_shape({(size_t)triangles_info.shape[0], (size_t)triangles_info.shape[1]});
+    size_t* triangles_ptr = reinterpret_cast<size_t*>(triangles_info.ptr);
+    auto triangles_elements = triangles_shape[0] * triangles_shape[1];
+
+
+    std::vector<double> vec_vertices(vertices_ptr, vertices_ptr + vertices_elements);
+    std::vector<size_t> vec_triangles(triangles_ptr, triangles_ptr + triangles_elements);
+
+    return delaunator::TriMesh(vec_vertices, vec_triangles);
+}
+
 } // namespace polylidar
