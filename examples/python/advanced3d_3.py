@@ -1,7 +1,10 @@
 import time
 import logging
-
+import warnings
 import numpy as np
+from scipy.spatial.transform import Rotation as R
+
+warnings.filterwarnings("ignore", message="Optimal rotation is not uniquely or poorly defined ")
 
 from examples.python.util.realsense_util import (get_realsense_data, get_frame_data, R_Standard_d400, prep_mesh,
                                             create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
@@ -9,42 +12,65 @@ from examples.python.util.mesh_util import get_mesh_data_iterator
 
 from polylidar import (extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_tri_mesh_from_float_depth,
                       extract_point_cloud_from_float_depth, create_tri_mesh_copy)
-
 from polylidarutil.open3d_util import construct_grid, create_lines, flatten
 from polylidarutil.plane_filtering import filter_planes_and_holes
+from fastga import GaussianAccumulatorS2, MatX3d
+from fastga.peak_and_cluster import find_peaks_from_accumulator
 
 import open3d as o3d
 
 
-def filter_and_create_open3d_polygons(points, polygons):
+def filter_and_create_open3d_polygons(points, polygons, rm=None):
     " Apply polygon filtering algorithm, return Open3D Mesh Lines "
-    # config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
-    #                  positive_buffer=0.00, negative_buffer=0.02, simplify=0.02)
-    config_pp = dict(filter=dict(hole_area=dict(min=0.00, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
-                     positive_buffer=0.00, negative_buffer=0.0, simplify=0.01)
-    planes, obstacles = filter_planes_and_holes(polygons, points, config_pp)
+    config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
+                     positive_buffer=0.00, negative_buffer=0.02, simplify=0.02)
+    # config_pp = dict(filter=dict(hole_area=dict(min=0.00, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.5)),
+    #                  positive_buffer=0.00, negative_buffer=0.0, simplify=0.01)
+    t1 = time.perf_counter()
+    planes, obstacles = filter_planes_and_holes(polygons, points, config_pp, rm=rm)
+    t2 = time.perf_counter()
     all_poly_lines = create_lines(planes, obstacles, line_radius=0.01)
-    return all_poly_lines
+    return all_poly_lines, (t2-t1) * 1000
 
 def open_3d_mesh_to_trimesh(mesh: o3d.geometry.TriangleMesh):
     triangles = np.asarray(mesh.triangles)
     vertices = np.asarray(mesh.vertices)
-    triangle_normals = np.asarray(mesh.triangle_normals)
-    
     triangles = np.ascontiguousarray(np.flip(triangles, 1))
     tri_mesh = create_tri_mesh_copy(vertices, triangles)
     return tri_mesh
-    # print(triangles)
-    # print(np.asarray(tri_mesh.triangles))
-    # print(vertices)
-    # print(np.asarray(tri_mesh.vertices))
-    # print(np.asarray(tri_mesh.halfedges))
 
+def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=10, min_samples=10000):
+    ga = GaussianAccumulatorS2(level=4, max_phi=150)
+    num_triangles = int(np.asarray(tri_mesh.triangles).shape[0] / 3)
+    triangle_normals = np.asarray(tri_mesh.triangle_normals).reshape((num_triangles, 3))
+
+    # Downsample, TODO improve this
+    ds_normals = int(num_triangles / ds)
+    to_sample = max(min([num_triangles, min_samples]), ds_normals)
+    ds_step = int(num_triangles / to_sample)
+    triangle_normals_ds = np.ascontiguousarray(triangle_normals[:num_triangles:ds_step, :])
+    # A copy occurs here for triangle_normals......if done in c++ there would be no copy
+    ga.integrate(MatX3d(triangle_normals_ds))
+    gaussian_normals = np.asarray(ga.get_bucket_normals())
+    accumulator_counts = np.asarray(ga.get_normalized_bucket_counts())
+    _, _, avg_peaks, _ = find_peaks_from_accumulator(gaussian_normals, accumulator_counts)
+
+    print(avg_peaks)
+    
+    all_poly_lines = []
+    for i in range(avg_peaks.shape[0]):
+        avg_peak = avg_peaks[i, :]
+        polylidar_kwargs['desiredVector'] = avg_peak.tolist()
+        rm, _ = R.align_vectors([[0, 0, 1]], [polylidar_kwargs['desiredVector']])
+        _, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
+        poly_lines, t_lines = filter_and_create_open3d_polygons(vertices, polygons, rm=rm)
+        all_poly_lines.extend(poly_lines)
+    return all_poly_lines
 
 def run_test(mesh, callback=None, stride=2):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
-    polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=100,
-                            zThresh=0.03, normThresh=0.98, normThreshMin=0.95, minHoleVertices=6)
+    polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=1000,
+                            zThresh=0.03, normThresh=0.95, normThreshMin=0.90, minHoleVertices=6)
     # Create Polylidar TriMesh
     # TODO convert this to a polylidar TriMesh
     tri_mesh = open_3d_mesh_to_trimesh(mesh)
@@ -52,24 +78,15 @@ def run_test(mesh, callback=None, stride=2):
     vertices = np.asarray(tri_mesh.vertices)
     vertices = np.ascontiguousarray(vertices.reshape(int(vertices.shape[0] / 3), 3))
     triangles = triangles.reshape(int(triangles.shape[0] / 3), 3)
-    t1 = time.perf_counter()
-    planes, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
-    t2 = time.perf_counter()
-    print("Extracted Planes: ",t2-t1)
-    all_poly_lines = filter_and_create_open3d_polygons(vertices, polygons)
-    print("Filtered Planes")
-    # all_poly_lines = all_poly_lines[0:10]
-    print(len(all_poly_lines))
-    # print(len(all_poly_lines[0].cylinder_segments))
-    # mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes)
+
+    all_poly_lines = extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs)
     mesh_3d_polylidar = []
-    print(mesh_3d_polylidar)
     mesh_3d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     mesh_3d_polylidar.append(mesh)
-    time_polylidar3D = (t2 - t1) * 1000
-    polylidar_3d_alg_name = 'Polylidar with Uniform Grid Mesh'
-    callback(polylidar_3d_alg_name, time_polylidar3D, mesh_3d_polylidar)
 
+    time_polylidar3D = 0.0
+    polylidar_3d_alg_name = 'Polylidar3D with Provided Mesh'
+    callback(polylidar_3d_alg_name, time_polylidar3D, mesh_3d_polylidar)
 
 def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
     """Create a Unifrom Grid Mesh from an RGBD Image
@@ -117,12 +134,15 @@ def main():
     axis_frame.translate([0, 0.8, -1.0])
     grid_ls = construct_grid(size=2, n=20, plane_offset=-1.0, translate=[0, 0.0, 0.0])
     for i, mesh in enumerate(get_mesh_data_iterator()):
-        if i < 0:
-            continue
-        # mesh = mesh.filter_smooth_simple(5)
-        mesh = mesh.filter_smooth_laplacian(20)
+        # if i < 0:
+        #     continue
+        if i < 1:
+            # Dense mesh needs to be smoothed
+            t0 = time.perf_counter()
+            mesh = mesh.filter_smooth_laplacian(5, 0.75)
+            t1 = time.perf_counter()
+            print("Laplacian Smoothing took (ms): {}".format((t1-t0) * 1000))
         mesh.compute_triangle_normals()
-        # logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([mesh, grid_ls, axis_frame])
         run_test(mesh, callback=callback, stride=2)
 

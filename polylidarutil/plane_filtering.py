@@ -123,10 +123,10 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
         if config_pp['negative_buffer']:
             poly_shape = poly_shape.buffer(
                     distance=-config_pp['negative_buffer'], join_style=JOIN_STYLE.mitre, resolution=4)
-            if poly_shape.geom_type == 'MultiPolygon':
-                all_poly_shapes = list(poly_shape.geoms)
-                poly_shape = sorted(
-                    all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
+            # if poly_shape.geom_type == 'MultiPolygon':
+            #     all_poly_shapes = list(poly_shape.geoms)
+            #     poly_shape = sorted(
+            #         all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
         t6 = time.perf_counter()
             # poly_shape = poly_shape.buffer(distance=config_pp['negative_buffer'], resolution=4)
         if config_pp['simplify']:
@@ -135,8 +135,8 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
         t7 = time.perf_counter()
         if poly_shape.geom_type == 'MultiPolygon':
             all_poly_shapes = list(poly_shape.geoms)
-            poly_shape = sorted(
-                all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
+            # poly_shape = sorted(
+            #     all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
         else:
             all_poly_shapes = [poly_shape]
 

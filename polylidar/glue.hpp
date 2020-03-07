@@ -154,8 +154,10 @@ delaunator::TriMesh CreateTriMeshCopy(py::array_t<double> vertices,
 
     std::vector<double> vec_vertices(vertices_ptr, vertices_ptr + vertices_elements);
     std::vector<size_t> vec_triangles(triangles_ptr, triangles_ptr + triangles_elements);
+    delaunator::TriMesh tri_mesh(vec_vertices, vec_triangles);
+    polylidar::ComputeTriangleNormals(tri_mesh.coords, tri_mesh.triangles, tri_mesh.triangle_normals);
 
-    return delaunator::TriMesh(vec_vertices, vec_triangles);
+    return tri_mesh;
 }
 
 } // namespace polylidar
