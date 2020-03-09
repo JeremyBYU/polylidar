@@ -5,7 +5,16 @@
 
 #include <unordered_map>
 #include <parallel_hashmap/phmap.h>
+#include "polylidar/util.hpp"
 
+#ifdef PY_EXTENSION
+#include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
+#include "pybind11/stl.h"      // Pybind11 import for STL containers
+#include "pybind11/numpy.h"
+#endif
+
+namespace polylidar
+{
 
 namespace MeshHelper
 
@@ -20,6 +29,40 @@ using unordered_map = phmap::flat_hash_map<T, G>;
 #endif
 
 using MatX2I = std::vector<std::array<size_t, 2>>;
+
+class HalfEdgeTriangulation
+{
+
+public:
+    polylidar::Matrix<double> coords;
+    std::vector<std::size_t> triangles;
+    std::vector<std::size_t> halfedges;
+
+    HalfEdgeTriangulation();
+    HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords);
+    HalfEdgeTriangulation(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges);
+#ifdef PY_EXTENSION
+    HalfEdgeTriangulation(pybind11::array_t<double> in_coords);
+    HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_);
+#endif
+    // #ifdef PY_EXTENSION
+    // HalfEdgeTriangulation(pybind11::array_t<double> nparray);
+    // #endif
+
+private:
+};
+
+class TriMesh : public HalfEdgeTriangulation
+{
+public:
+    polylidar::Matrix<double> triangle_normals_matrix;
+    std::vector<double> vertices;
+    std::vector<double> triangle_normals;
+    TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges);
+    TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles);
+    TriMesh();
+    void UpdateTriangleNormalMatrix();
+};
 
 inline size_t CantorMapping(const size_t k1, const size_t k2)
 {
@@ -39,9 +82,9 @@ inline std::vector<size_t> ExtractHalfEdges(const std::vector<size_t> &triangles
     unordered_map<size_t, size_t> vertex_indices_to_half_edge_index;
     vertex_indices_to_half_edge_index.reserve(triangles.size());
 
-    for (size_t triangle_index = 0; triangle_index < triangles.size(); triangle_index+=3)
+    for (size_t triangle_index = 0; triangle_index < triangles.size(); triangle_index += 3)
     {
-        const size_t* triangle = &triangles[triangle_index];
+        const size_t *triangle = &triangles[triangle_index];
         size_t &num_half_edges = triangle_index;
 
         size_t he_0_index = num_half_edges;
@@ -85,7 +128,28 @@ inline std::vector<size_t> ExtractHalfEdges(const std::vector<size_t> &triangles
     }
     return halfedges;
 }
-} // namespace MeshHelper
 
+inline void crossProduct3(const std::array<double, 3> &u, const std::array<double, 3> &v, double *normal)
+{
+    // cross product
+    normal[0] = u[1] * v[2] - u[2] * v[1];
+    normal[1] = u[2] * v[0] - u[0] * v[2];
+    normal[2] = u[0] * v[1] - u[1] * v[0];
+}
+
+inline void normalize3(double *normal)
+{
+    auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+    normal[0] /= norm;
+    normal[1] /= norm;
+    normal[2] /= norm;
+}
+
+void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
+TriMesh CreateTriMeshCopy(const double *vertices_ptr, size_t num_vertices, const size_t *triangles_ptr, size_t num_triangles);
+TriMesh CreateTriMeshCopy(const double *vertices_ptr, size_t num_vertices, const int *triangles_ptr, size_t num_triangles);
+
+} // namespace MeshHelper
+} // namespace polylidar
 
 #endif

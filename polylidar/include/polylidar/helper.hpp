@@ -33,7 +33,7 @@ inline void print_matrix(std::array<double, 9> &mat)
     std::cout << mat[6] << ", " << mat[7] << ", " << mat[8] << ", " << std::endl;
 }
 
-double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points);
+double circumsribedRadius(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points);
 
 inline double dotProduct3(const std::array<double, 3> &v1, const std::array<double, 3> &v2)
 {
@@ -69,7 +69,7 @@ std::tuple<std::array<double, 3>, double> axisAngleFromVectors(const std::array<
 // Rotate Vector
 std::array<double, 3> rotateVector(const double *v1, const std::array<double, 9> &rm);
 
-inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, double allowedClass)
+inline bool checkPointClass(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, double allowedClass)
 {
     auto &triangles = delaunay.triangles;
     std::vector<size_t> pis = {triangles[t * 3], triangles[t * 3 + 1], triangles[t * 3 + 2]};
@@ -83,7 +83,7 @@ inline bool checkPointClass(size_t t, delaunator::HalfEdgeTriangulation &delauna
 }
 
 // Determines if the triangles noise (dz from normal) is below a configurable zThrsh
-inline bool checkZThresh(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
+inline bool checkZThresh(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                          std::array<double, 3> &desiredVector, double zThresh)
 {
     auto &triangles = delaunay.triangles;
@@ -113,7 +113,7 @@ inline bool checkZThresh(size_t t, delaunator::HalfEdgeTriangulation &delaunay, 
     return zThresh > 0.0 && zDiff < zThresh;
 }
 
-inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
+inline void maxZChangeAndNormal(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                                 double &diff, std::array<double, 3> &normal, std::array<double, 3> &desiredVector)
 {
     auto &triangles = delaunay.triangles;
@@ -147,7 +147,7 @@ inline void maxZChangeAndNormal(size_t t, delaunator::HalfEdgeTriangulation &del
     diff = zMax - zMin;
 }
 
-inline double getMaxDimTriangle(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points)
+inline double getMaxDimTriangle(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points)
 {
     auto pi0 = delaunay.triangles[t * 3];
     auto pi1 = delaunay.triangles[t * 3 + 1];
@@ -169,7 +169,7 @@ inline double l2Norm(double dx, double dy)
     return std::sqrt(dx * dx + dy * dy);
 }
 
-inline double getMaxEdgeLength(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points)
+inline double getMaxEdgeLength(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points)
 {
     auto pi0 = delaunay.triangles[t * 3];
     auto pi1 = delaunay.triangles[t * 3 + 1];
@@ -214,7 +214,7 @@ inline size_t nextHalfedge(size_t e)
     return fast_mod(e, 3) == 2 ? e - 2 : e + 1;
 }
 
-inline std::array<double, 2> getVector(size_t edge, delaunator::HalfEdgeTriangulation &delaunay,
+inline std::array<double, 2> getVector(size_t edge, MeshHelper::HalfEdgeTriangulation &delaunay,
                                        std::array<double, 9> &rm, bool &need_rotation, bool flip = false)
 {
     auto &coords = delaunay.coords;
@@ -279,7 +279,7 @@ inline double get360Angle(const std::array<double, 2> &v1, const std::array<doub
     return ang;
 }
 
-inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges, delaunator::HalfEdgeTriangulation &delaunay,
+inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<size_t> &outgoingEdges, MeshHelper::HalfEdgeTriangulation &delaunay,
                           std::array<double, 9> &rm, bool &need_rotation, bool isHole = false)
 {
     // std::cout << "v1: " << v1 << std::endl;
@@ -313,7 +313,7 @@ inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<siz
     }
 }
 
-void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
+// void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
 
 } // namespace polylidar
 

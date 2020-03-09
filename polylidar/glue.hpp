@@ -3,6 +3,7 @@
 
 #include "polylidar/polylidar.hpp"
 #include "delaunator.hpp"
+#include "polylidar/Mesh/MeshHelper.hpp"
 
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
 #include "pybind11/stl.h"      // Pybind11 import for STL containers
@@ -39,11 +40,11 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
 //     std::vector<size_t> shape({(size_t)info.shape[0], (size_t)info.shape[1]});
 //     Config config{shape[1], alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass, desiredVector};
 //     Matrix<double> points((double *)info.ptr, shape[0], shape[1]);
-//     delaunator::HalfEdgeTriangulation triangulation(points, triangles, halfedges);
+//     MeshHelper::HalfEdgeTriangulation triangulation(points, triangles, halfedges);
 //     return ExtractPlanesAndPolygonsFromMesh(triangulation, config);
 // }
 
-std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygonsFromMesh(delaunator::TriMesh &triangulation,
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> _extractPlanesAndPolygonsFromMesh(MeshHelper::TriMesh &triangulation,
                                                                                                      double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax = DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                                                                                      size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
                                                                                                      double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN,
@@ -73,7 +74,7 @@ std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, p
     return points;
 }
 
-delaunator::TriMesh _extractTriMeshFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, py::array_t<double> extrinsics, size_t stride = DEFAULT_STRIDE, const bool calc_normals = DEFAULT_CALC_NORMALS)
+MeshHelper::TriMesh _extractTriMeshFromFloatDepth(py::array_t<float> image, py::array_t<double> intrinsics, py::array_t<double> extrinsics, size_t stride = DEFAULT_STRIDE, const bool calc_normals = DEFAULT_CALC_NORMALS)
 {
     // Will hold the point cloud
     std::vector<double> points;
@@ -96,7 +97,7 @@ delaunator::TriMesh _extractTriMeshFromFloatDepth(py::array_t<float> image, py::
     return triMesh;
 }
 
-std::vector<Polygon> _extractPolygonsFromMesh(delaunator::TriMesh &triangulation,
+std::vector<Polygon> _extractPolygonsFromMesh(MeshHelper::TriMesh &triangulation,
                                               double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax = DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                               size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
                                               double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN,
@@ -138,26 +139,20 @@ std::tuple<std::vector<Polygon>, std::vector<float>> _extractPolygonsAndTimings(
     return std::make_tuple(polygons, timings);
 }
 
-delaunator::TriMesh CreateTriMeshCopy(py::array_t<double> vertices,
+MeshHelper::TriMesh CreateTriMeshCopy(py::array_t<double> vertices,
                                       py::array_t<size_t> triangles)
 {
     auto vertices_info = vertices.request();
     std::vector<size_t> vertices_shape({(size_t)vertices_info.shape[0], (size_t)vertices_info.shape[1]});
     double* vertices_ptr = reinterpret_cast<double*>(vertices_info.ptr);
-    auto vertices_elements = vertices_shape[0] * vertices_shape[1];
+    auto num_vertices = vertices_shape[0];
 
     auto triangles_info = triangles.request();
     std::vector<size_t> triangles_shape({(size_t)triangles_info.shape[0], (size_t)triangles_info.shape[1]});
     size_t* triangles_ptr = reinterpret_cast<size_t*>(triangles_info.ptr);
-    auto triangles_elements = triangles_shape[0] * triangles_shape[1];
+    auto num_triangles = triangles_shape[0];
 
-
-    std::vector<double> vec_vertices(vertices_ptr, vertices_ptr + vertices_elements);
-    std::vector<size_t> vec_triangles(triangles_ptr, triangles_ptr + triangles_elements);
-    delaunator::TriMesh tri_mesh(vec_vertices, vec_triangles);
-    polylidar::ComputeTriangleNormals(tri_mesh.coords, tri_mesh.triangles, tri_mesh.triangle_normals);
-
-    return tri_mesh;
+    return MeshHelper::CreateTriMeshCopy(vertices_ptr, num_vertices, triangles_ptr, num_triangles);
 }
 
 } // namespace polylidar

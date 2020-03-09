@@ -14,8 +14,9 @@ set(PROJECT_VERSION 0.0.8)
 set(POLYLIDAR_SRC "${PROJECT_SOURCE_DIR}/polylidar")
 set(POLYLIDAR_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/polylidar/include")
 set(POLYLIDAR_EXAMPLES_CPP_DIR "${PROJECT_SOURCE_DIR}/examples/cpp")
-set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helper.cpp ${POLYLIDAR_SRC}/delaunator.cpp)
-set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/helper.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
+set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helper.cpp ${POLYLIDAR_SRC}/delaunator.cpp ${POLYLIDAR_SRC}/MeshHelper.cpp)
+set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp 
+${POLYLIDAR_INCLUDE_DIR}/polylidar/Mesh/MeshHelper.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/helper.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
 # Options for CMake
 option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
 option(WITH_PROFILE "Enable Profiling" ON)

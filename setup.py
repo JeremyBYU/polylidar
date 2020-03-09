@@ -63,7 +63,7 @@ def get_pybind_include_new():
         return pybind11_include_path
 
 # Source files for polylidar
-source_files = ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp']
+source_files = ['polylidar/module.cpp', 'polylidar/polylidar.cpp', 'polylidar/delaunator.cpp', 'polylidar/helper.cpp', 'polylidar/MeshHelper.cpp']
 # Source files for robust geometric predicates
 robust_files = ['polylidar/predicates/constants.c', 'polylidar/predicates/predicates.c', 'polylidar/predicates/printing.c', 'polylidar/predicates/random.c']
 # Include directories for polylidar

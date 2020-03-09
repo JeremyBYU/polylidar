@@ -5,7 +5,7 @@ namespace polylidar
 
 auto PL_NAN = std::numeric_limits<double>::quiet_NaN();
 
-inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+inline bool validateTriangle2D(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     // auto maxXY = getMaxDimTriangle(t, delaunay, points);
     // std::cout << "Triangle " << t << " Radius: " << radius << std::endl;
@@ -25,7 +25,7 @@ inline bool validateTriangle2D(size_t t, delaunator::HalfEdgeTriangulation &dela
     return true;
 }
 
-inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+inline bool validateTriangle3D(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     double zDiff = 0.0;
     std::array<double, 3> normal;
@@ -39,7 +39,7 @@ inline bool validateTriangle3D(size_t t, delaunator::HalfEdgeTriangulation &dela
     return prod > config.normThresh || (passZThresh && prod > config.normThreshMin);
 }
 
-inline bool validTriangle3D_Opt(size_t t, delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config)
+inline bool validTriangle3D_Opt(size_t t, MeshHelper::TriMesh &delaunay, Matrix<double> &points, Config &config)
 {
 
     auto &normals = delaunay.triangle_normals;
@@ -53,13 +53,13 @@ inline bool validTriangle3D_Opt(size_t t, delaunator::TriMesh &delaunay, Matrix<
     return prod > config.normThresh || passZThresh;
 }
 
-inline bool validateTriangle4D(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+inline bool validateTriangle4D(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     // hmm simple for right now
     return checkPointClass(t, delaunay, points, config.allowedClass);
 }
 
-void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+void createTriSet2(std::vector<bool> &triSet, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = delaunay.triangles.size() / 3;
 // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
@@ -77,7 +77,7 @@ void createTriSet2(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     }
 }
 
-void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+void createTriSet3(std::vector<bool> &triSet, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = delaunay.triangles.size() / 3;
 
@@ -96,12 +96,12 @@ void createTriSet3(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     }
 }
 
-void createTriSet3_Opt(std::vector<bool> &triSet, delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config)
+void createTriSet3_Opt(std::vector<bool> &triSet, MeshHelper::TriMesh &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = delaunay.triangles.size() / 3;
 
 // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
-// Experimentation has found that too many threads will kill this loop if not enough work is presetn
+// Experimentation has found that too many threads will kill this loop if not enough work is present
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
 #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
@@ -115,7 +115,7 @@ void createTriSet3_Opt(std::vector<bool> &triSet, delaunator::TriMesh &delaunay,
     }
 }
 
-void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+void createTriSet4(std::vector<bool> &triSet, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     size_t numTriangles = delaunay.triangles.size() / 3;
 #if defined(_OPENMP)
@@ -134,7 +134,7 @@ void createTriSet4(std::vector<bool> &triSet, delaunator::HalfEdgeTriangulation 
     }
 }
 
-void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
+void constructPointHash(std::vector<size_t> &plane, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points,
                         polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash, polylidar::unordered_map<size_t, size_t> &edgeHash,
                         ExtremePoint &xPoint, Config &config)
 {
@@ -205,7 +205,7 @@ void constructPointHash(std::vector<size_t> &plane, delaunator::HalfEdgeTriangul
 
 std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<size_t>> &pointHash,
                                    polylidar::unordered_map<size_t, size_t> &edgeHash,
-                                   delaunator::HalfEdgeTriangulation &delaunay,
+                                   MeshHelper::HalfEdgeTriangulation &delaunay,
                                    size_t startEdge, size_t stopPoint, Config &config,
                                    bool isHole)
 {
@@ -275,7 +275,7 @@ std::vector<size_t> concaveSection(polylidar::unordered_map<size_t, std::vector<
 
 std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<size_t, std::vector<size_t>> pointHash,
                                                       polylidar::unordered_map<size_t, size_t> edgeHash,
-                                                      delaunator::HalfEdgeTriangulation &delaunay, Config &config)
+                                                      MeshHelper::HalfEdgeTriangulation &delaunay, Config &config)
 {
     std::vector<std::vector<size_t>> allHoles;
     auto &triangles = delaunay.triangles;
@@ -299,7 +299,7 @@ std::vector<std::vector<size_t>> extractInteriorHoles(polylidar::unordered_map<s
     return allHoles;
 }
 
-Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+Polygon extractConcaveHull(std::vector<size_t> &plane, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     Polygon poly;
     // point hash map
@@ -353,7 +353,7 @@ Polygon extractConcaveHull(std::vector<size_t> &plane, delaunator::HalfEdgeTrian
     return poly;
 }
 
-std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
 
     std::vector<Polygon> polygons;
@@ -365,7 +365,7 @@ std::vector<Polygon> extractConcaveHulls(std::vector<std::vector<size_t>> planes
     return polygons;
 }
 
-void extractMeshSet(delaunator::HalfEdgeTriangulation &delaunay, std::vector<bool> &triSet, size_t seedIdx, std::vector<size_t> &candidates)
+void extractMeshSet(MeshHelper::HalfEdgeTriangulation &delaunay, std::vector<bool> &triSet, size_t seedIdx, std::vector<size_t> &candidates)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
@@ -404,7 +404,7 @@ bool passPlaneConstraints(std::vector<size_t> planeMesh, Config &config)
     return planeMesh.size() >= config.minTriangles;
 }
 
-std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
+std::vector<std::vector<size_t>> extractPlanesSet(MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
@@ -445,14 +445,14 @@ std::vector<std::vector<size_t>> extractPlanesSet(delaunator::HalfEdgeTriangulat
 
 // Slightly more optimized Plane Extraction for 3D triangular meshes
 // Triangle normals are already computed, or computed in bulk before creating the TriSet - triangles passing set consraints
-std::vector<std::vector<size_t>> extractPlanesSet(delaunator::TriMesh &delaunay, Matrix<double> &points, Config &config)
+std::vector<std::vector<size_t>> extractPlanesSet(MeshHelper::TriMesh &delaunay, Matrix<double> &points, Config &config)
 {
     std::vector<std::vector<size_t>> planes;
     size_t max_triangles = static_cast<size_t>(delaunay.triangles.size() / 3);
     std::vector<bool> triSet(max_triangles, false);
     if (delaunay.triangle_normals.size() <= 0)
     {
-        ComputeTriangleNormals(delaunay.coords, delaunay.triangles, delaunay.triangle_normals);
+        MeshHelper::ComputeTriangleNormals(delaunay.coords, delaunay.triangles, delaunay.triangle_normals);
     }
     createTriSet3_Opt(triSet, delaunay, points, config);
 
@@ -501,17 +501,17 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // nparray2D is a contigious buffer of (ROWS,2)
 }
 
-std::vector<double> ExtractNormalsFromMesh(delaunator::TriMesh &triangulation, Config &config)
+std::vector<double> ExtractNormalsFromMesh(MeshHelper::TriMesh &triangulation, Config &config)
 {
     auto &vertices = triangulation.coords;
     std::vector<double> triangle_normals;
     config.dim = vertices.cols;
-    ComputeTriangleNormals(vertices, triangulation.triangles, triangle_normals);
+    MeshHelper::ComputeTriangleNormals(vertices, triangulation.triangles, triangle_normals);
     triangulation.triangle_normals.swap(triangle_normals);
     return triangle_normals;
 }
 
-std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(delaunator::TriMesh &triangulation, Config config)
+std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config)
 {
     auto &vertices = triangulation.coords;
     config.dim = vertices.cols;
@@ -539,7 +539,7 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanes
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
 
-std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::TriMesh &triangulation, Config config)
+std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config)
 {
     auto vertices = triangulation.coords;
     config.dim = vertices.cols;
@@ -548,6 +548,11 @@ std::vector<Polygon> ExtractPolygonsFromMesh(delaunator::TriMesh &triangulation,
     std::vector<Polygon> polygons = extractConcaveHulls(planes, triangulation, vertices, config);
     return polygons;
 }
+
+// std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config, const Matrix<double> &normals)
+// {
+    
+// }
 
 std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config)
 {
@@ -823,18 +828,20 @@ std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> Extrac
     return std::make_tuple(std::move(points), std::move(triangles), std::move(halfedges));
 }
 
-delaunator::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals)
+MeshHelper::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals)
 {
     std::vector<double> vertices;
     std::vector<size_t> triangles;
     std::vector<size_t> halfedges;
     std::tie(vertices, triangles, halfedges) = ExtractUniformMeshFromFloatDepth(im, intrinsics, extrinsics, stride);
-    delaunator::TriMesh triangulation(vertices, triangles, halfedges);
+    MeshHelper::TriMesh triangulation(vertices, triangles, halfedges);
     if (calc_normals)
     {
-        ComputeTriangleNormals(triangulation.coords, triangulation.triangles, triangulation.triangle_normals);
+        MeshHelper::ComputeTriangleNormals(triangulation.coords, triangulation.triangles, triangulation.triangle_normals);
     }
     return triangulation;
 }
+
+
 
 } // namespace polylidar

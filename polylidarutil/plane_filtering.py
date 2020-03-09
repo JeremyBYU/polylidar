@@ -90,6 +90,7 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
     # will hold the plane(s) and obstacles found
     planes = []
     obstacles = []
+    # print("Polylidar returned {} polygons, ".format(len(polygons)))
     for poly in polygons:
         t0 = time.perf_counter()
         if rm is not None:
@@ -147,13 +148,14 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
         # Its possible that our polygon has no broken into a multipolygon
         # Check for this situation and handle it
         # all_poly_shapes = [poly_shape]
-
+        # print(len(all_poly_shapes))
         # iterate through every polygons and check for plane extraction
         for poly_shape in all_poly_shapes:
             area = poly_shape.area
-            dim = np.asarray(poly_shape.exterior).shape[1]
+            # print(poly_shape.geom_type, area)
             # logging.info("Plane is big enough still")
             if post_filter['plane_area']['min'] <= 0 or area >= post_filter['plane_area']['min']:
+                dim = np.asarray(poly_shape.exterior).shape[1]
                 # logging.info("Plane is big enough still")
                 if config_pp['negative_buffer'] or config_pp['simplify'] or config_pp['positive_buffer'] and dim < 3:
                     # convert back to 3D coordinates

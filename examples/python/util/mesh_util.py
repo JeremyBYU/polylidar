@@ -27,6 +27,7 @@ def get_mesh_data_iterator():
     for i, (mesh_fpath, r) in enumerate(zip(ALL_MESHES, ALL_MESHES_ROTATIONS)):
         example_mesh = o3d.io.read_triangle_mesh(str(mesh_fpath))
         if r is not None:
+            print(r.as_matrix())
             example_mesh = example_mesh.rotate(r.as_matrix())
         example_mesh_filtered = example_mesh
         example_mesh_filtered.compute_triangle_normals()

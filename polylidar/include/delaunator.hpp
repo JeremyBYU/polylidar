@@ -42,6 +42,7 @@
 #endif
 
 #include "polylidar/util.hpp"
+#include "polylidar/Mesh/MeshHelper.hpp"
 
 #ifdef PY_EXTENSION
 #include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
@@ -51,41 +52,7 @@
 
 namespace delaunator {
 
-
-    class HalfEdgeTriangulation {
-
-    public:
-        polylidar::Matrix<double> coords;
-        std::vector<std::size_t> triangles;
-        std::vector<std::size_t> halfedges;
-
-        HalfEdgeTriangulation();
-        HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords);
-        HalfEdgeTriangulation(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> & in_halfedges);
-        #ifdef PY_EXTENSION
-        HalfEdgeTriangulation(pybind11::array_t<double> in_coords);
-        HalfEdgeTriangulation(polylidar::Matrix<double> &in_coords, pybind11::array_t<size_t> triangles_, pybind11::array_t<size_t> halfedges_);
-        #endif
-        // #ifdef PY_EXTENSION
-        // HalfEdgeTriangulation(pybind11::array_t<double> nparray);
-        // #endif
-
-    private:
-    };
-
-    class TriMesh: public HalfEdgeTriangulation {
-    public:
-        polylidar::Matrix<double> triangle_normals_matrix;
-        std::vector<double> vertices;
-        std::vector<double> triangle_normals;
-        TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges);
-        TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles);
-        TriMesh();
-        void UpdateTriangleNormalMatrix();
-        
-    };
-
-    class Delaunator: public HalfEdgeTriangulation {
+    class Delaunator: public polylidar::MeshHelper::HalfEdgeTriangulation {
 
     public:
         // polylidar::Matrix<double> coords;

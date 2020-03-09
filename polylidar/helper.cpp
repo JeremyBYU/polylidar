@@ -60,7 +60,7 @@ std::array<double, 3> rotateVector(const double *v1, const std::array<double, 9>
     return rv1;
 }
 
-double circumsribedRadius(size_t t, delaunator::HalfEdgeTriangulation &delaunay, Matrix<double> &points)
+double circumsribedRadius(size_t t, MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points)
 {
     auto pa = delaunay.triangles[t * 3];
     auto pb = delaunay.triangles[t * 3 + 1];
@@ -124,31 +124,31 @@ std::ostream &operator<<(std::ostream &os, const ExtremePoint &values)
     return os;
 }
 
-void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals)
-{
-    size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
-    triangle_normals.resize(num_triangles * 3);
+// void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals)
+// {
+//     size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
+//     triangle_normals.resize(num_triangles * 3);
 
-    for (size_t i = 0; i < triangles.size(); i += 3)
-    {
-        auto &pi0 = triangles[i];
-        auto &pi1 = triangles[i + 1];
-        auto &pi2 = triangles[i + 2];
+//     for (size_t i = 0; i < triangles.size(); i += 3)
+//     {
+//         auto &pi0 = triangles[i];
+//         auto &pi1 = triangles[i + 1];
+//         auto &pi2 = triangles[i + 2];
 
-        std::array<double, 3> vv1 = {vertices(pi0, 0), vertices(pi0, 1), vertices(pi0, 2)};
-        std::array<double, 3> vv2 = {vertices(pi1, 0), vertices(pi1, 1), vertices(pi1, 2)};
-        std::array<double, 3> vv3 = {vertices(pi2, 0), vertices(pi2, 1), vertices(pi2, 2)};
+//         std::array<double, 3> vv1 = {vertices(pi0, 0), vertices(pi0, 1), vertices(pi0, 2)};
+//         std::array<double, 3> vv2 = {vertices(pi1, 0), vertices(pi1, 1), vertices(pi1, 2)};
+//         std::array<double, 3> vv3 = {vertices(pi2, 0), vertices(pi2, 1), vertices(pi2, 2)};
 
-        // two lines of triangle
-        // V1 is starting index
-        std::array<double, 3> u{{vv2[0] - vv1[0], vv2[1] - vv1[1], vv2[2] - vv1[2]}};
-        std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
+//         // two lines of triangle
+//         // V1 is starting index
+//         std::array<double, 3> u{{vv2[0] - vv1[0], vv2[1] - vv1[1], vv2[2] - vv1[2]}};
+//         std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
-        // cross product
-        crossProduct3(v, u, &triangle_normals[i]);
-        // normalize
-        normalize3(&triangle_normals[i]);
-    }
-}
+//         // cross product
+//         crossProduct3(v, u, &triangle_normals[i]);
+//         // normalize
+//         normalize3(&triangle_normals[i]);
+//     }
+// }
 
 } // namespace polylidar

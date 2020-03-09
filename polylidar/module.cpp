@@ -41,19 +41,19 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("hull_tri", &delaunator::Delaunator::hull_tri)
         .def_readonly("coords", &delaunator::Delaunator::coords);
 
-    py::class_<delaunator::HalfEdgeTriangulation>(m, "HalfEdgeTriangulation")
+    py::class_<polylidar::MeshHelper::HalfEdgeTriangulation>(m, "HalfEdgeTriangulation")
         // .def(py::init<py::array_t<double>>())
-        .def_readonly("triangles", &delaunator::HalfEdgeTriangulation::triangles)
-        .def_readonly("halfedges", &delaunator::HalfEdgeTriangulation::halfedges)
-        .def_readonly("coords", &delaunator::HalfEdgeTriangulation::coords);
+        .def_readonly("triangles", &polylidar::MeshHelper::HalfEdgeTriangulation::triangles)
+        .def_readonly("halfedges", &polylidar::MeshHelper::HalfEdgeTriangulation::halfedges)
+        .def_readonly("coords", &polylidar::MeshHelper::HalfEdgeTriangulation::coords);
 
-    py::class_<delaunator::TriMesh>(m, "TriMesh")
+    py::class_<polylidar::MeshHelper::TriMesh>(m, "TriMesh")
         // .def(py::init<std::vector<double>, std::vector<double>, std::vector<size_t>>())
-        .def_readonly("vertices", &delaunator::TriMesh::vertices)
-        .def_readonly("triangles", &delaunator::TriMesh::triangles)
-        .def_readonly("halfedges", &delaunator::TriMesh::halfedges)
-        .def_readonly("triangle_normals", &delaunator::TriMesh::triangle_normals)
-        .def_readonly("coords", &delaunator::TriMesh::coords);
+        .def_readonly("vertices", &polylidar::MeshHelper::TriMesh::vertices)
+        .def_readonly("triangles", &polylidar::MeshHelper::TriMesh::triangles)
+        .def_readonly("halfedges", &polylidar::MeshHelper::TriMesh::halfedges)
+        .def_readonly("triangle_normals", &polylidar::MeshHelper::TriMesh::triangle_normals)
+        .def_readonly("coords", &polylidar::MeshHelper::TriMesh::coords);
 
     py::class_<polylidar::Polygon>(m, "Polygon")
         .def(py::init<>())
