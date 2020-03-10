@@ -68,7 +68,7 @@ std::vector<double> _extractPointCloudFromFloatDepth(py::array_t<float> image, p
     auto info_ext = extrinsics.request();
     Matrix<double> extrinsics_((double *)info_ext.ptr, info_ext.shape[0], info_ext.shape[1]);
     // Extract point cloud
-    std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics_, extrinsics_, stride);
+    std::vector<double> points = MeshHelper::ExtractPointCloudFromFloatDepth(im, intrinsics_, extrinsics_, stride);
     // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
 
     return points;
@@ -91,7 +91,7 @@ MeshHelper::TriMesh _extractTriMeshFromFloatDepth(py::array_t<float> image, py::
     Matrix<double> extrinsics_((double *)info_ext.ptr, info_ext.shape[0], info_ext.shape[1]);
 
     // Get Data
-    auto triMesh = ExtractTriMeshFromFloatDepth(im, intrinsics_, extrinsics_, stride, calc_normals);
+    auto triMesh = MeshHelper::ExtractTriMeshFromFloatDepth(im, intrinsics_, extrinsics_, stride, calc_normals);
     // std::cout << "_extractUniformMeshFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
 
     return triMesh;

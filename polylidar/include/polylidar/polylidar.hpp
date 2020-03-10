@@ -40,7 +40,6 @@
 #include <omp.h>
 #define PL_OMP_CHUNK_SIZE_TRISET 64
 #define PL_OMP_ELEM_PER_THREAD_TRISET 12800
-#define PL_OMP_MAX_THREAD_DEPTH_TO_PC 8
 #endif
 
 #include "polylidar/helper.hpp"
@@ -130,10 +129,7 @@ std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config c
 std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config);
 std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config);
 std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config, const Matrix<double> &normals);
-std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
-std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
-MeshHelper::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals = DEFAULT_CALC_NORMALS);
-std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+
 
 std::vector<std::vector<size_t>> extractPlanesSet(MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config);
 std::vector<std::vector<size_t>> extractPlanesSet(MeshHelper::TriMesh &delaunay, Matrix<double> &points, Config &config);

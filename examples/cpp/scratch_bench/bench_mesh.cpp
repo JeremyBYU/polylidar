@@ -16,6 +16,7 @@ const std::string SPARSE_MESH = "./tests/fixtures/meshes/sparse_basement.ply";
 
 namespace o3d = open3d;
 using TriMesh = polylidar::MeshHelper::TriMesh;
+using namespace polylidar;
 class Images : public benchmark::Fixture
 {
 public:
@@ -68,7 +69,7 @@ BENCHMARK_DEFINE_F(Images, BM_Create_PointCloud)
     polylidar::Matrix<float> im(im_ptr, image_float->width_, image_float->height_);
     for (auto _ : st)
     {
-        auto points = ExtractPointCloudFromFloatDepth(im, intr, extr, 2);
+        auto points = MeshHelper::ExtractPointCloudFromFloatDepth(im, intr, extr, 2);
     }
 }
 
@@ -81,7 +82,7 @@ BENCHMARK_DEFINE_F(Images, BM_Create_TriMesh)
     for (auto _ : st)
     {
         // ExtractPointCloudFromFloatDepth(im, intr, 1);
-        auto triMesh = polylidar::ExtractTriMeshFromFloatDepth(im, intr, extr, 2, false);
+        auto triMesh = MeshHelper::ExtractTriMeshFromFloatDepth(im, intr, extr, 2, false);
     }
 }
 
@@ -91,7 +92,7 @@ BENCHMARK_DEFINE_F(Images, BM_ComputeTriangleNormals)
     auto im_ptr = image_float->PointerAt<float>(0, 0);
     image_float->height_;
     polylidar::Matrix<float> im(im_ptr, image_float->width_, image_float->height_);
-    auto triMesh = polylidar::ExtractTriMeshFromFloatDepth(im, intr, extr,2, false);
+    auto triMesh = MeshHelper::ExtractTriMeshFromFloatDepth(im, intr, extr,2, false);
     
     for (auto _ : st)
     {

@@ -13,6 +13,13 @@
 #include "pybind11/numpy.h"
 #endif
 
+#if defined(_OPENMP)
+#include <omp.h>
+#define PL_OMP_MAX_THREAD_DEPTH_TO_PC 8
+#endif
+
+#define DEFAULT_CALC_NORMALS true
+
 namespace polylidar
 {
 
@@ -29,6 +36,7 @@ using unordered_map = phmap::flat_hash_map<T, G>;
 #endif
 
 using MatX2I = std::vector<std::array<size_t, 2>>;
+
 
 class HalfEdgeTriangulation
 {
@@ -148,6 +156,10 @@ inline void normalize3(double *normal)
 void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
 TriMesh CreateTriMeshCopy(const double *vertices_ptr, size_t num_vertices, const size_t *triangles_ptr, size_t num_triangles);
 TriMesh CreateTriMeshCopy(const double *vertices_ptr, size_t num_vertices, const int *triangles_ptr, size_t num_triangles);
+std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
+MeshHelper::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals = DEFAULT_CALC_NORMALS);
+std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 
 } // namespace MeshHelper
 } // namespace polylidar

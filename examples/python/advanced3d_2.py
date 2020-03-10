@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh
+from polylidar import extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, create_tri_mesh_copy
 from polylidarutil.plane_filtering import filter_planes_and_holes
 from polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
                            scale_points, rotation_matrix, apply_rotation, COLOR_PALETTE)
@@ -139,15 +139,15 @@ o3d.visualization.draw_geometries([pcd, mesh])
 
 print("Sending Mesh to Polylidar to Extract Planes")
 num_triangles = np.asarray(mesh.triangles).shape[0]
-vertices = np.asarray(mesh.vertices)
+vertices = np.ascontiguousarray(np.asarray(mesh.vertices))
 # triangles produced by open3d are in counter clockwise order, polylidar expects clockwise
-triangles = np.ascontiguousarray(np.flip(np.asarray(mesh.triangles), 1)).flatten()
+triangles = np.ascontiguousarray(np.asarray(mesh.triangles))
 mesh.triangles = o3d.utility.Vector3iVector(np.reshape(triangles, (num_triangles, 3)))
-halfedges = np.asarray(o3d.geometry.HalfEdgeTriangleMesh.extract_halfedges(mesh))
+tri_mesh = create_tri_mesh_copy(vertices, triangles)
 
 desiredVector = [0, 0, 1]
 polylidar_kwargs = dict(alpha=0.0, lmax=1.0, minTriangles=10, zThresh=0.06, normThresh=0.98, desiredVector=desiredVector, normThreshMin=0.93, minHoleVertices=6)
-planes, polygons = extract_planes_and_polygons_from_mesh(vertices, triangles, halfedges, **polylidar_kwargs)
+planes, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
 # for poly in polygons:
 #     print(poly.shell)
 #     print(poly.holes)
