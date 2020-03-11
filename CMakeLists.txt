@@ -109,7 +109,7 @@ if (WITH_BENCHMARKS)
     target_link_libraries(bench-mesh ${BENCH_DEPENDENCIES})
     # Build Mesh Example
     add_executable(example-mesh ${POLYLIDAR_EXAMPLES_CPP_DIR}/example_mesh.cpp)
-    target_link_libraries(example-mesh ${BENCH_DEPENDENCIES})
+    target_link_libraries(example-mesh ${BENCH_DEPENDENCIES} ${GPERFTOOLS_PROFILER})
     target_include_directories(example-mesh PUBLIC ${POLYLIDAR_INCLUDE_DIR} ${Open3D_INCLUDE_DIRS})
 
     

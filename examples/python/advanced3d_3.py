@@ -80,18 +80,6 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
             poly_lines, _ = filter_and_create_open3d_polygons(vertices, polygons_for_normal, rm=rm)
             all_poly_lines.extend(poly_lines)
 
-    # import ipdb; ipdb.set_trace()
-
-    
-    # all_poly_lines = []
-    # # for i in range(avg_peaks.shape[0]):
-    # for i in range(3):
-    #     avg_peak = avg_peaks[i, :]
-    #     polylidar_kwargs['desiredVector'] = avg_peak.tolist()
-    #     rm, _ = R.align_vectors([[0, 0, 1]], [polylidar_kwargs['desiredVector']])
-    #     _, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
-    #     poly_lines, t_lines = filter_and_create_open3d_polygons(vertices, polygons, rm=rm)
-    #     all_poly_lines.extend(poly_lines)
     return all_poly_lines, polylidar_time
 
 def run_test(mesh, callback=None, stride=2):
@@ -166,7 +154,7 @@ def main():
         if i < 1:
             # Dense mesh needs to be smoothed
             t0 = time.perf_counter()
-            mesh = mesh.filter_smooth_laplacian(5, 0.75)
+            mesh = mesh.filter_smooth_laplacian(3, 0.75)
             t1 = time.perf_counter()
             logging.info("Laplacian Smoothing took (ms): %.2f",(t1-t0) * 1000)
         mesh.compute_triangle_normals()
