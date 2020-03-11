@@ -13,6 +13,7 @@
 
 const std::string DEFAULT_DEPTH_IMAGE = "./tests/fixtures/realsense/depth/00000003_1580908154939.png";
 const std::string SPARSE_MESH = "./tests/fixtures/meshes/sparse_basement.ply";
+const std::string DENSE_MESH = "./tests/fixtures/meshes/dense_first_floor_map_smoothed.ply";
 
 namespace o3d = open3d;
 using TriMesh = polylidar::MeshHelper::TriMesh;
@@ -48,8 +49,6 @@ public:
         // Sparse Mesh In O3D Format
         sparse_mesh_o3d = o3d::io::CreateMeshFromFile(SPARSE_MESH);
         sparse_mesh_o3d->Rotate(mesh_rotation);
-
-        // test << 
         // sparse_mesh_o3d->Rotate();
         // Sparse Mesh In HalfEdgeTriangulation
         auto triangles_ptr = reinterpret_cast<int*>(sparse_mesh_o3d->triangles_.data());
@@ -57,6 +56,29 @@ public:
         auto vertices_ptr = reinterpret_cast<double*>(sparse_mesh_o3d->vertices_.data());
         auto num_vertices = sparse_mesh_o3d->vertices_.size();
         sparse_mesh = polylidar::MeshHelper::CreateTriMeshCopy(vertices_ptr, num_vertices, triangles_ptr, num_triangles);
+    }
+};
+
+class DenseMesh : public benchmark::Fixture
+{
+public:
+  
+    std::shared_ptr<o3d::geometry::TriangleMesh> dense_mesh_o3d;
+    TriMesh dense_mesh;
+    Eigen::Matrix3d mesh_rotation;
+    void SetUp(const ::benchmark::State &state)
+    {
+     
+        // Rotation for mesh, camera axis to global frame
+        mesh_rotation << 1.0, 0.0, 0.0,
+                         0.0, 0.0, 1.0,
+                         0.0, -1.0, 0.0;
+        // Sparse Mesh In O3D Format
+        auto triangles_ptr = reinterpret_cast<int*>(dense_mesh_o3d->triangles_.data());
+        auto num_triangles = dense_mesh_o3d->triangles_.size();
+        auto vertices_ptr = reinterpret_cast<double*>(dense_mesh_o3d->vertices_.data());
+        auto num_vertices = dense_mesh_o3d->vertices_.size();
+        auto dense_mesh = polylidar::MeshHelper::CreateTriMeshCopy(vertices_ptr, num_vertices, triangles_ptr, num_triangles);
     }
 };
 
@@ -98,6 +120,20 @@ BENCHMARK_DEFINE_F(Images, BM_ComputeTriangleNormals)
     {
         std::vector<double> triangle_normals;
         polylidar::MeshHelper::ComputeTriangleNormals(triMesh.coords, triMesh.triangles, triangle_normals);
+    }
+}
+
+BENCHMARK_DEFINE_F(Images, BM_CopyTriMesh)
+(benchmark::State& st)
+{
+    auto triangles_ptr = reinterpret_cast<int*>(sparse_mesh_o3d->triangles_.data());
+    auto num_triangles = sparse_mesh_o3d->triangles_.size();
+    auto vertices_ptr = reinterpret_cast<double*>(sparse_mesh_o3d->vertices_.data());
+    auto num_vertices = sparse_mesh_o3d->vertices_.size();
+    
+    for (auto _ : st)
+    {
+        sparse_mesh = polylidar::MeshHelper::CreateTriMeshCopy(vertices_ptr, num_vertices, triangles_ptr, num_triangles);
     }
 }
 
@@ -149,13 +185,34 @@ BENCHMARK_DEFINE_F(Images, BM_ExtractPolygonsFromMultipleNormals_Sparse)
     }
 }
 
+BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPolygonsFromMultipleNormals_Dense)
+(benchmark::State& st)
+{
+    // dict(alpha=0.0, lmax=0.10, minTriangles=1000,
+    //                         zThresh=0.03, normThresh=0.95, normThreshMin=0.90, minHoleVertices=6)
+    polylidar::Config config{3, 0.0, 0.0, 0.10, 1000, 6, 0.0, 0.03, 0.95, 0.90, 1.0, {{0, 0, 1}}};
+    std::vector<std::array<double, 3>> normals =     {{-0.0192, -0.0199, -0.9996},
+    { -0.0123, -0.0021, -0.9999},
+    { -0.2241,  0.9744, -0.0171},
+    {0.2207, -0.9752,  0.0144},
+    {-0.9612, -0.2756,  0.0129}};
+    const polylidar::Matrix<double> normals_mat((double *)(normals.data()), st.range(0), 3);
+    for (auto _ : st)
+    {
+        // ExtractPointCloudFromFloatDepth(im, intr, 1);
+        auto polygons = polylidar::ExtractPolygonsFromMesh(dense_mesh, normals_mat, config);
+    }
+}
+
 
 
 BENCHMARK_REGISTER_F(Images, BM_Create_PointCloud)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_Create_TriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_ComputeTriangleNormals)->UseRealTime()->Unit(benchmark::kMicrosecond);
+BENCHMARK_REGISTER_F(Images, BM_CopyTriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_ExtractPlanesTriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_ExtractPlanesAndPolygons)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_ExtractPolygonsFromMultipleNormals_Sparse)->DenseRange(1, 4, 1)->UseRealTime()->Unit(benchmark::kMicrosecond);
+// BENCHMARK_REGISTER_F(DenseMesh, BM_ExtractPolygonsFromMultipleNormals_Dense)->DenseRange(1, 4, 1)->UseRealTime()->Unit(benchmark::kMicrosecond);
 // Run the benchmark
 BENCHMARK_MAIN();

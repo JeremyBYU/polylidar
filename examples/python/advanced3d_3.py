@@ -85,7 +85,7 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
 def run_test(mesh, callback=None, stride=2):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=1000,
-                            zThresh=0.03, normThresh=0.95, normThreshMin=0.90, minHoleVertices=6)
+                            zThresh=0.01, normThresh=0.95, normThreshMin=0.92, minHoleVertices=6)
     # Create Polylidar TriMesh
     # TODO convert this to a polylidar TriMesh
     tri_mesh = open_3d_mesh_to_trimesh(mesh)
@@ -154,7 +154,7 @@ def main():
         if i < 1:
             # Dense mesh needs to be smoothed
             t0 = time.perf_counter()
-            mesh = mesh.filter_smooth_laplacian(3, 0.75)
+            mesh = mesh.filter_smooth_laplacian(5, 0.75)
             t1 = time.perf_counter()
             logging.info("Laplacian Smoothing took (ms): %.2f",(t1-t0) * 1000)
         mesh.compute_triangle_normals()
