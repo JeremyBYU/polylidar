@@ -109,6 +109,21 @@ std::vector<Polygon> _extractPolygonsFromMesh(MeshHelper::TriMesh &triangulation
     return ExtractPolygonsFromMesh(triangulation, config);
 }
 
+std::vector<std::vector<Polygon>> _extractPolygonsFromMeshWithNormals(MeshHelper::TriMesh &triangulation, py::array_t<double> normals,
+                                              double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax = DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
+                                              size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,
+                                              double normThresh = DEFAULT_NORMTHRESH, double normThreshMin = DEFAULT_NORMTHRESH_MIN,
+                                              double allowedClass = DEFAULT_ALLOWEDCLASS)
+{
+    // This function allows us to convert keyword arguments into a configuration struct
+    auto cols = triangulation.coords.cols;
+    auto info_normals = normals.request();
+    Matrix<double> normals_((double *)info_normals.ptr, info_normals.shape[0], info_normals.shape[1]);
+    Config config{cols, alpha, xyThresh, lmax, minTriangles, minHoleVertices, minBboxArea, zThresh, normThresh, normThreshMin, allowedClass};
+
+    return ExtractPolygonsFromMesh(triangulation, normals_, config);
+}
+
 std::vector<Polygon> _extractPolygons(py::array_t<double> nparray,
                                       double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax = DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                       size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,

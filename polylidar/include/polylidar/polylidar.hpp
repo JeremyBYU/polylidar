@@ -60,7 +60,6 @@
 #define DEFAULT_ALLOWEDCLASS 4.0
 #define DEFAULT_STRIDE 2
 #define DEFAULT_CALC_NORMALS true
-#define EPS_RADIAN 0.001
 
 #define DEBUG 1
 
@@ -73,6 +72,9 @@
 // namespace py = pybind11;
 const static std::array<double, 3> DEFAULT_DESIRED_VECTOR{{0, 0, 1}};
 const static std::array<double, 9> DEFAULT_IDENTITY_RM{{1, 0, 0, 0, 1, 0, 0, 0, 1}};
+const static uint8_t ZERO_UINT8 = static_cast<uint8_t>(0);
+const static uint8_t ONE_UINT8 = static_cast<uint8_t>(1);
+const static uint8_t MAX_UINT8 = static_cast<uint8_t>(255);
 
 namespace polylidar
 {
@@ -104,10 +106,12 @@ struct Config
     double normThreshMin = DEFAULT_NORMTHRESH_MIN;
     // 4D configuration
     double allowedClass = DEFAULT_ALLOWEDCLASS;
-    // extra needed for 3D
+    // extra variables needed for planar extraction
     std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR;
     std::array<double, 9> rotationMatrix = DEFAULT_IDENTITY_RM;
     bool needRotation = false;
+    // Unique ID for normal being extracted
+    uint8_t normalID = ONE_UINT8;
 };
 
 struct Polygon
@@ -118,7 +122,7 @@ struct Polygon
     // but for some reason I need this to allow the polygon to have holes
     // without it I could access the holes, but only ONCE. Then they would be gone
     // i.e in python "polygon.holes" <- Now its dead the next time you acces it
-    // So I think this now makes a copy on every access. but whatever
+    // So I think this now makes a copy on every access.
     vvi getHoles() const { return holes; }
     void setHoles(vvi x) { holes = x; }
 };
@@ -128,11 +132,42 @@ std::vector<Polygon> ExtractPolygons(Matrix<double> &nparray, Config config);
 std::vector<Polygon> ExtractPolygonsAndTimings(Matrix<double> &nparray, Config config, std::vector<float> &timings);
 std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config);
 std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config);
-std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config, const Matrix<double> &normals);
 
+std::vector<std::vector<Polygon>> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, const Matrix<double> &normals, const Config &config);
 
 std::vector<std::vector<size_t>> extractPlanesSet(MeshHelper::HalfEdgeTriangulation &delaunay, Matrix<double> &points, Config &config);
 std::vector<std::vector<size_t>> extractPlanesSet(MeshHelper::TriMesh &delaunay, Matrix<double> &points, Config &config);
+
+inline void UpdateConfigWithRotationInformation(Config &config)
+{
+    std::array<double, 3> axis;
+    double angle;
+    // std::cout << "Normal to Extract: " << PL_PRINT_ARRAY(config.desiredVector) << "; Z Axis: " << PL_PRINT_ARRAY(DEFAULT_DESIRED_VECTOR) << std::endl;
+    std::tie(axis, angle) = axisAngleFromVectors(config.desiredVector, DEFAULT_DESIRED_VECTOR);
+    if (std::abs(angle) > EPS_RADIAN)
+    {
+        config.needRotation = true;
+        config.rotationMatrix = axisAngleToRotationMatrix(axis, angle);
+    }
+}
+
+inline std::vector<Config> CreateMultipleConfigsFromNormals(const Config &config, const Matrix<double> &normals)
+{
+    std::vector<Config> configs;
+    for (size_t i = 0; i < normals.rows; i++)
+    {
+        auto copy_config = config;
+        // Copy normal information into the new config
+        copy_config.desiredVector[0] = normals(i, 0);
+        copy_config.desiredVector[1] = normals(i, 1);
+        copy_config.desiredVector[2] = normals(i, 2);
+        copy_config.normalID = static_cast<uint8_t>(i + 1);
+        UpdateConfigWithRotationInformation(copy_config);
+        configs.emplace_back(std::move(copy_config));
+    }
+    return configs;
+}
+
 } // namespace polylidar
 
 #endif

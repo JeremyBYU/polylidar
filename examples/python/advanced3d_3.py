@@ -12,7 +12,7 @@ from examples.python.util.realsense_util import (get_realsense_data, get_frame_d
 from examples.python.util.mesh_util import get_mesh_data_iterator
 
 from polylidar import (extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_tri_mesh_from_float_depth,
-                      extract_point_cloud_from_float_depth, create_tri_mesh_copy)
+                      extract_point_cloud_from_float_depth, create_tri_mesh_copy, extract_polygons_from_mesh_with_normals)
 from polylidarutil.open3d_util import construct_grid, create_lines, flatten
 from polylidarutil.plane_filtering import filter_planes_and_holes
 from fastga import GaussianAccumulatorS2, MatX3d
@@ -38,7 +38,6 @@ def open_3d_mesh_to_trimesh(mesh: o3d.geometry.TriangleMesh):
     triangles = np.asarray(mesh.triangles)
     vertices = np.asarray(mesh.vertices)
     triangles = np.ascontiguousarray(triangles)
-    print(triangles.shape, triangles.dtype)
     # triangles = np.ascontiguousarray(np.flip(triangles, 1))
     tri_mesh = create_tri_mesh_copy(vertices, triangles)
     return tri_mesh
@@ -62,19 +61,38 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
     # print(gaussian_normals)
     accumulator_counts = np.asarray(ga.get_normalized_bucket_counts())
     _, _, avg_peaks, _ = find_peaks_from_accumulator(gaussian_normals, accumulator_counts)
-
+    logging.info("Processing mesh with %d triangles", num_normals)
+    logging.info("Dominant Plane Normals")
     print(avg_peaks)
-    
     all_poly_lines = []
-    # for i in range(avg_peaks.shape[0]):
-    for i in range(1):
+    t0 = time.perf_counter()
+    all_polygons = extract_polygons_from_mesh_with_normals(tri_mesh, avg_peaks, **polylidar_kwargs)
+    t1 = time.perf_counter()
+
+    polylidar_time = (t1 - t0) * 1000
+    
+    for i in range(avg_peaks.shape[0]):
         avg_peak = avg_peaks[i, :]
-        polylidar_kwargs['desiredVector'] = avg_peak.tolist()
-        rm, _ = R.align_vectors([[0, 0, 1]], [polylidar_kwargs['desiredVector']])
-        _, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
-        poly_lines, t_lines = filter_and_create_open3d_polygons(vertices, polygons, rm=rm)
-        all_poly_lines.extend(poly_lines)
-    return all_poly_lines
+        rm, _ = R.align_vectors([[0, 0, 1]], [avg_peak])
+        polygons_for_normal = all_polygons[i]
+        # print(polygons_for_normal)
+        if len(polygons_for_normal) > 0:
+            poly_lines, _ = filter_and_create_open3d_polygons(vertices, polygons_for_normal, rm=rm)
+            all_poly_lines.extend(poly_lines)
+
+    # import ipdb; ipdb.set_trace()
+
+    
+    # all_poly_lines = []
+    # # for i in range(avg_peaks.shape[0]):
+    # for i in range(3):
+    #     avg_peak = avg_peaks[i, :]
+    #     polylidar_kwargs['desiredVector'] = avg_peak.tolist()
+    #     rm, _ = R.align_vectors([[0, 0, 1]], [polylidar_kwargs['desiredVector']])
+    #     _, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
+    #     poly_lines, t_lines = filter_and_create_open3d_polygons(vertices, polygons, rm=rm)
+    #     all_poly_lines.extend(poly_lines)
+    return all_poly_lines, polylidar_time
 
 def run_test(mesh, callback=None, stride=2):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
@@ -88,12 +106,12 @@ def run_test(mesh, callback=None, stride=2):
     vertices = np.ascontiguousarray(vertices.reshape(int(vertices.shape[0] / 3), 3))
     triangles = triangles.reshape(int(triangles.shape[0] / 3), 3)
 
-    all_poly_lines = extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs)
+    all_poly_lines, polylidar_time = extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs)
     mesh_3d_polylidar = []
     mesh_3d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     mesh_3d_polylidar.append(mesh)
 
-    time_polylidar3D = 0.0
+    time_polylidar3D = polylidar_time
     polylidar_3d_alg_name = 'Polylidar3D with Provided Mesh'
     callback(polylidar_3d_alg_name, time_polylidar3D, mesh_3d_polylidar)
 
@@ -130,7 +148,7 @@ def callback(alg_name, execution_time,mesh=None):
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -0.7])
     grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
-    logging.info("%s took %.2f milliseconds", alg_name, execution_time)
+    logging.info("%s took (ms): %.2f", alg_name, execution_time)
     if mesh:
         if isinstance(mesh, list):
             o3d.visualization.draw_geometries(
@@ -150,7 +168,7 @@ def main():
             t0 = time.perf_counter()
             mesh = mesh.filter_smooth_laplacian(5, 0.75)
             t1 = time.perf_counter()
-            print("Laplacian Smoothing took (ms): {}".format((t1-t0) * 1000))
+            logging.info("Laplacian Smoothing took (ms): %.2f",(t1-t0) * 1000)
         mesh.compute_triangle_normals()
         o3d.visualization.draw_geometries([mesh, grid_ls, axis_frame])
         run_test(mesh, callback=callback, stride=2)

@@ -12,6 +12,7 @@
 
 #define PL_PRINT_ARRAY(a) a[0] << ", " << a[1] << ", " << a[2]
 #define PL_PRINT_ARRAY2(a) a[0] << ", " << a[1]
+#define EPS_RADIAN 0.001
 
 namespace polylidar
 {
@@ -312,6 +313,7 @@ inline size_t getHullEdge(const std::array<double, 2> &v1, const std::vector<siz
         return outgoingEdges[max_pos];
     }
 }
+
 
 // void ComputeTriangleNormals(const Matrix<double> &vertices, const std::vector<size_t> &triangles, std::vector<double> &triangle_normals);
 

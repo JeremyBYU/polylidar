@@ -14,6 +14,7 @@ set(PROJECT_VERSION 0.0.8)
 set(POLYLIDAR_SRC "${PROJECT_SOURCE_DIR}/polylidar")
 set(POLYLIDAR_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/polylidar/include")
 set(POLYLIDAR_EXAMPLES_CPP_DIR "${PROJECT_SOURCE_DIR}/examples/cpp")
+set(POLYLIDAR_BENCH_CPP_DIR "${PROJECT_SOURCE_DIR}/bench")
 set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/polylidar.cpp ${POLYLIDAR_SRC}/helper.cpp ${POLYLIDAR_SRC}/delaunator.cpp ${POLYLIDAR_SRC}/MeshHelper.cpp)
 set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/polylidar/polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/util.hpp 
 ${POLYLIDAR_INCLUDE_DIR}/polylidar/Mesh/MeshHelper.hpp ${POLYLIDAR_INCLUDE_DIR}/polylidar/helper.hpp ${POLYLIDAR_INCLUDE_DIR}/delaunator.hpp)
@@ -100,11 +101,17 @@ if (WITH_BENCHMARKS)
     find_package(Open3D REQUIRED)
     set(BENCH_DEPENDENCIES benchmark::benchmark OpenMP::OpenMP_CXX polylidar ${Open3D_LIBRARIES})
 
-    add_executable(parallel-test ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/parallelism_test.cpp)
+    add_executable(parallel-test ${POLYLIDAR_BENCH_CPP_DIR}/parallelism_test.cpp)
     target_link_libraries(parallel-test ${BENCH_DEPENDENCIES})
 
-    add_executable(bench-mesh ${POLYLIDAR_EXAMPLES_CPP_DIR}/scratch_bench/bench_mesh.cpp)
+    add_executable(bench-mesh ${POLYLIDAR_BENCH_CPP_DIR}/bench_mesh.cpp)
     target_include_directories(bench-mesh PRIVATE ${Open3D_INCLUDE_DIRS})
     target_link_libraries(bench-mesh ${BENCH_DEPENDENCIES})
+    # Build Mesh Example
+    add_executable(example-mesh ${POLYLIDAR_EXAMPLES_CPP_DIR}/example_mesh.cpp)
+    target_link_libraries(example-mesh ${BENCH_DEPENDENCIES})
+    target_include_directories(example-mesh PUBLIC ${POLYLIDAR_INCLUDE_DIR} ${Open3D_INCLUDE_DIRS})
+
+    
 endif()
 

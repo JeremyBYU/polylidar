@@ -1,4 +1,5 @@
 scratch
+cmake-build
 assets/scratch
 tests/fixtures/meshes
 # examples/cpp/bin
