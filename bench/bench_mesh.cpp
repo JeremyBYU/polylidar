@@ -128,14 +128,20 @@ BENCHMARK_DEFINE_F(Images, BM_ExtractPlanesAndPolygons)
     }
 }
 
-BENCHMARK_DEFINE_F(Images, BM_ExtractPolygonsFromMultipleNormals)
+BENCHMARK_DEFINE_F(Images, BM_ExtractPolygonsFromMultipleNormals_Sparse)
 (benchmark::State& st)
 {
     // dict(alpha=0.0, lmax=0.10, minTriangles=1000,
     //                         zThresh=0.03, normThresh=0.95, normThreshMin=0.90, minHoleVertices=6)
     polylidar::Config config{3, 0.0, 0.0, 0.10, 1000, 6, 0.0, 0.03, 0.95, 0.90, 1.0, {{0, 0, 1}}};
-    std::vector<std::array<double, 3>> normals = {{0,0,1}, {0, -1, 0}};
-    const polylidar::Matrix<double> normals_mat((double *)(normals.data()), 2, 3);
+    std::vector<std::array<double, 3>> normals =     {{-0.0192, -0.0199, -0.9996},
+    { 0.0023,  0.0227,  0.9997},
+    { 0.9995, -0.0213, -0.0227},
+    // { 0.9971,  0.0709, -0.0291},
+    {-0.0163, -0.9995, -0.0267},
+    // {0.0168, -0.2067,  0.9783},
+    {-0.,      0.5988,  0.8009}};
+    const polylidar::Matrix<double> normals_mat((double *)(normals.data()), st.range(0), 3);
     for (auto _ : st)
     {
         // ExtractPointCloudFromFloatDepth(im, intr, 1);
@@ -150,5 +156,6 @@ BENCHMARK_REGISTER_F(Images, BM_Create_TriMesh)->UseRealTime()->Unit(benchmark::
 BENCHMARK_REGISTER_F(Images, BM_ComputeTriangleNormals)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_ExtractPlanesTriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(Images, BM_ExtractPlanesAndPolygons)->UseRealTime()->Unit(benchmark::kMicrosecond);
+BENCHMARK_REGISTER_F(Images, BM_ExtractPolygonsFromMultipleNormals_Sparse)->DenseRange(1, 4, 1)->UseRealTime()->Unit(benchmark::kMicrosecond);
 // Run the benchmark
 BENCHMARK_MAIN();
