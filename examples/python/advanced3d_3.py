@@ -21,7 +21,7 @@ from fastga.peak_and_cluster import find_peaks_from_accumulator
 import open3d as o3d
 
 
-def filter_and_create_open3d_polygons(points, polygons, rm=None, line_radius=0.001):
+def filter_and_create_open3d_polygons(points, polygons, rm=None, line_radius=0.005):
     " Apply polygon filtering algorithm, return Open3D Mesh Lines "
     config_pp = dict(filter=dict(hole_area=dict(min=0.025, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.25)),
                      positive_buffer=0.02, negative_buffer=0.05, simplify=0.02)
