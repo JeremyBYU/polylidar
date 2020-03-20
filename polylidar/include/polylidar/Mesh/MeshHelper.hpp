@@ -68,6 +68,7 @@ public:
     std::vector<double> triangle_normals;
     TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges);
     TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_triangles);
+    TriMesh(const polylidar::Matrix<double> &in_coords, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges, const bool copy_vertices=true);
     TriMesh();
     void UpdateTriangleNormalMatrix();
 };
@@ -159,6 +160,7 @@ TriMesh CreateTriMeshCopy(const double *vertices_ptr, size_t num_vertices, const
 std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> ExtractUniformMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 MeshHelper::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride, const bool calc_normals = DEFAULT_CALC_NORMALS);
+MeshHelper::TriMesh ExtractTriMeshFromOrganizedPointCloud(const Matrix<double> points_2D, const size_t rows, const size_t cols, const size_t stride, const bool calc_normals);
 std::vector<double> ExtractPointCloudFromFloatDepth2(const Matrix<float> &im, const Matrix<double> &intrinsics, const Matrix<double> &extrinsics, const size_t stride);
 
 } // namespace MeshHelper

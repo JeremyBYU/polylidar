@@ -97,6 +97,16 @@ MeshHelper::TriMesh _extractTriMeshFromFloatDepth(py::array_t<float> image, py::
     return triMesh;
 }
 
+MeshHelper::TriMesh _extractTriMeshFromOrganizedPointCloud(py::array_t<double> points_organized, const size_t rows, const size_t cols, size_t stride = DEFAULT_STRIDE, const bool calc_normals = DEFAULT_CALC_NORMALS)
+{
+    // Create Points Wrapper
+    auto info_im = points_organized.request();
+    Matrix<double> points((double *)info_im.ptr, info_im.shape[0], info_im.shape[1]);
+    // Get Data
+    auto triMesh = MeshHelper::ExtractTriMeshFromOrganizedPointCloud(points, rows, cols,  stride, calc_normals);
+    return triMesh;
+}
+
 std::vector<Polygon> _extractPolygonsFromMesh(MeshHelper::TriMesh &triangulation,
                                               double alpha = DEFAULT_ALPHA, double xyThresh = DEFAULT_XYTHRESH, double lmax = DEFAULT_LMAX, size_t minTriangles = DEFAULT_MINTRIANGLES,
                                               size_t minHoleVertices = DEFAULT_MINHOLEVERTICES, double minBboxArea = DEFAULT_MINBBOX, double zThresh = DEFAULT_ZTHRESH,

@@ -77,6 +77,19 @@ TriMesh::TriMesh(std::vector<double> &in_vertices, std::vector<size_t> &in_trian
     coords.ptr = vertices.data();
 }
 
+TriMesh::TriMesh(const polylidar::Matrix<double> &in_coords, std::vector<size_t> &in_triangles, std::vector<size_t> &in_halfedges, const bool copy_vertices)
+    : HalfEdgeTriangulation(),
+      vertices(),
+      triangle_normals()
+{
+    // TODO COPY COORDS TO VERTICES IF REQUESTED
+    // vertices.swap(in_vertices);
+    triangles.swap(in_triangles);
+    halfedges.swap(in_halfedges);
+    // Point the 2D coords Matrix to vertices data;
+    coords = in_coords;
+}
+
 TriMesh::TriMesh()
     : HalfEdgeTriangulation(),
       vertices(),
@@ -280,9 +293,8 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
     return halfedges;
 }
 
-std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(size_t rows, size_t cols, std::vector<double> &points, size_t stride)
+std::tuple<std::vector<size_t>, std::vector<size_t>> CreateUniformMesh(const size_t rows, const size_t cols, const Matrix<double> &points_2D, const size_t stride)
 {
-    Matrix<double> points_2D(points.data(), points.size() / 3, 3);
     std::vector<size_t> triangles;
     // This represents the number of rows and columns of the downsampled POINT CLOUD
     // size_t cols_stride = static_cast<size_t>(ceil(cols / static_cast<float>(stride)));
@@ -344,10 +356,11 @@ std::tuple<std::vector<double>, std::vector<size_t>, std::vector<size_t>> Extrac
     std::vector<size_t> valid_tri;
     // auto t0 = std::chrono::high_resolution_clock::now();
     std::vector<double> points = ExtractPointCloudFromFloatDepth(im, intrinsics, extrinsics, stride);
+    Matrix<double> points_2D(points.data(), points.size() / 3, 3);
     // auto t1 = std::chrono::high_resolution_clock::now();
     // float elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t1 - t0).count();
     // std::cout << "Point Cloud Extraction took " << elapsed_d << " milliseconds" << std::endl;
-    std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points, stride);
+    std::tie(triangles, valid_tri) = CreateUniformMesh(im.rows, im.cols, points_2D, stride);
     // auto t2 = std::chrono::high_resolution_clock::now();
     // elapsed_d = static_cast<std::chrono::duration<float, std::milli>>(t2 - t1).count();
     // std::cout << "Create Uniform Mesh took " << elapsed_d << " milliseconds" << std::endl;
@@ -366,6 +379,21 @@ MeshHelper::TriMesh ExtractTriMeshFromFloatDepth(const Matrix<float> &im, const 
     std::vector<size_t> halfedges;
     std::tie(vertices, triangles, halfedges) = ExtractUniformMeshFromFloatDepth(im, intrinsics, extrinsics, stride);
     MeshHelper::TriMesh triangulation(vertices, triangles, halfedges);
+    if (calc_normals)
+    {
+        MeshHelper::ComputeTriangleNormals(triangulation.coords, triangulation.triangles, triangulation.triangle_normals);
+    }
+    return triangulation;
+}
+
+MeshHelper::TriMesh ExtractTriMeshFromOrganizedPointCloud(const Matrix<double> points_2D, const size_t rows, const size_t cols, const size_t stride, const bool calc_normals)
+{
+    std::vector<size_t> triangles;
+    std::vector<size_t> valid_tri;
+    std::tie(triangles, valid_tri) = CreateUniformMesh(rows, cols, points_2D, stride);
+    std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(rows, cols, triangles, valid_tri, stride);
+
+    MeshHelper::TriMesh triangulation(points_2D, triangles, halfedges, false);
     if (calc_normals)
     {
         MeshHelper::ComputeTriangleNormals(triangulation.coords, triangulation.triangles, triangulation.triangle_normals);
