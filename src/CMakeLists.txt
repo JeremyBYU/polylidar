@@ -1,0 +1,7 @@
+add_subdirectory(Polylidar)
+if (PL_BUILD_PYMODULE)
+    add_subdirectory(Python)
+endif ()
+# if (BUILD_UNIT_TESTS)
+#     add_subdirectory(UnitTest)
+# endif ()
