@@ -26,6 +26,7 @@
 #include "Polylidar/Types.hpp"
 #include "Polylidar/Utility.hpp"
 #include "Polylidar/Mesh/MeshHelper.hpp"
+#include "Polylidar/Delaunator/Delaunator.hpp"
 
 #define PL_DEFAULT_DIM 2
 #define PL_DEFAULT_ALPHA 1.0
@@ -72,7 +73,8 @@ class Polylidar3D
 
   public:
     Polylidar3D(const double _alpha = PL_DEFAULT_ALPHA, const double _lmax = PL_DEFAULT_LMAX,
-                const size_t _min_triangles = PL_DEFAULT_MINTRIANGLES, const size_t _min_hole_vertices = PL_DEFAULT_MINHOLEVERTICES,
+                const size_t _min_triangles = PL_DEFAULT_MINTRIANGLES,
+                const size_t _min_hole_vertices = PL_DEFAULT_MINHOLEVERTICES,
                 const double _z_thresh = PL_DEFAULT_ZTHRESH, const double _norm_thresh = PL_DEFAULT_NORMTHRESH,
                 const double _norm_thresh_min = PL_DEFAULT_NORMTHRESH_MIN);
 

@@ -16,10 +16,16 @@ def main():
     print("Matrix Array and Buffer Ptr")
     print(c)
     print(get_np_buffer_ptr(c))
+    try:
 
-    d = a.reshape((4,))
-    print("Should throw runtime error because not 2 Dim")
-    e = MatrixDouble(d, False)
+        d = a.reshape((4,))
+        print("")
+        print("Reshape to 1 Dimension")
+        print(d)
+        print("Should throw runtime error because not 2 Dim")
+        e = MatrixDouble(d, False)
+    except Exception:
+        print("Successfully threw an exception")
 
 
 

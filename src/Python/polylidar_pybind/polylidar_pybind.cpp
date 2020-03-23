@@ -1,6 +1,8 @@
 
 #include "polylidar_pybind/polylidar_pybind.hpp"
 
+using namespace Polylidar;
+
 // Convert Numpy Array to PolylidarMatrix
 template <typename T>
 Polylidar::Matrix<T> py_array_to_matrix(py::array_t<T, py::array::c_style | py::array::forcecast> array,
@@ -49,7 +51,7 @@ PYBIND11_MODULE(polylidar, m)
     py::bind_vector<std::vector<int>>(m, "VectorInt", py::buffer_protocol());
 
     py::class_<Polylidar::Matrix<double>>(m, "MatrixDouble", py::buffer_protocol())
-        .def(py::init(&py_array_to_matrix<double>))
+        .def(py::init<>(&py_array_to_matrix<double>), "points"_a, "copy"_a = false)
         .def_buffer([](Polylidar::Matrix<double>& m) -> py::buffer_info {
             return py::buffer_info(m.ptr,                                   /* Pointer to buffer */
                                    sizeof(double),                          /* Size of one scalar */
@@ -59,6 +61,30 @@ PYBIND11_MODULE(polylidar, m)
                                    {sizeof(double) * m.cols,                /* Strides (in bytes) for each index */
                                     sizeof(double)});
         });
+
+    py::class_<Polylidar::Matrix<size_t>>(m, "MatrixULongInt", py::buffer_protocol())
+        .def(py::init<>(&py_array_to_matrix<size_t>), "points"_a, "copy"_a = false)
+        .def_buffer([](Polylidar::Matrix<size_t>& m) -> py::buffer_info {
+            return py::buffer_info(m.ptr,                                   /* Pointer to buffer */
+                                   sizeof(size_t),                          /* Size of one scalar */
+                                   py::format_descriptor<size_t>::format(), /* Python struct-style format descriptor */
+                                   2UL,                                     /* Number of dimensions */
+                                   {m.rows, m.cols},                        /* Buffer dimensions */
+                                   {sizeof(size_t) * m.cols,                /* Strides (in bytes) for each index */
+                                    sizeof(size_t)});
+        });
+
+    py::class_<MeshHelper::HalfEdgeTriangulation>(m, "HalfEdgeTriangulation")
+        .def(py::init<Matrix<double>&>(), "in_vertices"_a)
+        .def("__repr__", [](const MeshHelper::HalfEdgeTriangulation& a) { return "<HalfEdgeTriangulation>"; })
+        .def_readonly("vertices", &MeshHelper::HalfEdgeTriangulation::vertices)
+        .def_readonly("triangles", &MeshHelper::HalfEdgeTriangulation::triangles)
+        .def_readonly("halfedges", &MeshHelper::HalfEdgeTriangulation::halfedges);
+
+    py::class_<Delaunator::Delaunator, MeshHelper::HalfEdgeTriangulation>(m, "Delaunator")
+        .def(py::init<Matrix<double>>(), "in_vertices"_a)
+        .def("__repr__", [](const Delaunator::Delaunator& dl) { return "<Delaunator>"; })
+        .def("triangulate", &Delaunator::Delaunator::triangulate);
 
     py::class_<Polylidar::Polylidar3D>(m, "Polylidar3D")
         .def(py::init<const double, const double, const size_t, const size_t, const double, const double,
