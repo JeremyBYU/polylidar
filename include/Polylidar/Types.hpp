@@ -3,14 +3,21 @@
 
 #include <limits>
 #include <vector>
+#include <cstdint>
+#include <array>
 
 namespace Polylidar {
 
 using VUI = std::vector<size_t>;
 using VVUI = std::vector<VUI>;
 
-
 using Planes = VVUI;
+
+constexpr std::array<double, 3> PL_DEFAULT_DESIRED_VECTOR{{0, 0, 1}};
+constexpr std::array<double, 9> PL_DEFAULT_IDENTITY_RM{{1, 0, 0, 0, 1, 0, 0, 0, 1}};
+constexpr uint8_t ZERO_UINT8 = static_cast<uint8_t>(0);
+constexpr uint8_t ONE_UINT8 = static_cast<uint8_t>(1);
+constexpr uint8_t MAX_UINT8 = static_cast<uint8_t>(255);
 
 template <class T>
 class Matrix
@@ -37,6 +44,12 @@ class Matrix
     Matrix<T>& operator=(const Matrix<T>& a) = default;
 
     void UpdatePtrFromData() { ptr = data.data(); }
+    void UpdatePtrFromData(const size_t rows_, const size_t cols_)
+    {
+        rows = rows_;
+        cols = cols_;
+        ptr = data.data();
+    }
 
     const T& operator()(size_t i, size_t j) const
     {
@@ -46,7 +59,6 @@ class Matrix
     }
 };
 
-
 struct Polygon
 {
     std::vector<size_t> shell;
@@ -54,6 +66,14 @@ struct Polygon
 
     VVUI getHoles() const { return holes; }
     void setHoles(VVUI x) { holes = x; }
+};
+
+struct PlaneData
+{
+    std::array<double, 3> plane_normal = PL_DEFAULT_DESIRED_VECTOR;
+    std::array<double, 9> rotation_matrix = PL_DEFAULT_IDENTITY_RM;
+    bool need_rotation = false;
+    uint8_t normal_id = ONE_UINT8;
 };
 
 using Polygons = std::vector<Polygon>;

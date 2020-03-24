@@ -9,7 +9,7 @@ def main():
     points_mat = MatrixDouble(points)
     delaunay = Delaunator(points_mat)
     delaunay.triangulate()
-    triangles = np.asarray(delaunay.triangles)
+    triangles = np.copy(np.asarray(delaunay.triangles))
 
     plt.triplot(points[:,0], points[:,1], triangles)
 

@@ -9,6 +9,7 @@ Polylidar::Matrix<T> py_array_to_matrix(py::array_t<T, py::array::c_style | py::
                                         bool copy_data = false)
 {
     // return std::vector<std::array<T, dim>>();
+    std::cout << "Calling py_array_to_matrix" << std::endl;
     if (array.ndim() != 2)
     {
         throw py::cast_error("Numpy array must have exactly 2 Dimensions to be transformed to Polylidar::Matrix<T>");
@@ -79,7 +80,8 @@ PYBIND11_MODULE(polylidar, m)
         .def("__repr__", [](const MeshHelper::HalfEdgeTriangulation& a) { return "<HalfEdgeTriangulation>"; })
         .def_readonly("vertices", &MeshHelper::HalfEdgeTriangulation::vertices)
         .def_readonly("triangles", &MeshHelper::HalfEdgeTriangulation::triangles)
-        .def_readonly("halfedges", &MeshHelper::HalfEdgeTriangulation::halfedges);
+        .def_readonly("halfedges", &MeshHelper::HalfEdgeTriangulation::halfedges)
+        .def_readonly("triangle_normals", &MeshHelper::HalfEdgeTriangulation::triangle_normals);
 
     py::class_<Delaunator::Delaunator, MeshHelper::HalfEdgeTriangulation>(m, "Delaunator")
         .def(py::init<Matrix<double>>(), "in_vertices"_a)
@@ -92,6 +94,7 @@ PYBIND11_MODULE(polylidar, m)
              "alpha"_a = PL_DEFAULT_ALPHA, "lmax"_a = PL_DEFAULT_LMAX, "min_triangles"_a = PL_DEFAULT_MINTRIANGLES,
              "min_hole_vertices"_a = PL_DEFAULT_MINHOLEVERTICES, "z_thresh"_a = PL_DEFAULT_ZTHRESH,
              "norm_thresh"_a = PL_DEFAULT_NORMTHRESH, "norm_thresh_min"_a = PL_DEFAULT_NORMTHRESH_MIN)
+        .def("extract_planes_and_polygons", &Polylidar::Polylidar3D::ExtractPlanesAndPolygons, "points"_a, "plane_normal"_a=PL_DEFAULT_DESIRED_VECTOR)
         .def("__repr__", [](const Polylidar::Polylidar3D& pl) { return "<Polylidar::Polylidar3D>"; });
 
     // Functions

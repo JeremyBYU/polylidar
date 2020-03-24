@@ -38,7 +38,7 @@ option(WERROR "Add -Werror flag to build (turns warnings into errors)" OFF)
 option(WITH_PROFILE "Enable Profiling" ON)
 # Options for Polylidar
 option(PL_BUILD_PYMODULE "Build Python Module" ON)
-option(PL_BUILD_DOCS "Build Documentation" ON)
+option(PL_BUILD_DOCS "Build Documentation" OFF)
 option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
 
 option(WITH_PROFILE "Enable Profiling" ON)
