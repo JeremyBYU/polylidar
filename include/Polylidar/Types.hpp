@@ -7,19 +7,26 @@
 #include <array>
 #include <unordered_map>
 
+// include a fast parallel hash map implementation
+#ifdef PL_USE_STD_UNORDERED_MAP
+#include <parallel_hashmap/phmap.h>
+#endif
+
 namespace Polylidar {
 
 using VUI = std::vector<size_t>;
 using VVUI = std::vector<VUI>;
 using Planes = VVUI;
-#define PL_USE_STD_UNORDERED_MAP
+
+// Use Parallel Hash Map unless asked not to
 #ifdef PL_USE_STD_UNORDERED_MAP
 template <typename T, typename G>
 using unordered_map = std::unordered_map<T, G>;
 #else
-#include <parallel_hashmap/phmap.h>
+// template <typename T, typename G>
+// using unordered_map = phmap::flat_hash_map<T, G>;
 template <typename T, typename G>
-using unordered_map = phmap::flat_hash_map<T, G>;
+using unordered_map = std::unordered_map<T, G>;
 #endif
 
 using PointHash = unordered_map<size_t, std::vector<size_t>>;

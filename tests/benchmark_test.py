@@ -8,6 +8,7 @@ try:
     from polylidar import extractPlanesAndPolygons, extractPolygons, extractPolygonsAndTimings
     Polylidar3D = None
 except Exception:
+    print("Using new Polylidar3D")
     from polylidar import Polylidar3D, MatrixDouble
 
 

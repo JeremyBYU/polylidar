@@ -43,6 +43,7 @@ endif()
 
 # Set Header and Properties of Polylidar Library
 get_target_property(phmap_include_dirs phmap INTERFACE_INCLUDE_DIRECTORIES)
+message("${phmap_include_dirs}")
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${phmap_include_dirs})
 target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")
