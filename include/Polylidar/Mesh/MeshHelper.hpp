@@ -38,7 +38,7 @@ class HalfEdgeTriangulation
     Matrix<size_t> halfedges;
 
     HalfEdgeTriangulation();
-    HalfEdgeTriangulation(Matrix<double> &in_vertices);
+    HalfEdgeTriangulation(const Matrix<double> &in_vertices);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges);
 

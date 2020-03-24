@@ -9,6 +9,9 @@ namespace Polylidar {
 using VUI = std::vector<size_t>;
 using VVUI = std::vector<VUI>;
 
+
+using Planes = VVUI;
+
 template <class T>
 class Matrix
 {
@@ -29,6 +32,7 @@ class Matrix
     }
     ~Matrix<T>() = default;
     Matrix<T>(Matrix<T>& a) = default;
+    Matrix<T>(const Matrix<T>& a) = default;
     Matrix<T>(Matrix<T>&& other) = default; // move constructor
     Matrix<T>& operator=(const Matrix<T>& a) = default;
 
@@ -41,6 +45,18 @@ class Matrix
         return ptr[i * cols + j];
     }
 };
+
+
+struct Polygon
+{
+    std::vector<size_t> shell;
+    VVUI holes;
+
+    VVUI getHoles() const { return holes; }
+    void setHoles(VVUI x) { holes = x; }
+};
+
+using Polygons = std::vector<Polygon>;
 
 } // namespace Polylidar
 

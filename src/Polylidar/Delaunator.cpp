@@ -200,6 +200,22 @@ Delaunator::Delaunator(Matrix<double>&& in_vertices)
 {
 }
 
+Delaunator::Delaunator(const Matrix<double>& in_vertices)
+    : HalfEdgeTriangulation(in_vertices),
+      triangles_ref(triangles.data),
+      halfedges_ref(halfedges.data),
+      hull_prev(),
+      hull_next(),
+      hull_tri(),
+      hull_start(),
+      m_hash(),
+      m_center_x(),
+      m_center_y(),
+      m_hash_size(),
+      m_edge_stack()
+{
+}
+
 // Delaunator::Delaunator(pybind11::array_t<double> nparray)
 
 void Delaunator::triangulate()

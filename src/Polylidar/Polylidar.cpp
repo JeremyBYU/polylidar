@@ -13,6 +13,24 @@ Polylidar3D::Polylidar3D(const double _alpha, const double _lmax, const size_t _
       norm_thresh(_norm_thresh),
       norm_thresh_min(_norm_thresh_min)
 {
-    std::cout << "It works still" << std::endl;
 }
+
+std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
+Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double> points)
+{
+    Delaunator::Delaunator delaunay(points);
+    delaunay.triangulate();
+
+    // Planes planes = extractPlanesSet(delaunay, nparray, config);
+
+
+    // // before = std::chrono::high_resolution_clock::now();
+    // std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
+    // // after = std::chrono::high_resolution_clock::now();
+    // // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+    // return std::make_tuple(delaunay, planes, polygons);
+    
+}
+
 } // namespace Polylidar

@@ -44,6 +44,34 @@
 
 namespace Polylidar {
 
+//   std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>>
+//   ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config)
+// {
+//     config.dim = nparray.cols;
+
+//     // auto before = std::chrono::high_resolution_clock::now();
+//     delaunator::Delaunator delaunay(nparray);
+//     delaunay.triangulate();
+//     // auto after = std::chrono::high_resolution_clock::now();
+//     // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+//     // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
+
+//     // before = std::chrono::high_resolution_clock::now();
+//     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
+//     // after = std::chrono::high_resolution_clock::now();
+//     // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+//     // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+
+//     // before = std::chrono::high_resolution_clock::now();
+//     std::vector<Polygon> polygons = extractConcaveHulls(planes, delaunay, nparray, config);
+//     // after = std::chrono::high_resolution_clock::now();
+//     // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+//     // std::cout << "Polygon Hull Extraction took " << elapsed.count() << " milliseconds" << std::endl;
+//     return std::make_tuple(delaunay, planes, polygons);
+
+//     // nparray2D is a contigious buffer of (ROWS,2)
+// }
+
 class Polylidar3D
 {
 
@@ -53,6 +81,8 @@ class Polylidar3D
                 const size_t _min_hole_vertices = PL_DEFAULT_MINHOLEVERTICES,
                 const double _z_thresh = PL_DEFAULT_ZTHRESH, const double _norm_thresh = PL_DEFAULT_NORMTHRESH,
                 const double _norm_thresh_min = PL_DEFAULT_NORMTHRESH_MIN);
+    std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
+    ExtractPlanesAndPolygons(Matrix<double> points);
 
   protected:
     double alpha;

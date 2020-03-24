@@ -62,7 +62,7 @@ class Delaunator : public Polylidar::MeshHelper::HalfEdgeTriangulation
     std::size_t hull_start;
 
     Delaunator(Matrix<double> &&in_vertices);
-    Delaunator(Matrix<double> &in_vertices);
+    Delaunator(const Matrix<double> &in_vertices);
     void triangulate();
 
     double get_hull_area();

@@ -8,7 +8,7 @@ const static double PL_NAN = std::numeric_limits<double>::quiet_NaN();
 // Half Edge Constructors
 HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges() {}
 
-HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double> &in_vertices)
+HalfEdgeTriangulation::HalfEdgeTriangulation(const Matrix<double> &in_vertices)
     : vertices(in_vertices), triangles(), halfedges()
 {
 }
