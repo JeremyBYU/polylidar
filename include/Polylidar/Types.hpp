@@ -5,15 +5,32 @@
 #include <vector>
 #include <cstdint>
 #include <array>
+#include <unordered_map>
 
 namespace Polylidar {
 
 using VUI = std::vector<size_t>;
 using VVUI = std::vector<VUI>;
-
 using Planes = VVUI;
+#define PL_USE_STD_UNORDERED_MAP
+#ifdef PL_USE_STD_UNORDERED_MAP
+template <typename T, typename G>
+using unordered_map = std::unordered_map<T, G>;
+#else
+#include <parallel_hashmap/phmap.h>
+template <typename T, typename G>
+using unordered_map = phmap::flat_hash_map<T, G>;
+#endif
+
+using PointHash = unordered_map<size_t, std::vector<size_t>>;
+// TODO Change to unordered_set
+using EdgeSet = unordered_map<size_t, size_t>; 
+
+
 
 constexpr std::array<double, 3> PL_DEFAULT_DESIRED_VECTOR{{0, 0, 1}};
+constexpr std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+constexpr std::array<double, 2> DOWN_VECTOR = {0.0, -1.0};
 constexpr std::array<double, 9> PL_DEFAULT_IDENTITY_RM{{1, 0, 0, 0, 1, 0, 0, 0, 1}};
 constexpr uint8_t ZERO_UINT8 = static_cast<uint8_t>(0);
 constexpr uint8_t ONE_UINT8 = static_cast<uint8_t>(1);
@@ -38,6 +55,7 @@ class Matrix
         ptr = data.data();
     }
     ~Matrix<T>() = default;
+    // TODO FIX COPY CONSTRUCTOR, the ptr cant just copied, check ownership
     Matrix<T>(Matrix<T>& a) = default;
     Matrix<T>(const Matrix<T>& a) = default;
     Matrix<T>(Matrix<T>&& other) = default; // move constructor
@@ -66,6 +84,16 @@ struct Polygon
 
     VVUI getHoles() const { return holes; }
     void setHoles(VVUI x) { holes = x; }
+};
+
+struct ExtremePoint
+{
+    size_t xr_he = -1;
+    size_t xr_pi = -1;
+    double xr_val = -1 * std::numeric_limits<double>::infinity();
+    size_t xl_he = -1;
+    size_t xl_pi = -1;
+    double xl_val = std::numeric_limits<double>::infinity();
 };
 
 struct PlaneData

@@ -523,16 +523,20 @@ std::vector<std::vector<size_t>> extractPlanesSetMultipleNormals(MeshHelper::Tri
 std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanesAndPolygons(Matrix<double> &nparray, Config config)
 {
     config.dim = nparray.cols;
-
+    Timer timer(true);
     // auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
+    std::cout << "Delaunay init took: " << timer  << std::endl;
     delaunay.triangulate();
+    std::cout << "Delaunay took: " << timer  << std::endl;
     // auto after = std::chrono::high_resolution_clock::now();
     // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
 
     // before = std::chrono::high_resolution_clock::now();
+    timer.Reset();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
+    std::cout << "Plane Extraction took: " << timer  << std::endl;
     // after = std::chrono::high_resolution_clock::now();
     // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;
@@ -575,6 +579,7 @@ std::tuple<std::vector<std::vector<size_t>>, std::vector<Polygon>> ExtractPlanes
     // I think the std move is what I'm looking for??
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
+
 
 
 std::vector<Polygon> ExtractPolygonsFromMesh(MeshHelper::TriMesh &triangulation, Config config)

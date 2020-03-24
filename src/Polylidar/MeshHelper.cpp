@@ -6,21 +6,21 @@ constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 const static double PL_NAN = std::numeric_limits<double>::quiet_NaN();
 
 // Half Edge Constructors
-HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges() {}
+HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges(), triangle_normals() {}
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(const Matrix<double> &in_vertices)
-    : vertices(in_vertices), triangles(), halfedges()
+    : vertices(in_vertices), triangles(), halfedges(), triangle_normals()
 {
 }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices)
-    : vertices(std::move(in_vertices)), triangles(), halfedges()
+    : vertices(std::move(in_vertices)), triangles(), halfedges(), triangle_normals()
 {
 }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles,
                                              Matrix<size_t>&& in_halfedges)
-    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(std::move(in_halfedges))
+    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(std::move(in_halfedges)), triangle_normals()
 {
 }
 // TriMesh::TriMesh() : HalfEdgeTriangulation(), triangle_normals() {}
@@ -32,7 +32,7 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
 // }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges,
-                 Matrix<double> in_triangle_normals)
+                 Matrix<double> && in_triangle_normals)
     : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(std::move(in_halfedges)),
       triangle_normals(std::move(in_triangle_normals))
 {

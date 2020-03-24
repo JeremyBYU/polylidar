@@ -75,6 +75,12 @@ PYBIND11_MODULE(polylidar, m)
                                     sizeof(size_t)});
         });
 
+    py::class_<Polygon>(m, "Polygon")
+        .def(py::init<>())
+        .def_readonly("shell", &Polygon::shell, py::return_value_policy::copy)
+        // .def_readonly("holes", &polylidar::Polygon::holes, py::return_value_policy::copy)
+        .def_property("holes", &Polygon::getHoles, &Polygon::setHoles);
+
     py::class_<MeshHelper::HalfEdgeTriangulation>(m, "HalfEdgeTriangulation")
         .def(py::init<Matrix<double>&>(), "in_vertices"_a)
         .def("__repr__", [](const MeshHelper::HalfEdgeTriangulation& a) { return "<HalfEdgeTriangulation>"; })

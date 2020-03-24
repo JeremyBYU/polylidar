@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 #include "Polylidar/Delaunator/Delaunator.hpp"
+#include "Polylidar/Utility.hpp"
 namespace Polylidar {
 
 namespace Delaunator {
@@ -220,6 +221,7 @@ Delaunator::Delaunator(const Matrix<double>& in_vertices)
 
 void Delaunator::triangulate()
 {
+    Utility::Timer timer(true);
     std::size_t n = vertices.rows;
 
     double max_x = std::numeric_limits<double>::min();
