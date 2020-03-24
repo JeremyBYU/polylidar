@@ -2,6 +2,8 @@ scratch
 cmake-build
 assets/scratch
 tests/fixtures/meshes
+docs/latex
+docs/html
 # examples/cpp/bin
 .vscode
 .nox

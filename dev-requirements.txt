@@ -1,0 +1,8 @@
+numpy
+matplotlib
+scipy
+
+# Documentation Generation Pacakges
+Sphinx
+sphinx_rtd_theme
+breathe

@@ -42,30 +42,6 @@
 #define PL_DEFAULT_STRIDE 2
 #define PL_DEFAULT_CALC_NORMALS true
 
-// struct Config
-// {
-//     // 2D base configuration
-//     size_t dim = DEFAULT_DIM;
-//     double alpha = DEFAULT_ALPHA;
-//     double xyThresh = DEFAULT_XYTHRESH;
-//     double lmax = DEFAULT_LMAX;
-//     size_t minTriangles = DEFAULT_MINTRIANGLES;
-//     size_t minHoleVertices = DEFAULT_MINHOLEVERTICES;
-//     double minBboxArea = DEFAULT_MINBBOX;
-//     // 3D configuration
-//     double zThresh = DEFAULT_ZTHRESH;
-//     double normThresh = DEFAULT_NORMTHRESH;
-//     double normThreshMin = DEFAULT_NORMTHRESH_MIN;
-//     // 4D configuration
-//     double allowedClass = DEFAULT_ALLOWEDCLASS;
-//     // extra variables needed for planar extraction
-//     std::array<double, 3> desiredVector = DEFAULT_DESIRED_VECTOR;
-//     std::array<double, 9> rotationMatrix = DEFAULT_IDENTITY_RM;
-//     bool needRotation = false;
-//     // Unique ID for normal being extracted
-//     uint8_t normalID = ONE_UINT8;
-// };
-
 namespace Polylidar {
 
 class Polylidar3D
