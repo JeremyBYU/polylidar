@@ -4,6 +4,8 @@ assets/scratch
 tests/fixtures/meshes
 docs/latex
 docs/html
+docs/api
+docs/sphinx
 # examples/cpp/bin
 .vscode
 .nox

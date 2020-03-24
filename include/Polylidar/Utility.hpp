@@ -5,10 +5,10 @@
 #include <cstddef>
 #include <vector>
 
-namespace polylidar {
+namespace Polylidar {
 
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
-constexpr std::size_t operator"" _z(unsigned long long n) { return n; }
+// constexpr std::size_t operator"" _z(unsigned long long n) { return n; }
 
 
 } // namespace polylidar
