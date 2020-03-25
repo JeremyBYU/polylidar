@@ -377,7 +377,7 @@ HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, cons
     return triangulation;
 }
 
-HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> points_2D, const size_t rows,
+HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &points_2D, const size_t rows,
                                                             const size_t cols, const size_t stride,
                                                             const bool calc_normals)
 {

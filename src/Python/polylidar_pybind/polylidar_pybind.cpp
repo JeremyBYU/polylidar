@@ -146,6 +146,10 @@ PYBIND11_MODULE(polylidar, m)
           "Extracts a uniform triangular mesh from a float depth image", "image"_a, "intrinsics"_a, "extrinsics"_a,
           "stride"_a = PL_DEFAULT_STRIDE, "calc_normals"_a = PL_DEFAULT_CALC_NORMALS);
 
+    m.def("extract_tri_mesh_from_organized_point_cloud", &MeshHelper::ExtractTriMeshFromOrganizedPointCloud,
+          "Extracts a uniform triangular mesh from an organized point cloud", "points"_a, "rows"_a, "cols"_a,
+          "stride"_a = PL_DEFAULT_STRIDE, "calc_normals"_a = PL_DEFAULT_CALC_NORMALS);
+
     m.def("create_tri_mesh_copy", py::overload_cast<Matrix<double>&, Matrix<int>&, const bool>(&MeshHelper::CreateTriMeshCopy),
           "Creates a copy of a tri mesh, triangles of int dtype", "vertices"_a, "triangles"_a, "calc_normals"_a=PL_DEFAULT_CALC_NORMALS);
 }
