@@ -10,15 +10,25 @@ namespace Polylidar {
 
 namespace Core {
 
-inline bool PassPlaneConstraints(std::vector<size_t>& plane_set, size_t min_triangles)
-{
-    return plane_set.size() >= min_triangles;
-}
+
 
 void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, size_t seed_idx,
                     std::vector<size_t>& candidates, uint8_t& normal_id);
 void ConstructPointHash(VUI& plane, MeshHelper::HalfEdgeTriangulation& mesh, PointHash& point_hash, EdgeSet& edge_hash,
                         ExtremePoint& xPoint, PlaneData& plane_data);
+
+Polygons ExtractConcaveHulls(Planes planes, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
+Polygon ExtractConcaveHull(VUI plane, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
+
+
+// Inline Function
+
+
+
+inline bool PassPlaneConstraints(std::vector<size_t>& plane_set, size_t min_triangles)
+{
+    return plane_set.size() >= min_triangles;
+}
 
 inline size_t fast_mod(const size_t i, const size_t c) { return i >= c ? i % c : i; }
 
@@ -67,43 +77,21 @@ inline std::array<double, 2> GetVector(size_t edge, MeshHelper::HalfEdgeTriangul
     return result; // RVO
 }
 
-inline double Get360Angle(const std::array<double, 2>& v1, const std::array<double, 2>& v2)
-{
-    auto dot = Utility::Math::DotProduct2(v1, v2);
-    auto det = Utility::Math::Determinant(v1, v2);
-    auto ang = std::atan2(det, dot);
-    if (ang < 0)
-    {
-        ang += M_PI * 2;
-    }
-    return ang;
-}
 
 inline size_t GetHullEdge(const std::array<double, 2>& v1, const std::vector<size_t>& outgoingEdges,
                           MeshHelper::HalfEdgeTriangulation& mesh, std::array<double, 9>& rm, bool& need_rotation,
                           bool isHole = false)
 {
-    // std::cout << "v1: " << v1 << std::endl;
     std::vector<std::array<double, 2>> otherVectors;
-    // Gosh everything is so verbose with c++, even with the c11+ stdlib
     std::transform(outgoingEdges.begin(), outgoingEdges.end(), std::back_inserter(otherVectors),
                    [&mesh, &rm, &need_rotation](size_t edge) -> std::array<double, 2> {
                        return GetVector(edge, mesh, rm, need_rotation, false);
                    });
 
-    // for (auto &&vecs : otherVectors) {
-    //     std::cout << "other vec " << vecs << std::endl;
-    // }
-
     std::vector<double> angleDist;
     std::transform(otherVectors.begin(), otherVectors.end(), std::back_inserter(angleDist),
-                   [&v1](std::array<double, 2>& outVector) -> double { return Get360Angle(v1, outVector); });
+                   [&v1](std::array<double, 2>& outVector) -> double { return Utility::Math::Get360Angle(v1, outVector); });
 
-    // for (auto &&angle : angleDist) {
-    //     std::cout << "angle " << angle << std::endl;
-    // }
-
-    // YOUR SELECTING ANGLE
     if (isHole)
     {
         auto min_pos = std::distance(angleDist.begin(), std::min_element(angleDist.begin(), angleDist.end()));

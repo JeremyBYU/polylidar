@@ -9,7 +9,7 @@ Polylidar::Matrix<T> py_array_to_matrix(py::array_t<T, py::array::c_style | py::
                                         bool copy_data = false)
 {
     // return std::vector<std::array<T, dim>>();
-    std::cout << "Calling py_array_to_matrix" << std::endl;
+    // std::cout << "Calling py_array_to_matrix" << std::endl;
     if (array.ndim() != 2)
     {
         throw py::cast_error("Numpy array must have exactly 2 Dimensions to be transformed to Polylidar::Matrix<T>");

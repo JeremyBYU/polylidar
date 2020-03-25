@@ -10,7 +10,19 @@
 #include <unordered_map>
 #include "Polylidar/Mesh/MeshHelper.hpp"
 
-
+#define PL_DEFAULT_DIM 2
+#define PL_DEFAULT_ALPHA 1.0
+#define PL_DEFAULT_XYTHRESH 0.0
+#define PL_DEFAULT_LMAX 0.0
+#define PL_DEFAULT_MINTRIANGLES 20
+#define PL_DEFAULT_MINHOLEVERTICES 3
+#define PL_DEFAULT_MINBBOX 100.0
+#define PL_DEFAULT_ZTHRESH 0.20
+#define PL_DEFAULT_NORMTHRESH 0.90
+#define PL_DEFAULT_NORMTHRESH_MIN 0.1
+#define PL_DEFAULT_ALLOWEDCLASS 4.0
+#define PL_DEFAULT_STRIDE 2
+#define PL_DEFAULT_CALC_NORMALS true
 
 #define PL_EPS_RADIAN 0.001
 
@@ -25,6 +37,7 @@ constexpr std::size_t operator"" _z(unsigned long long n) { return n; }
 namespace Math
 
 {
+
 
 
 inline double Determinant(const std::array<double, 2> &v1, const std::array<double, 2> &v2)
@@ -110,6 +123,19 @@ inline std::array<double, 3> RotateVector(const double* v1, const std::array<dou
 
     return rv1;
 }
+
+inline double Get360Angle(const std::array<double, 2>& v1, const std::array<double, 2>& v2)
+{
+    auto dot = DotProduct2(v1, v2);
+    auto det = Determinant(v1, v2);
+    auto ang = std::atan2(det, dot);
+    if (ang < 0)
+    {
+        ang += M_PI * 2;
+    }
+    return ang;
+}
+
 } // namespace Math
 
 inline void UpdatePlaneDataWithRotationInformation(PlaneData& plane_data)
@@ -188,6 +214,50 @@ inline bool ValidateTriangle2D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh
     }
 
     return true;
+}
+
+// Determines if the triangles noise (dz from normal) is below a configurable zThrsh
+inline bool CheckZThresh(size_t t, MeshHelper::HalfEdgeTriangulation &mesh, std::array<double, 3> &plane_normal, double &z_thresh)
+{
+    auto &triangles = mesh.triangles;
+    auto &points = mesh.vertices;
+    // Get reference to point indices
+    auto &pi0 = triangles(t, 0);
+    auto &pi1 = triangles(t, 1);
+    auto &pi2 = triangles(t, 2);
+
+    std::array<double, 3> vv1 = {points(pi0, 0), points(pi0, 1), points(pi0, 2)};
+    std::array<double, 3> vv2 = {points(pi1, 0), points(pi1, 1), points(pi1, 2)};
+    std::array<double, 3> vv3 = {points(pi2, 0), points(pi2, 1), points(pi2, 2)};
+
+    // two lines of triangle
+    // V1 is starting index
+    std::array<double, 3> u{{vv2[0] - vv1[0], vv2[1] - vv1[1], vv2[2] - vv1[2]}};
+    std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
+
+    // Calculate the noise amt from the desired vector
+    auto u_z = Utility::Math::DotProduct3(u, plane_normal);
+    auto v_z = Utility::Math::DotProduct3(v, plane_normal);
+    auto s_z = 0.0;
+
+    // get max dimension change in a triangle
+    auto zMin = std::min(std::min(u_z, v_z), s_z);
+    auto zMax = std::max(std::max(u_z, v_z), s_z);
+    double zDiff = zMax - zMin;
+    return z_thresh > 0.0 && zDiff < z_thresh;
+}
+
+inline bool ValidateTriangle3D(size_t &t, MeshHelper::HalfEdgeTriangulation& mesh, double &z_thresh, double &norm_thresh, double &norm_thresh_min, std::array<double, 3> &plane_normal)
+{
+    auto &normals = mesh.triangle_normals;
+    auto normal = &normals(t, 0);
+
+    auto prod = std::abs(Utility::Math::DotProduct3(normal, plane_normal));
+    if (prod < norm_thresh_min)
+        return false;
+
+    auto passZThresh = CheckZThresh(t, mesh, plane_normal, z_thresh);
+    return prod > norm_thresh || passZThresh;
 }
 
 class Timer

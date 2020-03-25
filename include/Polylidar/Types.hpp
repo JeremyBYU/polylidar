@@ -62,7 +62,7 @@ class Matrix
         ptr = data.data();
     }
     ~Matrix<T>() = default;
-    // TODO FIX COPY CONSTRUCTOR, the ptr cant just copied, check ownership
+    // TODO FIX COPY CONSTRUCTOR, the ptr can't just copied, check ownership
     Matrix<T>(Matrix<T>& a) = default;
     Matrix<T>(const Matrix<T>& a) = default;
     Matrix<T>(Matrix<T>&& other) = default; // move constructor
@@ -82,13 +82,19 @@ class Matrix
         // assert(j >= 0 && j < cols);
         return ptr[i * cols + j];
     }
+    const T& operator()(size_t index) const
+    {
+        // assert(i >= 0 && i < rows);
+        // assert(j >= 0 && j < cols);
+        return ptr[index];
+    }
 };
 
 struct Polygon
 {
     std::vector<size_t> shell;
     VVUI holes;
-
+    Polygon():shell(), holes(){}
     VVUI getHoles() const { return holes; }
     void setHoles(VVUI x) { holes = x; }
 };

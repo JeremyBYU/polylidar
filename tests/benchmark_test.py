@@ -20,11 +20,21 @@ except Exception:
 #     benchmark(extractPlanesAndPolygons, building2, **basic_params)
 
 
-# def test_100k_array_lmax(benchmark, np_100K_array, params_lmax):
-#     benchmark(extractPolygons, np_100K_array, **params_lmax)
+def test_100k_array_lmax(benchmark, np_100K_array, params_lmax):
+    if Polylidar3D is not None:
+        points_mat = MatrixDouble(np_100K_array)
+        pl = Polylidar3D(**params_lmax)
+        _, _ , _  = benchmark(pl.extract_planes_and_polygons, points_mat)
+    else:
+        benchmark(extractPolygons, np_100K_array, **params_lmax)
 
-# def test_100k_array_3d_lmax(benchmark, np_100K_array_3d, params_lmax):
-#     benchmark(extractPolygons, np_100K_array_3d, **params_lmax)
+def test_100k_array_3d_lmax(benchmark, np_100K_array_3d, params_lmax):
+    if Polylidar3D is not None:
+        points_mat = MatrixDouble(np_100K_array_3d)
+        pl = Polylidar3D(**params_lmax)
+        _, _ , _  = benchmark(pl.extract_planes_and_polygons, points_mat)
+    else:
+        benchmark(extractPolygons, np_100K_array_3d, **params_lmax)
 
 def test_clusters(benchmark, cluster_groups):
     """

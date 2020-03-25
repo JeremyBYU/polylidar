@@ -31,17 +31,17 @@ def bad_convex_hull():
 
 @pytest.fixture()
 def basic_params():
-    return dict(alpha=0.5, xyThresh=0.0)
+    return dict(alpha=0.5)
 
 
 @pytest.fixture()
 def params_lmax():
-    return dict(alpha=0.0, xyThresh=0.0, lmax=100.0)
+    return dict(alpha=0.0, lmax=100.0)
 
 
 @pytest.fixture()
 def hardcase1_params():
-    return dict(alpha=0.0, xyThresh=20.0)
+    return dict(alpha=0.0, lmax=20.0)
 
 
 @pytest.fixture

@@ -6,6 +6,71 @@ namespace Core {
 
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 
+
+Polygon ExtractConcaveHull(VUI plane, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data,
+                                        size_t min_hole_vertices_)
+{
+    Polygon poly;
+    // point hash map
+    unordered_map<size_t, std::vector<size_t>> pointHash;
+    // hash of all empty border half edges
+    unordered_map<size_t, size_t> edgeHash;
+    // the left and right most extreme points
+    ExtremePoint xPoint;
+
+    // 99.6% of the time inside extractConcaveHull is inside constructPointHash
+    // auto before = std::chrono::high_resolution_clock::now();
+    Core::ConstructPointHash(plane, mesh, pointHash, edgeHash, xPoint, plane_data);
+    // auto after = std::chrono::high_resolution_clock::now();
+    // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    // std::cout << "ConstructPointHash - Total (ms): " << elapsed.count() << std::endl;
+
+    // std::vector<size_t> bucket_sizes;
+    // for(auto i = 0; i < edgeHash.bucket_count(); ++i)
+    // {
+    //   auto bucket_size = edgeHash.bucket_size(i);
+    //   bucket_sizes.push_back(bucket_size);
+    // }
+    // std::cout << bucket_sizes << std::endl;
+
+    auto startingHalfEdge = xPoint.xr_he;
+    // Error checking, just in case the extreme right point has a hole connected to it
+    auto& nextEdges = pointHash[xPoint.xr_pi];
+    if (nextEdges.size() > 1)
+    {
+        startingHalfEdge =
+            Core::GetHullEdge(UP_VECTOR, nextEdges, mesh, plane_data.rotation_matrix, plane_data.need_rotation, false);
+    }
+    auto startingPointIndex = xPoint.xr_pi;
+    // std::cout << "Staring point index " << startingPointIndex << std::endl;;
+    auto stopPoint = startingPointIndex;
+    auto shell = Core::ConcaveSection(pointHash, edgeHash, mesh, startingHalfEdge, stopPoint, plane_data, false);
+    auto holes = Core::ExtractInteriorHoles(pointHash, edgeHash, mesh, plane_data);
+
+    holes.erase(
+        std::remove_if(holes.begin(), holes.end(),
+                       [&min_hole_vertices_](std::vector<size_t>& hole) { return hole.size() < min_hole_vertices_; }),
+        holes.end());
+
+    // std::vector<std::vector<size_t>> holes;
+    poly.shell = std::move(shell);
+    poly.holes = std::move(holes);
+    return poly;
+}
+
+Polygons ExtractConcaveHulls(Planes planes, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data,
+                                          size_t min_hole_vertices_)
+{
+
+    std::vector<Polygon> polygons;
+    for (auto&& plane : planes)
+    {
+        Polygon poly = ExtractConcaveHull(plane, mesh, plane_data, min_hole_vertices_);
+        polygons.push_back(std::move(poly));
+    }
+    return polygons;
+}
+
 void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t> &tri_set, size_t seed_idx, std::vector<size_t> &candidates, uint8_t &normal_id)
 {
     // Construct queue for triangle neighbor expansion
@@ -14,7 +79,7 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
     queue.push(seed_idx);
     tri_set[seed_idx] = MAX_UINT8;
 
-    auto &halfedges = mesh.halfedges.data;
+    auto &halfedges = mesh.halfedges;
 
     // std::vector<size_t> candidates;
     while (!queue.empty())
@@ -27,7 +92,7 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
         for (size_t i = 0; i < 3; ++i)
         {
             auto e = tri * 3 + i;
-            auto opposite = halfedges[e];
+            auto opposite = halfedges(e);
             if (opposite != Utility::INVALID_INDEX)
             {
                 // convert opposite edge to a triangle
@@ -53,7 +118,6 @@ inline void TrackExtremePoint(size_t pi, Matrix<double> &points, ExtremePoint &e
 
     if (x_val > exPoint.xr_val)
     {
-        // std::cout<< "Updating extreme point" << std::endl;
         exPoint.xr_he = he;
         exPoint.xr_pi = pi;
         exPoint.xr_val = x_val;
@@ -64,11 +128,11 @@ inline void TrackExtremePoint(size_t pi, Matrix<double> &points, ExtremePoint &e
 void ConstructPointHash(VUI &plane, MeshHelper::HalfEdgeTriangulation &mesh, PointHash &point_hash, EdgeSet &edge_hash,
                         ExtremePoint &xPoint, PlaneData &plane_data)
 {
-    auto &triangles = mesh.triangles.data;
-    auto &halfedges = mesh.halfedges.data;
+    auto &triangles = mesh.triangles;
+    auto &halfedges = mesh.halfedges;
     auto &points = mesh.vertices;
 
-    size_t max_triangles_all = static_cast<size_t>(triangles.size() / 3);
+    size_t max_triangles_all = static_cast<size_t>(triangles.rows);
     std::vector<uint8_t> triSet(max_triangles_all, false);
 
     size_t max_triangles = static_cast<size_t>(plane.size());
@@ -98,7 +162,7 @@ void ConstructPointHash(VUI &plane, MeshHelper::HalfEdgeTriangulation &mesh, Poi
             // get halfedge index
             auto heIndex = t * 3 + i;
             // get the adjacent edge of this triangle edge
-            auto oppHe = halfedges[heIndex];
+            auto oppHe = halfedges(heIndex);
             // if (oppHe == INVALID_INDEX)
             //     continue;
             size_t oppT = static_cast<size_t>(oppHe / 3);
@@ -108,7 +172,7 @@ void ConstructPointHash(VUI &plane, MeshHelper::HalfEdgeTriangulation &mesh, Poi
                 // Record this edge
                 edge_hash[heIndex] = heIndex;
                 // get point index of this half edge, this is an edge leaving from this pi
-                auto pi = triangles[heIndex];
+                auto pi = triangles(heIndex);
                 TrackExtremePoint(pi, points, xPoint, heIndex, plane_data.rotation_matrix, plane_data.need_rotation);
                 // Check if the point has already been indexed
                 if (point_hash.find(pi) == point_hash.end())
@@ -133,9 +197,7 @@ std::vector<size_t> ConcaveSection(PointHash& pointHash, EdgeSet& edgeHash, Mesh
 
     // std::cout << "Inside concave section" <<std::endl;
     std::vector<size_t> hullSection;
-
-    // TODO, dont rely on data
-    auto& triangles = mesh.triangles.data;
+    auto& triangles = mesh.triangles;
     // auto &coords = delaunay.coords;
     auto workingEdge = startEdge;
     // std::cout<< "Starting working edge: " << workingEdge << std::endl;
@@ -148,7 +210,8 @@ std::vector<size_t> ConcaveSection(PointHash& pointHash, EdgeSet& edgeHash, Mesh
         auto nextHalfEdge = nextHalfedge(workingEdge);
         // std::cout << "nextHalf edge: " <<  nextHalfEdge <<std::endl;
         // Get the starting point of this edge
-        auto nextPi = triangles[nextHalfEdge];
+        // auto nextPi = triangles[nextHalfEdge];
+        auto nextPi = triangles(nextHalfEdge);
         // std::cout<< "nextPi: " << nextPi << std::endl;
         // std::cout<< "nextPi Coord: " << coords[2 * nextPi] << ", " << coords[2 * nextPi + 1] << std::endl;
         // Add point to the hull section
@@ -204,7 +267,7 @@ std::vector<std::vector<size_t>> ExtractInteriorHoles(PointHash& pointHash, Edge
                                                       MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data)
 {
     std::vector<std::vector<size_t>> allHoles;
-    auto& triangles = mesh.triangles.data;
+    auto& triangles = mesh.triangles;
     // std::cout<< "Starting extracting Interior Holes" << std::endl;
     while (true)
     {
@@ -214,7 +277,7 @@ std::vector<std::vector<size_t>> ExtractInteriorHoles(PointHash& pointHash, Edge
         }
         auto startEdge = std::begin(edgeHash)->first;
         // auto startingPointIndex = triangles[startEdge];
-        auto stopPoint = triangles[startEdge];
+        auto stopPoint = triangles(startEdge);
         auto hole = ConcaveSection(pointHash, edgeHash, mesh, startEdge, stopPoint, plane_data, false);
         if (hole.size() > 0)
         {

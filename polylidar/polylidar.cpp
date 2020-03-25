@@ -526,9 +526,9 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     Timer timer(true);
     // auto before = std::chrono::high_resolution_clock::now();
     delaunator::Delaunator delaunay(nparray);
-    std::cout << "Delaunay init took: " << timer  << std::endl;
+    // std::cout << "Delaunay init took: " << timer  << std::endl;
     delaunay.triangulate();
-    std::cout << "Delaunay took: " << timer  << std::endl;
+    // std::cout << "Delaunay took: " << timer  << std::endl;
     // auto after = std::chrono::high_resolution_clock::now();
     // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Delaunay took " << elapsed.count() << " milliseconds" << std::endl;
@@ -536,7 +536,7 @@ std::tuple<delaunator::Delaunator, std::vector<std::vector<size_t>>, std::vector
     // before = std::chrono::high_resolution_clock::now();
     timer.Reset();
     std::vector<std::vector<size_t>> planes = extractPlanesSet(delaunay, nparray, config);
-    std::cout << "Plane Extraction took: " << timer  << std::endl;
+    // std::cout << "Plane Extraction took: " << timer  << std::endl;
     // after = std::chrono::high_resolution_clock::now();
     // elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
     // std::cout << "Plane Extraction took " << elapsed.count() << " milliseconds" << std::endl;

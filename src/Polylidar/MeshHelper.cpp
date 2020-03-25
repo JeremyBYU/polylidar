@@ -61,9 +61,9 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
         std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
         // cross product
-        crossProduct3(v, u, &triangle_normals[i]);
+        crossProduct3(v, u, &triangle_normals[i*3]);
         // normalize
-        normalize3(&triangle_normals[i]);
+        normalize3(&triangle_normals[i*3]);
     }
 
     // Ensure that the matrix ptr, row, col is updated

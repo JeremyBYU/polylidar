@@ -29,19 +29,7 @@
 #include "Polylidar/Delaunator/Delaunator.hpp"
 #include "Polylidar/Core.hpp"
 
-#define PL_DEFAULT_DIM 2
-#define PL_DEFAULT_ALPHA 1.0
-#define PL_DEFAULT_XYTHRESH 0.0
-#define PL_DEFAULT_LMAX 0.0
-#define PL_DEFAULT_MINTRIANGLES 20
-#define PL_DEFAULT_MINHOLEVERTICES 3
-#define PL_DEFAULT_MINBBOX 100.0
-#define PL_DEFAULT_ZTHRESH 0.20
-#define PL_DEFAULT_NORMTHRESH 0.90
-#define PL_DEFAULT_NORMTHRESH_MIN 0.1
-#define PL_DEFAULT_ALLOWEDCLASS 4.0
-#define PL_DEFAULT_STRIDE 2
-#define PL_DEFAULT_CALC_NORMALS true
+
 
 #if defined(_OPENMP)
 #include <omp.h>
@@ -63,8 +51,6 @@ class Polylidar3D
                 const double _norm_thresh_min = PL_DEFAULT_NORMTHRESH_MIN);
     std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
     ExtractPlanesAndPolygons(const Matrix<double>& points, const std::array<double, 3> plane_normal);
-    Polygons ExtractConcaveHulls(Planes planes, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
-    Polygon ExtractConcaveHull(VUI plane, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
 
   protected:
     double alpha;
@@ -75,6 +61,7 @@ class Polylidar3D
     double norm_thresh;
     double norm_thresh_min;
 
+  private:
     Planes ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, PlaneData& plane_data);
     void CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh);
     void CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data);
