@@ -13,7 +13,7 @@
 #define PL_OMP_MAX_THREAD_DEPTH_TO_PC 8
 #endif
 
-#define DEFAULT_CALC_NORMALS true
+#define PL_DEFAULT_CALC_NORMALS true
 
 namespace Polylidar {
 
@@ -156,7 +156,7 @@ ExtractUniformMeshFromFloatDepth(const Matrix<float>& im, const Matrix<double>& 
                                  const Matrix<double>& extrinsics, const size_t stride);
 HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, const Matrix<double>& intrinsics,
                                                  const Matrix<double>& extrinsics, const size_t stride,
-                                                 const bool calc_normals = DEFAULT_CALC_NORMALS);
+                                                 const bool calc_normals = PL_DEFAULT_CALC_NORMALS);
 HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> points_2D, const size_t rows,
                                                           const size_t cols, const size_t stride,
                                                           const bool calc_normals);

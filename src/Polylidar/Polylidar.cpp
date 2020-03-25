@@ -46,6 +46,26 @@ Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double>& points, const std::a
     return std::make_tuple(std::move(mesh), std::move(planes), std::move(polygons));
 }
 
+ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation &mesh, const std::array<double, 3> plane_normal)
+ {
+    Utility::Timer timer(true);
+    // Create Plane Data Structure, informs Polylidar which normal to extract on
+    PlaneData plane_data{plane_normal};
+    Utility::UpdatePlaneDataWithRotationInformation(plane_data);
+
+    // Extract planes from the mesh from desired plane normal
+    timer.Reset();
+    size_t max_triangles = mesh.triangles.rows;
+    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
+    auto planes = ExtractPlanes(mesh, tri_set, plane_data);
+
+    Polygons polygons;
+    timer.Reset();
+    polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
+    return std::make_tuple(std::move(planes), std::move(polygons));
+
+ }
+
 Planes Polylidar3D::ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
                                   PlaneData& plane_data)
 {

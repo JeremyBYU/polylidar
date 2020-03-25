@@ -63,6 +63,18 @@ PYBIND11_MODULE(polylidar, m)
                                     sizeof(double)});
         });
 
+    py::class_<Polylidar::Matrix<float>>(m, "MatrixFloat", py::buffer_protocol())
+        .def(py::init<>(&py_array_to_matrix<float>), "points"_a, "copy"_a = false)
+        .def_buffer([](Polylidar::Matrix<float>& m) -> py::buffer_info {
+            return py::buffer_info(m.ptr,                                   /* Pointer to buffer */
+                                   sizeof(float),                          /* Size of one scalar */
+                                   py::format_descriptor<float>::format(), /* Python struct-style format descriptor */
+                                   2UL,                                     /* Number of dimensions */
+                                   {m.rows, m.cols},                        /* Buffer dimensions */
+                                   {sizeof(float) * m.cols,                /* Strides (in bytes) for each index */
+                                    sizeof(float)});
+        });
+
     py::class_<Polylidar::Matrix<size_t>>(m, "MatrixULongInt", py::buffer_protocol())
         .def(py::init<>(&py_array_to_matrix<size_t>), "points"_a, "copy"_a = false)
         .def_buffer([](Polylidar::Matrix<size_t>& m) -> py::buffer_info {
@@ -100,9 +112,17 @@ PYBIND11_MODULE(polylidar, m)
              "alpha"_a = PL_DEFAULT_ALPHA, "lmax"_a = PL_DEFAULT_LMAX, "min_triangles"_a = PL_DEFAULT_MINTRIANGLES,
              "min_hole_vertices"_a = PL_DEFAULT_MINHOLEVERTICES, "z_thresh"_a = PL_DEFAULT_ZTHRESH,
              "norm_thresh"_a = PL_DEFAULT_NORMTHRESH, "norm_thresh_min"_a = PL_DEFAULT_NORMTHRESH_MIN)
-        .def("extract_planes_and_polygons", &Polylidar::Polylidar3D::ExtractPlanesAndPolygons, "points"_a, "plane_normal"_a=PL_DEFAULT_DESIRED_VECTOR)
+        .def("extract_planes_and_polygons", py::overload_cast<const Matrix<double>&, const std::array<double, 3>>(&Polylidar::Polylidar3D::ExtractPlanesAndPolygons), "points"_a, "plane_normal"_a=PL_DEFAULT_DESIRED_VECTOR)
+        .def("extract_planes_and_polygons", py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const std::array<double, 3>>(&Polylidar::Polylidar3D::ExtractPlanesAndPolygons), "mesh"_a, "plane_normal"_a=PL_DEFAULT_DESIRED_VECTOR)
         .def("__repr__", [](const Polylidar::Polylidar3D& pl) { return "<Polylidar::Polylidar3D>"; });
 
+// std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float>& im, const Matrix<double>& intrinsics,
+//                                                     const Matrix<double>& extrinsics, const size_t stride)
+    m.def("extract_point_cloud_from_float_depth", &MeshHelper::ExtractPointCloudFromFloatDepth, "Extracts point cloud from a float depth image",
+          "image"_a, "intrinsics"_a, "extrinsics"_a, "stride"_a = PL_DEFAULT_STRIDE);
+
+    m.def("extract_tri_mesh_from_float_depth", &MeshHelper::ExtractTriMeshFromFloatDepth, "Extracts a uniform triangular mesh from a float depth image",
+          "image"_a, "intrinsics"_a, "extrinsics"_a, "stride"_a = PL_DEFAULT_STRIDE, "calc_normals"_a = PL_DEFAULT_CALC_NORMALS);
     // Functions
     // m.def("convert_normals_to_hilbert", &FastGA::Helper::ConvertNormalsToHilbert, "normals"_a, "bbox"_a);
     // m.def("convert_normals_to_s2id", &FastGA::Helper::ConvertNormalsToS2ID, "normals"_a);

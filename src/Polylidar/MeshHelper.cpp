@@ -152,6 +152,7 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float>& im, con
     points.resize(cols_stride * rows_stride * 3, PL_NAN);
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
+    num_threads = std::max(num_threads, 1);
 #pragma omp parallel for schedule(static) num_threads(num_threads)
 #endif
     for (size_t i = 0; i < rows; i += stride)
@@ -164,8 +165,6 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float>& im, con
                                  points[p_idx + 2]);
         }
     }
-    // std::cout << "Point Count: " << pnt_cnt << "; Expected: "<< cols_stride * rows_stride <<std::endl;
-    // std::cout << "extractPointCloudFromFloatDepth C++ : " << points[0] << " Address:" <<  &points[0] << std::endl;
     return points;
 }
 
