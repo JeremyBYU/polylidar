@@ -51,6 +51,9 @@ class Polylidar3D
     std::tuple<Planes, Polygons> ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
                                                           const std::array<double, 3> plane_normal);
 
+    std::tuple<PlanesGroup, PolygonsGroup> ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                          const Matrix<double> &plane_normals);
+
   protected:
     double alpha;
     double lmax;

@@ -42,6 +42,7 @@ class HalfEdgeTriangulation
     HalfEdgeTriangulation(HalfEdgeTriangulation&& other) = default;
     HalfEdgeTriangulation(const Matrix<double> &in_vertices);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices);
+    HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges, Matrix<double> &&in_triangle_normals);
     void ComputeTriangleNormals();
@@ -122,6 +123,16 @@ inline std::vector<size_t> ExtractHalfEdges(const std::vector<size_t>& triangles
     return halfedges;
 }
 
+inline void ExtractHalfEdgesMatrix(const Matrix<size_t> &triangles, Matrix<size_t> &halfedges)
+{
+    auto &triangles_vec = triangles.data;
+    // Extract half edges as a vector
+    auto halfedges_vec = ExtractHalfEdges(triangles_vec);
+    halfedges.data = std::move(halfedges_vec);
+    // Update the ptr to the new data, set rows and columns
+    halfedges.UpdatePtrFromData(triangles.rows, triangles.cols);
+}
+
 inline void crossProduct3(const std::array<double, 3>& u, const std::array<double, 3>& v, double* normal)
 {
     // cross product
@@ -160,6 +171,8 @@ HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, cons
 HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> points_2D, const size_t rows,
                                                           const size_t cols, const size_t stride,
                                                           const bool calc_normals);
+
+HalfEdgeTriangulation CreateTriMeshCopy(Matrix<double>& vertices, Matrix<int>& triangles, const bool calc_normals=true);
 
 } // namespace MeshHelper
 } // namespace Polylidar

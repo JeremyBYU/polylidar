@@ -46,8 +46,9 @@ Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double>& points, const std::a
     return std::make_tuple(std::move(mesh), std::move(planes), std::move(polygons));
 }
 
- std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation &mesh, const std::array<double, 3> plane_normal)
- {
+std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                                   const std::array<double, 3> plane_normal)
+{
     Utility::Timer timer(true);
     // Create Plane Data Structure, informs Polylidar which normal to extract on
     PlaneData plane_data{plane_normal};
@@ -63,8 +64,28 @@ Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double>& points, const std::a
     timer.Reset();
     polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
     return std::make_tuple(std::move(planes), std::move(polygons));
+}
 
- }
+std::tuple<PlanesGroup, PolygonsGroup> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                                const Matrix<double> &plane_normals)
+{
+    auto plane_data_list = Utility::CreateMultiplePlaneDataFromNormals(plane_normals);
+    // Create tri_set
+    size_t max_triangles = mesh.triangles.rows;
+    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
+    // vectors for our planes and polygons, each element is for each normal to be expanded upon
+    PlanesGroup planes_group;
+    PolygonsGroup polygons_group;
+
+    for (auto& plane_data : plane_data_list)
+    {
+        auto planes = ExtractPlanes(mesh, tri_set, plane_data);
+        auto polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
+        planes_group.emplace_back(std::move(planes));
+        polygons_group.emplace_back(std::move(polygons));
+    }
+    return std::make_tuple(std::move(planes_group), std::move(polygons_group));
+}
 
 Planes Polylidar3D::ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
                                   PlaneData& plane_data)
@@ -132,7 +153,10 @@ void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfE
     {
         if (tri_set[t] != ZERO_UINT8) continue;
         uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
-        uint8_t valid3D = Utility::ValidateTriangle3D(t, mesh, z_thresh, norm_thresh, norm_thresh_min, plane_data.plane_normal) ? plane_data.normal_id : ZERO_UINT8;
+        uint8_t valid3D =
+            Utility::ValidateTriangle3D(t, mesh, z_thresh, norm_thresh, norm_thresh_min, plane_data.plane_normal)
+                ? plane_data.normal_id
+                : ZERO_UINT8;
         tri_set[t] = valid2D | valid3D;
     }
 }

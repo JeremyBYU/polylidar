@@ -8,7 +8,7 @@ const static double PL_NAN = std::numeric_limits<double>::quiet_NaN();
 // Half Edge Constructors
 HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges(), triangle_normals() {}
 
-HalfEdgeTriangulation::HalfEdgeTriangulation(const Matrix<double> &in_vertices)
+HalfEdgeTriangulation::HalfEdgeTriangulation(const Matrix<double>& in_vertices)
     : vertices(in_vertices), triangles(), halfedges(), triangle_normals()
 {
 }
@@ -18,9 +18,18 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices)
 {
 }
 
+HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles)
+    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(), triangle_normals()
+{
+    ExtractHalfEdgesMatrix(triangles, halfedges);
+}
+
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles,
                                              Matrix<size_t>&& in_halfedges)
-    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(std::move(in_halfedges)), triangle_normals()
+    : vertices(std::move(in_vertices)),
+      triangles(std::move(in_triangles)),
+      halfedges(std::move(in_halfedges)),
+      triangle_normals()
 {
 }
 // TriMesh::TriMesh() : HalfEdgeTriangulation(), triangle_normals() {}
@@ -31,9 +40,11 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
 // {
 // }
 
-HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges,
-                 Matrix<double> && in_triangle_normals)
-    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(std::move(in_halfedges)),
+HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles,
+                                             Matrix<size_t>&& in_halfedges, Matrix<double>&& in_triangle_normals)
+    : vertices(std::move(in_vertices)),
+      triangles(std::move(in_triangles)),
+      halfedges(std::move(in_halfedges)),
       triangle_normals(std::move(in_triangle_normals))
 {
 }
@@ -61,9 +72,9 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
         std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
         // cross product
-        crossProduct3(v, u, &triangle_normals[i*3]);
+        crossProduct3(v, u, &triangle_normals[i * 3]);
         // normalize
-        normalize3(&triangle_normals[i*3]);
+        normalize3(&triangle_normals[i * 3]);
     }
 
     // Ensure that the matrix ptr, row, col is updated
@@ -73,7 +84,10 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
     triangle_normals_mat.ptr = triangle_normals.data();
 }
 
-void HalfEdgeTriangulation::ComputeTriangleNormals() { ComputeTriangleNormalsFromMatrix(vertices, triangles, triangle_normals); }
+void HalfEdgeTriangulation::ComputeTriangleNormals()
+{
+    ComputeTriangleNormalsFromMatrix(vertices, triangles, triangle_normals);
+}
 
 void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<size_t>& triangles,
                             std::vector<double>& triangle_normals)
@@ -104,7 +118,7 @@ void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<si
 }
 
 HalfEdgeTriangulation CreateTriMeshFromVectors(std::vector<double>&& vertices, std::vector<size_t>&& triangles,
-                                 std::vector<size_t>&& halfedges)
+                                               std::vector<size_t>&& halfedges)
 {
     size_t num_vertices = static_cast<size_t>(vertices.size() / 3);
     size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
@@ -118,7 +132,7 @@ HalfEdgeTriangulation CreateTriMeshFromVectors(std::vector<double>&& vertices, s
 }
 
 HalfEdgeTriangulation CreateTriMeshFromVectors(Matrix<double>&& vertices, std::vector<size_t>&& triangles,
-                                 std::vector<size_t>&& halfedges)
+                                               std::vector<size_t>&& halfedges)
 {
     size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
     size_t num_halfedges = static_cast<size_t>(halfedges.size() / 3);
@@ -348,8 +362,8 @@ ExtractUniformMeshFromFloatDepth(const Matrix<float>& im, const Matrix<double>& 
 }
 
 HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, const Matrix<double>& intrinsics,
-                                                 const Matrix<double>& extrinsics, const size_t stride,
-                                                 const bool calc_normals)
+                                                   const Matrix<double>& extrinsics, const size_t stride,
+                                                   const bool calc_normals)
 {
     std::vector<double> vertices;
     std::vector<size_t> triangles;
@@ -364,8 +378,8 @@ HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, cons
 }
 
 HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> points_2D, const size_t rows,
-                                                          const size_t cols, const size_t stride,
-                                                          const bool calc_normals)
+                                                            const size_t cols, const size_t stride,
+                                                            const bool calc_normals)
 {
     std::vector<size_t> triangles;
     std::vector<size_t> valid_tri;
@@ -378,6 +392,19 @@ HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> point
         triangulation.ComputeTriangleNormals();
     }
     return triangulation;
+}
+
+HalfEdgeTriangulation CreateTriMeshCopy(Matrix<double>& vertices, Matrix<int>& triangles, const bool calc_normals)
+{
+    auto new_triangles = Matrix<size_t>::CopyFromDifferentType<int>(triangles.ptr, triangles.rows, triangles.cols);
+    auto new_vertices = Matrix<double>(vertices);
+
+    HalfEdgeTriangulation mesh(std::move(new_vertices), std::move(new_triangles));
+    if (calc_normals)
+    {
+        mesh.ComputeTriangleNormals();
+    }
+    return mesh;
 }
 
 } // namespace MeshHelper

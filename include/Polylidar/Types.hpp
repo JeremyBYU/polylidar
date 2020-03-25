@@ -17,6 +17,7 @@ namespace Polylidar {
 using VUI = std::vector<size_t>;
 using VVUI = std::vector<VUI>;
 using Planes = VVUI;
+using PlanesGroup = std::vector<Planes>;
 
 // Use Parallel Hash Map unless asked not to
 #ifdef PL_USE_STD_UNORDERED_MAP
@@ -31,9 +32,7 @@ using unordered_map = std::unordered_map<T, G>;
 
 using PointHash = unordered_map<size_t, std::vector<size_t>>;
 // TODO Change to unordered_set
-using EdgeSet = unordered_map<size_t, size_t>; 
-
-
+using EdgeSet = unordered_map<size_t, size_t>;
 
 constexpr std::array<double, 3> PL_DEFAULT_DESIRED_VECTOR{{0, 0, 1}};
 constexpr std::array<double, 2> UP_VECTOR = {0.0, 1.0};
@@ -62,12 +61,23 @@ class Matrix
         ptr = data.data();
     }
     ~Matrix<T>() = default;
-    // TODO FIX COPY CONSTRUCTOR, the ptr can't just copied, check ownership
-    Matrix<T>(Matrix<T>& a) = default;
-    Matrix<T>(const Matrix<T>& a) = default;
-    Matrix<T>(Matrix<T>&& other) = default; // move constructor
+    // Copy Constructor: the ptr can't just copied, check ownership
+    Matrix<T>(Matrix<T>& a):own_data(a.own_data), data(a.data), ptr(a.ptr), rows(a.rows), cols(a.cols) {
+        if (own_data)
+        {
+            ptr = data.data();
+        }
+    }
+    Matrix<T>(const Matrix<T>& a): own_data(a.own_data), data(a.data), ptr(a.ptr), rows(a.rows), cols(a.cols) {
+        if (own_data)
+        {
+            ptr = data.data();
+        }
+    }
+    // Move Constructors can be default
+    Matrix<T>(Matrix<T>&& other) = default;
     Matrix<T>& operator=(const Matrix<T>& a) = default;
-
+    // Helper function to update ptr to the underlying data structure
     void UpdatePtrFromData() { ptr = data.data(); }
     void UpdatePtrFromData(const size_t rows_, const size_t cols_)
     {
@@ -88,13 +98,28 @@ class Matrix
         // assert(j >= 0 && j < cols);
         return ptr[index];
     }
+
+    template <class G>
+    static Matrix<T> CopyFromDifferentType(G* ptr_from, size_t rows, size_t cols)
+    {
+        Matrix<T> matrix;
+        auto& matrix_data = matrix.data;
+        auto total_elements = rows * cols;
+        matrix_data.resize(total_elements);
+        for (size_t i = 0; i < total_elements; ++i)
+        {
+            matrix_data[i] = static_cast<T>(ptr_from[i]);
+        }
+        matrix.UpdatePtrFromData(rows, cols);
+        return std::move(matrix);
+    }
 };
 
 struct Polygon
 {
     std::vector<size_t> shell;
     VVUI holes;
-    Polygon():shell(), holes(){}
+    Polygon() : shell(), holes() {}
     VVUI getHoles() const { return holes; }
     void setHoles(VVUI x) { holes = x; }
 };
@@ -118,6 +143,7 @@ struct PlaneData
 };
 
 using Polygons = std::vector<Polygon>;
+using PolygonsGroup = std::vector<Polygons>;
 
 } // namespace Polylidar
 
