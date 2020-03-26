@@ -1,6 +1,6 @@
 #ifndef POLYLIDAR_TYPES
 #define POLYLIDAR_TYPES
-
+#define _USE_MATH_DEFINES
 #include <limits>
 #include <vector>
 #include <cstdint>
@@ -10,6 +10,10 @@
 // include a fast parallel hash map implementation
 #ifdef PL_USE_STD_UNORDERED_MAP
 #include <parallel_hashmap/phmap.h>
+#endif
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
 #endif
 
 namespace Polylidar {
@@ -126,11 +130,11 @@ struct Polygon
 
 struct ExtremePoint
 {
-    size_t xr_he = -1;
-    size_t xr_pi = -1;
+    size_t xr_he = 0;
+    size_t xr_pi = 0;
     double xr_val = -1 * std::numeric_limits<double>::infinity();
-    size_t xl_he = -1;
-    size_t xl_pi = -1;
+    size_t xl_he = 0;
+    size_t xl_pi = 0;
     double xl_val = std::numeric_limits<double>::infinity();
 };
 

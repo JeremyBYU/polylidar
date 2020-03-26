@@ -247,7 +247,7 @@ inline bool CheckZThresh(size_t t, MeshHelper::HalfEdgeTriangulation &mesh, std:
     return z_thresh > 0.0 && zDiff < z_thresh;
 }
 
-inline bool ValidateTriangle3D(size_t &t, MeshHelper::HalfEdgeTriangulation& mesh, double &z_thresh, double &norm_thresh, double &norm_thresh_min, std::array<double, 3> &plane_normal)
+inline bool ValidateTriangle3D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh, double &z_thresh, double &norm_thresh, double &norm_thresh_min, std::array<double, 3> &plane_normal)
 {
     auto &normals = mesh.triangle_normals;
     auto normal = &normals(t, 0);

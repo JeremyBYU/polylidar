@@ -122,7 +122,7 @@ Planes Polylidar3D::ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::
 
 void Polylidar3D::CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh)
 {
-    size_t& numTriangles = mesh.triangles.rows;
+    int numTriangles = static_cast<int>(mesh.triangles.rows);
 // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
 // Experimentation has found that too many threads will kill this loop if not enough work is present
 #if defined(_OPENMP)
@@ -130,7 +130,7 @@ void Polylidar3D::CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfE
     num_threads = std::max(1, num_threads);
 #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
 #endif
-    for (size_t t = 0; t < numTriangles; t++)
+    for (int t = 0; t < numTriangles; t++)
     {
         if (tri_set[t] != ZERO_UINT8) continue;
         tri_set[t] = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ONE_UINT8 : MAX_UINT8;
@@ -140,7 +140,7 @@ void Polylidar3D::CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfE
 void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
                                 PlaneData& plane_data)
 {
-    size_t& numTriangles = mesh.triangles.rows;
+    int numTriangles = static_cast<int>(mesh.triangles.rows);
 
 // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
 // Experimentation has found that too many threads will kill this loop if not enough work is present
@@ -149,12 +149,12 @@ void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfE
     num_threads = std::max(1, num_threads);
 #pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
 #endif
-    for (size_t t = 0; t < numTriangles; t++)
+    for (int t = 0; t < numTriangles; t++)
     {
         if (tri_set[t] != ZERO_UINT8) continue;
         uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
         uint8_t valid3D =
-            Utility::ValidateTriangle3D(t, mesh, z_thresh, norm_thresh, norm_thresh_min, plane_data.plane_normal)
+            Utility::ValidateTriangle3D(static_cast<size_t>(t), mesh, z_thresh, norm_thresh, norm_thresh_min, plane_data.plane_normal)
                 ? plane_data.normal_id
                 : ZERO_UINT8;
         tri_set[t] = valid2D | valid3D;

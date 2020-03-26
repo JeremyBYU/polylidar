@@ -159,19 +159,20 @@ std::vector<double> ExtractPointCloudFromFloatDepth(const Matrix<float>& im, con
                                                     const Matrix<double>& extrinsics, const size_t stride)
 {
     std::vector<double> points;
-    auto rows = im.rows;
-    auto cols = im.cols;
-    size_t cols_stride = (cols + stride - 1) / stride;
-    size_t rows_stride = (rows + stride - 1) / stride;
+    int stride_ = static_cast<int>(stride);
+    int rows = static_cast<int>(im.rows);
+    int cols = static_cast<int>(im.cols);
+    int cols_stride = (cols + stride_ - 1) / stride_;
+    int rows_stride = (rows + stride_ - 1) / stride_;
     points.resize(cols_stride * rows_stride * 3, PL_NAN);
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), PL_OMP_MAX_THREAD_DEPTH_TO_PC);
     num_threads = std::max(num_threads, 1);
 #pragma omp parallel for schedule(static) num_threads(num_threads)
 #endif
-    for (size_t i = 0; i < rows; i += stride)
+    for (int i = 0; i < rows; i += stride_)
     {
-        for (size_t j = 0; j < cols; j += stride)
+        for (int j = 0; j < cols; j += stride_)
         {
             size_t p_idx = static_cast<size_t>((cols_stride * i / stride + j / stride) * 3);
             if (im(i, j) > 0)

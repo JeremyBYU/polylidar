@@ -40,12 +40,6 @@
 
 #include "Polylidar/Mesh/MeshHelper.hpp"
 
-#ifdef PY_EXTENSION
-#include "pybind11/pybind11.h" // Pybind11 import to define Python bindings
-#include "pybind11/stl.h"      // Pybind11 import for STL containers
-#include "pybind11/numpy.h"
-#endif
-
 namespace Polylidar {
 
 namespace Delaunator {
