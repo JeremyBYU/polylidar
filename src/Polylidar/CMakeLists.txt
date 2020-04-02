@@ -32,24 +32,27 @@ if (PL_USE_ROBUST_PREDICATES)
 endif()
 
 # OPTON Build with OpenMP Support
-if (WITH_OPENMP)
+if (PL_WITH_OPENMP)
   find_package(OpenMP)
-  target_link_libraries(${PROJECT_NAME}  PUBLIC OpenMP::OpenMP_CXX)
+  target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
 # Build with FastGA Support
 # add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/GaussianAccumulator")
 # target_link_libraries(polylidar PRIVATE FastGA::GA)
 
-# Set Header and Properties of Polylidar Library
+# Add any Dependencies
 get_target_property(phmap_include_dirs phmap INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${phmap_include_dirs})
-target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
+
+# Set Properties
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION} POSITION_INDEPENDENT_CODE ON)
+# Set Public and Private Include Directories
+target_include_directories(${PROJECT_NAME} PRIVATE ${INCLUDE_DIR})
+# TODO - This is something that I still do not fully understand, Build vs Install?
 target_include_directories(${PROJECT_NAME} PUBLIC
-$<BUILD_INTERFACE:${INCLUDE_DIR}>
-$<INSTALL_INTERFACE:include>
-PRIVATE src)
-# set_target_properties(polylidar PROPERTIES VERSION ${PROJECT_VERSION})
+  $<BUILD_INTERFACE:${INCLUDE_DIR}>
+  $<INSTALL_INTERFACE:include>
+  PRIVATE src)
 

@@ -39,6 +39,7 @@ class HalfEdgeTriangulation
     Matrix<double> triangle_normals;
 
     HalfEdgeTriangulation();
+    HalfEdgeTriangulation& operator=(const HalfEdgeTriangulation& other) = default;
     HalfEdgeTriangulation(HalfEdgeTriangulation&& other) = default;
     HalfEdgeTriangulation(const Matrix<double> &in_vertices);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices);

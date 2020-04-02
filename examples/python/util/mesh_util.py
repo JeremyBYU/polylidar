@@ -12,7 +12,7 @@ import open3d as o3d
 from scipy.spatial.transform import Rotation as R
 
 DIR_NAME = path.dirname(__file__)
-FIXTURES_DIR = path.join(DIR_NAME, '../../../tests', 'fixtures')
+FIXTURES_DIR = path.join(DIR_NAME, '../../..', 'fixtures')
 MESHES_DIR = path.join(FIXTURES_DIR, 'meshes')
 
 DENSE_MESH = path.join(MESHES_DIR, 'dense_first_floor_map.ply')
@@ -31,3 +31,16 @@ def get_mesh_data_iterator():
         example_mesh_filtered = example_mesh
         example_mesh_filtered.compute_triangle_normals()
         yield example_mesh_filtered
+
+
+def main():
+    for i, mesh in enumerate(get_mesh_data_iterator()):
+        if i < 1:
+            continue
+        colors = np.asarray(mesh.vertex_colors)
+        colors2 = np.column_stack((colors[:, 2], colors[:, 1], colors[:, 0]))
+        mesh.vertex_colors = o3d.utility.Vector3dVector(colors2)
+        o3d.io.write_triangle_mesh('test.ply', mesh)
+
+if __name__ == "__main__":
+    main()

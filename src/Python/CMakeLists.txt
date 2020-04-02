@@ -3,6 +3,7 @@
 #           virtual environment.
 # Option 2: You can also define `cmake -DPYTHON_EXECUTABLE` to specify a python
 #           executable.
+set(PYBIND_PACKAGE_FOLDER "${PYPI_PACKAGE_NAME}_pybind")
 if (NOT PYTHON_EXECUTABLE)
     # find_program will returns the python executable in current PATH, which
     # works with virtualenv

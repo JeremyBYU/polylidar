@@ -50,7 +50,7 @@ template <class T>
 class Matrix
 {
   public:
-    const bool own_data;
+    bool own_data;
     std::vector<T> data;
     T* ptr; // This raw pointer never needs to be freed
     size_t rows;
@@ -80,7 +80,17 @@ class Matrix
     }
     // Move Constructors can be default
     Matrix<T>(Matrix<T>&& other) = default;
-    Matrix<T>& operator=(const Matrix<T>& a) = default;
+    Matrix<T>& operator=(const Matrix<T>& a){
+        own_data = a.own_data;
+        data = a.data;
+        ptr = a.ptr;
+        rows = a.rows;
+        cols = a.cols;
+        if (a.own_data)
+        {
+            ptr = data.data();
+        }
+    };
     // Helper function to update ptr to the underlying data structure
     void UpdatePtrFromData() { ptr = data.data(); }
     void UpdatePtrFromData(const size_t rows_, const size_t cols_)

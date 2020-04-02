@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 
-from tests.helpers.utils import load_csv, verify_points, basic_polylidar_verification, verify_all_polygons_are_valid, load_npy
+from python_tests.helpers.utils import load_csv, verify_points, basic_polylidar_verification, verify_all_polygons_are_valid, load_npy
 try:
     from polylidar import extractPlanesAndPolygons, extractPolygons, extractPolygonsAndTimings
     Polylidar3D = None

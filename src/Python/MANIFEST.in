@@ -1,0 +1,11 @@
+# Misc
+include README.md
+include LICENSE
+include requirements.txt
+
+# Compiled module
+include polylidar/polylidar*.pyd
+include polylidar/polylidar*.so
+
+# Exclude
+global-exclude *.py[co]

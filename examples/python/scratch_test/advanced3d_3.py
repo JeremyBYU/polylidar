@@ -138,6 +138,7 @@ def main():
             mesh = mesh.filter_smooth_laplacian(5, 0.75)
             t1 = time.perf_counter()
             logging.info("Laplacian Smoothing took (ms): %.2f",(t1-t0) * 1000)
+            # o3d.io.write_triangle_mesh('test.ply', mesh)
         mesh.compute_triangle_normals()
         # o3d.visualization.draw_geometries([mesh, grid_ls, axis_frame])
         run_test(mesh, callback=callback, stride=2)

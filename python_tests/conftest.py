@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 
-from tests.helpers.utils import load_csv, load_npy
+from python_tests.helpers.utils import load_csv, load_npy
 from polylidarutil import generate_test_points, get_estimated_lmax
 
 np.random.seed(1)
