@@ -1,0 +1,75 @@
+
+Added Marl (Optimized). All it does is create separate tasks for each Plane Normal so far.
+
+2020-04-03 11:59:27
+Running ./cmake-build/bin/run-bench
+Run on (24 X 3800 MHz CPU s)
+CPU Caches:
+  L1 Data 32K (x12)
+  L1 Instruction 32K (x12)
+  L2 Unified 512K (x12)
+  L3 Unified 16384K (x4)
+Load Average: 0.52, 0.51, 0.30
+-----------------------------------------------------------------------------------------------------------------------------------------
+Benchmark                                                                                               Time             CPU   Iterations
+-----------------------------------------------------------------------------------------------------------------------------------------
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/1/real_time_mean                   321 us          321 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/1/real_time_median                 320 us          320 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/1/real_time_stddev                1.14 us         1.14 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/2/real_time_mean                   397 us          397 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/2/real_time_median                 397 us          397 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/2/real_time_stddev               0.392 us        0.396 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/3/real_time_mean                   608 us          608 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/3/real_time_median                 608 us          608 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/3/real_time_stddev                1.07 us         1.07 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/4/real_time_mean                   899 us          899 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/4/real_time_median                 899 us          899 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/4/real_time_stddev                1.66 us         1.66 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/1/real_time_mean          607 us          225 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/1/real_time_median        582 us          223 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/1/real_time_stddev       48.5 us         2.84 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/2/real_time_mean          707 us          286 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/2/real_time_median        704 us          287 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/2/real_time_stddev       9.05 us         1.71 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/3/real_time_mean          804 us          332 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/3/real_time_median        793 us          331 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/3/real_time_stddev       21.6 us         1.80 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/4/real_time_mean          871 us          372 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/4/real_time_median        869 us          373 us            3
+ImagesAndSparseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/4/real_time_stddev       39.4 us         3.56 us            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/1/real_time_mean                            71.4 ms         71.4 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/1/real_time_median                          71.3 ms         71.3 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/1/real_time_stddev                         0.302 ms        0.302 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/2/real_time_mean                            94.3 ms         94.3 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/2/real_time_median                          94.3 ms         94.3 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/2/real_time_stddev                         0.048 ms        0.050 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/3/real_time_mean                             115 ms          115 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/3/real_time_median                           115 ms          115 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/3/real_time_stddev                         0.467 ms        0.468 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/4/real_time_mean                             140 ms          140 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/4/real_time_median                           140 ms          140 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormals/4/real_time_stddev                          1.28 ms         1.28 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/1/real_time_mean                   71.5 ms         18.8 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/1/real_time_median                 71.6 ms         18.7 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/1/real_time_stddev                0.442 ms        0.255 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/2/real_time_mean                   69.1 ms         20.1 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/2/real_time_median                 69.1 ms         20.1 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/2/real_time_stddev                0.177 ms        0.077 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/3/real_time_mean                   71.1 ms         21.6 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/3/real_time_median                 71.0 ms         21.6 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/3/real_time_stddev                0.155 ms        0.046 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/4/real_time_mean                   73.4 ms         23.0 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/4/real_time_median                 73.4 ms         23.0 ms            3
+DenseMesh/BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized/4/real_time_stddev                0.083 ms        0.037 ms            3
+
+
+Analysis
+For sparse meshes there seems to be an overhead with only one normal
+Large meshes its always equal or better.
+
+// Ideas, Cost of starting up Marl
+// Thread contention for locks, they all finish extracting planes and polygons so fast
+// I dont think there is much we can do here.
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++

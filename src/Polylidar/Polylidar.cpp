@@ -2,6 +2,10 @@
 #include "Polylidar/Core.hpp"
 
 #include "Eigen/Dense"
+#include "marl/defer.h"
+#include "marl/scheduler.h"
+#include "marl/waitgroup.h"
+#include <mutex>
 
 using RowMatrixX3d = Eigen::Matrix<double, Eigen::Dynamic, 3, Eigen::RowMajor>;
 using RowMatrixX3lui = Eigen::Matrix<size_t, Eigen::Dynamic, 3, Eigen::RowMajor>;
@@ -51,26 +55,6 @@ Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double>& points, const std::a
     return std::make_tuple(std::move(mesh), std::move(planes), std::move(polygons));
 }
 
-std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation& mesh,
-                                                                            const std::array<double, 3> plane_normal)
-{
-    Utility::Timer timer(true);
-    // Create Plane Data Structure, informs Polylidar which normal to extract on
-    PlaneData plane_data{plane_normal};
-    Utility::UpdatePlaneDataWithRotationInformation(plane_data);
-
-    // Extract planes from the mesh from desired plane normal
-    timer.Reset();
-    size_t max_triangles = mesh.triangles.rows;
-    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
-    auto planes = ExtractPlanes(mesh, tri_set, plane_data);
-
-    Polygons polygons;
-    timer.Reset();
-    polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
-    return std::make_tuple(std::move(planes), std::move(polygons));
-}
-
 std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
                                                                    const std::array<double, 3> plane_normal)
 {
@@ -91,6 +75,90 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::H
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
 
+std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                                            const std::array<double, 3> plane_normal)
+{
+    Utility::Timer timer(true);
+    // Create Plane Data Structure, informs Polylidar which normal to extract on
+    PlaneData plane_data{plane_normal};
+    Utility::UpdatePlaneDataWithRotationInformation(plane_data);
+
+    // Extract planes from the mesh from desired plane normal
+    timer.Reset();
+    size_t max_triangles = mesh.triangles.rows;
+    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
+    auto planes = ExtractPlanes(mesh, tri_set, plane_data);
+
+    Polygons polygons;
+    timer.Reset();
+    polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
+    return std::make_tuple(std::move(planes), std::move(polygons));
+}
+
+std::tuple<PlanesGroup, PolygonsGroup>
+Polylidar3D::ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation& mesh,
+                                               const Matrix<double>& plane_normals)
+{
+    auto plane_data_list = Utility::CreateMultiplePlaneDataFromNormals(plane_normals);
+    // Create tri_set
+    size_t max_triangles = mesh.triangles.rows;
+    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
+    // Check the entire triset from the start.
+    Utility::Timer timer(true);
+    CreateTriSet3OptimizedForMultiplePlanes(tri_set, mesh, plane_data_list);
+    // std::cout << "Create TriSet3Optimized took: " << timer << " us" << std::endl;
+    // vectors for our planes and polygons, each element is for each normal to be expanded upon
+
+    int number_of_groups = static_cast<int>(plane_data_list.size());
+    PlanesGroup planes_group(number_of_groups);
+    PolygonsGroup polygons_group(number_of_groups);
+
+    std::mutex planes_group_mutex;
+    std::mutex polygons_group_mutex;
+
+    marl::Scheduler scheduler;
+    scheduler.bind();
+    scheduler.setWorkerThreadCount(4);
+    defer(scheduler.unbind()); // Automatically unbind before returning.
+
+    marl::WaitGroup plane_data_wg(static_cast<int>(plane_data_list.size()));
+
+    for (int i =0; i < number_of_groups; ++i)
+    {
+        marl::schedule([this, i, &mesh, &tri_set, &plane_data_list, &planes_group, &polygons_group, &planes_group_mutex,
+                        &polygons_group_mutex, plane_data_wg] {
+            
+            defer(plane_data_wg.done());  // Decrement plane_data_wg when task is done
+            auto& plane_data = plane_data_list[i]; // get plane data
+
+            // Planes planes; // will contain the planes extracted on this normal
+            // Polygons polygons; // will contain the associated polygons for these planes
+
+            // // Plane extraction will happen serially so no mutex needed for `planes` structure
+            // std::mutex polygons_mutex; // Polygon extraction happend in parallel so a mutex must be created
+            // // These will be dynamic tasks
+            // marl::WaitGroup planes_wg(1); 
+            // marl::WaitGroup polygons_wg(1);
+
+            auto planes = ExtractPlanes(mesh, tri_set, plane_data, true);
+            auto polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
+            // Use locks to add to planes and polygons group
+            {
+                std::lock_guard<std::mutex> lockGuard(planes_group_mutex);
+                planes_group[i] = std::move(planes);
+            }
+            {
+                std::lock_guard<std::mutex> lockGuard(polygons_group_mutex);
+                polygons_group[i] = std::move(polygons);
+            }
+        });
+    }
+    plane_data_wg.wait();
+
+
+    return std::make_tuple(std::move(planes_group), std::move(polygons_group));
+}
+
 std::tuple<PlanesGroup, PolygonsGroup> Polylidar3D::ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
                                                                              const Matrix<double>& plane_normals)
 {
@@ -99,43 +167,63 @@ std::tuple<PlanesGroup, PolygonsGroup> Polylidar3D::ExtractPlanesAndPolygons(Mes
     size_t max_triangles = mesh.triangles.rows;
     std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
     // Check the entire triset from the start.
+    // Utility::Timer timer(true);
     CreateTriSet3OptimizedForMultiplePlanes(tri_set, mesh, plane_data_list);
+    // std::cout << "Create TriSet3Optimized took: " << timer << " us" << std::endl;
     // vectors for our planes and polygons, each element is for each normal to be expanded upon
     PlanesGroup planes_group;
     PolygonsGroup polygons_group;
 
     for (auto& plane_data : plane_data_list)
     {
+        // timer.Reset();
         auto planes = ExtractPlanes(mesh, tri_set, plane_data, true);
+        // std::cout << "Create Extract Planes took: " << timer << " us" << std::endl;
+        // timer.Reset();
         auto polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
+        // std::cout << "Extract ConcaveHulls took: " << timer << " us" << std::endl;
         planes_group.emplace_back(std::move(planes));
         polygons_group.emplace_back(std::move(polygons));
     }
+    
     return std::make_tuple(std::move(planes_group), std::move(polygons_group));
 }
 
-// Planes Polylidar3D::ExtractPlanesOptimized(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
-//                                            PlaneData& plane_data)
-// {
-//     Planes planes;
-//     size_t max_triangles = mesh.triangles.rows;
+Planes Polylidar3D::ExtractPlanesOptimized(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
+                                  PlaneData& plane_data, bool tri_set_finished)
+{
+    Planes planes;
+    size_t max_triangles = mesh.triangles.rows;
+    // If tri_set is not finished, then construct it
+    if (!tri_set_finished)
+    {
+        if (mesh.vertices.cols == 2)
+        {
+            // std::cout << "Using TriSet2" << std::endl;
+            CreateTriSet2(tri_set, mesh);
+        }
+        else
+        {
+            CreateTriSet3Optimized(tri_set, mesh, plane_data);
+        }
+    }
 
-//     for (size_t t = 0; t < max_triangles; t++)
-//     {
-//         if (tri_set[t] == plane_data.normal_id)
-//         {
+    for (size_t t = 0; t < max_triangles; t++)
+    {
+        if (tri_set[t] == plane_data.normal_id)
+        {
 
-//             planes.emplace_back();                       // construct empty vector inside planes
-//             auto& plane_set = planes[planes.size() - 1]; // retrieve this newly created vector
-//             Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data.normal_id);
-//             if (!Core::PassPlaneConstraints(plane_set, min_triangles))
-//             {
-//                 planes.pop_back();
-//             }
-//         }
-//     }
-//     return planes;
-// }
+            planes.emplace_back();                       // construct empty vector inside planes
+            auto& plane_set = planes[planes.size() - 1]; // retrieve this newly created vector
+            Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data.normal_id);
+            if (!Core::PassPlaneConstraints(plane_set, min_triangles))
+            {
+                planes.pop_back();
+            }
+        }
+    }
+    return planes;
+}
 
 Planes Polylidar3D::ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
                                   PlaneData& plane_data, bool tri_set_finished)
@@ -226,7 +314,7 @@ void Polylidar3D::CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& 
         // auto this_normal = triangles_normals_e.row(t).transpose();
         // auto maxDotProduct = (plane_normal_matrix * this_normal).maxCoeff(&idx);
         double maxDotProduct = -1.0;
-        for(int i = 0; i < static_cast<int>(plane_data_list.size()); ++i)
+        for (int i = 0; i < static_cast<int>(plane_data_list.size()); ++i)
         {
             auto dotproduct = triangles_normals_e.row(t).dot(plane_normal_matrix.row(i));
             if (dotproduct > maxDotProduct)

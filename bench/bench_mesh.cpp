@@ -189,6 +189,25 @@ BENCHMARK_DEFINE_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsFromMultipleN
     }
 }
 
+BENCHMARK_DEFINE_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized)
+(benchmark::State& st)
+{
+    std::vector<std::array<double, 3>> normals = {{-0.0192, -0.0199, -0.9996},
+                                                  {0.0023, 0.0227, 0.9997},
+                                                  {0.9995, -0.0213, -0.0227},
+                                                  // { 0.9971,  0.0709, -0.0291},
+                                                  {-0.0163, -0.9995, -0.0267},
+                                                  // {0.0168, -0.2067,  0.9783},
+                                                  {-0., 0.5988, 0.8009}};
+    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.90);
+    const Matrix<double> normals_mat((double*)(normals.data()), st.range(0), 3);
+    for (auto _ : st)
+    {
+        // ExtractPointCloudFromFloatDepth(im, intr, 1);
+        auto planes_and_polygons = pl3d.ExtractPlanesAndPolygonsOptimized(sparse_mesh, normals_mat);
+    }
+}
+
 BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
 (benchmark::State& st)
 {
@@ -206,6 +225,23 @@ BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
     }
 }
 
+BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized)
+(benchmark::State& st)
+{
+
+    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.01, 0.95, 0.92);
+    std::vector<std::array<double, 3>> normals = {{-0.0123, -0.0021, -0.9999},
+                                                  {-0.2241, 0.9744, -0.0171},
+                                                  {0.2207, -0.9752, 0.0144},
+                                                  {-0.9612, -0.2756, 0.0129}};
+
+    const Matrix<double> normals_mat((double*)(normals.data()), st.range(0), 3);
+    for (auto _ : st)
+    {
+        auto planes_and_polygons = pl3d.ExtractPlanesAndPolygonsOptimized(dense_mesh, normals_mat);
+    }
+}
+
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_Create_PointCloud)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_Create_TriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ComputeTriangleNormals)->UseRealTime()->Unit(benchmark::kMicrosecond);
@@ -215,7 +251,15 @@ BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsFromMultipl
     ->DenseRange(1, 4, 1)
     ->UseRealTime()
     ->Unit(benchmark::kMicrosecond);
+BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized)
+    ->DenseRange(1, 4, 1)
+    ->UseRealTime()
+    ->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
+    ->DenseRange(1, 4, 1)
+    ->UseRealTime()
+    ->Unit(benchmark::kMillisecond);
+BENCHMARK_REGISTER_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormalsOptimized)
     ->DenseRange(1, 4, 1)
     ->UseRealTime()
     ->Unit(benchmark::kMillisecond);

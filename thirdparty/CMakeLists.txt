@@ -18,5 +18,11 @@ FetchContent_Declare(
   GIT_TAG        3.3.7
 )
 
+FetchContent_Declare(
+  extern_marl
+  GIT_REPOSITORY https://github.com/google/marl.git
+  GIT_TAG        origin/master
+)
+
 # After the following call, the library will be installed
-FetchContent_MakeAvailable(extern_parallel_hashmap extern_pybind11 extern_eigen)
+FetchContent_MakeAvailable(extern_parallel_hashmap extern_pybind11 extern_eigen extern_marl)

@@ -24,7 +24,9 @@ $<$<CXX_COMPILER_ID:MSVC>:
 # Method to hide warnings from nanoflann using SYSTEM
 get_target_property(eigen_include_dirs eigen INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${eigen_include_dirs})
-# target_link_libraries(${PROJECT_NAME} PRIVATE eigen)
+# -pedantic-errors marl has issues with this
+target_link_libraries_system(${PROJECT_NAME} marl)
+# target_link_libraries(${PROJECT_NAME} PRIVATE marl)
 
 # OPTION Build with Robust Predicates
 if (PL_USE_ROBUST_PREDICATES)
