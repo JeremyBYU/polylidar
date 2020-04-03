@@ -20,6 +20,12 @@ ${DESIRED_WARNINGS}>
 $<$<CXX_COMPILER_ID:MSVC>:
 /W4>)
 
+# Link with Eigen
+# Method to hide warnings from nanoflann using SYSTEM
+get_target_property(eigen_include_dirs eigen INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${eigen_include_dirs})
+# target_link_libraries(${PROJECT_NAME} PRIVATE eigen)
+
 # OPTION Build with Robust Predicates
 if (PL_USE_ROBUST_PREDICATES)
     MESSAGE(STATUS "Building with Robust Geometric Predicates")

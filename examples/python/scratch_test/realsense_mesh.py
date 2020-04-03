@@ -58,6 +58,7 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     tri_mesh = polylidar_inputs['tri_mesh']
     t1 = time.perf_counter()
     planes, polygons = pl.extract_planes_and_polygons(tri_mesh)
+
     t2 = time.perf_counter()
     all_poly_lines = filter_and_create_open3d_polygons(vertices, polygons)
     mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes)
@@ -125,7 +126,8 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
         tuple(dict, dict) - Mesh and timings
     """
     t0 = time.perf_counter()
-    tri_mesh = extract_tri_mesh_from_float_depth(MatrixFloat(im), MatrixDouble(intrinsics), MatrixDouble(extrinsics), stride=stride)
+    tri_mesh = extract_tri_mesh_from_float_depth(MatrixFloat(
+        im), MatrixDouble(intrinsics), MatrixDouble(extrinsics), stride=stride)
     t1 = time.perf_counter()
     points = np.asarray(tri_mesh.vertices)
     triangles = np.asarray(tri_mesh.triangles)

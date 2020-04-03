@@ -51,8 +51,11 @@ class Polylidar3D
     std::tuple<Planes, Polygons> ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
                                                           const std::array<double, 3> plane_normal);
 
+    std::tuple<Planes, Polygons> ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                                   const std::array<double, 3> plane_normal);
+
     std::tuple<PlanesGroup, PolygonsGroup> ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
-                                                          const Matrix<double> &plane_normals);
+                                                                    const Matrix<double>& plane_normals);
 
   protected:
     double alpha;
@@ -64,9 +67,15 @@ class Polylidar3D
     double norm_thresh_min;
 
   private:
-    Planes ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, PlaneData& plane_data);
+    Planes ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, PlaneData& plane_data, bool tri_set_finished=false);
+    // Planes ExtractPlanesOptimized(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
+    //                               PlaneData& plane_data);
     void CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh);
     void CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data);
+    void CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
+                                PlaneData& plane_data);
+    void CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
+                                                 std::vector<PlaneData>& plane_data_list);
 };
 
 } // namespace Polylidar

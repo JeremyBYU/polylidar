@@ -12,5 +12,11 @@ FetchContent_Declare(
   GIT_TAG        1.31
 )
 
+FetchContent_Declare(
+  extern_eigen
+  GIT_REPOSITORY https://github.com/eigenteam/eigen-git-mirror.git
+  GIT_TAG        3.3.7
+)
+
 # After the following call, the library will be installed
-FetchContent_MakeAvailable(extern_parallel_hashmap extern_pybind11)
+FetchContent_MakeAvailable(extern_parallel_hashmap extern_pybind11 extern_eigen)

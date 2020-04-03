@@ -132,6 +132,10 @@ PYBIND11_MODULE(polylidar, m)
              py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const std::array<double, 3>>(
                  &Polylidar::Polylidar3D::ExtractPlanesAndPolygons),
              "mesh"_a, "plane_normal"_a = PL_DEFAULT_DESIRED_VECTOR)
+        .def("extract_planes_and_polygons_optimized",
+             py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const std::array<double, 3>>(
+                 &Polylidar::Polylidar3D::ExtractPlanesAndPolygonsOptimized),
+             "mesh"_a, "plane_normal"_a = PL_DEFAULT_DESIRED_VECTOR)
         .def("extract_planes_and_polygons",
              py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const Matrix<double>&>(
                  &Polylidar::Polylidar3D::ExtractPlanesAndPolygons),

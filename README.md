@@ -23,14 +23,14 @@
 ## Key Features
 
 * Fast (Multi)Polygon Extraction from 2D and 3D point clouds
-  + Written in C++ for portability
-  + Extremely fast.100, 000 3D point cloud takes ~130ms to process on laptop
-  + Polygons with holes may be returned
+  * Written in C++ for portability
+  * Extremely fast.100, 000 3D point cloud takes ~130ms to process on laptop
+  * Polygons with holes may be returned
 * Python3 bindings using PyBind11
-  + Low overhead for calling python/cpp interface (no copying of point cloud data)
+  * Low overhead for calling python/cpp interface (no copying of point cloud data)
 * Python and C++ Examples
 * Cross platform
-  + Windows and Linux ready.
+  * Windows and Linux ready.
 
 Polylidar allows one to extract planar meshes from a point cloud **and** their polygon representations. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors. Click here for a basic demo in the browser: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jeremybyu/polylidar/master?filepath=examples%2Fpython%2FBasicDemo.ipynb)
 
