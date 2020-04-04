@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <array>
 #include <unordered_map>
+#include <deque>
 
 // include a fast parallel hash map implementation
 #ifdef PL_USE_STD_UNORDERED_MAP

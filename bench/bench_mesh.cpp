@@ -155,6 +155,17 @@ BENCHMARK_DEFINE_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygons)
     }
 }
 
+BENCHMARK_DEFINE_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsOptimized)
+(benchmark::State& st)
+{
+    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.90);
+    for (auto _ : st)
+    {
+        // ExtractPointCloudFromFloatDepth(im, intr, 1);
+        auto planes_and_polygons = pl3d.ExtractPlanesAndPolygonsOptimized(sparse_mesh, {{0.0, 0.0, 1.0}});
+    }
+}
+
 // BENCHMARK_DEFINE_F(Images, BM_ExtractPlanesAndPolygons)
 // (benchmark::State& st)
 // {
@@ -247,6 +258,7 @@ BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_Create_TriMesh)->UseRealTime()->Uni
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ComputeTriangleNormals)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_CopyTriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygons)->UseRealTime()->Unit(benchmark::kMicrosecond);
+BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsOptimized)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
     ->DenseRange(1, 4, 1)
     ->UseRealTime()
