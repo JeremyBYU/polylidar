@@ -120,10 +120,11 @@ PYBIND11_MODULE(polylidar, m)
 
     py::class_<Polylidar::Polylidar3D>(m, "Polylidar3D")
         .def(py::init<const double, const double, const size_t, const size_t, const double, const double,
-                      const double>(),
+                      const double, const int>(),
              "alpha"_a = PL_DEFAULT_ALPHA, "lmax"_a = PL_DEFAULT_LMAX, "min_triangles"_a = PL_DEFAULT_MINTRIANGLES,
              "min_hole_vertices"_a = PL_DEFAULT_MINHOLEVERTICES, "z_thresh"_a = PL_DEFAULT_ZTHRESH,
-             "norm_thresh"_a = PL_DEFAULT_NORMTHRESH, "norm_thresh_min"_a = PL_DEFAULT_NORMTHRESH_MIN)
+             "norm_thresh"_a = PL_DEFAULT_NORMTHRESH, "norm_thresh_min"_a = PL_DEFAULT_NORMTHRESH_MIN,
+             "task_threads"_a = PL_DEFAULT_TASK_THREADS)
         .def("extract_planes_and_polygons",
              py::overload_cast<const Matrix<double>&, const std::array<double, 3>>(
                  &Polylidar::Polylidar3D::ExtractPlanesAndPolygons),

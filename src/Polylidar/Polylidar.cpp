@@ -15,15 +15,17 @@ namespace Polylidar {
 
 Polylidar3D::Polylidar3D(const double _alpha, const double _lmax, const size_t _min_triangles,
                          const size_t _min_hole_vertices, const double _z_thresh, const double _norm_thresh,
-                         const double _norm_thresh_min)
+                         const double _norm_thresh_min, const int _task_threads)
     : alpha(_alpha),
       lmax(_lmax),
       min_triangles(_min_triangles),
       min_hole_vertices(_min_hole_vertices),
       z_thresh(_z_thresh),
       norm_thresh(_norm_thresh),
-      norm_thresh_min(_norm_thresh_min)
+      norm_thresh_min(_norm_thresh_min),
+      task_threads(_task_threads)
 {
+
 }
 
 std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
@@ -115,7 +117,7 @@ Polylidar3D::ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation
     // use marl for dynamic task creation and exectution
     marl::Scheduler scheduler;
     scheduler.bind();
-    scheduler.setWorkerThreadCount(4);
+    scheduler.setWorkerThreadCount(task_threads);
     defer(scheduler.unbind()); // Automatically unbind before returning.
 
     // We will extract each plane group using dynamic tasks

@@ -45,7 +45,8 @@ class Polylidar3D
                 const size_t _min_triangles = PL_DEFAULT_MINTRIANGLES,
                 const size_t _min_hole_vertices = PL_DEFAULT_MINHOLEVERTICES,
                 const double _z_thresh = PL_DEFAULT_ZTHRESH, const double _norm_thresh = PL_DEFAULT_NORMTHRESH,
-                const double _norm_thresh_min = PL_DEFAULT_NORMTHRESH_MIN);
+                const double _norm_thresh_min = PL_DEFAULT_NORMTHRESH_MIN,
+                const int _task_threads = PL_DEFAULT_TASK_THREADS);
     std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
     ExtractPlanesAndPolygons(const Matrix<double>& points, const std::array<double, 3> plane_normal);
     std::tuple<Planes, Polygons> ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
@@ -67,6 +68,7 @@ class Polylidar3D
     double z_thresh;
     double norm_thresh;
     double norm_thresh_min;
+    int task_threads;
 
   private:
     Planes ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, PlaneData& plane_data,
