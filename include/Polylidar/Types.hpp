@@ -91,6 +91,7 @@ class Matrix
         {
             ptr = data.data();
         }
+        return *this;
     };
     // Helper function to update ptr to the underlying data structure
     void UpdatePtrFromData() { ptr = data.data(); }
