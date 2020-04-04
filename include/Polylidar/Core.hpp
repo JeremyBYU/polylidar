@@ -17,8 +17,8 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t
 void ConstructPointHash(VUI& plane, MeshHelper::HalfEdgeTriangulation& mesh, PointHash& point_hash, EdgeSet& edge_hash,
                         ExtremePoint& xPoint, PlaneData& plane_data);
 
-Polygons ExtractConcaveHulls(Planes planes, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
-Polygon ExtractConcaveHull(VUI plane, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
+Polygons ExtractConcaveHulls(Planes &planes, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
+Polygon ExtractConcaveHull(VUI &plane, MeshHelper::HalfEdgeTriangulation &mesh, PlaneData &plane_data, size_t min_hole_vertices_);
 
 
 // Inline Function

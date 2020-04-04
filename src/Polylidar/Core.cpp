@@ -7,7 +7,7 @@ namespace Core {
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 
 
-Polygon ExtractConcaveHull(VUI plane, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data,
+Polygon ExtractConcaveHull(VUI &plane, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data,
                                         size_t min_hole_vertices_)
 {
     Polygon poly;
@@ -58,7 +58,7 @@ Polygon ExtractConcaveHull(VUI plane, MeshHelper::HalfEdgeTriangulation& mesh, P
     return poly;
 }
 
-Polygons ExtractConcaveHulls(Planes planes, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data,
+Polygons ExtractConcaveHulls(Planes &planes, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data,
                                           size_t min_hole_vertices_)
 {
 

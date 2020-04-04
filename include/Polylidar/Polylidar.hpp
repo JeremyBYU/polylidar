@@ -71,8 +71,8 @@ class Polylidar3D
   private:
     Planes ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, PlaneData& plane_data,
                          bool tri_set_finished = false);
-    Planes ExtractPlanesOptimized(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
-                                  PlaneData& plane_data, bool tri_set_finished = false);
+    std::tuple<Planes, Polygons> ExtractPlanesWithTasks(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
+                                  PlaneData& plane_data);
     void CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh);
     void CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data);
     void CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,

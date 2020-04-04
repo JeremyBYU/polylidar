@@ -83,9 +83,6 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
     all_planes, all_polygons = pl.extract_planes_and_polygons_optimized(tri_mesh, avg_peaks_mat)
     t1 = time.perf_counter()
 
-    print("python")
-    print(len(all_planes))
-    print(len(all_polygons))
 
     polylidar_time = (t1 - t0) * 1000
     
