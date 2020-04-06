@@ -29,15 +29,16 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     points = np.asarray(pcd.points)
     # Create 2.5D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, min_triangles=100,
-                            z_thresh=0.03, norm_thresh=0.99, norm_thresh_min=0.95, min_hole_vertices=6)
+                            z_thresh=0.03, norm_thresh=0.99, norm_thresh_min=0.90, min_hole_vertices=6)
     pl = Polylidar3D(**polylidar_kwargs)
     points_mat = MatrixDouble(points)
     t1 = time.perf_counter()
     mesh, planes, polygons = pl.extract_planes_and_polygons(points_mat)
     t2 = time.perf_counter()
+
     all_poly_lines = filter_and_create_open3d_polygons(points, polygons)
     triangles = np.asarray(mesh.triangles)
-    mesh_2d_polylidar = extract_mesh_planes(points, triangles, planes, COLOR_PALETTE[0])
+    mesh_2d_polylidar = extract_mesh_planes(points, triangles, planes, mesh.counter_clock_wise, COLOR_PALETTE[0])
     mesh_2d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     time_mesh_2d_polylidar = (t2 - t1) * 1000
     polylidar_alg_name = 'Polylidar2D'
@@ -58,10 +59,9 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     tri_mesh = polylidar_inputs['tri_mesh']
     t1 = time.perf_counter()
     planes, polygons = pl.extract_planes_and_polygons(tri_mesh)
-
     t2 = time.perf_counter()
     all_poly_lines = filter_and_create_open3d_polygons(vertices, polygons)
-    mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes)
+    mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes, tri_mesh.counter_clock_wise)
     mesh_3d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     time_polylidar3D = (t2 - t1) * 1000
     polylidar_3d_alg_name = 'Polylidar with Uniform Grid Mesh'
@@ -143,7 +143,7 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
 def callback(alg_name, execution_time, pcd, mesh=None):
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -0.7])
-    grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
+    grid_ls = construct_grid(size=2, n=20, plane_offset=-1.0, translate=[0, 1.0, 0.0])
     logging.info("%s took %.2f milliseconds", alg_name, execution_time)
     if mesh:
         if isinstance(mesh, list):
@@ -159,7 +159,7 @@ def main():
     axis_frame.translate([0, 0.8, -0.7])
     grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
     for idx in range(len(color_files)):
-        if idx < 3:
+        if idx < 4:
             continue
         pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)

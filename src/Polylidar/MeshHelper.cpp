@@ -6,20 +6,20 @@ constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 const static double PL_NAN = std::numeric_limits<double>::quiet_NaN();
 
 // Half Edge Constructors
-HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges(), triangle_normals() {}
+HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges(), triangle_normals(), counter_clock_wise(true) {}
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(const Matrix<double>& in_vertices)
-    : vertices(in_vertices), triangles(), halfedges(), triangle_normals()
+    : vertices(in_vertices), triangles(), halfedges(), triangle_normals(), counter_clock_wise(true)
 {
 }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices)
-    : vertices(std::move(in_vertices)), triangles(), halfedges(), triangle_normals()
+    : vertices(std::move(in_vertices)), triangles(), halfedges(), triangle_normals(), counter_clock_wise(true)
 {
 }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles)
-    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(), triangle_normals()
+    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(), triangle_normals(), counter_clock_wise(true)
 {
     ExtractHalfEdgesMatrix(triangles, halfedges);
 }
@@ -29,7 +29,8 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
     : vertices(std::move(in_vertices)),
       triangles(std::move(in_triangles)),
       halfedges(std::move(in_halfedges)),
-      triangle_normals()
+      triangle_normals(),
+      counter_clock_wise(true)
 {
 }
 // TriMesh::TriMesh() : HalfEdgeTriangulation(), triangle_normals() {}
@@ -45,12 +46,13 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
     : vertices(std::move(in_vertices)),
       triangles(std::move(in_triangles)),
       halfedges(std::move(in_halfedges)),
-      triangle_normals(std::move(in_triangle_normals))
+      triangle_normals(std::move(in_triangle_normals)),
+      counter_clock_wise(true)
 {
 }
 
 void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matrix<size_t>& triangles,
-                                      Matrix<double>& triangle_normals_mat)
+                                      Matrix<double>& triangle_normals_mat, const bool flip_normals)
 {
     auto& num_triangles = triangles.rows;
     auto& triangle_normals = triangle_normals_mat.data;
@@ -72,7 +74,15 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
         std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
         // cross product
-        crossProduct3(v, u, &triangle_normals[i * 3]);
+        if (flip_normals)
+        {
+            crossProduct3(v, u, &triangle_normals[i * 3]);
+        }
+        else
+        {
+            crossProduct3(u, v, &triangle_normals[i * 3]);
+        }
+        
         // normalize
         normalize3(&triangle_normals[i * 3]);
     }
@@ -86,11 +96,11 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
 
 void HalfEdgeTriangulation::ComputeTriangleNormals()
 {
-    ComputeTriangleNormalsFromMatrix(vertices, triangles, triangle_normals);
+    ComputeTriangleNormalsFromMatrix(vertices, triangles, triangle_normals, !counter_clock_wise);
 }
 
 void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<size_t>& triangles,
-                            std::vector<double>& triangle_normals)
+                            std::vector<double>& triangle_normals, const bool flip_normals)
 {
     size_t num_triangles = static_cast<size_t>(triangles.size() / 3);
     triangle_normals.resize(num_triangles * 3);
@@ -111,7 +121,14 @@ void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<si
         std::array<double, 3> v{{vv3[0] - vv1[0], vv3[1] - vv1[1], vv3[2] - vv1[2]}};
 
         // cross product
-        crossProduct3(v, u, &triangle_normals[i]);
+        if (flip_normals)
+        {
+            crossProduct3(v, u, &triangle_normals[i * 3]);
+        }
+        else
+        {
+            crossProduct3(u, v, &triangle_normals[i * 3]);
+        }
         // normalize
         normalize3(&triangle_normals[i]);
     }
@@ -238,9 +255,15 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
                     t_valid_idx_right = valid_tri[t_global_idx_right];
                 }
                 // Set the edges if they are valid
-                if (t_valid_idx_top != INVALID_INDEX) halfedges[size_t(t_valid_idx_first * 3)] = t_valid_idx_top * 3;
+                // if (t_valid_idx_top != INVALID_INDEX) halfedges[size_t(t_valid_idx_first * 3)] = t_valid_idx_top * 3;
+                // if (t_valid_idx_right != INVALID_INDEX)
+                //     halfedges[size_t(t_valid_idx_first * 3 + 1)] = t_valid_idx_right * 3 + 1;
+                // if (t_valid_idx_second != INVALID_INDEX)
+                //     halfedges[size_t(t_valid_idx_first * 3 + 2)] = t_valid_idx_second * 3 + 2;
+
+                if (t_valid_idx_top != INVALID_INDEX) halfedges[size_t(t_valid_idx_first * 3 + 1)] = t_valid_idx_top * 3 + 1;
                 if (t_valid_idx_right != INVALID_INDEX)
-                    halfedges[size_t(t_valid_idx_first * 3 + 1)] = t_valid_idx_right * 3 + 1;
+                    halfedges[size_t(t_valid_idx_first * 3)] = t_valid_idx_right * 3;
                 if (t_valid_idx_second != INVALID_INDEX)
                     halfedges[size_t(t_valid_idx_first * 3 + 2)] = t_valid_idx_second * 3 + 2;
             }
@@ -269,10 +292,16 @@ std::vector<size_t> ExtractHalfEdgesFromUniformMesh(size_t rows, size_t cols, st
                     t_valid_idx_left = valid_tri[t_global_idx_left];
                 }
                 // Set Edges
+                // if (t_valid_idx_bottom != INVALID_INDEX)
+                //     halfedges[size_t(t_valid_idx_second * 3)] = t_valid_idx_bottom * 3;
+                // if (t_valid_idx_left != INVALID_INDEX)
+                //     halfedges[size_t(t_valid_idx_second * 3 + 1)] = t_valid_idx_left * 3 + 1;
+                // if (t_valid_idx_first != INVALID_INDEX)
+                //     halfedges[size_t(t_valid_idx_second * 3 + 2)] = t_valid_idx_first * 3 + 2;
                 if (t_valid_idx_bottom != INVALID_INDEX)
-                    halfedges[size_t(t_valid_idx_second * 3)] = t_valid_idx_bottom * 3;
+                    halfedges[size_t(t_valid_idx_second * 3 + 1)] = t_valid_idx_bottom * 3 + 1;
                 if (t_valid_idx_left != INVALID_INDEX)
-                    halfedges[size_t(t_valid_idx_second * 3 + 1)] = t_valid_idx_left * 3 + 1;
+                    halfedges[size_t(t_valid_idx_second * 3)] = t_valid_idx_left * 3;
                 if (t_valid_idx_first != INVALID_INDEX)
                     halfedges[size_t(t_valid_idx_second * 3 + 2)] = t_valid_idx_first * 3 + 2;
             }
@@ -318,17 +347,23 @@ CreateUniformMesh(const size_t rows, const size_t cols, const Matrix<double>& po
 
             if (!std::isnan(p1) && !std::isnan(p2) && !std::isnan(p3))
             {
-                triangles.push_back(p1_idx);
-                triangles.push_back(p2_idx);
                 triangles.push_back(p3_idx);
+                triangles.push_back(p2_idx);
+                triangles.push_back(p1_idx);
+                // triangles.push_back(p1_idx);
+                // triangles.push_back(p2_idx);
+                // triangles.push_back(p3_idx);
                 valid_tri[pix_cnt * 2] = tri_cnt;
                 tri_cnt++;
             }
             if (!std::isnan(p3) && !std::isnan(p4) && !std::isnan(p1))
             {
-                triangles.push_back(p3_idx);
-                triangles.push_back(p4_idx);
                 triangles.push_back(p1_idx);
+                triangles.push_back(p4_idx);
+                triangles.push_back(p3_idx);
+                // triangles.push_back(p3_idx);
+                // triangles.push_back(p4_idx);
+                // triangles.push_back(p1_idx);
                 valid_tri[pix_cnt * 2 + 1] = tri_cnt;
                 tri_cnt++;
             }

@@ -37,6 +37,7 @@ class HalfEdgeTriangulation
     Matrix<size_t> triangles;
     Matrix<size_t> halfedges;
     Matrix<double> triangle_normals;
+    bool counter_clock_wise;
 
     HalfEdgeTriangulation();
     HalfEdgeTriangulation& operator=(const HalfEdgeTriangulation& other) = default;
@@ -151,9 +152,9 @@ inline void normalize3(double* normal)
 }
 
 void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matrix<size_t>& triangles,
-                                      Matrix<double>& triangle_normals_mat);
+                                      Matrix<double>& triangle_normals_mat, const bool flip_normals=false);
 void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<size_t>& triangles,
-                            std::vector<double>& triangle_normals);
+                            std::vector<double>& triangle_normals, const bool flip_normals=false);
 
 HalfEdgeTriangulation CreateTriMeshFromVectors(std::vector<double>&& vertices, std::vector<size_t>&& triangles,
                                  std::vector<size_t>&& halfedges);

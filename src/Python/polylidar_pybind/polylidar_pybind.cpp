@@ -111,7 +111,8 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("vertices", &MeshHelper::HalfEdgeTriangulation::vertices)
         .def_readonly("triangles", &MeshHelper::HalfEdgeTriangulation::triangles)
         .def_readonly("halfedges", &MeshHelper::HalfEdgeTriangulation::halfedges)
-        .def_readonly("triangle_normals", &MeshHelper::HalfEdgeTriangulation::triangle_normals);
+        .def_readonly("triangle_normals", &MeshHelper::HalfEdgeTriangulation::triangle_normals)
+        .def_readonly("counter_clock_wise", &MeshHelper::HalfEdgeTriangulation::counter_clock_wise);
 
     py::class_<Delaunator::Delaunator, MeshHelper::HalfEdgeTriangulation>(m, "Delaunator")
         .def(py::init<Matrix<double>>(), "in_vertices"_a)

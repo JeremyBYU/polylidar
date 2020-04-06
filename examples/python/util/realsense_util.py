@@ -112,7 +112,7 @@ def create_open3d_pc(points):
     return pcd
 
 
-def create_open_3d_mesh(triangles, points, triangle_normals=None, color=COLOR_PALETTE[0]):
+def create_open_3d_mesh(triangles, points, triangle_normals=None, color=COLOR_PALETTE[0], counter_clock_wise=True):
     """Create an Open3D Mesh given triangles vertices
 
     Arguments:
@@ -131,6 +131,7 @@ def create_open_3d_mesh(triangles, points, triangle_normals=None, color=COLOR_PA
     if triangles.ndim == 1:
         triangles = triangles.reshape((int(triangles.shape[0] / 3), 3))
         # Open 3D expects triangles to be counter clockwise
+    if not counter_clock_wise:
         triangles = np.ascontiguousarray(np.flip(triangles, 1))
     mesh_2d.triangles = o3d.utility.Vector3iVector(triangles)
     mesh_2d.vertices = o3d.utility.Vector3dVector(points)
@@ -139,13 +140,12 @@ def create_open_3d_mesh(triangles, points, triangle_normals=None, color=COLOR_PA
         mesh_2d.compute_triangle_normals()
     elif triangle_normals.ndim == 1:
         triangle_normals_ = triangle_normals.reshape((int(triangle_normals.shape[0] / 3), 3))
-        # triangles = np.ascontiguousarray(np.flip(triangles, 1))
         mesh_2d.triangle_normals = o3d.utility.Vector3dVector(triangle_normals_)
     mesh_2d.paint_uniform_color(color)
     return mesh_2d
 
 
-def extract_mesh_planes(points, triangles, planes, color=None):
+def extract_mesh_planes(points, triangles, planes, counter_clock_wise=True, color=None):
     " Converts Polylidar Mesh Planes into Open3D format "
 
     meshes = []
@@ -155,8 +155,9 @@ def extract_mesh_planes(points, triangles, planes, color=None):
             color_ = COLOR_PALETTE[i % (len(COLOR_PALETTE) - 1)]
         else:
             color_ = COLOR_PALETTE[0]
-        tris = np.ascontiguousarray(np.flip(triangles[plane, :], 1))
-        mesh = create_open_3d_mesh(tris, points, color=color_)
+        # tris = np.ascontiguousarray(np.flip(triangles[plane, :], 1))
+        tris = np.ascontiguousarray(triangles[plane, :])
+        mesh = create_open_3d_mesh(tris, points, color=color_, counter_clock_wise=counter_clock_wise)
         meshes.append(mesh)
     return meshes
 

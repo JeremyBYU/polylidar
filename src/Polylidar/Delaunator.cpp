@@ -199,6 +199,7 @@ Delaunator::Delaunator(Matrix<double>&& in_vertices)
       m_hash_size(),
       m_edge_stack()
 {
+    counter_clock_wise = false;
 }
 
 Delaunator::Delaunator(const Matrix<double>& in_vertices)
@@ -215,6 +216,7 @@ Delaunator::Delaunator(const Matrix<double>& in_vertices)
       m_hash_size(),
       m_edge_stack()
 {
+    counter_clock_wise = false;
 }
 
 // Delaunator::Delaunator(pybind11::array_t<double> nparray)
