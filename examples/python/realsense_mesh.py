@@ -26,9 +26,10 @@ def filter_and_create_open3d_polygons(points, polygons):
 
 def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]), poisson=dict(depth=8), callback=None, stride=2):
     points = np.asarray(pcd.points)
+    np.save('./fixtures/temp/broken.npy', points)
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=100,
-                            zThresh=0.03, normThresh=0.99, normThreshMin=0.95, minHoleVertices=6)
+                            zThresh=0.03, normThresh=0.99, normThreshMin=0.90, minHoleVertices=6)
     t1 = time.perf_counter()
     delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
     t2 = time.perf_counter()
@@ -156,7 +157,7 @@ def main():
     axis_frame.translate([0, 0.8, -0.7])
     grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
     for idx in range(len(color_files)):
-        if idx < 3:
+        if idx < 4:
             continue
         pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
         pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
