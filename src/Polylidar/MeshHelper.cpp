@@ -1,4 +1,5 @@
 #include "Polylidar/Mesh/MeshHelper.hpp"
+#include <iostream>
 namespace Polylidar {
 
 namespace MeshHelper {
@@ -57,7 +58,6 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
     auto& num_triangles = triangles.rows;
     auto& triangle_normals = triangle_normals_mat.data;
     triangle_normals.resize(num_triangles * 3);
-
     for (size_t i = 0; i < num_triangles; ++i)
     {
         auto& pi0 = triangles(i, 0);
@@ -421,7 +421,6 @@ HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &poin
     std::vector<size_t> valid_tri;
     std::tie(triangles, valid_tri) = CreateUniformMesh(rows, cols, points_2D, stride);
     std::vector<size_t> halfedges = ExtractHalfEdgesFromUniformMesh(rows, cols, triangles, valid_tri, stride);
-
     auto triangulation = CreateTriMeshFromVectors(std::move(points_2D), std::move(triangles), std::move(halfedges));
     if (calc_normals)
     {

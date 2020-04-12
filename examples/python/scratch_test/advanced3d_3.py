@@ -76,6 +76,8 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
     logging.info("Processing mesh with %d triangles", num_normals)
     logging.info("Dominant Plane Normals")
     print(avg_peaks)
+    # avg_peaks = np.ascontiguousarray(avg_peaks[:2, :])
+    # print(avg_peaks)
     all_poly_lines = []
     pl = Polylidar3D(**polylidar_kwargs)
     avg_peaks_mat = MatrixDouble(avg_peaks)
