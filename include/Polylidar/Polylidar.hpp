@@ -29,6 +29,8 @@
 #include "Polylidar/Delaunator/Delaunator.hpp"
 #include "Polylidar/Core.hpp"
 
+#include "marl/scheduler.h"
+
 #if defined(_OPENMP)
 #include <omp.h>
 #define PL_OMP_CHUNK_SIZE_TRISET 64
@@ -70,11 +72,13 @@ class Polylidar3D
     double norm_thresh_min;
     int task_threads;
 
+    std::shared_ptr<marl::Scheduler> scheduler;
+
   private:
     Planes ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set, PlaneData& plane_data,
                          bool tri_set_finished = false);
-    std::tuple<Planes, Polygons> ExtractPlanesWithTasks(MeshHelper::HalfEdgeTriangulation& mesh, std::vector<uint8_t>& tri_set,
-                                  PlaneData& plane_data);
+    std::tuple<Planes, Polygons> ExtractPlanesWithTasks(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                        std::vector<uint8_t>& tri_set, PlaneData& plane_data);
     void CreateTriSet2(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh);
     void CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data);
     void CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,

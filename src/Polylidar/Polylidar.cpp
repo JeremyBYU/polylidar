@@ -23,9 +23,15 @@ Polylidar3D::Polylidar3D(const double _alpha, const double _lmax, const size_t _
       z_thresh(_z_thresh),
       norm_thresh(_norm_thresh),
       norm_thresh_min(_norm_thresh_min),
-      task_threads(_task_threads)
+      task_threads(_task_threads),
+      scheduler(nullptr)
 {
-
+    // TODO check if marl scheduler has already been constructed
+    // TODO do i need to somehow bind this to my shared ptr, its seems to be just a raw pointer. Should I be managing the memory?
+    // auto something = marl::Scheduler::get();
+    // Build the scheduler into marl
+    scheduler = std::make_shared<marl::Scheduler>();
+    scheduler->setWorkerThreadCount(task_threads);
 }
 
 std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
@@ -117,10 +123,11 @@ Polylidar3D::ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation
     PolygonsGroup polygons_group(number_of_groups);
 
     // use marl for dynamic task creation and exectution
-    marl::Scheduler scheduler;
-    scheduler.bind();
-    scheduler.setWorkerThreadCount(task_threads);
-    defer(scheduler.unbind()); // Automatically unbind before returning.
+    // marl::Scheduler scheduler;
+    // scheduler.bind();
+    // scheduler.setWorkerThreadCount(task_threads);
+    scheduler->bind();
+    defer(scheduler->unbind()); // Automatically unbind before returning.
 
     // We will extract each plane group using dynamic tasks
     marl::WaitGroup plane_data_wg(static_cast<int>(plane_data_list.size()));
