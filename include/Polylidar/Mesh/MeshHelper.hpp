@@ -47,6 +47,7 @@ class HalfEdgeTriangulation
     HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges);
     HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles, Matrix<size_t>&& in_halfedges, Matrix<double> &&in_triangle_normals);
+    void SetTriangleNormals(const Matrix<double> &in_triangle_normals);
     void ComputeTriangleNormals();
   private:
 };

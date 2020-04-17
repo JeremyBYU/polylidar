@@ -52,6 +52,11 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
 {
 }
 
+void HalfEdgeTriangulation::SetTriangleNormals(const Matrix<double> &in_triangle_normals)
+{
+    triangle_normals = in_triangle_normals;
+}
+
 void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matrix<size_t>& triangles,
                                       Matrix<double>& triangle_normals_mat, const bool flip_normals)
 {

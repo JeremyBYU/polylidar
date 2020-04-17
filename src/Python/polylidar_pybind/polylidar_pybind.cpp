@@ -112,7 +112,9 @@ PYBIND11_MODULE(polylidar, m)
         .def_readonly("triangles", &MeshHelper::HalfEdgeTriangulation::triangles)
         .def_readonly("halfedges", &MeshHelper::HalfEdgeTriangulation::halfedges)
         .def_readonly("triangle_normals", &MeshHelper::HalfEdgeTriangulation::triangle_normals)
-        .def_readonly("counter_clock_wise", &MeshHelper::HalfEdgeTriangulation::counter_clock_wise);
+        .def_readonly("counter_clock_wise", &MeshHelper::HalfEdgeTriangulation::counter_clock_wise)
+        .def("set_triangle_normals", &MeshHelper::HalfEdgeTriangulation::SetTriangleNormals, "Sets Triangle Normals",
+            "triangle_normals"_a);
 
     py::class_<Delaunator::Delaunator, MeshHelper::HalfEdgeTriangulation>(m, "Delaunator")
         .def(py::init<Matrix<double>>(), "in_vertices"_a)
@@ -146,6 +148,13 @@ PYBIND11_MODULE(polylidar, m)
              py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const Matrix<double>&>(
                  &Polylidar::Polylidar3D::ExtractPlanesAndPolygonsOptimized),
              "mesh"_a, "plane_normals"_a)
+        .def_readwrite("alpha", &Polylidar3D::alpha)
+        .def_readwrite("lmax", &Polylidar3D::lmax)
+        .def_readwrite("min_triangles", &Polylidar3D::min_triangles)
+        .def_readwrite("min_hole_vertices", &Polylidar3D::min_hole_vertices)
+        .def_readwrite("z_thresh", &Polylidar3D::z_thresh)
+        .def_readwrite("norm_thresh", &Polylidar3D::norm_thresh)
+        .def_readwrite("norm_thresh_min", &Polylidar3D::norm_thresh_min)
         .def("__repr__", [](const Polylidar::Polylidar3D& pl) { return "<Polylidar::Polylidar3D>"; });
 
     m.def("extract_point_cloud_from_float_depth", &MeshHelper::ExtractPointCloudFromFloatDepth,

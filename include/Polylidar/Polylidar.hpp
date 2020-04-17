@@ -62,7 +62,7 @@ class Polylidar3D
     std::tuple<PlanesGroup, PolygonsGroup> ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation& mesh,
                                                                              const Matrix<double>& plane_normals);
 
-  protected:
+  public:
     double alpha;
     double lmax;
     size_t min_triangles;
@@ -70,6 +70,7 @@ class Polylidar3D
     double z_thresh;
     double norm_thresh;
     double norm_thresh_min;
+  private:
     int task_threads;
 
     std::shared_ptr<marl::Scheduler> scheduler;
