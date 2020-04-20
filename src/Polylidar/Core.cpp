@@ -38,6 +38,7 @@ Polygon ExtractConcaveHull(VUI &plane, MeshHelper::HalfEdgeTriangulation& mesh, 
     auto& nextEdges = pointHash[xPoint.xr_pi];
     if (nextEdges.size() > 1)
     {
+        // TODO check counter clockwise, need to modify function argument
         startingHalfEdge =
             Core::GetHullEdge(UP_VECTOR, nextEdges, mesh, plane_data.rotation_matrix, plane_data.need_rotation, false);
     }
@@ -230,6 +231,7 @@ std::vector<size_t> ConcaveSection(PointHash& pointHash, EdgeSet& edgeHash, Mesh
             std::cerr << "ERROR! Found a broken edge when extracting a concave section (most likely during hole "
                          "extraction). Possible that delaunator mislabeled an edge as part of the convex hull"
                       << std::endl;
+            // throw "ERROR! Found a broken edge when extracting a concave section (most likely during hole extraction). Possible that delaunator mislabeled an edge as part of the convex hull";
             // return empty hull
             return std::vector<size_t>();
         }

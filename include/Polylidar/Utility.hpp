@@ -29,7 +29,6 @@
 
 namespace Polylidar {
 
-
 namespace Utility {
 
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
@@ -39,14 +38,12 @@ namespace Math
 
 {
 
-
-
-inline double Determinant(const std::array<double, 2> &v1, const std::array<double, 2> &v2)
+inline double Determinant(const std::array<double, 2>& v1, const std::array<double, 2>& v2)
 {
     return v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-inline double DotProduct2(const std::array<double, 2> &v1, const std::array<double, 2> &v2)
+inline double DotProduct2(const std::array<double, 2>& v1, const std::array<double, 2>& v2)
 {
     return v1[0] * v2[0] + v1[1] * v2[1];
 }
@@ -146,16 +143,41 @@ inline void UpdatePlaneDataWithRotationInformation(PlaneData& plane_data)
     // std::cout << "Normal to Extract: " << PL_PRINT_ARRAY(config.desiredVector) << "; Z Axis: " <<
     // PL_PRINT_ARRAY(DEFAULT_DESIRED_VECTOR) << std::endl;
     std::tie(axis, angle) = Math::AxisAngleFromVectors(plane_data.plane_normal, PL_DEFAULT_DESIRED_VECTOR);
-    if (std::abs(angle) > PL_EPS_RADIAN)
+    // std::cout << "Axis Angle" << axis[0] << "," << axis[1] << ", " << axis[2] << "; " << angle << std::endl;
+
+    // Check if axis angle is malformed
+    if (std::isnan(axis[0]))
     {
-        plane_data.need_rotation = true;
-        plane_data.rotation_matrix = Math::AxisAngleToRotationMatrix(axis, angle);
+        // Malformed Cross Product, Vectors must be parallel or anti parallel
+        if (std::abs(angle) > 1.0)
+        {
+            // Vectors are opposite to each other!
+            plane_data.need_rotation = true;
+            plane_data.rotation_matrix = {{-1, 0, 0, 0, -1, 0, 0, 0, -1}};
+        }
+        else
+        {
+            // Vectors are aligned
+            plane_data.need_rotation = false;
+        }
+    }
+    else
+    {
+        if (std::abs(angle) > PL_EPS_RADIAN)
+        {
+            plane_data.need_rotation = true;
+            plane_data.rotation_matrix = Math::AxisAngleToRotationMatrix(axis, angle);
+        }
     }
 }
 
 inline std::vector<PlaneData> CreateMultiplePlaneDataFromNormals(const Matrix<double>& normals)
 {
     std::vector<PlaneData> configs;
+    if (normals.rows > 253)
+    {
+        throw std::domain_error("A max of 254 unit normals are allowed. Please reduce the amount of normals.");
+    }
     for (size_t i = 0; i < normals.rows; i++)
     {
         PlaneData plane_data;
@@ -218,14 +240,15 @@ inline bool ValidateTriangle2D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh
 }
 
 // Determines if the triangles noise (dz from normal) is below a configurable zThrsh
-inline bool CheckZThresh(size_t t, MeshHelper::HalfEdgeTriangulation &mesh, std::array<double, 3> &plane_normal, double &z_thresh)
+inline bool CheckZThresh(size_t t, MeshHelper::HalfEdgeTriangulation& mesh, std::array<double, 3>& plane_normal,
+                         double& z_thresh)
 {
-    auto &triangles = mesh.triangles;
-    auto &points = mesh.vertices;
+    auto& triangles = mesh.triangles;
+    auto& points = mesh.vertices;
     // Get reference to point indices
-    auto &pi0 = triangles(t, 0);
-    auto &pi1 = triangles(t, 1);
-    auto &pi2 = triangles(t, 2);
+    auto& pi0 = triangles(t, 0);
+    auto& pi1 = triangles(t, 1);
+    auto& pi2 = triangles(t, 2);
 
     std::array<double, 3> vv1 = {points(pi0, 0), points(pi0, 1), points(pi0, 2)};
     std::array<double, 3> vv2 = {points(pi1, 0), points(pi1, 1), points(pi1, 2)};
@@ -248,14 +271,14 @@ inline bool CheckZThresh(size_t t, MeshHelper::HalfEdgeTriangulation &mesh, std:
     return z_thresh > 0.0 && zDiff < z_thresh;
 }
 
-inline bool ValidateTriangle3D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh, double &z_thresh, double &norm_thresh, double &norm_thresh_min, std::array<double, 3> &plane_normal)
+inline bool ValidateTriangle3D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh, double& z_thresh, double& norm_thresh,
+                               double& norm_thresh_min, std::array<double, 3>& plane_normal)
 {
-    auto &normals = mesh.triangle_normals;
+    auto& normals = mesh.triangle_normals;
     auto normal = &normals(t, 0);
 
     auto prod = std::abs(Utility::Math::DotProduct3(normal, plane_normal));
-    if (prod < norm_thresh_min)
-        return false;
+    if (prod < norm_thresh_min) return false;
 
     auto passZThresh = CheckZThresh(t, mesh, plane_normal, z_thresh);
     return prod > norm_thresh || passZThresh;
@@ -267,7 +290,7 @@ class Timer
     typedef std::chrono::microseconds microseconds;
 
   public:
-    explicit Timer(bool run = false):_start()
+    explicit Timer(bool run = false) : _start()
     {
         if (run) Reset();
     }
