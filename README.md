@@ -34,6 +34,16 @@
 
 Polylidar allows one to extract planar meshes from a point cloud **and** their polygon representations. The point cloud can be in 2, 3, or 4 dimensions (XY, XYZ, XYZC=Class). This module is written in C++ and can be used as a python module or standalone with a C++ project. Note the **lidar** in Poly**lidar** is a misnomer; it works with any point cloud, not just from LiDAR sensors. Click here for a basic demo in the browser: [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/jeremybyu/polylidar/master?filepath=examples%2Fpython%2FBasicDemo.ipynb)
 
+## NOTE!!!
+
+Polylidar is going through a major rewrite to more properly handle 3D data. I'm very exctied about the work and will soon publish the results. If you are interested work is going on in the branch `major_changes_refactor`. Some key changes are:
+
+* New Data inputs: Organized Point Cloud (i.e. rgbd images) and arbitary user input meshes.
+* Parallelsim - Using OpenMP and Dynamic Tasks (Fibers).
+* Plane Extraction from all data inputs. Polylidar can determine all the dominant planes in the scene and extract polygonal representations.
+
+This is still a WIP, but wanted to let people know that may be watching this work. Thanks!
+
 ## Install
 
 ### Python Projects
