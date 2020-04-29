@@ -49,9 +49,13 @@ set_target_properties(polylidar PROPERTIES VERSION ${PROJECT_VERSION})
 set_target_properties(polylidar PROPERTIES PUBLIC_HEADER ${POLYLIDAR_HEADER_FILES})
 
 # Add the application sources to the target
-add_executable(polylidar-simple ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple.cpp)
-target_link_libraries(polylidar-simple polylidar)
-target_include_directories(polylidar-simple PUBLIC ${POLYLIDAR_INCLUDE_DIR})
+add_executable(polylidar-simple-3d ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple-3d.cpp)
+target_link_libraries(polylidar-simple-3d polylidar)
+target_include_directories(polylidar-simple-3d PUBLIC ${POLYLIDAR_INCLUDE_DIR})
+
+add_executable(polylidar-simple-2d ${POLYLIDAR_EXAMPLES_CPP_DIR}/simple-2d.cpp)
+target_link_libraries(polylidar-simple-2d polylidar)
+target_include_directories(polylidar-simple-2d PUBLIC ${POLYLIDAR_INCLUDE_DIR})
 if (WITH_PROFILE)
     MESSAGE(STATUS "Building with Profiling Enabled")
     set (Gperftools_DIR "${CMAKE_CURRENT_LIST_DIR}/cmake/")

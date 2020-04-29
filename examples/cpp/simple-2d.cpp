@@ -13,7 +13,6 @@
 
 #include "polylidar/polylidar.hpp"
 
-
 // Print arrays
 template <typename TElem>
 std::ostream& operator<<(std::ostream& os, const std::vector<TElem>& vec) {
@@ -27,56 +26,30 @@ std::ostream& operator<<(std::ostream& os, const std::vector<TElem>& vec) {
     return os;
 }
 
-// Read in an input file of the point cloud
-bool file_input(std::vector<double> &points, std::string file_path)
-{
-  std::ifstream is(file_path, std::ios::in);
-  if (is.fail())
-  {
-    std::cerr << "unable to open file for input" << std::endl;
-    return false;
-  }
-
-  std::string line;
-  std::getline(is, line); // Skip header
-  // std::cout<<line<<std::endl;
-  while (std::getline(is, line))
-  {
-    std::istringstream iss(line);
-    char _;
-    double a, b, c;
-    if (!(iss >> a >> _ >> b >> _ >> c))
-    {
-      break;
-    } // error
-    points.push_back(a);
-    points.push_back(b);
-    points.push_back(c);
-  }
-
-  return true;
-}
-
 int main(int argc, char *argv[])
 {
 
   std::cout << "Simple C++ Example of Polylidar" << std::endl;
-  std::vector<double> points;
-  std::string file_path = "./tests/fixtures/100K_array_3d.csv";
+  std::vector<double> points = {
+    0.0, 0.0,
+    0.0, 1.0,
+    1.0, 1.0,
+    1.0, 0.0,
+    5.0, 0.1,
+  };
 
-  // N X 3 array as one contigious array
-  auto success = file_input(points, file_path);
-  if (!success)
-    return 0;
 
+  // 5 X 2 matrix as one contigious array
   // Convert to multidimensional array
-  std::vector<std::size_t> shape = { points.size() / 3, 3 };
+  std::vector<std::size_t> shape = { points.size() / 2, 2 };
   polylidar::Matrix<double> points_(points.data(), shape[0], shape[1]);
   // Set configuration parameters
   polylidar::Config config;
+  config.dim = 2;
   config.xyThresh = 0.0;
   config.alpha = 0.0;
-  config.lmax = 100.0;
+  config.lmax = 2.0;
+  config.minTriangles = 1;
 
   // Extract polygon
   std::vector<float> timings;
@@ -91,7 +64,7 @@ int main(int argc, char *argv[])
   }
 
   std::cout << std::endl;
-  std::cout << "Detailed timings in milleseconds:" << std::endl;
+  std::cout << "Detailed timings in milliseconds:" << std::endl;
   std::cout << std::fixed << std::setprecision(2) << "Delaunay Triangulation: " << timings[0] << "; Mesh Extraction: " << timings[1] << "; Polygon Extraction: " << timings[2] <<std::endl;
 
 
