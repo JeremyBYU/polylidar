@@ -77,6 +77,7 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
     logging.info("Dominant Plane Normals")
     print(avg_peaks)
     # avg_peaks = np.ascontiguousarray(avg_peaks[:2, :])
+    # import ipdb; ipdb.set_trace()
     # print(avg_peaks)
     all_poly_lines = []
     pl = Polylidar3D(**polylidar_kwargs)
@@ -124,9 +125,9 @@ def callback(alg_name, execution_time,mesh=None):
     if mesh:
         if isinstance(mesh, list):
             o3d.visualization.draw_geometries(
-                [*mesh, grid_ls, axis_frame])
+                [*mesh, axis_frame])
         else:
-            o3d.visualization.draw_geometries([mesh, grid_ls, axis_frame])
+            o3d.visualization.draw_geometries([mesh, axis_frame])
 
 def main():
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
@@ -137,7 +138,7 @@ def main():
             continue
             # o3d.io.write_triangle_mesh('test.ply', mesh)
         mesh.compute_triangle_normals()
-        # o3d.visualization.draw_geometries([mesh, grid_ls, axis_frame])
+        o3d.visualization.draw_geometries([mesh, axis_frame])
         run_test(mesh, callback=callback, stride=2)
 
 

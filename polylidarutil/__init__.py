@@ -79,13 +79,14 @@ def convert_to_shapely_polygons(polygons, points, return_first=False, sort=False
     else:
         return shapely_polygons
 
-def set_axes_radius(ax, origin, radius):
+def set_axes_radius(ax, origin, radius, ignore_z=False):
     ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
     ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
-    ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
+    if not ignore_z:
+        ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
 
 
-def set_axes_equal(ax):
+def set_axes_equal(ax, ignore_z=False):
     '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
     cubes as cubes, etc..  This is one possible solution to Matplotlib's
     ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
@@ -102,7 +103,7 @@ def set_axes_equal(ax):
 
     origin = np.mean(limits, axis=1)
     radius = 0.5 * np.max(np.abs(limits[:, 1] - limits[:, 0]))
-    set_axes_radius(ax, origin, radius)
+    set_axes_radius(ax, origin, radius, ignore_z=ignore_z)
 
 
 def generate_3d_plane(bounds_x=[0,10,0.5], bounds_y=[0, 10, 0.5], holes=[[[3,5], [3, 5]]], height=0, planar_noise=0.01, height_noise=0.1):
