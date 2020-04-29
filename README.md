@@ -75,7 +75,7 @@ You can build Polylidar and an example project with CMake.
 
 1. `mkdir build && cd build`
 2. `cmake .. && make -j && cd ..`
-3. `./build/polylidar-simple` - Simple test program.
+3. `./build/polylidar-simple-2d` - Simple test program.
 
 To integrate with a *different* CMake Project do the following:
 
