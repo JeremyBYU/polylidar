@@ -45,6 +45,12 @@ if (PL_WITH_OPENMP)
   target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
+# OPTON Build with OpenMP Support
+if (PL_USE_ROBUST_PREDICATES)
+  target_link_libraries(${PROJECT_NAME} PRIVATE PL_Predicates)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE PL_USE_ROBUST_PREDICATES)
+endif()
+
 # Build with FastGA Support
 # add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/GaussianAccumulator")
 # target_link_libraries(polylidar PRIVATE FastGA::GA)

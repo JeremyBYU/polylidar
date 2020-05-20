@@ -24,5 +24,13 @@ FetchContent_Declare(
   GIT_TAG        origin/master
 )
 
+
+# Build Robust Predicates if requested
+if (PL_USE_ROBUST_PREDICATES)
+    MESSAGE(STATUS "Building Robust Geometric Predicates")
+    add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/predicates")
+endif()
+
+
 # After the following call, the library will be installed
 FetchContent_MakeAvailable(extern_parallel_hashmap extern_pybind11 extern_eigen extern_marl)

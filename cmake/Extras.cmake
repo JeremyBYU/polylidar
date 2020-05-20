@@ -14,7 +14,7 @@ function(target_link_libraries_system_public target)
     target_include_directories(${target} SYSTEM PUBLIC ${lib_include_dirs})
     target_link_libraries(${target} PUBLIC ${lib})
   endforeach(lib)
-endfunction(target_link_libraries_system)
+endfunction(target_link_libraries_system_public)
 
 macro(add_subdirectory_if_not_exists LIBRARY SUB_DIR)
   if(NOT TARGET ${LIBRARY})
