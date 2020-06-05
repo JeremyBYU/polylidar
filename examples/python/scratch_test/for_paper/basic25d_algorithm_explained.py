@@ -28,17 +28,17 @@ def main():
     np.random.seed(1)
     # generate random plane with hole
     plane = generate_3d_plane(bounds_x=[0, 10, 0.5], bounds_y=[0, 10, 0.5], holes=[
-                            [[3, 5], [3, 5]]], height_noise=0.04, planar_noise=0.04)
+                            [[3, 6], [3, 6]]], height_noise=0.04, planar_noise=0.04)
 
-    large_wall = generate_3d_plane(bounds_x=[0, 4, 0.5], bounds_y=[0, 10, 0.5], holes=[], height_noise=0.04, planar_noise=0.1)
+    large_wall = generate_3d_plane(bounds_x=[0.5, 4, 1.0], bounds_y=[0, 9.5, 0.5], holes=[], height_noise=0.04, planar_noise=0.1)
     # Generate top of box (causing the hole that we see)
-    box_top = generate_3d_plane(bounds_x=[3, 5, 0.2], bounds_y=[3, 5, 0.2], holes=[
-    ], height_noise=0.03, height=2, planar_noise=0.03)
+    box_top = generate_3d_plane(bounds_x=[3, 6, 0.5], bounds_y=[3, 6, 0.5], holes=[
+    ], height_noise=0.02, height=2, planar_noise=0.03)
     # Generate side of box (causing the hole that we see)
-    box_side = generate_3d_plane(bounds_x=[0, 2, 0.2], bounds_y=[
-                                0, 2, 0.2], holes=[], height_noise=0.02, planar_noise=0.02)
+    box_side = generate_3d_plane(bounds_x=[.25, 2, 0.5], bounds_y=[
+                                0, 3, 0.5], holes=[], height_noise=0.02, planar_noise=0.02)
     rm = rotation_matrix([0,1,0], -math.pi/2.0)
-    box_side = apply_rotation(rm, box_side) + [5, 3, 0]
+    box_side = apply_rotation(rm, box_side) + [6, 3, 0]
 
     large_wall = apply_rotation(rm , large_wall) + [10, 0, -3.5]
     # box_side = r.apply(box_side) + [5, 3, 0]
@@ -46,7 +46,7 @@ def main():
     points = np.concatenate((plane, box_side, box_top, large_wall))
 
     points_mat = MatrixDouble(points)
-    polylidar_kwargs = dict(alpha=0.0, lmax=1.0, min_triangles=20, z_thresh=0.1, norm_thresh_min=0.95)
+    polylidar_kwargs = dict(alpha=0.0, lmax=1.0, min_triangles=10, z_thresh=0.15, norm_thresh_min=0.95)
     polylidar = Polylidar3D(**polylidar_kwargs)
 
     elev = 15.0
