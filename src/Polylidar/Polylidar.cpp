@@ -30,8 +30,9 @@ Polylidar3D::Polylidar3D(const double _alpha, const double _lmax, const size_t _
     // TODO do i need to somehow bind this to my shared ptr, its seems to be just a raw pointer. Should I be managing the memory?
     // auto something = marl::Scheduler::get();
     // Build the scheduler into marl
-    scheduler = std::make_shared<marl::Scheduler>();
-    scheduler->setWorkerThreadCount(task_threads);
+    marl::Scheduler::Config cfg;
+    cfg.setWorkerThreadCount(_task_threads);
+    scheduler = std::make_shared<marl::Scheduler>(cfg);
 }
 
 std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
