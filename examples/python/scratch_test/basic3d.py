@@ -30,7 +30,7 @@ def main():
     points = np.concatenate((plane, box_side, box_top))
 
     points_mat = MatrixDouble(points)
-    polylidar_kwargs = dict(alpha=0.0, lmax=1.0, min_triangles=20, z_thresh=0.1, norm_thresh_min=0.98)
+    polylidar_kwargs = dict(alpha=0.0, lmax=1.0, min_triangles=20, z_thresh=0.1, norm_thresh_min=0.94)
     polylidar = Polylidar3D(**polylidar_kwargs)
 
 

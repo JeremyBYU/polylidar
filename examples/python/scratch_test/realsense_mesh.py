@@ -29,7 +29,7 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     points = np.asarray(pcd.points)
     # Create 2.5D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, min_triangles=100,
-                            z_thresh=0.03, norm_thresh=0.99, norm_thresh_min=0.90, min_hole_vertices=6)
+                            z_thresh=0.04, norm_thresh=0.99, norm_thresh_min=0.90, min_hole_vertices=6)
     pl = Polylidar3D(**polylidar_kwargs)
     points_mat = MatrixDouble(points)
     t1 = time.perf_counter()

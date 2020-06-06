@@ -223,7 +223,7 @@ BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
 (benchmark::State& st)
 {
 
-    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.01, 0.95, 0.92);
+    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.92);
     std::vector<std::array<double, 3>> normals = {{0.0123, 0.0021, 0.9999},
                                                   {0.2241, -0.9744, 0.0171},
                                                   {-0.2207, 0.9752, -0.0144},
@@ -240,7 +240,7 @@ BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormalsOpti
 (benchmark::State& st)
 {
 
-    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.01, 0.95, 0.92);
+    Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.92);
     std::vector<std::array<double, 3>> normals = {{0.0123, 0.0021, 0.9999},
                                                   {0.2241, -0.9744, 0.0171},
                                                   {-0.2207, 0.9752, -0.0144},

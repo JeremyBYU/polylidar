@@ -72,28 +72,40 @@ Polygons ExtractConcaveHulls(Planes &planes, MeshHelper::HalfEdgeTriangulation& 
     return polygons;
 }
 
+inline void UpdateAverage(double *old_average, const double *new_point, int samples)
+{   
+    old_average[0] = old_average[0] + (new_point[0] - old_average[0]) / samples;
+    old_average[1] = old_average[1] + (new_point[1] - old_average[1]) / samples;
+    old_average[2] = old_average[2] + (new_point[2] - old_average[2]) / samples;
+}
+
 // need unit normal, and z_thresh
 void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t> &tri_set, size_t seed_idx, std::vector<size_t> &candidates, const PlaneData &plane_data, const double &z_thresh)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
-    // Average Point
+    // Average Point of Planar Segment
     std::array<double, 3> avg_point {{0.0, 0.0, 0.0}};
+    // Number of sample for running average 
+    int samples = 1;
+    // Temporary Variables
     std::array<double, 3> temp_point {{0.0, 0.0, 0.0}};
     double point_to_plane = 0.0;
-    // Add seed index to queue and erase from hash map
+
+    // Add seed index to queue and erase from tri set
     queue.push(seed_idx);
     tri_set[seed_idx] = MAX_UINT8;
 
+    // aliases
     auto &halfedges = mesh.halfedges;
     auto &vertices = mesh.vertices;
     auto &triangles = mesh.triangles;
 
+    // Average point of of planar segment
     avg_point[0] = (vertices(triangles(seed_idx, 0), 0) + vertices(triangles(seed_idx, 1), 0)  + vertices(triangles(seed_idx, 2), 0)) / 3.0;
     avg_point[1] = (vertices(triangles(seed_idx, 0), 1) + vertices(triangles(seed_idx, 1), 1)  + vertices(triangles(seed_idx, 2), 1)) / 3.0;
     avg_point[2] = (vertices(triangles(seed_idx, 0), 2) + vertices(triangles(seed_idx, 1), 2)  + vertices(triangles(seed_idx, 2), 2)) / 3.0;
 
-    // std::vector<size_t> candidates;
     while (!queue.empty())
     {
         auto tri = queue.front();
@@ -111,13 +123,17 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
                 size_t tn = opposite / 3;
                 if (tri_set[tn] == plane_data.normal_id)
                 {
-                    // TODO Point to plane
-                    Utility::Math::Subtract(&avg_point[0], &vertices(triangles(seed_idx, 0), 0), temp_point);
-                    point_to_plane =  Utility::Math::DotProduct3(plane_data.plane_normal, temp_point);
+                    // Ensure point to plane distance meets minimum requirements
+                    Utility::Math::Subtract(&avg_point[0], &vertices(triangles(tn, 0), 0), temp_point);
+                    point_to_plane = std::abs(Utility::Math::DotProduct3(plane_data.plane_normal, temp_point));
                     if (point_to_plane < z_thresh)
                     {
+                        // Push triangle onto planar segment
                         queue.push(tn);
                         tri_set[tn] = MAX_UINT8;
+                        // update rolling average
+                        samples++;
+                        UpdateAverage(&avg_point[0], &vertices(triangles(tn, 0), 0), samples);
                     }
                 }
             }
