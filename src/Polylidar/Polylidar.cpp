@@ -218,7 +218,7 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesWithTasks(MeshHelper::Hal
 
             VUI plane_set;
             // Plane extraction occurs in serial, but polygon extraction is in parallel through tasks
-            Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data.normal_id);
+            Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data, z_thresh);
             if (Core::PassPlaneConstraints(plane_set, min_triangles))
             {
                 planes_deque.emplace_back(std::move(plane_set));
@@ -272,7 +272,7 @@ Planes Polylidar3D::ExtractPlanes(MeshHelper::HalfEdgeTriangulation& mesh, std::
 
             planes.emplace_back();                       // construct empty vector inside planes
             auto& plane_set = planes[planes.size() - 1]; // retrieve this newly created vector
-            Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data.normal_id);
+            Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data, z_thresh);
             if (!Core::PassPlaneConstraints(plane_set, min_triangles))
             {
                 planes.pop_back();

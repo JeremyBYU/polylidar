@@ -72,15 +72,26 @@ Polygons ExtractConcaveHulls(Planes &planes, MeshHelper::HalfEdgeTriangulation& 
     return polygons;
 }
 
-void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t> &tri_set, size_t seed_idx, std::vector<size_t> &candidates, uint8_t &normal_id)
+// need unit normal, and z_thresh
+void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t> &tri_set, size_t seed_idx, std::vector<size_t> &candidates, const PlaneData &plane_data, const double &z_thresh)
 {
     // Construct queue for triangle neighbor expansion
     std::queue<size_t> queue;
+    // Average Point
+    std::array<double, 3> avg_point {{0.0, 0.0, 0.0}};
+    std::array<double, 3> temp_point {{0.0, 0.0, 0.0}};
+    double point_to_plane = 0.0;
     // Add seed index to queue and erase from hash map
     queue.push(seed_idx);
     tri_set[seed_idx] = MAX_UINT8;
 
     auto &halfedges = mesh.halfedges;
+    auto &vertices = mesh.vertices;
+    auto &triangles = mesh.triangles;
+
+    avg_point[0] = (vertices(triangles(seed_idx, 0), 0) + vertices(triangles(seed_idx, 1), 0)  + vertices(triangles(seed_idx, 2), 0)) / 3.0;
+    avg_point[1] = (vertices(triangles(seed_idx, 0), 1) + vertices(triangles(seed_idx, 1), 1)  + vertices(triangles(seed_idx, 2), 1)) / 3.0;
+    avg_point[2] = (vertices(triangles(seed_idx, 0), 2) + vertices(triangles(seed_idx, 1), 2)  + vertices(triangles(seed_idx, 2), 2)) / 3.0;
 
     // std::vector<size_t> candidates;
     while (!queue.empty())
@@ -98,10 +109,16 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
             {
                 // convert opposite edge to a triangle
                 size_t tn = opposite / 3;
-                if (tri_set[tn] == normal_id)
+                if (tri_set[tn] == plane_data.normal_id)
                 {
-                    queue.push(tn);
-                    tri_set[tn] = MAX_UINT8;
+                    // TODO Point to plane
+                    Utility::Math::Subtract(&avg_point[0], &vertices(triangles(seed_idx, 0), 0), temp_point);
+                    point_to_plane =  Utility::Math::DotProduct3(plane_data.plane_normal, temp_point);
+                    if (point_to_plane < z_thresh)
+                    {
+                        queue.push(tn);
+                        tri_set[tn] = MAX_UINT8;
+                    }
                 }
             }
         }

@@ -56,6 +56,20 @@ inline void CrossProduct3(const std::array<double, 3>& u, const std::array<doubl
     normal[2] = u[0] * v[1] - u[1] * v[0];
 }
 
+inline void Subtract(const std::array<double, 3> &u, const std::array<double, 3> &v,  std::array<double, 3> &out)
+{
+    out[0] = u[0] - v[0];
+    out[1] = u[1] - v[1];
+    out[2] = u[2] - v[2];
+}
+
+inline void Subtract(const double *u, const double *v,  std::array<double, 3> &out)
+{
+    out[0] = u[0] - v[0];
+    out[1] = u[1] - v[1];
+    out[2] = u[2] - v[2];
+}
+
 inline void Normalize3(double* normal)
 {
     auto norm = std::sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
