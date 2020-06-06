@@ -21,7 +21,7 @@ FetchContent_Declare(
 FetchContent_Declare(
   extern_marl
   GIT_REPOSITORY https://github.com/google/marl.git
-  GIT_TAG        origin/master
+  GIT_TAG        32af8bb50807f719818168eb165761e60e0090d5
 )
 
 
