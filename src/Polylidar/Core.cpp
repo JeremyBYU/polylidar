@@ -92,7 +92,7 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
     std::array<double, 3> temp_point {{0.0, 0.0, 0.0}};
     double point_to_plane = 0.0;
 
-    // Add seed index to queue and erase from tri set
+    // Add seed index to queue and "erase" from tri set
     queue.push(seed_idx);
     tri_set[seed_idx] = MAX_UINT8;
 
@@ -101,44 +101,81 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
     auto &vertices = mesh.vertices;
     auto &triangles = mesh.triangles;
 
-    // Average point of of planar segment
+    // Average point of of planar segment (from seed idx three vetices)
     avg_point[0] = (vertices(triangles(seed_idx, 0), 0) + vertices(triangles(seed_idx, 1), 0)  + vertices(triangles(seed_idx, 2), 0)) / 3.0;
     avg_point[1] = (vertices(triangles(seed_idx, 0), 1) + vertices(triangles(seed_idx, 1), 1)  + vertices(triangles(seed_idx, 2), 1)) / 3.0;
     avg_point[2] = (vertices(triangles(seed_idx, 0), 2) + vertices(triangles(seed_idx, 1), 2)  + vertices(triangles(seed_idx, 2), 2)) / 3.0;
 
-    while (!queue.empty())
+    // A user may set z_thresh to 0, indicating they are not interested in point to plane distance
+    // Put this conditional outside of the while loop
+    // If put inside the while loop a slowdown occurs (compiler did not optimize the constant result unfortunately)
+    if (z_thresh > 0.0)
     {
-        auto tri = queue.front();
-        queue.pop();
-        candidates.push_back(tri);
-        // Get all neighbors that are inside our triangle hash map
-        // Loop through every edge of this triangle and get adjacent triangle of this edge
-        for (size_t i = 0; i < 3; ++i)
+        // Calculate point to plane distance constraints during region growing
+        while (!queue.empty())
         {
-            auto e = tri * 3 + i;
-            auto opposite = halfedges(e);
-            if (opposite != Utility::INVALID_INDEX)
+            auto tri = queue.front();
+            queue.pop();
+            candidates.push_back(tri);
+            // Get all neighbors that are inside our triangle hash map
+            // Loop through every edge of this triangle and get adjacent triangle of this edge
+            for (size_t i = 0; i < 3; ++i)
             {
-                // convert opposite edge to a triangle
-                size_t tn = opposite / 3;
-                if (tri_set[tn] == plane_data.normal_id)
+                auto e = tri * 3 + i;
+                auto opposite = halfedges(e);
+                if (opposite != Utility::INVALID_INDEX)
                 {
-                    // Ensure point to plane distance meets minimum requirements
-                    Utility::Math::Subtract(&avg_point[0], &vertices(triangles(tn, 0), 0), temp_point);
-                    point_to_plane = std::abs(Utility::Math::DotProduct3(plane_data.plane_normal, temp_point));
-                    if (point_to_plane < z_thresh)
+                    // convert opposite edge to a triangle
+                    size_t tn = opposite / 3;
+                    if (tri_set[tn] == plane_data.normal_id)
                     {
-                        // Push triangle onto planar segment
-                        queue.push(tn);
-                        tri_set[tn] = MAX_UINT8;
-                        // update rolling average
-                        samples++;
-                        UpdateAverage(&avg_point[0], &vertices(triangles(tn, 0), 0), samples);
+                        // Ensure point to plane distance meets minimum requirements
+                        Utility::Math::Subtract(&avg_point[0], &vertices(triangles(tn, 0), 0), temp_point);
+                        point_to_plane = std::abs(Utility::Math::DotProduct3(plane_data.plane_normal, temp_point));
+                        if (point_to_plane < z_thresh)
+                        {
+                            // Push triangle onto planar segment
+                            queue.push(tn);
+                            tri_set[tn] = MAX_UINT8;
+                            // update rolling average
+                            // TODO maybe just stick to the seed point?
+                            samples++;
+                            UpdateAverage(&avg_point[0], &vertices(triangles(tn, 0), 0), samples);
+                        }
                     }
                 }
             }
         }
     }
+    else
+    {
+        // Do NOT calculate point to plane distance constraints during region growing
+        while (!queue.empty())
+        {
+            auto tri = queue.front();
+            queue.pop();
+            candidates.push_back(tri);
+            // Get all neighbors that are inside our triangle hash map
+            // Loop through every edge of this triangle and get adjacent triangle of this edge
+            for (size_t i = 0; i < 3; ++i)
+            {
+                auto e = tri * 3 + i;
+                auto opposite = halfedges(e);
+                if (opposite != Utility::INVALID_INDEX)
+                {
+                    // convert opposite edge to a triangle
+                    size_t tn = opposite / 3;
+                    if (tri_set[tn] == plane_data.normal_id)
+                    {
+                        // Push triangle onto planar segment
+                        queue.push(tn);
+                        tri_set[tn] = MAX_UINT8;
+                    }
+                }
+            }
+        }
+    }
+    
 }
 
 inline void TrackExtremePoint(size_t pi, Matrix<double> &points, ExtremePoint &exPoint, size_t he, std::array<double, 9> &rm, bool &need_rotation)

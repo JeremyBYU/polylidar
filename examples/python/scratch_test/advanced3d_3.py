@@ -103,7 +103,7 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
 def run_test(mesh, callback=None, stride=2):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, min_triangles=1000,
-                            z_thresh=0.03, norm_thresh=0.95, norm_thresh_min=0.92, min_hole_vertices=6)
+                            z_thresh=0.05, norm_thresh=0.95, norm_thresh_min=0.92, min_hole_vertices=6)
     # Create Polylidar TriMesh
     tri_mesh = open_3d_mesh_to_trimesh(mesh)
     vertices = np.asarray(tri_mesh.vertices)
