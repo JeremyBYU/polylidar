@@ -130,7 +130,10 @@ void ExtractMeshSet(MeshHelper::HalfEdgeTriangulation &mesh, std::vector<uint8_t
                     if (tri_set[tn] == plane_data.normal_id)
                     {
                         // Ensure point to plane distance meets minimum requirements
-                        Utility::Math::Subtract(&avg_point[0], &vertices(triangles(tn, 0), 0), temp_point);
+                        // Choose the point on the triangle that is NOT shared with the edge of its connecting triangle
+                        auto he_index = opposite - (tn * static_cast<size_t>(3)); // will be 0,1, or 2
+                        he_index = he_index == 0 ? 2: he_index - 1;
+                        Utility::Math::Subtract(&avg_point[0], &vertices(triangles(tn, he_index), 0), temp_point);
                         point_to_plane = std::abs(Utility::Math::DotProduct3(plane_data.plane_normal, temp_point));
                         if (point_to_plane < z_thresh)
                         {
