@@ -152,6 +152,7 @@ inline void normalize3(double* normal)
     normal[2] /= norm;
 }
 
+
 void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matrix<size_t>& triangles,
                                       Matrix<double>& triangle_normals_mat, const bool flip_normals=false);
 void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<size_t>& triangles,
@@ -159,6 +160,9 @@ void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<si
 
 HalfEdgeTriangulation CreateTriMeshFromVectors(std::vector<double>&& vertices, std::vector<size_t>&& triangles,
                                  std::vector<size_t>&& halfedges);
+
+void BilateralFilterNormals(HalfEdgeTriangulation& mesh, int iterations, double sigma_length,
+                                      double sigma_angle);
 // TriMesh CreateTriMeshCopy(const double* vertices_ptr, size_t num_vertices, const size_t* triangles_ptr,
 //                           size_t num_triangles);
 // TriMesh CreateTriMeshCopy(const double* vertices_ptr, size_t num_vertices, const int* triangles_ptr,

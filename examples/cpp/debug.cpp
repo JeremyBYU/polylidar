@@ -39,6 +39,7 @@ int main(int argc, char const *argv[])
 
     TriMesh sparse_mesh = MeshHelper::CreateTriMeshCopy(vertices, triangles, true);
 
+    // MeshHelper::BilateralFilterNormals(sparse_mesh, 1, 0.1, 0.1);
     // alpha, lmax, min_tri, min_hole_vert, z_thresh, norm__thresh, norm_thresh_min, _task_threads
     Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.90);
     auto planes_and_polygons = pl3d.ExtractPlanesAndPolygonsOptimized(sparse_mesh, {{0.0, 0.0, 1.0}});

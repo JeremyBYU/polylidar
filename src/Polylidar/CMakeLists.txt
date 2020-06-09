@@ -3,7 +3,7 @@
 set(POLYLIDAR_SRC "${CMAKE_CURRENT_SOURCE_DIR}")
 set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(POLYLIDAR_INCLUDE_DIR "${INCLUDE_DIR}/Polylidar")
-set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/Polylidar.cpp ${POLYLIDAR_SRC}/MeshHelper.cpp ${POLYLIDAR_SRC}/Delaunator.cpp ${POLYLIDAR_SRC}/Core.cpp)
+set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/Polylidar.cpp ${POLYLIDAR_SRC}/MeshHelper.cpp ${POLYLIDAR_SRC}/MeshFilter.cpp ${POLYLIDAR_SRC}/Delaunator.cpp ${POLYLIDAR_SRC}/Core.cpp)
 set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/Polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/Types.hpp 
                             ${POLYLIDAR_INCLUDE_DIR}/Utility.hpp ${POLYLIDAR_INCLUDE_DIR}/Mesh/MeshHelper.hpp
                             ${POLYLIDAR_INCLUDE_DIR}/Delaunator/Delaunator.hpp ${POLYLIDAR_INCLUDE_DIR}/Core.hpp)
@@ -26,27 +26,24 @@ get_target_property(eigen_include_dirs eigen INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${eigen_include_dirs})
 # -pedantic-errors marl has issues with this
 target_link_libraries_system_public(${PROJECT_NAME} marl)
-# target_link_libraries(${PROJECT_NAME} PRIVATE marl)
 
-# OPTION Build with Robust Predicates
-if (PL_USE_ROBUST_PREDICATES)
-    MESSAGE(STATUS "Building with Robust Geometric Predicates")
-    # add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/polylidar/predicates")
-    # include_directories("${CMAKE_CURRENT_SOURCE_DIR}/polylidar/predicates")
-    # target_link_libraries(polylidar predicates)
-    # add_definitions(-DPL_USE_ROBUST_PREDICATES)
-    # set_property(TARGET polylidar PROPERTY INTERPROCEDURAL_OPTIMIZATION TRUE)
-    # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -flto")
-endif()
+# Fast Exponential
+set(FASTEXP_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty")
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${FASTEXP_INCLUDE_DIR})
 
-# OPTON Build with OpenMP Support
+# Fast PHMAP
+get_target_property(phmap_include_dirs phmap INTERFACE_INCLUDE_DIRECTORIES)
+target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${phmap_include_dirs})
+
+# OPTION Build with OpenMP Support
 if (PL_WITH_OPENMP)
   find_package(OpenMP)
   target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
 
-# OPTON Build with OpenMP Support
+# OPTION Build with Robust Predicates
 if (PL_USE_ROBUST_PREDICATES)
+  MESSAGE(STATUS "Building with Robust Geometric Predicates")
   target_link_libraries(${PROJECT_NAME} PRIVATE PL_Predicates)
   target_compile_definitions(${PROJECT_NAME} PRIVATE PL_USE_ROBUST_PREDICATES)
 endif()
@@ -55,9 +52,6 @@ endif()
 # add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/GaussianAccumulator")
 # target_link_libraries(polylidar PRIVATE FastGA::GA)
 
-# Add any Dependencies
-get_target_property(phmap_include_dirs phmap INTERFACE_INCLUDE_DIRECTORIES)
-target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${phmap_include_dirs})
 
 # Set Properties
 set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${POLYLIDAR_HEADER_FILES}")

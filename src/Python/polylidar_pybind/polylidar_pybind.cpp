@@ -162,6 +162,10 @@ PYBIND11_MODULE(polylidar, m)
           "Extracts point cloud from a float depth image", "image"_a, "intrinsics"_a, "extrinsics"_a,
           "stride"_a = PL_DEFAULT_STRIDE);
 
+    m.def("bilateral_filter_normals", &MeshHelper::BilateralFilterNormals,
+          "Applies bilateral filter to triangle normals", "mesh"_a, "iterations"_a, "sigma_length"_a,
+          "sigma_angle"_a);
+
     m.def("extract_tri_mesh_from_float_depth", &MeshHelper::ExtractTriMeshFromFloatDepth,
           "Extracts a uniform triangular mesh from a float depth image", "image"_a, "intrinsics"_a, "extrinsics"_a,
           "stride"_a = PL_DEFAULT_STRIDE, "calc_normals"_a = PL_DEFAULT_CALC_NORMALS);
