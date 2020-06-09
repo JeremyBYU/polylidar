@@ -31,7 +31,8 @@ inline void IntegrateTriangle(Eigen::Block<Eigen::Ref<Eigen::Map<RowMatrixX3d>>,
                               Eigen::Block<Eigen::Ref<Eigen::Map<RowMatrixX3d>>, 1, 3, true>& centroid,
                               Eigen::Block<Eigen::Ref<Eigen::Map<RowMatrixX3d>>, 1, 3, true>& nbr_normal,
                               Eigen::Block<Eigen::Ref<Eigen::Map<RowMatrixX3d>>, 1, 3, true>& nbr_centroid,
-                              double& total_weight, Eigen::Vector3d& sum_normal, double& sas, double& sls)
+                              double& total_weight, Eigen::Vector3d& sum_normal, double& sas, double& sls,
+                              double min_weight = 0.0025)
 {
     auto normal_dist = (nbr_normal - normal).norm();
     auto centroid_dist = (nbr_centroid - centroid).norm();
@@ -39,13 +40,16 @@ inline void IntegrateTriangle(Eigen::Block<Eigen::Ref<Eigen::Map<RowMatrixX3d>>,
     if (std::isnan(centroid_dist)) return;
 
     auto weight = GaussianWeight(normal_dist, sas) * GaussianWeight(centroid_dist, sls);
+
+    if (weight < min_weight) return;
+
     total_weight += weight;
     sum_normal += weight * nbr_normal;
 }
 
-inline void SmoothNormal(Eigen::Ref<Eigen::Map<RowMatrixX3d>> normals_in, Eigen::Ref<Eigen::Map<RowMatrixX3d>> centroids,
-                  Matrix<size_t> &halfedges, Eigen::Ref<Eigen::Map<RowMatrixX3d>> normals_out, double sls, double sas,
-                  int t)
+inline void SmoothNormal(Eigen::Ref<Eigen::Map<RowMatrixX3d>> normals_in,
+                         Eigen::Ref<Eigen::Map<RowMatrixX3d>> centroids, Matrix<size_t>& halfedges,
+                         Eigen::Ref<Eigen::Map<RowMatrixX3d>> normals_out, double sls, double sas, int t)
 {
     double total_weight = 0.0;
     Eigen::Vector3d sum_normal(0, 0, 0);
@@ -82,7 +86,7 @@ inline void SmoothNormal(Eigen::Ref<Eigen::Map<RowMatrixX3d>> normals_in, Eigen:
     }
 }
 
-void BilateralNormalLoop(Matrix<double>& normals_in, Matrix<double>& centroids, Matrix<size_t> &halfedges,
+void BilateralNormalLoop(Matrix<double>& normals_in, Matrix<double>& centroids, Matrix<size_t>& halfedges,
                          Matrix<double>& normals_out, double sls, double sas)
 {
     const int rows = static_cast<int>(normals_in.rows);
@@ -104,7 +108,6 @@ void BilateralNormalLoop(Matrix<double>& normals_in, Matrix<double>& centroids, 
 }
 
 } // namespace BilateralCore
-
 
 void ComputeCentroids(HalfEdgeTriangulation& mesh, Matrix<double>& centroids)
 {
@@ -133,8 +136,7 @@ void ComputeCentroids(HalfEdgeTriangulation& mesh, Matrix<double>& centroids)
     }
 }
 
-void BilateralFilterNormals(HalfEdgeTriangulation& mesh, int iterations, double sigma_length,
-                                      double sigma_angle)
+void BilateralFilterNormals(HalfEdgeTriangulation& mesh, int iterations, double sigma_length, double sigma_angle)
 {
     auto& normals = mesh.triangle_normals;
     auto& halfedges = mesh.halfedges;
@@ -155,12 +157,14 @@ void BilateralFilterNormals(HalfEdgeTriangulation& mesh, int iterations, double 
     {
         if (i % 2 == 0)
         {
-            BilateralCore::BilateralNormalLoop(normals, centroids, halfedges, new_normals, sigma_length_squared, sigma_angle_squared);
+            BilateralCore::BilateralNormalLoop(normals, centroids, halfedges, new_normals, sigma_length_squared,
+                                               sigma_angle_squared);
             need_copy = false;
         }
         else
         {
-            BilateralCore::BilateralNormalLoop(new_normals, centroids, halfedges, normals, sigma_length_squared, sigma_angle_squared);
+            BilateralCore::BilateralNormalLoop(new_normals, centroids, halfedges, normals, sigma_length_squared,
+                                               sigma_angle_squared);
             need_copy = true;
         }
     }
@@ -170,7 +174,6 @@ void BilateralFilterNormals(HalfEdgeTriangulation& mesh, int iterations, double 
         normals.data.swap(new_normals.data);
         normals.ptr = normals.data.data();
     }
-
 }
 
 } // namespace MeshHelper

@@ -59,7 +59,7 @@ def main():
     axis_frame.translate([0, 0.8, -1.0])
     grid_ls = construct_grid(size=2, n=20, plane_offset=-1.0, translate=[0, 0.0, 0.0])
     for i, mesh in enumerate(get_mesh_data_iterator()):
-        if i < 1:
+        if i < 0:
             continue
             # o3d.io.write_triangle_mesh('test.ply', mesh)
         mesh.compute_vertex_normals()
@@ -69,7 +69,7 @@ def main():
 
         tri_mesh = open_3d_mesh_to_trimesh(mesh)
         t1 = time.perf_counter()
-        bilateral_filter_normals(tri_mesh, 3, 0.1, 0.1)
+        bilateral_filter_normals(tri_mesh, 20, 0.1, 0.1)
         t2 = time.perf_counter()
         print(t2-t1)
         normals_smooth = np.asarray(tri_mesh.triangle_normals)
