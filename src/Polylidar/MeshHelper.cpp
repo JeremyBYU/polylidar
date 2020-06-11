@@ -93,7 +93,7 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
     }
 
     // Ensure that the matrix ptr, row, col is updated
-    // NOTE - This kind of sucks because if you forget to do this there will be serious issues
+    // TODO - This kind of sucks because if you forget to do this there will be serious issues
     triangle_normals_mat.rows = num_triangles;
     triangle_normals_mat.cols = 3UL;
     triangle_normals_mat.ptr = triangle_normals.data();

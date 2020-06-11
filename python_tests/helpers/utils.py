@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 from shapely.geometry import Polygon
-# from polylidar import extractPlanesAndPolygons, extractPolygons
+from polylidar import Polylidar3D, MatrixDouble, HalfEdgeTriangulation
 
 DIR_NAME =path.dirname(path.dirname(__file__))
 FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
@@ -24,9 +24,9 @@ def verify_points(data, n_cols=2):
     assert isinstance(data, np.ndarray)
     assert data.shape[1] == n_cols
 
-def basic_polylidar_verification(points, delaunay, planes, polygons):
+def basic_polylidar_verification(points, mesh:HalfEdgeTriangulation, planes, polygons):
     # make sure delaunay has the correct number of points
-    assert points.shape[0] == np.array(delaunay.coords).shape[0]
+    assert points.shape[0] == np.array(mesh.vertices).shape[0]
     # make sure that some planes were extracted
     assert len(planes) > 0
     # make sure that some polygons were extracted
@@ -48,16 +48,13 @@ def verify_valid_polygon(poly, points):
 #         np.save("scratch/error_{}.npy".format(points.shape[0]), points)
     assert shapelyPoly.is_valid
 
-# def verify_all(points, polylidar_kwargs):
-#     delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
-#     # Basic test to ensure no obvious errors occurred
-#     basic_polylidar_verification(points, delaunay, planes, polygons)
-#     # Ensure that the polygons returned are valid
-#     verify_all_polygons_are_valid(polygons, points)
-#     # Ensure that all polygons are as expected
-#     # Test just polygon extraction
-#     polygons = extractPolygons(points, **polylidar_kwargs)
-#     # Ensure that the polygons returned are valid
-#     verify_all_polygons_are_valid(polygons, points)
+def verify_all(points, polylidar_kwargs):
+    pl = Polylidar3D(**polylidar_kwargs)
+    points_mat = MatrixDouble(points)
+    mesh, planes, polygons = pl.extract_planes_and_polygons(points_mat)
+    # Basic test to ensure no obvious errors occurred
+    basic_polylidar_verification(points, mesh, planes, polygons)
+    # Ensure that the polygons returned are valid
+    verify_all_polygons_are_valid(polygons, points)
 
 

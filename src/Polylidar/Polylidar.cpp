@@ -49,6 +49,15 @@ Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double>& points, const std::a
         mesh.ComputeTriangleNormals();
     }
 
+    // Parameter check for 2D
+    if (mesh.vertices.cols == 2 && z_thresh > 0)
+    {
+        z_thresh = 0.0;
+        // TODO Ah yes, the code smell of bad design choices. Really should separate 2D from 3D.
+        std::cerr << "Warning! Sent a 2D point cloud put passed in z_thresh>0. Z_thresh is only for 3D pont clouds. I set it to 0.0.";
+    }
+    
+
     // Create Plane Data Structure, informs Polylidar which normal to extract on
     PlaneData plane_data{plane_normal};
     Utility::UpdatePlaneDataWithRotationInformation(plane_data);
@@ -102,6 +111,20 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygonsOptimized(Mesh
 
 
     return std::make_tuple(std::move(planes), std::move(polygons));
+}
+
+
+std::vector<uint8_t>
+Polylidar3D::ExtractTriSet(MeshHelper::HalfEdgeTriangulation& mesh,
+                                               const Matrix<double>& plane_normals)
+{
+    auto plane_data_list = Utility::CreateMultiplePlaneDataFromNormals(plane_normals);
+
+    size_t max_triangles = mesh.triangles.rows;
+    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
+    CreateTriSet3OptimizedForMultiplePlanes(tri_set, mesh, plane_data_list);
+    return tri_set;
+
 }
 
 std::tuple<PlanesGroup, PolygonsGroup>

@@ -17,12 +17,13 @@ MESHES_DIR = path.join(FIXTURES_DIR, 'meshes')
 
 DENSE_MESH = path.join(MESHES_DIR, 'dense_first_floor_map_smoothed.ply')
 SPARSE_MESH = path.join(MESHES_DIR, 'sparse_basement.ply')
+BASEMENT_CHAIR = path.join(MESHES_DIR, 'basement_chair_5cm.ply')
 
-ALL_MESHES = [DENSE_MESH, SPARSE_MESH]
+ALL_MESHES = [DENSE_MESH, SPARSE_MESH, BASEMENT_CHAIR]
 # ALL_MESHES_ROTATIONS = [R.from_rotvec(-np.pi / 2 * np.array([1, 0, 0])),
 #                         R.from_rotvec(-np.pi / 2 * np.array([1, 0, 0]))]
 
-ALL_MESHES_ROTATIONS = [None, None]
+ALL_MESHES_ROTATIONS = [None, None, None]
 
 
 def get_mesh_data_iterator():

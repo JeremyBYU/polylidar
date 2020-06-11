@@ -80,7 +80,7 @@ inline std::array<double, 2> GetVector(size_t edge, MeshHelper::HalfEdgeTriangul
 
 inline size_t GetHullEdge(const std::array<double, 2>& v1, const std::vector<size_t>& outgoingEdges,
                           MeshHelper::HalfEdgeTriangulation& mesh, std::array<double, 9>& rm, bool& need_rotation,
-                          bool isHole = false)
+                          const bool is_ccw = false)
 {
     std::vector<std::array<double, 2>> otherVectors;
     std::transform(outgoingEdges.begin(), outgoingEdges.end(), std::back_inserter(otherVectors),
@@ -92,7 +92,7 @@ inline size_t GetHullEdge(const std::array<double, 2>& v1, const std::vector<siz
     std::transform(otherVectors.begin(), otherVectors.end(), std::back_inserter(angleDist),
                    [&v1](std::array<double, 2>& outVector) -> double { return Utility::Math::Get360Angle(v1, outVector); });
 
-    if (isHole)
+    if (is_ccw)
     {
         auto min_pos = std::distance(angleDist.begin(), std::min_element(angleDist.begin(), angleDist.end()));
         return outgoingEdges[min_pos];
@@ -105,7 +105,7 @@ inline size_t GetHullEdge(const std::array<double, 2>& v1, const std::vector<siz
 }
 
 std::vector<size_t> ConcaveSection(PointHash& pointHash, EdgeSet& edgeHash, MeshHelper::HalfEdgeTriangulation& mesh,
-                                   size_t startEdge, size_t stopPoint, PlaneData& plane_data, bool isHole);
+                                   size_t startEdge, size_t stopPoint, PlaneData& plane_data);
 
 std::vector<std::vector<size_t>> ExtractInteriorHoles(PointHash& pointHash, EdgeSet& edgeHash,
                                                       MeshHelper::HalfEdgeTriangulation& mesh, PlaneData& plane_data);

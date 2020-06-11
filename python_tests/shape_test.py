@@ -4,7 +4,7 @@ import numpy as np
 
 
 from python_tests.helpers.utils import verify_points, basic_polylidar_verification, verify_all_polygons_are_valid, verify_all
-from polylidar import extractPlanesAndPolygons, extractPolygons
+
 
 np.random.seed(1)
 

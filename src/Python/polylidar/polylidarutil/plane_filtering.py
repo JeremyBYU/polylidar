@@ -9,6 +9,35 @@ import logging
 IDENTITY = R.identity()
 logging.basicConfig(level=logging.INFO)
 
+import matplotlib.pyplot as plt
+
+
+def plot_indices_text(indices, points, ax):
+    for i in range(indices.shape[0]):
+        ax.text(points[i, 0], points[i, 1], str(indices[i]))
+
+
+def plot_poly(polygon: Polygon, ax, polygon_indices=None):
+    from shapely.geometry import Polygon
+    from descartes import PolygonPatch
+    outlinePatch = PolygonPatch(Polygon(polygon.exterior), ec='green', fill=False, linewidth=2)
+    for i, hole in enumerate(polygon.interiors):
+        color = plt.cm.get_cmap('tab20')([i])[0][:3]
+        pl = Polygon(shell=hole)
+        pp = PolygonPatch(pl, fill=False, linewidth=2, ec=color)
+        ax.add_patch(pp)
+    if polygon_indices:
+        lr_indices = np.asarray(polygon_indices.shell)
+        lr_points = np.array(polygon.exterior)
+        plot_indices_text(lr_indices, lr_points, ax)
+        for i, hole in enumerate(polygon.interiors):
+            lr_indices = np.asarray(polygon_indices.holes[i])
+            lr_points = np.asarray(hole)
+            plot_indices_text(lr_indices, lr_points, ax)
+
+    ax.add_patch(outlinePatch)
+
+
 def get_points(point_idxs, points):
     return points[point_idxs, :]
 
@@ -103,6 +132,11 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
         poly_shape = Polygon(shell=shell_coords, holes=hole_coords)
         t2 = time.perf_counter()
         # print(poly_shape.is_valid)
+        # fig, ax = plt.subplots(figsize=(10, 10), nrows=1, ncols=1)
+        # plot_poly(poly_shape, ax, poly)
+        # plt.axis('equal')
+        # plt.show()
+        # print(poly_shape.is_valid)
         # assert poly_shape.is_valid
         area = poly_shape.area
         # logging.info("Got a plane!")
@@ -110,7 +144,7 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
             # logging.info("Skipping Plane")
             continue
         z_value = shell_coords[0][2]
-        
+
         t3 = time.perf_counter()
         if config_pp['simplify']:
             poly_shape = poly_shape.simplify(
@@ -123,16 +157,16 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
         t5 = time.perf_counter()
         if config_pp['negative_buffer']:
             poly_shape = poly_shape.buffer(
-                    distance=-config_pp['negative_buffer'], join_style=JOIN_STYLE.mitre, resolution=4)
+                distance=-config_pp['negative_buffer'], join_style=JOIN_STYLE.mitre, resolution=4)
             # if poly_shape.geom_type == 'MultiPolygon':
             #     all_poly_shapes = list(poly_shape.geoms)
             #     poly_shape = sorted(
             #         all_poly_shapes, key=lambda geom: geom.area, reverse=True)[0]
         t6 = time.perf_counter()
-            # poly_shape = poly_shape.buffer(distance=config_pp['negative_buffer'], resolution=4)
+        # poly_shape = poly_shape.buffer(distance=config_pp['negative_buffer'], resolution=4)
         if config_pp['simplify']:
             poly_shape = poly_shape.simplify(
-                tolerance=config_pp['simplify'], preserve_topology=True) # False makes fast, but can cause invalid polygons
+                tolerance=config_pp['simplify'], preserve_topology=True)  # False makes fast, but can cause invalid polygons
         t7 = time.perf_counter()
         if poly_shape.geom_type == 'MultiPolygon':
             all_poly_shapes = list(poly_shape.geoms)
@@ -142,7 +176,7 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
             all_poly_shapes = [poly_shape]
 
         logging.debug("Rotation: {:.2f}; Polygon Creation: {:.2f}; Simplify 1: {:.2f}; Positive Buffer: {:.2f}; Negative Buffer: {:.2f}; Simplify 2: {:.2f}".format(
-            (t1-t0) * 1000, (t2-t1) * 1000, (t4-t3) * 1000, (t5-t4) * 1000, (t6-t5) * 1000, (t7-t6) * 1000
+            (t1 - t0) * 1000, (t2 - t1) * 1000, (t4 - t3) * 1000, (t5 - t4) * 1000, (t6 - t5) * 1000, (t7 - t6) * 1000
         ))
 
         # Its possible that our polygon has no broken into a multipolygon
@@ -166,10 +200,12 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
                     poly_shape = recover_3d(poly_shape, kd_tree, z_value)
                     t10 = time.perf_counter()
                     logging.debug("Create KD Tree: {:.2f}; Recover Polygon 3D Coordinates: {:.2f}".format(
-                        (t9-t8) * 1000, (t10-t9) * 1000
+                        (t9 - t8) * 1000, (t10 - t9) * 1000
                     ))
 
                 # Capture the polygon as well as its z height
+                # after applying buffering and simplification with shapely/geos all polygons are valid
+                # print(poly_shape.is_valid)
                 new_plane_polygon = Polygon(shell=poly_shape.exterior)
                 planes.append((new_plane_polygon, z_value))
 
@@ -187,13 +223,13 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
         rm_inv = rm.inv()
         for i, (poly, z_value) in enumerate(planes):
             points = np.asarray(poly.exterior)
-            new_poly =  Polygon(rm_inv.apply(points))
+            new_poly = Polygon(rm_inv.apply(points))
             planes[i] = (new_poly, z_value)
 
         for i, (poly, z_value) in enumerate(obstacles):
             points = np.asarray(poly.exterior)
-            new_poly =  Polygon(rm_inv.apply(points))
+            new_poly = Polygon(rm_inv.apply(points))
             obstacles[i] = (new_poly, z_value)
         t12 = time.perf_counter()
-        logging.debug("Revert Rotation and Create New Polygons: {:2f}".format((t12-t11) * 1000))
+        logging.debug("Revert Rotation and Create New Polygons: {:2f}".format((t12 - t11) * 1000))
     return planes, obstacles

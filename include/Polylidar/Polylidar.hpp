@@ -62,6 +62,8 @@ class Polylidar3D
     std::tuple<PlanesGroup, PolygonsGroup> ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation& mesh,
                                                                              const Matrix<double>& plane_normals);
 
+    std::vector<uint8_t> ExtractTriSet(MeshHelper::HalfEdgeTriangulation& mesh, const Matrix<double>& plane_normals);
+
   public:
     double alpha;
     double lmax;
@@ -70,6 +72,7 @@ class Polylidar3D
     double z_thresh;
     double norm_thresh;
     double norm_thresh_min;
+
   private:
     int task_threads;
 

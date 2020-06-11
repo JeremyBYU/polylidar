@@ -149,6 +149,8 @@ PYBIND11_MODULE(polylidar, m)
              py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const Matrix<double>&>(
                  &Polylidar::Polylidar3D::ExtractPlanesAndPolygonsOptimized),
              "mesh"_a, "plane_normals"_a)
+        .def("extract_tri_set",&Polylidar::Polylidar3D::ExtractTriSet,
+             "mesh"_a, "plane_normals"_a)
         .def_readwrite("alpha", &Polylidar3D::alpha)
         .def_readwrite("lmax", &Polylidar3D::lmax)
         .def_readwrite("min_triangles", &Polylidar3D::min_triangles)
