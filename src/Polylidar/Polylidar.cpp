@@ -1,3 +1,4 @@
+#include <mutex>          // std::mutex
 #include "Polylidar/Polylidar.hpp"
 #include "Polylidar/Core.hpp"
 
@@ -218,6 +219,8 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesWithTasks(MeshHelper::Hal
 
     // Planes planes; // will contain the planes extracted on this normal
     Polygons polygons; // will contain the associated polygons for these planes
+    // Need to lock polygon vector whenever accessing or modifying
+    std::mutex polygons_mutex;
 
     // need this to guarantee pointer/reference stability
     // the other option is to keep using vector and reserve a large amount of memory up front (e.g. 1000)
@@ -242,20 +245,26 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesWithTasks(MeshHelper::Hal
 
             VUI plane_set;
             // Plane extraction occurs in serial, but polygon extraction is in parallel through tasks
+            
             Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data, z_thresh);
             if (Core::PassPlaneConstraints(plane_set, min_triangles))
             {
                 planes_deque.emplace_back(std::move(plane_set));
                 plane_counter++;
-
-                polygons.emplace_back();
+                {
+                    const std::lock_guard<std::mutex> lock(polygons_mutex);
+                    polygons.emplace_back();
+                }
                 polygons_wg.add(1);
-                marl::schedule([this, &planes_deque, plane_counter, &mesh, &plane_data, &polygons, polygons_wg] {
+                marl::schedule([this, &planes_deque, plane_counter, &mesh, &plane_data, &polygons, &polygons_mutex,polygons_wg] {
                     defer(polygons_wg.done()); // Decrement polygons_wg when task is done
                     auto& plane =
                         planes_deque[plane_counter - 1]; // get the plane, reference is stable when using deque
                     auto polygon = Core::ExtractConcaveHull(plane, mesh, plane_data, min_hole_vertices);
-                    polygons[plane_counter - 1] = std::move(polygon);
+                    {
+                        const std::lock_guard<std::mutex> lock(polygons_mutex);
+                        polygons[plane_counter - 1] = std::move(polygon);
+                    }
                 });
             }
         }

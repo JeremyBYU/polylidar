@@ -175,7 +175,7 @@ ExtractUniformMeshFromFloatDepth(const Matrix<float>& im, const Matrix<double>& 
 HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, const Matrix<double>& intrinsics,
                                                  const Matrix<double>& extrinsics, const size_t stride,
                                                  const bool calc_normals = PL_DEFAULT_CALC_NORMALS);
-HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &points_2D, const size_t rows,
+std::tuple<HalfEdgeTriangulation, VUI> ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &points_2D, const size_t rows,
                                                           const size_t cols, const size_t stride,
                                                           const bool calc_normals);
 

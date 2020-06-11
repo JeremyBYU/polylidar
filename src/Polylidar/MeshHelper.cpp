@@ -418,7 +418,7 @@ HalfEdgeTriangulation ExtractTriMeshFromFloatDepth(const Matrix<float>& im, cons
     return triangulation;
 }
 
-HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &points_2D, const size_t rows,
+std::tuple<HalfEdgeTriangulation, VUI> ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &points_2D, const size_t rows,
                                                             const size_t cols, const size_t stride,
                                                             const bool calc_normals)
 {
@@ -431,7 +431,7 @@ HalfEdgeTriangulation ExtractTriMeshFromOrganizedPointCloud(Matrix<double> &poin
     {
         triangulation.ComputeTriangleNormals();
     }
-    return triangulation;
+    return std::make_tuple(std::move(triangulation), std::move(valid_tri));
 }
 
 HalfEdgeTriangulation CreateTriMeshCopy(Matrix<double>& vertices, Matrix<int>& triangles, const bool calc_normals)
