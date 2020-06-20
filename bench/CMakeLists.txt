@@ -19,7 +19,7 @@ find_package(Threads REQUIRED)
 find_package(Open3D REQUIRED)
 
 
-add_executable(run-bench ${CMAKE_CURRENT_SOURCE_DIR}/run-bench.cpp ${CMAKE_CURRENT_SOURCE_DIR}/bench_mesh.cpp
+add_executable(run-bench ${CMAKE_CURRENT_SOURCE_DIR}/run-bench.cpp ${CMAKE_CURRENT_SOURCE_DIR}/bench_mesh.cpp ${CMAKE_CURRENT_SOURCE_DIR}/bench_mesh_paper.cpp
               )
               # ${CMAKE_CURRENT_SOURCE_DIR}/parallelism_test.cpp
 target_link_libraries(run-bench PRIVATE Polylidar::PL benchmark Threads::Threads ${Open3D_LIBRARIES})

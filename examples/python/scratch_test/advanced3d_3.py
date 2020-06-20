@@ -106,7 +106,7 @@ def run_test(mesh, callback=None, stride=2):
                             z_thresh=0.06, norm_thresh=0.97, norm_thresh_min=0.92, min_hole_vertices=6)
     # Create Polylidar TriMesh
     tri_mesh = open_3d_mesh_to_trimesh(mesh)
-    bilateral_filter_normals(tri_mesh, 3, 0.1, 0.1)
+    # bilateral_filter_normals(tri_mesh, 3, 0.1, 0.1)
     vertices = np.asarray(tri_mesh.vertices)
     normals_smooth = np.asarray(tri_mesh.triangle_normals)
     mesh.triangle_normals = o3d.utility.Vector3dVector(normals_smooth)
@@ -140,8 +140,8 @@ def main():
         if i < 0:
             continue
             # o3d.io.write_triangle_mesh('test.ply', mesh)
-        
         o3d.visualization.draw_geometries([mesh, axis_frame])
+
         run_test(mesh, callback=callback, stride=2)
 
 

@@ -358,7 +358,7 @@ void Polylidar3D::CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& 
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
     num_threads = std::max(1, num_threads);
-#pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+#pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
 #endif
     for (int t = 0; t < numTriangles; t++)
     {
@@ -397,7 +397,7 @@ void Polylidar3D::CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelp
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
     num_threads = std::max(1, num_threads);
-#pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+#pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
 #endif
     for (int t = 0; t < numTriangles; t++)
     {
@@ -421,7 +421,7 @@ void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfE
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
     num_threads = std::max(1, num_threads);
-#pragma omp parallel for schedule(static, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+#pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
 #endif
     for (int t = 0; t < numTriangles; t++)
     {

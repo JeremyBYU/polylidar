@@ -43,10 +43,10 @@ class ImagesAndSparseMesh : public benchmark::Fixture
         extr = Matrix<double>(intr_.data(), 4, 4);
 
         // Rotation for mesh, camera axis to global frame
-        mesh_rotation << 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0;
+        // mesh_rotation << 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, -1.0, 0.0;
         // Sparse Mesh In O3D Format
         sparse_mesh_o3d = o3d::io::CreateMeshFromFile(SPARSE_MESH);
-        sparse_mesh_o3d->Rotate(mesh_rotation);
+        // sparse_mesh_o3d->Rotate(mesh_rotation);
         // sparse_mesh_o3d->Rotate();
         // Sparse Mesh In HalfEdgeTriangulation
         auto triangles_ptr = reinterpret_cast<int*>(sparse_mesh_o3d->triangles_.data());
@@ -224,10 +224,8 @@ BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
 {
 
     Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.92);
-    std::vector<std::array<double, 3>> normals = {{0.0123, 0.0021, 0.9999},
-                                                  {0.2241, -0.9744, 0.0171},
-                                                  {-0.2207, 0.9752, -0.0144},
-                                                  {0.9612, 0.2756, -0.0129}};
+    std::vector<std::array<double, 3>> normals = {
+        {0.0123, 0.0021, 0.9999}, {0.2241, -0.9744, 0.0171}, {-0.2207, 0.9752, -0.0144}, {0.9612, 0.2756, -0.0129}};
 
     const Matrix<double> normals_mat((double*)(normals.data()), st.range(0), 3);
     for (auto _ : st)
@@ -241,10 +239,8 @@ BENCHMARK_DEFINE_F(DenseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormalsOpti
 {
 
     Polylidar3D pl3d(0.0, 0.1, 1000, 6, 0.03, 0.95, 0.92);
-    std::vector<std::array<double, 3>> normals = {{0.0123, 0.0021, 0.9999},
-                                                  {0.2241, -0.9744, 0.0171},
-                                                  {-0.2207, 0.9752, -0.0144},
-                                                  {0.9612, 0.2756, -0.0129}};
+    std::vector<std::array<double, 3>> normals = {
+        {0.0123, 0.0021, 0.9999}, {0.2241, -0.9744, 0.0171}, {-0.2207, 0.9752, -0.0144}, {0.9612, 0.2756, -0.0129}};
 
     const Matrix<double> normals_mat((double*)(normals.data()), st.range(0), 3);
     for (auto _ : st)
@@ -258,7 +254,9 @@ BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_Create_TriMesh)->UseRealTime()->Uni
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ComputeTriangleNormals)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_CopyTriMesh)->UseRealTime()->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygons)->UseRealTime()->Unit(benchmark::kMicrosecond);
-BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsOptimized)->UseRealTime()->Unit(benchmark::kMicrosecond);
+BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsOptimized)
+    ->UseRealTime()
+    ->Unit(benchmark::kMicrosecond);
 BENCHMARK_REGISTER_F(ImagesAndSparseMesh, BM_ExtractPlanesAndPolygonsFromMultipleNormals)
     ->DenseRange(1, 4, 1)
     ->UseRealTime()
