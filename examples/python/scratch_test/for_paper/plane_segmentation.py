@@ -10,10 +10,11 @@ warnings.filterwarnings("ignore", message="Optimal rotation is not uniquely or p
 np.set_printoptions(precision=4, suppress=True)
 
 from examples.python.util.realsense_util import (get_realsense_data, get_frame_data, R_Standard_d400, prep_mesh,
-                                            create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
+                                                 create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
 from examples.python.util.mesh_util import get_mesh_data_iterator
 
-from polylidar import (Polylidar3D, MatrixDouble, MatrixFloat, MatrixInt, create_tri_mesh_copy, bilateral_filter_normals)
+from polylidar import (Polylidar3D, MatrixDouble, MatrixFloat, MatrixInt,
+                       create_tri_mesh_copy, bilateral_filter_normals)
 
 from polylidar.polylidarutil.open3d_util import construct_grid, create_lines, flatten
 from polylidar.polylidarutil.plane_filtering import filter_planes_and_holes
@@ -34,9 +35,10 @@ def filter_and_create_open3d_polygons(points, polygons, rm=None, line_radius=0.0
     t1 = time.perf_counter()
     planes, obstacles = filter_planes_and_holes(polygons, points, config_pp, rm=rm)
     t2 = time.perf_counter()
-    logging.info("Plane Filtering Took (ms): %.2f", (t2-t1) * 1000)
+    logging.info("Plane Filtering Took (ms): %.2f", (t2 - t1) * 1000)
     all_poly_lines = create_lines(planes, obstacles, line_radius=line_radius)
-    return all_poly_lines, (t2-t1) * 1000
+    return all_poly_lines, (t2 - t1) * 1000
+
 
 def open_3d_mesh_to_trimesh(mesh: o3d.geometry.TriangleMesh):
     triangles = np.asarray(mesh.triangles)
@@ -46,6 +48,7 @@ def open_3d_mesh_to_trimesh(mesh: o3d.geometry.TriangleMesh):
     triangles_mat = MatrixInt(triangles)
     tri_mesh = create_tri_mesh_copy(vertices_mat, triangles_mat)
     return tri_mesh
+
 
 def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min_samples=10000):
     ga = GaussianAccumulatorS2(level=4, max_phi=180)
@@ -76,7 +79,7 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
 
     all_planes, all_polygons = pl.extract_planes_and_polygons_optimized(tri_mesh, avg_peaks_mat)
     t1 = time.perf_counter()
-    polylidar_time = (t1-t0) * 1000
+    polylidar_time = (t1 - t0) * 1000
 
     all_poly_lines = []
     for i in range(avg_peaks_selected.shape[0]):
@@ -89,6 +92,7 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, ds=50, min
             all_poly_lines.extend(poly_lines)
 
     return all_planes, tri_set, all_poly_lines, polylidar_time
+
 
 def split_triangles(mesh):
     """
@@ -114,6 +118,7 @@ def split_triangles(mesh):
     mesh_return.triangle_normals = mesh.triangle_normals
     mesh_return.paint_uniform_color([0.5, 0.5, 0.5])
     return mesh_return
+
 
 def assign_some_vertex_colors(mesh, triangle_indices, triangle_colors, mask=None):
     """Assigns vertex colors by given normal colors
@@ -153,6 +158,7 @@ def assign_some_vertex_colors(mesh, triangle_indices, triangle_colors, mask=None
 
     return split_mesh
 
+
 def paint_planes(o3d_mesh, planes):
     # colors = np.arange(0, 0+ len(planes))
     colors = [0, 3]
@@ -163,6 +169,7 @@ def paint_planes(o3d_mesh, planes):
 
     new_mesh = assign_some_vertex_colors(o3d_mesh, planes, all_colors)
     return new_mesh
+
 
 def run_test(mesh, callback=None, stride=2):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
@@ -180,8 +187,8 @@ def run_test(mesh, callback=None, stride=2):
     planes, tri_set, all_poly_lines, polylidar_time = extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs)
     time_polylidar3D = polylidar_time
     polylidar_3d_alg_name = 'Polylidar3D with Provided Mesh'
-    
-    planes_tri_set = [np.argwhere(np.asarray(tri_set) == i)  for i in range(1, 3)]
+
+    planes_tri_set = [np.argwhere(np.asarray(tri_set) == i) for i in range(1, 3)]
     # import ipdb; ipdb.set_trace()
     mesh_tri_set = paint_planes(mesh, planes_tri_set)
     callback(polylidar_3d_alg_name, time_polylidar3D, mesh_tri_set)
@@ -189,13 +196,13 @@ def run_test(mesh, callback=None, stride=2):
     mesh_segment = paint_planes(mesh, planes)
     callback(polylidar_3d_alg_name, time_polylidar3D, mesh_segment)
 
-
     mesh_3d_polylidar = []
     mesh_3d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     mesh_3d_polylidar.append(mesh_segment)
     callback(polylidar_3d_alg_name, time_polylidar3D, mesh_3d_polylidar)
 
-def callback(alg_name, execution_time,mesh=None):
+
+def callback(alg_name, execution_time, mesh=None):
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -0.7])
     grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
@@ -207,22 +214,22 @@ def callback(alg_name, execution_time,mesh=None):
         else:
             o3d.visualization.draw_geometries([mesh, axis_frame], width=600, height=500)
 
+
 def main():
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -1.0])
-    grid_ls = construct_grid(size=2, n=20, plane_offset=-1.0, translate=[0, 0.0, 0.0])
+    grid_ls = construct_grid(size=2, n=20, plane_offset=-1.0, translate=[0, 0.0, 0.0])                            
+
     for i, mesh in enumerate(get_mesh_data_iterator()):
         if i < 2:
             continue
             # o3d.io.write_triangle_mesh('test.ply', mesh)
-        
+
         run_test(mesh, callback=callback, stride=2)
 
 
 if __name__ == "__main__":
     main()
-
-
 
 
 """

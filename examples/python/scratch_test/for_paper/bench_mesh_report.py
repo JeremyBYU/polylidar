@@ -3,12 +3,14 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-sns.set_style()
+sns.set(font_scale=1.15)
+sns.set_style('white')
+sns.set_style("ticks")
 
 
 
-def plot_df(df):
-
+def plot_df(df, name='basement'):
+    fig = plt.figure(figsize=(6,3.5))
     ax = sns.lineplot(x="threads", y="Speedup", hue="normals", palette='deep', data=df, legend=False)
     ax2 = ax.twinx()
     sns.lineplot(x="threads", y="Execution Time (ms)", ax=ax2, hue='normals',palette='muted', data=df, legend=False)
@@ -22,10 +24,12 @@ def plot_df(df):
                     Line2D([0], [0], color='k', lw=1, dashes=[2,6])]
 
     ax.legend(custom_lines, ['1 DP', '2 DP', '3 DP', '4 DP'], loc='upper left', bbox_to_anchor=(0.1, 1,))
-    ax2.legend(custom_lines_2, ['Speedup', 'Execution Time'], loc='upper left', bbox_to_anchor=(0.3, 1,))
+    ax2.legend(custom_lines_2, ['Speedup', 'Execution Time'], loc='upper left', bbox_to_anchor=(0.35, 1,))
     # ax.axis('equal')
     # ax.legend(custom_lines, ['1 DP', '2 DP', '3 DP', '4 DP'], loc='upper left', bbox_to_anchor=(0.4, 0.4,))
     # ax2.legend(custom_lines_2, ['Speedup', 'Execution Time'], loc='upper left', bbox_to_anchor=(0.6, 0.4,))
+    fig.savefig(f'assets/scratch/{name}_speedup.pdf', bbox_inches='tight')
+    plt.tight_layout()
     plt.show()
 
 
@@ -66,8 +70,8 @@ def main():
     df_sparse = df_reduced[df_reduced['mesh'] == 'SparseMeshPaper']
     df_dense = df_reduced[df_reduced['mesh'] == 'DenseMeshPaper']
 
-    plot_df(df_sparse)
-    plot_df(df_dense)
+    plot_df(df_sparse, 'basement')
+    plot_df(df_dense, 'mainfloor')
 
 if __name__ == "__main__":
     main()

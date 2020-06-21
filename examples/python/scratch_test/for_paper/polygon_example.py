@@ -167,7 +167,7 @@ def paint_planes(o3d_mesh, planes):
 def run_test(mesh, callback=None, stride=2):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
     polylidar_kwargs = dict(alpha=0.0, lmax=0.10, min_triangles=1000,
-                            z_thresh=0.06, norm_thresh=0.97, norm_thresh_min=0.92, min_hole_vertices=6)
+                            z_thresh=0.06, norm_thresh=0.95, norm_thresh_min=0.95, min_hole_vertices=6)
     # Create Polylidar TriMesh
     tri_mesh = open_3d_mesh_to_trimesh(mesh)
     bilateral_filter_normals(tri_mesh, 3, 0.1, 0.1)
