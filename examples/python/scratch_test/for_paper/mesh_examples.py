@@ -19,14 +19,14 @@ from polylidar import (Polylidar3D, MatrixDouble, MatrixFloat, MatrixInt,
 from polylidar.polylidarutil.open3d_util import construct_grid, create_lines, flatten
 from polylidar.polylidarutil.plane_filtering import filter_planes_and_holes
 
-from fastga import GaussianAccumulatorS2, MatX3d
-from fastga.peak_and_cluster import find_peaks_from_accumulator
+from fastga import GaussianAccumulatorS2, MatX3d, IcoCharts
+from fastga.peak_and_cluster import find_peaks_from_accumulator, find_peaks_from_ico_charts
 
 
 import open3d as o3d
 
 
-def filter_and_create_open3d_polygons(points, polygons, rm=None, line_radius=0.005,
+def filter_and_create_open3d_polygons(points, polygons, rm=None, line_radius=0.01,
                                       config_pp=dict(filter=dict(hole_area=dict(min=0.1, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.25)),
                                                      positive_buffer=0.02, negative_buffer=0.05, simplify=0.02)):
     " Apply polygon filtering algorithm, return Open3D Mesh Lines "
@@ -50,22 +50,68 @@ def open_3d_mesh_to_trimesh(mesh: o3d.geometry.TriangleMesh):
     return tri_mesh
 
 
+def down_sample_normals(triangle_normals, down_sample_fraction=0.12, min_samples=10000, flip_normals=False, **kwargs):
+    num_normals = triangle_normals.shape[0]
+    to_sample = int(down_sample_fraction * num_normals)
+    to_sample = max(min([num_normals, min_samples]), to_sample)
+    ds_step = int(num_normals / to_sample)
+    triangle_normals_ds = np.ascontiguousarray(triangle_normals[:num_normals:ds_step, :])
+    if flip_normals:
+        triangle_normals_ds = triangle_normals_ds * -1.0
+    return triangle_normals_ds
+
+def get_image_peaks(ico_chart, ga, level=2, with_o3d=False,
+                    find_peaks_kwargs=dict(threshold_abs=15, min_distance=1, exclude_border=True, indices=False),
+                    cluster_kwargs=dict(t=0.10, criterion='distance'),
+                    average_filter=dict(min_total_weight=0.01),
+                    **kwargs):
+
+    normalized_bucket_counts_by_vertex = ga.get_normalized_bucket_counts_by_vertex(True)
+
+    t1 = time.perf_counter()
+    ico_chart.fill_image(normalized_bucket_counts_by_vertex)  # this takes microseconds
+    # plt.imshow(np.asarray(ico_chart.image))
+    # plt.show()
+    peaks, clusters, avg_peaks, avg_weights = find_peaks_from_ico_charts(ico_chart, np.asarray(
+        normalized_bucket_counts_by_vertex), find_peaks_kwargs, cluster_kwargs, average_filter)
+    t2 = time.perf_counter()
+
+    gaussian_normals_sorted = np.asarray(ico_chart.sphere_mesh.vertices)
+    # Create Open3D structures for visualization
+    if with_o3d:
+        pcd_all_peaks = get_pc_all_peaks(peaks, clusters, gaussian_normals_sorted)
+        arrow_avg_peaks = get_arrow_normals(avg_peaks, avg_weights)
+    else:
+        pcd_all_peaks = None
+        arrow_avg_peaks = None
+
+    elapsed_time = (t2 - t1) * 1000
+    timings = dict(t_fastga_peak=elapsed_time)
+
+    logging.debug("Peak Detection - Took (ms): %.2f", (t2 - t1) * 1000)
+
+
+    return avg_peaks, pcd_all_peaks, arrow_avg_peaks, timings
+
+
 def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, config_pp, ds=50, min_samples=10000):
     ga = GaussianAccumulatorS2(level=4, max_phi=180)
+    ico = IcoCharts(level=4)
+
     triangle_normals = np.asarray(tri_mesh.triangle_normals)
     num_normals = triangle_normals.shape[0]
+    triangle_normals_ds = down_sample_normals(triangle_normals)
 
-    # Downsample, TODO improve this
-    ds_normals = int(num_normals / ds)
-    to_sample = max(min([num_normals, min_samples]), ds_normals)
-    ds_step = int(num_normals / to_sample)
 
-    triangle_normals_ds = np.ascontiguousarray(triangle_normals[:num_normals:ds_step, :])
-    # A copy occurs here for triangle_normals......if done in c++ there would be no copy
+    # Get the data
+    t0 = time.perf_counter()
     ga.integrate(MatX3d(triangle_normals_ds))
-    gaussian_normals = np.asarray(ga.get_bucket_normals())
-    accumulator_counts = np.asarray(ga.get_normalized_bucket_counts())
-    _, _, avg_peaks, _ = find_peaks_from_accumulator(gaussian_normals, accumulator_counts)
+    t1 = time.perf_counter()
+    avg_peaks, _, _, timings = get_image_peaks(ico, ga, level=4, with_o3d=False)
+    timings['t_fastga_integrate'] = (t1-t0) * 1000
+    timings['t_fastga_total'] = timings['t_fastga_integrate'] + timings['t_fastga_peak']
+
+
     logging.info("Processing mesh with %d triangles", num_normals)
     logging.info("Dominant Plane Normals")
     print(avg_peaks)
@@ -74,12 +120,13 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, config_pp,
     pl = Polylidar3D(**polylidar_kwargs)
     avg_peaks_mat = MatrixDouble(avg_peaks_selected)
 
+    # debugging purposes, ignore
     tri_set = pl.extract_tri_set(tri_mesh, avg_peaks_mat)
-    t0 = time.perf_counter()
 
+    t0 = time.perf_counter()
     all_planes, all_polygons = pl.extract_planes_and_polygons_optimized(tri_mesh, avg_peaks_mat)
     t1 = time.perf_counter()
-    polylidar_time = (t1 - t0) * 1000
+    timings['t_polylidar_planepoly'] = (t1 - t0) * 1000
 
     all_poly_lines = []
     for i in range(avg_peaks_selected.shape[0]):
@@ -91,7 +138,7 @@ def extract_all_dominant_planes(tri_mesh, vertices, polylidar_kwargs, config_pp,
             poly_lines, _ = filter_and_create_open3d_polygons(vertices, polygons_for_normal, rm=rm, config_pp=config_pp)
             all_poly_lines.extend(poly_lines)
 
-    return all_planes, tri_set, all_poly_lines, polylidar_time
+    return all_planes, tri_set, all_poly_lines, timings
 
 def run_test(mesh, callback=None, polylidar_kwargs=None, config_pp=None):
     # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
@@ -99,16 +146,16 @@ def run_test(mesh, callback=None, polylidar_kwargs=None, config_pp=None):
     #                         z_thresh=0.06, norm_thresh=0.97, norm_thresh_min=0.92, min_hole_vertices=6)
     # Create Polylidar TriMesh
     tri_mesh = open_3d_mesh_to_trimesh(mesh)
-    bilateral_filter_normals(tri_mesh, 3, 0.1, 0.1)
+    # bilateral_filter_normals(tri_mesh, 3, 0.1, 0.1)
     vertices = np.asarray(tri_mesh.vertices)
     normals_smooth = np.asarray(tri_mesh.triangle_normals)
     mesh.triangle_normals = o3d.utility.Vector3dVector(normals_smooth)
 
     # o3d.visualization.draw_geometries([mesh], width=600, height=500)
 
-    planes, tri_set, all_poly_lines, polylidar_time = extract_all_dominant_planes(
+    planes, tri_set, all_poly_lines, timings = extract_all_dominant_planes(
         tri_mesh, vertices, polylidar_kwargs, config_pp)
-    time_polylidar3D = polylidar_time
+    time_polylidar3D = timings['t_polylidar_planepoly']
     polylidar_3d_alg_name = 'Polylidar3D with Provided Mesh'
 
     mesh_3d_polylidar = []
@@ -125,9 +172,9 @@ def callback(alg_name, execution_time, mesh=None):
     if mesh:
         if isinstance(mesh, list):
             o3d.visualization.draw_geometries(
-                [*mesh, axis_frame], width=800, height=500)
+                [*mesh], width=800, height=500)
         else:
-            o3d.visualization.draw_geometries([mesh, axis_frame], width=800, height=500)
+            o3d.visualization.draw_geometries([mesh], width=800, height=500)
 
 
 def main():
@@ -138,11 +185,11 @@ def main():
     polylidar_kwargs_basement = dict(alpha=0.0, lmax=0.10, min_triangles=80,
                                      z_thresh=0.08, norm_thresh=0.95, norm_thresh_min=0.95, min_hole_vertices=6)
 
-    config_pp_basement = dict(filter=dict(hole_area=dict(min=0.05, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.07)),
-                              positive_buffer=0.0, negative_buffer=0.01, simplify=0.01)
+    config_pp_basement = dict(filter=dict(hole_area=dict(min=0.05, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.06)),
+                              positive_buffer=0.0, negative_buffer=0.025, simplify=0.01)
 
     polylidar_kwargs_mainfloor = dict(alpha=0.0, lmax=0.10, min_triangles=1000,
-                                      z_thresh=0.07, norm_thresh=0.95, norm_thresh_min=0.95, min_hole_vertices=6)
+                                      z_thresh=0.08, norm_thresh=0.95, norm_thresh_min=0.95, min_hole_vertices=6)
 
     config_pp_main_floor = dict(filter=dict(hole_area=dict(min=0.1, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.25)),
                                 positive_buffer=0.02, negative_buffer=0.05, simplify=0.02)
@@ -173,7 +220,7 @@ MainFloor View 1
 			"boundingbox_min" : [ -1.7143359241036764, -4.4827524540588648, -1.2944623277755183 ],
 			"field_of_view" : 60.0,
 			"front" : [ 0.53039465128384522, -0.61345881428120275, 0.58510665444018772 ],
-			"lookat" : [ 1.0331991996946295, 0.51841621148927719, -1.2803830857125866 ],
+			"lookat" : [ 1.1083255653557145, 0.45595517159720361, -1.4139722312039875 ],
 			"up" : [ -0.37208261429501627, 0.45169957452210624, 0.81087731656270567 ],
 			"zoom" : 0.25999999999999956
 		}
@@ -194,9 +241,9 @@ MainFloor View 2
 			"boundingbox_max" : [ 4.6879752961101335, 4.3041731602087356, 1.1239513038042122 ],
 			"boundingbox_min" : [ -1.7143359241036764, -4.4827524540588648, -1.2944623277755183 ],
 			"field_of_view" : 60.0,
-			"front" : [ 0.46610835217068658, -0.6860901898536802, 0.55859041830599676 ],
+			"front" : [ 0.33172820056487995, -0.73579018685271158, 0.59039749481280723 ],
 			"lookat" : [ 0.01577387102866264, 1.2098965809101954, -0.32128930881301754 ],
-			"up" : [ -0.29937618514282682, 0.47181341832497803, 0.82931658494077354 ],
+			"up" : [ -0.24179049551880405, 0.53861595454388955, 0.80711226591320351 ],
 			"zoom" : 0.099999999999999617
 		}
 	],
