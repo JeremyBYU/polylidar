@@ -1,8 +1,9 @@
 numpy
 matplotlib
 scipy
+open3d
 
-# Documentation Generation Pacakges
+# Documentation Generation Packages
 Sphinx
 sphinx_rtd_theme
 breathe

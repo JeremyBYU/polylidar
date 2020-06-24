@@ -7,7 +7,7 @@ import re
 import logging
 
 import numpy as np
-from polylidarutil import COLOR_PALETTE
+from polylidar.polylidarutil import COLOR_PALETTE
 import open3d as o3d
 from scipy.spatial.transform import Rotation as R
 

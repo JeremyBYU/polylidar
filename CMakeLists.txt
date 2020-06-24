@@ -34,13 +34,13 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Extras.cmake)
 
 # Build Options
 # Options for Polylidar
-option(PL_USE_ROBUST_PREDICATES "Use Robust Geometric Predicates" OFF)
-option(PL_BUILD_PYMODULE "Build Python Module" ON)
-option(PL_BUILD_TESTS "OPF - Build Tests" ON)
-option(PL_BUILD_BENCHMARKS "OPF - Build Benchmarks" ON)
-option(PL_BUILD_EXAMPLES "OPF - Build Examples" ON)
-option(PL_WITH_OPENMP "OPF - Build with OpenMP Support" ON)
-option(PL_BUILD_WERROR "OPF - Add Werror flag to build (turns warnings into errors)" OFF)
+option(PL_USE_ROBUST_PREDICATES "PL - Use Robust Geometric Predicates" OFF)
+option(PL_BUILD_PYMODULE "PL - Build Python Module" ON)
+option(PL_BUILD_TESTS "PL - Build Tests" ON)
+option(PL_BUILD_BENCHMARKS "PL - Build Benchmarks" ON)
+option(PL_BUILD_EXAMPLES "PL - Build Examples" ON)
+option(PL_WITH_OPENMP "PL - Build with OpenMP Support" ON)
+option(PL_BUILD_WERROR "PL - Add Werror flag to build (turns warnings into errors)" OFF)
 
 # Add any dependencies needed by our library
 add_subdirectory("thirdparty")

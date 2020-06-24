@@ -1,42 +1,60 @@
 
+#include <tuple>
+#include <iomanip>
 #include "Polylidar/Polylidar.hpp"
-#include "Polylidar/Delaunator/Delaunator.hpp"
-#include "npy/npy.h"
 
-
-void PrintPoint(Polylidar::Delaunator::Delaunator &mesh, size_t idx)
+template <typename TElem>
+std::ostream& operator<<(std::ostream& os, const std::vector<TElem>& vec)
 {
-
-    std:: cout << "[" << mesh.triangles(idx, 0) << ", " << mesh.triangles(idx, 1) << ", " << mesh.triangles(idx, 2) << "]" <<  std::endl;
+    auto iter_begin = vec.begin();
+    auto iter_end = vec.end();
+    os << "[";
+    for (auto iter = iter_begin; iter != iter_end; ++iter)
+    {
+        std::cout << ((iter != iter_begin) ? "," : "") << *iter;
+    }
+    os << "]";
+    return os;
 }
-
-int main(int argc, char const *argv[])
+int main(int argc, char const* argv[])
 {
-    std::vector<unsigned long> shape;
-    bool fortran_order;
-    std::vector<double> data;
-    std::string path = "fixtures/temp/broken.npy";
-    npy::LoadArrayFromNumpy(path, shape, fortran_order, data);
+    std::cout << "Very Simple C++ Example of Polylidar3D on 2D Point Set" << std::endl;
+    std::vector<double> points_data = {
+        0.0, 0.0, // Point index 0
+        0.0, 1.0, // Point index 1
+        1.0, 1.0, // Point index 2
+        1.0, 0.0, // Point index 3
+        5.0, 0.1, // Point index 4, outlier and should not be included in polygon
+    };
 
-    std::ofstream out("./fixtures/temp/broken.txt");
-    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
-    std::cout.rdbuf(out.rdbuf()); //redirect std::cout to out.txt!
+    // 5 X 2 matrix as one contigious array
+    std::vector<std::size_t> shape = {points_data.size() / 2, 2};
+    Polylidar::Matrix<double> points(points_data.data(), shape[0], shape[1]);
+    // Set configuration parameters
 
-    std::cout << shape[0] << ", " << shape[1] << std::endl;
+    // alpha, lmax, min triangles, min hole vertices,
+    Polylidar::Polylidar3D pl(0.0, 2.0, 1, 3);
 
-    Polylidar::Matrix<double> point_mat(data.data(), shape[0], shape[1]);
-    // Delaunator::Delaunator mesh(points);
-    Polylidar::Delaunator::Delaunator mesh(point_mat);
-    mesh.triangulate();
+    Polylidar::MeshHelper::HalfEdgeTriangulation mesh;
+    Polylidar::Planes planes;
+    Polylidar::Polygons polygons;
+    auto before = std::chrono::high_resolution_clock::now();
+std:
+    tie(mesh, planes, polygons) = pl.ExtractPlanesAndPolygons(points);
+    auto after = std::chrono::high_resolution_clock::now();
 
-    std::cout << "Raw Buffer size:" << mesh.triangles.data.size() << std::endl;
-    std::cout << "Number of triangles:" << mesh.triangles.rows << std::endl;
+    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);
+    std::cout << "Polylidar took " << elapsed.count() << " milliseconds processing a " << shape[0] << " point cloud"
+              << std::endl;
+    std::cout << "Point indices of Polygon Shell: ";
+    // Extract polygon
+    for (auto const& polygon : polygons)
+    {
+        std::cout << polygon.shell << std::endl;
+    }
+    // Point indices of Polygon Shell: [3,0,1,2]
 
-    PrintPoint(mesh, 0);
-    PrintPoint(mesh, 1);
-    std::cout << "..." << std::endl;
-    PrintPoint(mesh, 49578);
-    PrintPoint(mesh, 49579);
+    std::cout << std::endl;
 
     return 0;
 }

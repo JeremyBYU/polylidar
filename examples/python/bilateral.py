@@ -1,3 +1,8 @@
+"""
+Simple example demonstrating a bilateral filter implented in C++.
+Note that this is NOT the accelerated bilateral filter discussed in the Paper. This is just something fun I tried out that works for generalized meshes.
+The accelerated bilateral filter for **organized** point clouds is found in OrganizedPointFilters repo (not this repo). 
+"""
 import time
 import logging
 import warnings

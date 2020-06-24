@@ -1,6 +1,6 @@
 // MIT License
 
-// Copyright (c) 2018 Jeremy Castagno
+// Copyright (c) 2020 Jeremy Castagno
 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,7 @@ class Polylidar3D
                 const double _norm_thresh_min = PL_DEFAULT_NORMTHRESH_MIN,
                 const int _task_threads = PL_DEFAULT_TASK_THREADS);
     std::tuple<MeshHelper::HalfEdgeTriangulation, Planes, Polygons>
-    ExtractPlanesAndPolygons(const Matrix<double>& points, const std::array<double, 3> plane_normal);
+    ExtractPlanesAndPolygons(const Matrix<double>& points, const std::array<double, 3> plane_normal = PL_DEFAULT_DESIRED_VECTOR);
     std::tuple<Planes, Polygons> ExtractPlanesAndPolygons(MeshHelper::HalfEdgeTriangulation& mesh,
                                                           const std::array<double, 3> plane_normal);
 

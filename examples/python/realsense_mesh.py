@@ -1,16 +1,22 @@
+"""
+Demonstrates Polygon Extraction on some RealSense data.
+Warning - Haven't looked at this specific file in a while.
+TODO - Clean this up
+"""
 import time
 import logging
+import sys
 
 import numpy as np
 
 from examples.python.util.realsense_util import (get_realsense_data, get_frame_data, R_Standard_d400, prep_mesh,
-                                            create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
+                                                 create_open3d_pc, extract_mesh_planes, COLOR_PALETTE, create_open_3d_mesh)
 
-from polylidar import (extractPlanesAndPolygons, extract_planes_and_polygons_from_mesh, extract_tri_mesh_from_float_depth,
-                      extract_point_cloud_from_float_depth)
+from polylidar import (Polylidar3D, MatrixDouble, MatrixFloat, extract_tri_mesh_from_float_depth,
+                       extract_point_cloud_from_float_depth)
 
-from polylidarutil.open3d_util import construct_grid, create_lines, flatten
-from polylidarutil.plane_filtering import filter_planes_and_holes
+from polylidar.polylidarutil.open3d_util import construct_grid, create_lines, flatten
+from polylidar.polylidarutil.plane_filtering import filter_planes_and_holes
 
 import open3d as o3d
 
@@ -26,16 +32,18 @@ def filter_and_create_open3d_polygons(points, polygons):
 
 def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]), poisson=dict(depth=8), callback=None, stride=2):
     points = np.asarray(pcd.points)
-    np.save('./fixtures/temp/broken.npy', points)
-    # Create Pseudo 3D Surface Mesh using Delaunay Triangulation and Polylidar
-    polylidar_kwargs = dict(alpha=0.0, lmax=0.10, minTriangles=100,
-                            zThresh=0.03, normThresh=0.99, normThreshMin=0.90, minHoleVertices=6)
+    # Create 2.5D Surface Mesh using Delaunay Triangulation and Polylidar
+    polylidar_kwargs = dict(alpha=0.0, lmax=0.10, min_triangles=100,
+                            z_thresh=0.04, norm_thresh=0.99, norm_thresh_min=0.90, min_hole_vertices=6)
+    pl = Polylidar3D(**polylidar_kwargs)
+    points_mat = MatrixDouble(points)
     t1 = time.perf_counter()
-    delaunay, planes, polygons = extractPlanesAndPolygons(points, **polylidar_kwargs)
+    mesh, planes, polygons = pl.extract_planes_and_polygons(points_mat)
     t2 = time.perf_counter()
+
     all_poly_lines = filter_and_create_open3d_polygons(points, polygons)
-    triangles = np.asarray(delaunay.triangles).reshape(int(len(delaunay.triangles) / 3), 3)
-    mesh_2d_polylidar = extract_mesh_planes(points, triangles, planes, COLOR_PALETTE[0])
+    triangles = np.asarray(mesh.triangles)
+    mesh_2d_polylidar = extract_mesh_planes(points, triangles, planes, mesh.counter_clock_wise, COLOR_PALETTE[0])
     mesh_2d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     time_mesh_2d_polylidar = (t2 - t1) * 1000
     polylidar_alg_name = 'Polylidar2D'
@@ -55,11 +63,10 @@ def run_test(pcd, rgbd, intrinsics, extrinsics, bp_alg=dict(radii=[0.02, 0.02]),
     halfedges = polylidar_inputs['halfedges']
     tri_mesh = polylidar_inputs['tri_mesh']
     t1 = time.perf_counter()
-    planes, polygons = extract_planes_and_polygons_from_mesh(tri_mesh, **polylidar_kwargs)
+    planes, polygons = pl.extract_planes_and_polygons(tri_mesh)
     t2 = time.perf_counter()
     all_poly_lines = filter_and_create_open3d_polygons(vertices, polygons)
-    triangles = triangles.reshape(int(triangles.shape[0] / 3), 3)
-    mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes)
+    mesh_3d_polylidar = extract_mesh_planes(vertices, triangles, planes, tri_mesh.counter_clock_wise)
     mesh_3d_polylidar.extend(flatten([line_mesh.cylinder_segments for line_mesh in all_poly_lines]))
     time_polylidar3D = (t2 - t1) * 1000
     polylidar_3d_alg_name = 'Polylidar with Uniform Grid Mesh'
@@ -124,12 +131,12 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
         tuple(dict, dict) - Mesh and timings
     """
     t0 = time.perf_counter()
-    tri_mesh = extract_tri_mesh_from_float_depth(im, intrinsics, extrinsics, stride=stride)
+    tri_mesh = extract_tri_mesh_from_float_depth(MatrixFloat(
+        im), MatrixDouble(intrinsics), MatrixDouble(extrinsics), stride=stride)
     t1 = time.perf_counter()
     points = np.asarray(tri_mesh.vertices)
     triangles = np.asarray(tri_mesh.triangles)
     halfedges = np.asarray(tri_mesh.halfedges)
-    points = points.reshape((int(points.shape[0] / 3), 3))
 
     t2 = time.perf_counter()
     polylidar_inputs = dict(
@@ -141,7 +148,7 @@ def make_uniform_grid_mesh(im, intrinsics, extrinsics, stride=2, **kwargs):
 def callback(alg_name, execution_time, pcd, mesh=None):
     axis_frame = o3d.geometry.TriangleMesh.create_coordinate_frame(size=0.2)
     axis_frame.translate([0, 0.8, -0.7])
-    grid_ls = construct_grid(size=2, n=20, plane_offset=-0.8, translate=[0, 1.0, 0.0])
+    grid_ls = construct_grid(size=2, n=20, plane_offset=-1.0, translate=[0, 1.0, 0.0])
     logging.info("%s took %.2f milliseconds", alg_name, execution_time)
     if mesh:
         if isinstance(mesh, list):
