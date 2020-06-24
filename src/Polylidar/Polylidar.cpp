@@ -377,7 +377,7 @@ void Polylidar3D::CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& 
             }
         }
 
-        uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
+        uint8_t valid2D = Utility::ValidateTriangleLength(t, mesh, lmax) ? ZERO_UINT8 : MAX_UINT8;
         uint8_t valid3D = std::abs(maxDotProduct) > norm_thresh_min ? plane_data_list[idx].normal_id : ZERO_UINT8;
         tri_set[t] = valid2D | valid3D;
     }
@@ -402,7 +402,7 @@ void Polylidar3D::CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelp
     for (int t = 0; t < numTriangles; t++)
     {
         if (tri_set[t] != ZERO_UINT8) continue;
-        uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
+        uint8_t valid2D = Utility::ValidateTriangleLength(t, mesh, lmax) ? ZERO_UINT8 : MAX_UINT8;
         uint8_t valid3D = std::abs(triangles_normals_e.row(t).dot(plane_normal)) > norm_thresh_min
                               ? plane_data.normal_id
                               : ZERO_UINT8;
@@ -410,29 +410,29 @@ void Polylidar3D::CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelp
     }
 }
 
-void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
-                                PlaneData& plane_data)
-{
-    // std::cout << "Calling CreateTriSet3" << std::endl;
-    int numTriangles = static_cast<int>(mesh.triangles.rows);
+// void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
+//                                 PlaneData& plane_data)
+// {
+//     // std::cout << "Calling CreateTriSet3" << std::endl;
+//     int numTriangles = static_cast<int>(mesh.triangles.rows);
 
-// Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
-// Experimentation has found that too many threads will kill this loop if not enough work is present
-#if defined(_OPENMP)
-    int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
-    num_threads = std::max(1, num_threads);
-#pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
-#endif
-    for (int t = 0; t < numTriangles; t++)
-    {
-        if (tri_set[t] != ZERO_UINT8) continue;
-        uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
-        uint8_t valid3D = Utility::ValidateTriangle3D(static_cast<size_t>(t), mesh, z_thresh, norm_thresh,
-                                                      norm_thresh_min, plane_data.plane_normal)
-                              ? plane_data.normal_id
-                              : ZERO_UINT8;
-        tri_set[t] = valid2D | valid3D;
-    }
-}
+// // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
+// // Experimentation has found that too many threads will kill this loop if not enough work is present
+// #if defined(_OPENMP)
+//     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
+//     num_threads = std::max(1, num_threads);
+// #pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+// #endif
+//     for (int t = 0; t < numTriangles; t++)
+//     {
+//         if (tri_set[t] != ZERO_UINT8) continue;
+//         uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
+//         uint8_t valid3D = Utility::ValidateTriangle3D(static_cast<size_t>(t), mesh, z_thresh, norm_thresh,
+//                                                       norm_thresh_min, plane_data.plane_normal)
+//                               ? plane_data.normal_id
+//                               : ZERO_UINT8;
+//         tri_set[t] = valid2D | valid3D;
+//     }
+// }
 
 } // namespace Polylidar

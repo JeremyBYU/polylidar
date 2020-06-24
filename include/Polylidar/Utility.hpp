@@ -10,17 +10,14 @@
 #include <unordered_map>
 #include "Polylidar/Mesh/MeshHelper.hpp"
 
-#define PL_DEFAULT_DIM 2
-#define PL_DEFAULT_ALPHA 1.0
-#define PL_DEFAULT_XYTHRESH 0.0
-#define PL_DEFAULT_LMAX 0.0
+#define PL_DEFAULT_ALPHA 0.0
+#define PL_DEFAULT_LMAX 1.0
 #define PL_DEFAULT_MINTRIANGLES 20
 #define PL_DEFAULT_MINHOLEVERTICES 3
 #define PL_DEFAULT_MINBBOX 100.0
 #define PL_DEFAULT_ZTHRESH 0.0
 #define PL_DEFAULT_NORMTHRESH 0.90
-#define PL_DEFAULT_NORMTHRESH_MIN 0.1
-#define PL_DEFAULT_ALLOWEDCLASS 4.0
+#define PL_DEFAULT_NORMTHRESH_MIN 0.90
 #define PL_DEFAULT_STRIDE 2
 #define PL_DEFAULT_CALC_NORMALS true
 #define PL_DEFAULT_TASK_THREADS 4
@@ -79,6 +76,8 @@ inline void Normalize3(double* normal)
 }
 
 inline double L2Norm(double dx, double dy) { return std::sqrt(dx * dx + dy * dy); }
+
+inline double L2Norm3D(double dx, double dy, double dz) { return std::sqrt(dx * dx + dy * dy + dz * dz); }
 
 inline double DotProduct3(const std::array<double, 3>& v1, const std::array<double, 3>& v2)
 {
@@ -205,7 +204,7 @@ inline std::vector<PlaneData> CreateMultiplePlaneDataFromNormals(const Matrix<do
     }
     return configs;
 }
-// TODO fix to look at three dimension
+
 inline double GetMaxEdgeLength(size_t t, MeshHelper::HalfEdgeTriangulation& mesh)
 {
     auto& triangles = mesh.triangles;
@@ -217,6 +216,20 @@ inline double GetMaxEdgeLength(size_t t, MeshHelper::HalfEdgeTriangulation& mesh
     auto l1 = Math::L2Norm(points(pa, 0) - points(pb, 0), points(pa, 1) - points(pb, 1));
     auto l2 = Math::L2Norm(points(pb, 0) - points(pc, 0), points(pb, 1) - points(pc, 1));
     auto l3 = Math::L2Norm(points(pc, 0) - points(pa, 0), points(pc, 1) - points(pa, 1));
+    return std::max(std::max(l1, l2), l3);
+}
+
+inline double GetMaxEdgeLength3D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh)
+{
+    auto& triangles = mesh.triangles;
+    auto& points = mesh.vertices;
+    auto& pa = triangles(t, 0_z);
+    auto& pb = triangles(t, 1_z);
+    auto& pc = triangles(t, 2_z);
+    // get max length of triangle
+    auto l1 = Math::L2Norm3D(points(pa, 0) - points(pb, 0), points(pa, 1) - points(pb, 1), points(pa, 2) - points(pb, 2));
+    auto l2 = Math::L2Norm3D(points(pb, 0) - points(pc, 0), points(pb, 1) - points(pc, 1), points(pb, 2) - points(pc, 2));
+    auto l3 = Math::L2Norm3D(points(pc, 0) - points(pa, 0), points(pc, 1) - points(pa, 1), points(pc, 2) - points(pa, 2));
     return std::max(std::max(l1, l2), l3);
 }
 
@@ -251,6 +264,11 @@ inline bool ValidateTriangle2D(size_t t, MeshHelper::HalfEdgeTriangulation& mesh
     }
 
     return true;
+}
+
+inline bool ValidateTriangleLength(size_t t, MeshHelper::HalfEdgeTriangulation& mesh, double lmax = 0.0)
+{
+    return GetMaxEdgeLength3D(t, mesh) <= lmax;
 }
 
 // Determines if the triangles noise (dz from normal) is below a configurable zThrsh
