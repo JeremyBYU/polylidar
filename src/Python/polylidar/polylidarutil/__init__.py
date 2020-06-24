@@ -127,17 +127,17 @@ def generate_3d_plane(bounds_x=[0,10,0.5], bounds_y=[0, 10, 0.5], holes=[[[3,5],
     return pc_noisy[~mask]
 
 
-def plot_polygons(polygons, points, ax):
+def plot_polygons(polygons, points, ax, linewidth=2, shell_color='green', hole_color='orange'):
     for poly in polygons:
         shell_coords = [get_point(pi, points) for pi in poly.shell]
         outline = Polygon(shell=shell_coords)
-        outlinePatch = PolygonPatch(outline, ec='green', fill=False, linewidth=2)
+        outlinePatch = PolygonPatch(outline, ec=shell_color, fill=False, linewidth=linewidth)
         ax.add_patch(outlinePatch)
 
         for hole_poly in poly.holes:
             shell_coords = [get_point(pi, points) for pi in hole_poly]
             outline = Polygon(shell=shell_coords)
-            outlinePatch = PolygonPatch(outline, ec='orange', fill=False, linewidth=2)
+            outlinePatch = PolygonPatch(outline, ec=hole_color, fill=False, linewidth=linewidth)
             ax.add_patch(outlinePatch)
 
         

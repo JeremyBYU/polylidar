@@ -317,6 +317,11 @@ if __name__ == "__main__":
                         action="store_true",
                         default=True,
                         help="Clean directories before creating")
+    parser.add_argument("--copy",
+                        dest="copy",
+                        action="store_true",
+                        default=False,
+                        help="Copy HTML website to docs folder")
     parser.add_argument("--is_release",
                         dest="is_release",
                         action="store_true",
@@ -349,3 +354,12 @@ if __name__ == "__main__":
         sdb.run()
     else:
         print("Sphinx build disabled, use --sphinx to enable")
+
+    if args.copy:
+        html_out = os.path.join(pwd, "_out", "html")
+        doc_folder = os.path.join(pwd, '..', 'docs')
+        if os.path.exists(doc_folder):
+            print("Removing old docs folder")
+            shutil.rmtree(doc_folder)
+        print("Copying Folder")
+        shutil.copytree(html_out, doc_folder)

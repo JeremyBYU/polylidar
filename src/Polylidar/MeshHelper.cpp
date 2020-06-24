@@ -81,15 +81,15 @@ void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matr
         // cross product
         if (flip_normals)
         {
-            crossProduct3(v, u, &triangle_normals[i * 3]);
+            Utility::Math::CrossProduct3(v, u, &triangle_normals[i * 3]);
         }
         else
         {
-            crossProduct3(u, v, &triangle_normals[i * 3]);
+            Utility::Math::CrossProduct3(u, v, &triangle_normals[i * 3]);
         }
         
         // normalize
-        normalize3(&triangle_normals[i * 3]);
+        Utility::Math::Normalize3(&triangle_normals[i * 3]);
     }
 
     // Ensure that the matrix ptr, row, col is updated
@@ -128,14 +128,14 @@ void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<si
         // cross product
         if (flip_normals)
         {
-            crossProduct3(v, u, &triangle_normals[i * 3]);
+            Utility::Math::CrossProduct3(v, u, &triangle_normals[i * 3]);
         }
         else
         {
-            crossProduct3(u, v, &triangle_normals[i * 3]);
+            Utility::Math::CrossProduct3(u, v, &triangle_normals[i * 3]);
         }
         // normalize
-        normalize3(&triangle_normals[i]);
+        Utility::Math::Normalize3(&triangle_normals[i]);
     }
 }
 

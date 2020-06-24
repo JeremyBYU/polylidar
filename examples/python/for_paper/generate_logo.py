@@ -80,7 +80,7 @@ def main():
         triangle_meshes = get_plane_triangles(planes_np, triangles, points)
         plot_triangle_meshes(triangle_meshes, ax)
         # plot polygons
-        plot_polygons(polygons, points, ax)
+        plot_polygons(polygons, points, ax, linewidth=4.0)
 
         ax.set_xticks([])
         ax.set_yticks([])
