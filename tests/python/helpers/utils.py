@@ -5,8 +5,8 @@ import numpy as np
 from shapely.geometry import Polygon
 from polylidar import Polylidar3D, MatrixDouble, HalfEdgeTriangulation
 
-DIR_NAME =path.dirname(path.dirname(__file__))
-FIXTURES_DIR = path.join(DIR_NAME, 'fixtures')
+DIR_NAME = path.dirname(path.dirname(path.dirname(path.dirname(__file__))))
+FIXTURES_DIR = path.join(DIR_NAME, 'fixtures', 'pointsets')
 
 def get_poly_coords(outline, points):
     return [get_point(pi, points) for pi in outline]

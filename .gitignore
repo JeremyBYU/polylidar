@@ -1,5 +1,7 @@
 fixtures/meshes
 fixtures/temp
+fixtures/realsense
+fixtures/pointsets
 scratch
 cmake-build
 assets/scratch

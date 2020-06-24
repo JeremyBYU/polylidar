@@ -3,8 +3,8 @@ import pytest
 import numpy as np
 
 
-from python_tests.helpers.utils import load_csv, load_npy
-from polylidarutil import generate_test_points, get_estimated_lmax
+from tests.python.helpers.utils import load_csv, load_npy
+from polylidar.polylidarutil import generate_test_points, get_estimated_lmax
 
 np.random.seed(1)
 
@@ -24,9 +24,9 @@ def hardcase1():
     return load_csv("hardcase1.csv")
 
 
-@pytest.fixture
-def bad_convex_hull():
-    return load_npy("possible_error_free.npy")
+# @pytest.fixture
+# def bad_convex_hull():
+#     return load_npy("possible_error_free.npy")
 
 
 @pytest.fixture()
