@@ -40,13 +40,13 @@ using PointHash = unordered_map<size_t, std::vector<size_t>>;
 // TODO Change to unordered_set
 using EdgeSet = unordered_map<size_t, size_t>;
 
-constexpr std::array<double, 3> PL_DEFAULT_DESIRED_VECTOR{{0, 0, 1}};
-constexpr std::array<double, 2> UP_VECTOR = {0.0, 1.0};
-constexpr std::array<double, 2> DOWN_VECTOR = {0.0, -1.0};
-constexpr std::array<double, 9> PL_DEFAULT_IDENTITY_RM{{1, 0, 0, 0, 1, 0, 0, 0, 1}};
-constexpr uint8_t ZERO_UINT8 = static_cast<uint8_t>(0);
-constexpr uint8_t ONE_UINT8 = static_cast<uint8_t>(1);
-constexpr uint8_t MAX_UINT8 = static_cast<uint8_t>(255);
+static constexpr std::array<double, 3> PL_DEFAULT_DESIRED_VECTOR{0, 0, 1};
+static constexpr std::array<double, 2> UP_VECTOR = {0.0, 1.0};
+static constexpr std::array<double, 2> DOWN_VECTOR = {0.0, -1.0};
+static constexpr std::array<double, 9> PL_DEFAULT_IDENTITY_RM{1, 0, 0, 0, 1, 0, 0, 0, 1};
+static constexpr uint8_t ZERO_UINT8 = static_cast<uint8_t>(0);
+static constexpr uint8_t ONE_UINT8 = static_cast<uint8_t>(1);
+static constexpr uint8_t MAX_UINT8 = static_cast<uint8_t>(255);
 
 template <class T>
 class Matrix
@@ -68,13 +68,15 @@ class Matrix
     }
     ~Matrix<T>() = default;
     // Copy Constructor: the ptr can't just copied, check ownership
-    Matrix<T>(Matrix<T>& a):own_data(a.own_data), data(a.data), ptr(a.ptr), rows(a.rows), cols(a.cols) {
+    Matrix<T>(Matrix<T>& a) : own_data(a.own_data), data(a.data), ptr(a.ptr), rows(a.rows), cols(a.cols)
+    {
         if (own_data)
         {
             ptr = data.data();
         }
     }
-    Matrix<T>(const Matrix<T>& a): own_data(a.own_data), data(a.data), ptr(a.ptr), rows(a.rows), cols(a.cols) {
+    Matrix<T>(const Matrix<T>& a) : own_data(a.own_data), data(a.data), ptr(a.ptr), rows(a.rows), cols(a.cols)
+    {
         if (own_data)
         {
             ptr = data.data();
@@ -82,7 +84,8 @@ class Matrix
     }
     // Move Constructors can be default
     Matrix<T>(Matrix<T>&& other) = default;
-    Matrix<T>& operator=(const Matrix<T>& a){
+    Matrix<T>& operator=(const Matrix<T>& a)
+    {
         own_data = a.own_data;
         data = a.data;
         ptr = a.ptr;

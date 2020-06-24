@@ -6,10 +6,12 @@ scratch
 cmake-build
 assets/scratch
 tests/fixtures/meshes
-docs/latex
-docs/html
-docs/api
-docs/sphinx
+
+# Documentation Sphinx
+src_docs/_build
+src_docs/_out
+src_docs/cpp_api
+src_docs/python_api
 # examples/cpp/bin
 .vscode
 .nox
