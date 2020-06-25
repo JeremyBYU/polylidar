@@ -39,8 +39,7 @@ int main(int argc, char const* argv[])
     Polylidar::Planes planes;
     Polylidar::Polygons polygons;
     auto before = std::chrono::high_resolution_clock::now();
-std:
-    tie(mesh, planes, polygons) = pl.ExtractPlanesAndPolygons(points);
+    std:tie(mesh, planes, polygons) = pl.ExtractPlanesAndPolygons(points);
     auto after = std::chrono::high_resolution_clock::now();
 
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(after - before);

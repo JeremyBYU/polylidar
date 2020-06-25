@@ -73,7 +73,7 @@ def main():
     mesh, planes, polygons = polylidar.extract_planes_and_polygons(points_mat)
     t2 = time.perf_counter()
     print("Point Size: {}".format(points.shape[0]))
-    print("2D Delaunay Triangulation and Plane Extraction; Mesh Creation {:.2f} milliseconds".format((t2 - t1) * 1000))
+    print("2.5D Delaunay Triangulation and Plane Extraction; Mesh Creation {:.2f} milliseconds".format((t2 - t1) * 1000))
 
     # Visualize
     # Create Open3D Mesh

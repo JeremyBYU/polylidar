@@ -1,3 +1,8 @@
+"""Example MultiPolygon Extraction with an **Unorganized* 3D Point Cloud. Step through algorithm.
+Note this method is only suitable if you know the dominant surface normal of the plane you desire to extract.
+The 3D point cloud must be rotated such that this surface normal is [0,0,1], i.e., the plane is aligned with the XY Plane
+The method relies upon 3D->2D Projection and performs 2.5D Delaunay Triangulation. 
+"""
 import time
 import math
 

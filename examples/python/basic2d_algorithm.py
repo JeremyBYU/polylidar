@@ -1,8 +1,10 @@
+"""Example of extracting MultiPolygons with holes of a 2D point set. Step through algorithm.
+"""
 import time
 import numpy as np
 from polylidar import Delaunator, MatrixDouble, Polylidar3D
 from polylidar.polylidarutil import (generate_test_points, plot_points, plot_triangles, get_estimated_lmax,
-                            plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
+                            plot_triangle_meshes, get_triangles_from_list, get_colored_planar_segments, plot_polygons)
 import matplotlib.pyplot as plt
 
 np.random.seed(1)
@@ -48,7 +50,7 @@ def main():
         # plot points
         ax.scatter(points[:, 0], points[:, 1], c='k', s=0.1)
         # plot all triangles
-        plot_triangles(get_triangles_from_he(triangles, points), ax)
+        plot_triangles(get_triangles_from_list(triangles, points), ax)
         fig.savefig("assets/scratch/Basic2DAlgorithm_mesh.png", bbox_inches='tight', pad_inches=-0.6)
         plt.show()
 
@@ -57,9 +59,9 @@ def main():
         # plot points
         ax.scatter(points[:, 0], points[:, 1], c='k', s=0.1)
         # plot all triangles
-        plot_triangles(get_triangles_from_he(triangles, points), ax)
+        plot_triangles(get_triangles_from_list(triangles, points), ax)
         # plot mesh triangles
-        triangle_meshes = get_plane_triangles(planes_np, triangles, points)
+        triangle_meshes = get_colored_planar_segments(planes_np, triangles, points)
         plot_triangle_meshes(triangle_meshes, ax)
         # plot polygons
         plot_polygons(polygons, points, ax)

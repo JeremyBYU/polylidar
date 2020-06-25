@@ -2,12 +2,56 @@ import numpy as np
 import open3d as o3d
 
 from .line_mesh import LineMesh
+from polylidar.polylidarutil import COLOR_PALETTE
 EXTRINSICS = None
 
 MAX_POLYS = 10
 ORANGE = (255 / 255, 188 / 255, 0)
 GREEN = (0, 255 / 255, 0)
 
+
+def create_open_3d_mesh_from_tri_mesh(tri_mesh):
+    """Create an Open3D Mesh given a Polylidar TriMesh"""
+    triangles = np.asarray(tri_mesh.triangles)
+    vertices = np.asarray(tri_mesh.vertices)
+    triangle_normals = np.asarray(tri_mesh.triangle_normals)
+    return create_open_3d_mesh(triangles, vertices, triangle_normals, counter_clock_wise=tri_mesh.counter_clock_wise)
+
+
+def create_open_3d_mesh(triangles, points, triangle_normals=None, color=COLOR_PALETTE[0], counter_clock_wise=True):
+    """Create an Open3D Mesh given triangles vertices
+
+    Arguments:
+        triangles {ndarray} -- Triangles array
+        points {ndarray} -- Points array
+
+    Keyword Arguments:
+        color {list} -- RGB COlor (default: {[1, 0, 0]})
+
+    Returns:
+        mesh -- Open3D Mesh
+    """
+    mesh_o3d = o3d.geometry.TriangleMesh()
+    if points.ndim == 1:
+        points = points.reshape((int(points.shape[0] / 3), 3))
+    if triangles.ndim == 1:
+        triangles = triangles.reshape((int(triangles.shape[0] / 3), 3))
+        # Open 3D expects triangles to be counter clockwise
+    if not counter_clock_wise:
+        triangles = np.ascontiguousarray(np.flip(triangles, 1))
+    mesh_o3d.triangles = o3d.utility.Vector3iVector(triangles)
+    mesh_o3d.vertices = o3d.utility.Vector3dVector(points)
+    if triangle_normals is None:
+        mesh_o3d.compute_vertex_normals()
+        mesh_o3d.compute_triangle_normals()
+    elif triangle_normals.ndim == 1:
+        triangle_normals_ = triangle_normals.reshape((int(triangle_normals.shape[0] / 3), 3))
+        mesh_o3d.triangle_normals = o3d.utility.Vector3dVector(triangle_normals_)
+    else:
+        mesh_o3d.triangle_normals = o3d.utility.Vector3dVector(triangle_normals)
+    mesh_o3d.paint_uniform_color(color)
+    mesh_o3d.compute_vertex_normals()
+    return mesh_o3d
 
 def flatten(l): return [item for sublist in l for item in sublist]
 

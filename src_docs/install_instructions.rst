@@ -12,7 +12,7 @@ There are several config options which can be specified here during step (2):
 
 .. code:: text
 
-    PL_BUILD_BENCHMARKS:BOOL=ON // PL - Build Benchmarks
+    PL_BUILD_BENCHMARKS:BOOL=OFF // PL - Build Benchmarks
     PL_BUILD_EXAMPLES:BOOL=ON // PL - Build Examples
     PL_BUILD_PYMODULE:BOOL=ON // PL -Build Python Module
     PL_BUILD_TESTS:BOOL=ON // PL - Build Tests
@@ -47,7 +47,7 @@ CMake Integration
 
 To integrate with a *different* CMake Project do the following:
 
-1. Add as a submodule into your repo: `git submodule add https://github.com/JeremyBYU/polylidar thirdparty/polylidar` 
+1. Add as a submodule into your repo: ``git submodule add https://github.com/JeremyBYU/polylidar thirdparty/polylidar``
 2. Add the following to your CMakeLists.txt file:
 
 .. code:: text
@@ -64,4 +64,4 @@ Delaunator (the 2D triangulation library used for 2D Point Sets and Unorganized 
 This means that the triangulation can be incorrect when points are nearly colinear or cocircular. A library developed by Jonathan Richard Shewchuk provides very fast adaptive precision floating point arithmetic for `geometric predicates <https://www.cs.cmu.edu/~quake/robust.html>`_.  
 This library is released in the public domain and an updated version of it is maintained at this `repository <https://github.com/danshapero/predicates>`_. I have included this source code in the folder ``polylidar/predicates`` .  
 
-If you desire to have robust geometric predicates built into Delaunator you must build with the CMake option. For example ``cmake .. -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_QUIET=OFF -DPL_USE_ROBUST_PREDICATES=ONE``.
+If you desire to have robust geometric predicates built into Delaunator you must build with the CMake option. For example ``cmake .. -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_QUIET=OFF -DPL_USE_ROBUST_PREDICATES=ON``.

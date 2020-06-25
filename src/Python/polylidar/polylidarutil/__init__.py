@@ -159,21 +159,27 @@ def get_estimated_lmax(num_groups=2, dist=100, group_size=10, scale_factor=4, **
     lmax = scale_factor / math.sqrt(clust_point_density)
     return lmax
 
-def get_triangles_from_he(triangles, points):
+def get_triangles_from_list(triangles:np.ndarray, points):
     triangle_list = []
     for i in range(0, len(triangles), 3):
         # print(triangles)
         triangle = []
-        p0 = triangles[i]
-        p1 = triangles[i + 1]
-        p2 = triangles[i + 2]
+        if triangles.ndim == 1:
+            p0 = triangles[i]
+            p1 = triangles[i + 1]
+            p2 = triangles[i + 2]
+        else:
+            p0 = triangles[i, 0]
+            p1 = triangles[i, 1]
+            p2 = triangles[i, 2]
         triangle.append(get_point(p0, points))
         triangle.append(get_point(p1, points))
         triangle.append(get_point(p2, points))
         triangle_list.append(triangle)
+
     return triangle_list
 
-def get_plane_triangles(planes, triangles, points):
+def get_colored_planar_segments(planes, triangles:np.ndarray, points):
     triangle_meshes = []
     for i,plane in enumerate(planes):
         # Get color for plane mesh
@@ -187,9 +193,14 @@ def get_plane_triangles(planes, triangles, points):
         for t in plane:
             # print(triangles)
             triangle = []
-            p0 = triangles[t * 3]
-            p1 = triangles[t* 3 + 1]
-            p2 = triangles[t * 3 + 2]
+            if triangles.ndim == 1:
+                p0 = triangles[t * 3]
+                p1 = triangles[t* 3 + 1]
+                p2 = triangles[t * 3 + 2]
+            else:
+                p0 = triangles[t, 0]
+                p1 = triangles[t, 1]
+                p2 = triangles[t, 2]
             triangle.append(get_point(p0, points))
             triangle.append(get_point(p1, points))
             triangle.append(get_point(p2, points))
@@ -200,7 +211,7 @@ def get_plane_triangles(planes, triangles, points):
 
 def get_all_triangles(delaunay, points):
     triangles = delaunay.triangles
-    triangle_coords = get_triangles_from_he(triangles, points)
+    triangle_coords = get_triangles_from_list(triangles, points)
     return triangle_coords
 
 

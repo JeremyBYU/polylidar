@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from python_tests.helpers.utils import load_csv
 from polylidar import Polylidar3D, MatrixDouble
 from polylidar.polylidarutil import (plot_points, plot_triangles,
-                           plot_triangle_meshes, get_triangles_from_he, get_plane_triangles, plot_polygons)
+                           plot_triangle_meshes, get_triangles_from_list, get_colored_planar_segments, plot_polygons)
 
 # Load point set that for which delaunator generates invalid convex hulls when using non-robust predicates
 # Convex hull should be malformed if polylidar not built with robust predicates
@@ -37,9 +37,9 @@ for robust_test in robust_tests:
         # plot points
         plot_points(points, ax)
         # plot all triangles
-        plot_triangles(get_triangles_from_he(triangles, points), ax)
+        plot_triangles(get_triangles_from_list(triangles, points), ax)
         # plot mesh triangles
-        triangle_meshes = get_plane_triangles(planes_np, triangles, points)
+        triangle_meshes = get_colored_planar_segments(planes_np, triangles, points)
         plot_triangle_meshes(triangle_meshes, ax)
         # plot polygons
         plot_polygons(polygons, points, ax)
