@@ -1,8 +1,9 @@
 """Example of extracting MultiPolygons with holes of a 2D point set
 """
 import time
+
 import numpy as np
-from polylidar import Delaunator, MatrixDouble, Polylidar3D
+from polylidar import MatrixDouble, Polylidar3D
 from polylidar.polylidarutil import (generate_test_points, plot_triangles, get_estimated_lmax,
                                      plot_triangle_meshes, get_triangles_from_list, get_colored_planar_segments, plot_polygons)
 import matplotlib.pyplot as plt
@@ -11,7 +12,6 @@ np.random.seed(1)
 
 
 def main():
-
     kwargs = dict(num_groups=2, group_size=1000, dist=100.0, seed=1)
     # generate 2 random normally distributed clusters of points, 200 X 2 numpy array.
     points = generate_test_points(**kwargs)

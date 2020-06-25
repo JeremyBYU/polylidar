@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 
-from polylidar import Delaunator, MatrixDouble, Polylidar3D
+from polylidar import MatrixDouble, Polylidar3D
 from polylidar.polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal, plot_planes_3d,
                                      scale_points, rotation_matrix, apply_rotation)
 
@@ -29,7 +29,6 @@ def main():
         0, 2, 0.2], holes=[], height_noise=0.02, planar_noise=0.02)
     rm = rotation_matrix([0, 1, 0], -math.pi / 2.0)
     box_side = apply_rotation(rm, box_side) + [5, 3, 0]
-    # box_side = r.apply(box_side) + [5, 3, 0]
     # All points joined together
     points = np.concatenate((plane, box_side, box_top))
 

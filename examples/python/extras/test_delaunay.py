@@ -1,3 +1,5 @@
+"""Used to just test Delaunay triangulation
+"""
 import numpy as np
 from polylidar import Delaunator, MatrixDouble
 import matplotlib.pyplot as plt

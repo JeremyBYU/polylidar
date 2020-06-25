@@ -3,12 +3,26 @@ import open3d as o3d
 
 from .line_mesh import LineMesh
 from polylidar.polylidarutil import COLOR_PALETTE
+from polylidar import MatrixDouble, MatrixInt, create_tri_mesh_copy
 EXTRINSICS = None
 
 MAX_POLYS = 10
 ORANGE = (255 / 255, 188 / 255, 0)
 GREEN = (0, 255 / 255, 0)
 
+
+def open_3d_mesh_to_trimesh(mesh: o3d.geometry.TriangleMesh):
+    triangles = np.asarray(mesh.triangles)
+    vertices = np.asarray(mesh.vertices)
+
+    triangles = np.ascontiguousarray(triangles)
+
+    vertices_mat = MatrixDouble(vertices)
+    triangles_mat = MatrixInt(triangles)
+    triangles_mat_np = np.asarray(triangles_mat)
+
+    tri_mesh = create_tri_mesh_copy(vertices_mat, triangles_mat)
+    return tri_mesh
 
 def create_open_3d_mesh_from_tri_mesh(tri_mesh):
     """Create an Open3D Mesh given a Polylidar TriMesh"""

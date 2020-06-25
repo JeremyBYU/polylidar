@@ -1,3 +1,6 @@
+"""Used to test Polyidars Matrix Class
+This test ensures that a no copy operation actually works
+"""
 import numpy as np
 from polylidar import Polylidar3D, MatrixDouble
 
