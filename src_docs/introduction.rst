@@ -1,13 +1,8 @@
 .. _introduction:
 
-About Polylidar3D
+Introducing Polylidar3D
 ############################
 
-Polylidar3D is ...
 
-Core features
-======================
-
-* One
-* Two
+.. mdinclude:: ../README.md
 

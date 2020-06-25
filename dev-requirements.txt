@@ -7,3 +7,4 @@ open3d
 Sphinx
 sphinx_rtd_theme
 breathe
+m2r

@@ -265,7 +265,7 @@ struct Polygon
 
 /**
  * Represents point on the far right (x-axis) of hull of a mesh
- * TODO remove the y-axis junk that I dont use/need
+ * TODO remove the far left x-axis information that I dont use/need
  * 
  */
 struct ExtremePoint

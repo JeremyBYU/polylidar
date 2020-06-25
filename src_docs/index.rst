@@ -10,16 +10,21 @@
 
 -----------
 
-Polylidar3D: A Great Polylidar3D
-===============================================
+Polylidar3D: Fast Polygon Extraction from 3D Data
+=====================================================
 
 .. only: not latex
 
     Contents:
 
+.. _gettting_started_index:
+
 .. toctree::
+    :maxdepth: 0
+    :caption: Getting Started
 
     introduction
+    install_instructions
     builddocs
 
 

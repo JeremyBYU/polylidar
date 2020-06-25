@@ -52,7 +52,7 @@ sys.path.insert(
 # ones.
 extensions = [
     'sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon', 'breathe', 'exhale'
+    'sphinx.ext.napoleon', 'breathe', 'exhale', 'm2r',
 ]
 
 # Setup the breathe extension
@@ -134,6 +134,7 @@ todo_include_todos = False
 html_theme = "sphinx_rtd_theme"
 # html_theme_path = [theme_path]
 html_favicon = ""
+html_logo = '_static/pl_logo.png'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
