@@ -4,7 +4,8 @@ scipy
 open3d
 
 # Documentation Generation Packages
-Sphinx
-sphinx_rtd_theme
-breathe
-m2r
+Sphinx==2.4.4
+sphinx_rtd_theme==0.4.3
+exhale==0.2.3
+breathe==4.14.1 
+m2r==0.2.1
