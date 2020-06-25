@@ -39,7 +39,7 @@
 namespace Polylidar {
 
 /**
- * This class handles all data inputs: 2D points sets, 3D point clouds, 3D meshes.
+ * This class handles all data inputs: 2D points sets, 3D point clouds, 3D meshes. Will extract polygons from data.
  * The only issue is the '_alpha' parameter is only applicable for 2D point sets.
  * TODO - Break up into 2D and 3D classes?
  */
@@ -55,7 +55,7 @@ class Polylidar3D
      * @param _lmax               Maximum triangle edge length in a planar triangle segment
      * @param _min_triangles      Minimum number of triangles in a planar triangle segment
      * @param _min_hole_vertices  Minimum number of vertices for an interior hole in a polygon
-     * @param _z_thresh           Maximum point to plane distance during region growing (3D only)
+     * @param _z_thresh           Maximum point to plane distance during region growing (3D only). A value of 0.0 ignores this constraint.
      * @param _norm_thresh        IGNORE - will be deprecated or repurposed (3D only)
      * @param _norm_thresh_min    Minimum value of the dot product between a triangle and surface normal being extracted
      * (3D only)
@@ -136,7 +136,8 @@ class Polylidar3D
     std::vector<uint8_t> ExtractTriSet(MeshHelper::HalfEdgeTriangulation& mesh, const Matrix<double>& plane_normals);
 
   public:
-    /** @brief Maximum circumcircle radius of a triangle. Filters 'big' triangles. Only applicable for 2D point sets. */
+    /** @brief Maximum circumcircle radius of a triangle. Filters 'big' triangles. Only applicable for 2D point sets. A
+     * value of 0.0 makes this parameter ignored. */
     double alpha;
     /** @brief Maximum triangle edge length of a triangle in a planar segment. Filters 'big' triangles */
     double lmax;
@@ -144,7 +145,8 @@ class Polylidar3D
     size_t min_triangles;
     /** @brief Minimum number of vertices for a hole in a polygon. Filters small holes very fast. */
     size_t min_hole_vertices;
-    /** @brief Maximum point to plane distance during region growing (3D only). Forces planarity constraints */
+    /** @brief Maximum point to plane distance during region growing (3D only). Forces planarity constraints. A value of
+     * 0.0 ignores this constraint. */
     double z_thresh;
     /** @brief IGNORE - will be deprecated or repurposed (3D only) */
     double norm_thresh;

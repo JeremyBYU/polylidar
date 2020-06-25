@@ -8,6 +8,7 @@
 #include <pybind11/stl_bind.h>
 
 #include "Polylidar/Polylidar.hpp"
+#include "polylidar_pybind/docstring/docstring.hpp"
 
 namespace py = pybind11;
 using namespace py::literals;

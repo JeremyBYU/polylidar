@@ -27,22 +27,25 @@ using unordered_map = phmap::flat_hash_map<T, G>;
 #endif
 
 using MatX2I = std::vector<std::array<size_t, 2>>;
-
+/**
+ * This class hold all the datastructures in our meshes (vertices, triangles, halfedges, etc.).
+ * 
+ */
 class HalfEdgeTriangulation
 {
 
   public:
-    /** @brief vertices in the mesh, N X 2 or N X 3 */
+    /** @brief Vertices in the mesh, N X 2 or N X 3 */
     Matrix<double> vertices;
-    /** @brief triangles in the mesh, K X 3 */
+    /** @brief Triangles in the mesh, K X 3 */
     Matrix<size_t> triangles;
-    /** @brief half-edge mapping in the mesh, K X 3. Every triangle has three oriented half-edges.
+    /** @brief Half-edge mapping in the mesh, K X 3. Every triangle has three oriented half-edges.
      * Each half-edge has unique id which is mapped to the 2D index of all triangles, e.g. the half-edges of triangle k
      * are [3*k, 3*k + 1, 3*k + 2]. Halfedges array provides the twin/opposite/shared half-edge id. e.g., The twin
      * half-edge of first edge for the triangle k is halfedges(k, 0)
      */
     Matrix<size_t> halfedges;
-    /** @brief triangle normals in the mesh (normalized), K X 3 */
+    /** @brief Triangle normals in the mesh (normalized), K X 3 */
     Matrix<double> triangle_normals;
     /** @brief Direction of travel for oriented half-edges around a triangle */
     bool counter_clock_wise;
