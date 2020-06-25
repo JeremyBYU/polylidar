@@ -52,7 +52,7 @@ sys.path.insert(
 # ones.
 extensions = [
     'sphinx.ext.mathjax', 'sphinx.ext.autodoc', 'sphinx.ext.autosummary',
-    'sphinx.ext.napoleon', 'breathe', 'exhale', 'm2r',
+    'sphinx.ext.napoleon', 'breathe', 'exhale', 'm2r', 'nbsphinx','nbsphinx_link',
 ]
 
 # Setup the breathe extension

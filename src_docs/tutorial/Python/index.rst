@@ -1,8 +1,9 @@
 Python
 ===================================================================
 
-Python Interface Tutorials
+Python Tutorials
 
 .. toctree::
+    :maxdepth: 0
 
-    basic
+    basicdemo
