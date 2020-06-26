@@ -1,9 +1,11 @@
 
+configure_file("PLConfig.hpp.in" "PLConfig.hpp" @ONLY)
 
 set(POLYLIDAR_SRC "${CMAKE_CURRENT_SOURCE_DIR}")
 set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 set(POLYLIDAR_INCLUDE_DIR "${INCLUDE_DIR}/Polylidar")
-set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/Polylidar.cpp ${POLYLIDAR_SRC}/MeshHelper.cpp ${POLYLIDAR_SRC}/MeshFilter.cpp ${POLYLIDAR_SRC}/Delaunator.cpp ${POLYLIDAR_SRC}/Core.cpp)
+set(POLYLIDAR_SOURCE_FILES ${POLYLIDAR_SRC}/Polylidar.cpp ${POLYLIDAR_SRC}/MeshHelper.cpp ${POLYLIDAR_SRC}/MeshFilter.cpp 
+                            ${POLYLIDAR_SRC}/Delaunator.cpp ${POLYLIDAR_SRC}/Core.cpp ${POLYLIDAR_SRC}/PLConfig.cpp)
 set(POLYLIDAR_HEADER_FILES ${POLYLIDAR_INCLUDE_DIR}/Polylidar.hpp ${POLYLIDAR_INCLUDE_DIR}/Types.hpp 
                             ${POLYLIDAR_INCLUDE_DIR}/Utility.hpp ${POLYLIDAR_INCLUDE_DIR}/Mesh/MeshHelper.hpp
                             ${POLYLIDAR_INCLUDE_DIR}/Delaunator/Delaunator.hpp ${POLYLIDAR_INCLUDE_DIR}/Core.hpp)
@@ -20,8 +22,11 @@ ${DESIRED_WARNINGS}>
 $<$<CXX_COMPILER_ID:MSVC>:
 /W4>)
 
+# To include the PLConfig.hpp file
+target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
 # Link with Eigen
-# Method to hide warnings from nanoflann using SYSTEM
+# Method to hide warnings from eigen using SYSTEM
 get_target_property(eigen_include_dirs eigen INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE ${eigen_include_dirs})
 # -pedantic-errors marl has issues with this

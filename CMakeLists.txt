@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.11)
 # Project Details
 set(PROJECT_NAME "Polylidar")
-set(PROJECT_VERSION 0.1.0)
+set(PROJECT_VERSION 1.0.0)
 set(PROJECT_EMAIL   "")
 set(PROJECT_HOME    "")
 set(PROJECT_DOCS    "")

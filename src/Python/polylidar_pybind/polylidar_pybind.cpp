@@ -251,6 +251,9 @@ PYBIND11_MODULE(polylidar, m)
           "Creates a copy of a tri mesh, triangles of int dtype. Mostly used for Open3D triangles.", "vertices"_a,
           "triangles"_a, "calc_normals"_a = PL_DEFAULT_CALC_NORMALS);
 
+    m.def("get_polylidar_version", &GetPolylidarVersion, "Get Polylidar Version");
+    m.def("robust_predicates_activated", &RobustPredicatesActivated, "Check if built with Robust Geometric Predicates");
+
     docstring::FunctionDocInject(m, "create_tri_mesh_copy",
                                  {{"vertices", "Triangle vertices in Matrix Form"},
                                   {"triangles", "Triangle point indices in Matrix Form"},

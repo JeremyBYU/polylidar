@@ -13,6 +13,9 @@
 
 namespace Polylidar {
 
+std::string GetPolylidarVersion();
+bool RobustPredicatesActivated();
+
 namespace Utility {
 
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
