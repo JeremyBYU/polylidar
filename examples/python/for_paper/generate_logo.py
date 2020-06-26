@@ -17,7 +17,7 @@ def get_np_buffer_ptr(a):
 def stitch_letters(letters_map, letters=['P', 'L']):
     # letters = ['P', 'O', 'L', 'Y', 'L', 'I', 'D', 'A', 'R']
     x_offset = np.array([0.0, 0.0])
-    x_spacing = np.array([0.0, 0.0])
+    x_spacing = np.array([-30.0, 0.0])
     all_points = []
     for letter in letters:
         letter_points = np.copy(letters_map[letter])
@@ -86,7 +86,7 @@ def main():
         ax.set_yticks([])
         plt.axis('equal')
         plt.axis('off')
-        plt.subplots_adjust(wspace=0.185, hspace=0.185,left=0.110,top=0.535,right=0.850,bottom=0.110) 
+        plt.subplots_adjust(wspace=0.185, hspace=0.185,left=0.110,top=0.535,right=0.750,bottom=0.110) 
         fig.savefig('assets/scratch/pl_logo.png', bbox_inches='tight', transparent=True)
         plt.show()
 
