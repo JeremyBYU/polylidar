@@ -20,7 +20,7 @@ Polylidar3D: Fast Polygon Extraction from 2D & 3D Data
 .. _gettting_started_index:
 
 .. toctree::
-    :maxdepth: 0
+    :maxdepth: 1
     :caption: Getting Started
 
     introduction
