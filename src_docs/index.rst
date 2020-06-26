@@ -10,8 +10,8 @@
 
 -----------
 
-Polylidar3D: Fast Polygon Extraction from 3D Data
-=====================================================
+Polylidar3D: Fast Polygon Extraction from 2D & 3D Data
+========================================================
 
 .. only: not latex
 

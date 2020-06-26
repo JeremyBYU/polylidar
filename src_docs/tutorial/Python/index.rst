@@ -7,3 +7,4 @@ Python Tutorials
     :maxdepth: 0
 
     basicdemo
+    organizeddemo
