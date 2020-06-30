@@ -7,7 +7,6 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#install">Install</a> •
   <a href="#documentation">Documentation</a> •
   <a href="#polylidar-use-cases">Use Cases</a> •
   <a href="#credits">Credits</a> •

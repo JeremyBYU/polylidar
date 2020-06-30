@@ -88,15 +88,30 @@ def recover_3d(poly, kd_tree, z_value):
 
 
 def filter_planes_and_holes(polygons, points, config_pp, rm=None):
-    """Extracts the plane and obstacles returned from polylidar
-    Will filter polygons according to: number of vertices and size
-    Will also buffer (dilate) and simplify polygons
+    """Extracts the plane and obstacles returned from polylidar.
+    This function performs post-processing of the Polygons returned by Polylidar3D using the Shapely library.
+    If the polygons are 3D you must provide a scipy rotation matrix such that the polygon
+    align with they XY plane (Shapely can only handle 2D polygons with XY coordinates).
 
-    Arguments:
-        polygons {list[Polygons]} -- A list of polygons returned from polylidar
-        points {ndarray} -- MX3 array
-        config_pp {dict} -- Configuration for post processing filtering
-          Example Configuration
+    The basic steps are:
+        * Simplification of Polygon by config_pp['simplify]
+        * Positive buffer of Polygon by config_pp['positive_buffer]
+        * Negative Buffer of POlygons by config_pp['negative_buffer]
+        * Simplification of Polygon by config_pp['simplify]
+        * Remove polygons whose area is less or greater than data in config_pp['filter]['plane_area']
+        * Remove holes whose vertices are less than data in config_pp['filter]['hole_vertices']
+        * Remove holes whose area is less or greater than data in config_pp['filter]['hole_area']
+
+    It then returns the shapely polygons of the polygons and holes (obstacles)
+
+    An example config_pp
+
+    .. code-block:: python
+
+        {
+            positive_buffer: 0.005 # m, Positively expand polygon.  Fills in small holes
+            negative_buffer: 0.03 # m, Negative buffer to polygon. Expands holes and constricts outer hull of polygon
+            simplify: 0.02  # m, simplify edges of polygon
             filter: # obstacles must have these characteristics
                 hole_area:
                     min: 0.025   # m^2
@@ -105,13 +120,16 @@ def filter_planes_and_holes(polygons, points, config_pp, rm=None):
                     min: 6
                 plane_area:
                     min: .5 # m^2
-            # These parameters correspond to Shapely polygon geometry operations
-            positive_buffer: 0.005 # m, Positively expand polygon.  Fills in small holes
-            negative_buffer: 0.03 # m, Negative buffer to polygon. Expands holes and constricts outer hull of polygon
-            simplify: 0.02  # m, simplify edges of polygon
+        }
+
+    Arguments:
+        polygons {list[Polygons]} -- A list of polygons returned from polylidar
+        points {ndarray} -- MX3 array
+        config_pp {dict} -- Configuration for post processing filtering
+        rm {scipy.spatial.RotationMatrix} -- Rotation matrix applied to 3D polygons to make 2D
 
     Returns:
-        tuple -- A list of plane shapely polygons and a list of obstacle polygons
+        tuple -- A list of plane shapely polygons and a list of holes in polygons
     """
     # filtering configuration
     post_filter = config_pp['filter']

@@ -22,7 +22,7 @@ There are several config options which can be specified here during step (2):
 
 
 1. ``mkdir cmake-build && cd cmake-build`` - create build folder directory
-2. ``cmake .. -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_QUIET=OFF`` - This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break!
+2. ``cmake .. -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_QUIET=OFF`` - For windows also add ``-DCMAKE_GENERATOR_PLATFORM=x64``. This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break! 
 3. ``cmake --build . -j4`` - Build Polylidar3D, change ``-j4`` to how many processors/threads you have. 
 4. ``cd .. && ./cmake-build/polylidar-simple`` - Simple test program.
 

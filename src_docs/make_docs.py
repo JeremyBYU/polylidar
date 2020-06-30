@@ -39,7 +39,7 @@ import sys
 import multiprocessing
 import importlib
 import os
-from inspect import getmembers, isbuiltin, isclass, ismodule
+from inspect import getmembers, isbuiltin, isclass, ismodule, isfunction
 import shutil
 import warnings
 import weakref
@@ -83,10 +83,10 @@ class PyAPIDocsBuilder:
     def generate_rst(self):
         _create_or_clear_dir(self.output_dir)
 
-        for module_name in self.module_names:
+        for module_name, module_type in self.module_names:
             module = self._get_polylidar_module(module_name)
             PyAPIDocsBuilder._generate_sub_module_class_function_docs(
-                module_name, module, self.output_dir)
+                module_name, module, module_type, self.output_dir)
 
     @staticmethod
     def _get_polylidar_module(full_module_name):
@@ -185,7 +185,7 @@ class PyAPIDocsBuilder:
 
     @staticmethod
     def _generate_sub_module_class_function_docs(sub_module_full_name,
-                                                 sub_module, output_dir):
+                                                 sub_module, module_type, output_dir):
         print("Generating docs for submodule: %s" % sub_module_full_name)
 
         # Class docs
@@ -199,9 +199,14 @@ class PyAPIDocsBuilder:
                                                  class_name, output_path)
 
         # Function docs
-        function_names = [
-            obj[0] for obj in getmembers(sub_module) if isbuiltin(obj[1])
-        ]
+        if module_type == '':
+            function_names = [
+                obj[0] for obj in getmembers(sub_module) if isbuiltin(obj[1])
+            ]
+        else:
+            function_names = [
+                obj[0] for obj in getmembers(sub_module) if isfunction(obj[1]) and obj[1].__module__ == sub_module.__name__
+            ]
         for function_name in function_names:
             file_name = "%s.%s.rst" % (sub_module_full_name, function_name)
             output_path = os.path.join(output_dir, file_name)
@@ -244,9 +249,10 @@ class SphinxDocsBuilder:
         module_names = []
         with open('index.rst', 'r') as f:
             for line in f:
-                m = re.match('^\s*python_api/(.*)\s*$', line)
+                m = re.match('\s*MAKE_DOCS/python_api/([^\s]*)\s*(.*)\s*$', line)
+                # m = re.match('^\s*python_api/(.*)\s*$', line)
                 if m:
-                    module_names.append(m.group(1))
+                    module_names.append((m.group(1), m.group(2)))
         return module_names
 
     def run(self):

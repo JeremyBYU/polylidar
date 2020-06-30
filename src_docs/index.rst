@@ -44,6 +44,12 @@ Polylidar3D: Fast Polygon Extraction from 2D & 3D Data
     :caption: Python API
 
     python_api/polylidar
+    python_api/polylidar.polylidarutil.plane_filtering
+
+..
+    Please put the module and meta data you want here!
+    MAKE_DOCS/python_api/polylidar
+    MAKE_DOCS/python_api/polylidar.polylidarutil.plane_filtering   python_only
 
 .. _cpp_api_index:
 
