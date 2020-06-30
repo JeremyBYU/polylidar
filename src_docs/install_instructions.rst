@@ -39,6 +39,11 @@ The basic setup here is that CMake will build the python extension (.so or .dll)
 6. ``pip install -e .`` - Install the python package in ``develop/edit`` mode into python virtual environment.
 7. ``cd ../../../ && pip install -r dev-requirements.txt`` - Move back to main folder and install optional dependencies to run python examples.
 
+Download Example/Fixture Data
+------------------------------
+
+You can download example data `here <https://drive.google.com/file/d/1T5u7Cn8H_rWZpugcr_h3VrRx_onTpcX7/view?usp=sharinghttps://drive.google.com/file/d/1T5u7Cn8H_rWZpugcr_h3VrRx_onTpcX7/view?usp=sharing>`_ . Everything should be placed in the ```fixtures``` folder.
+
 C++ Projects
 -------------
 
