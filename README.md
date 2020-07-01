@@ -19,6 +19,9 @@
   <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
 </p>
 
+[![Docs](assets/api-doc.svg)](https://jeremybyu.github.io/Polylidar3D/)
+[![Cite](https://img.shields.io/badge/cite-%2010.1109--LRA.2020.3002212-red)](https://ieeexplore.ieee.org/document/9117017)
+
 ## Key Features
 
 * Fast (Multi)Polygon Extraction from multiple sources of 3D Data
@@ -72,6 +75,27 @@ This software is only possible because of the great work from the following open
 
 Any help or suggestions would be appreciated!
 
+## Citation
+
+If are using Polylidar for 2D work please cite: 
+
+```
+@ARTICLE{9117017,
+  author={J. {Castagno} and E. {Atkins}},
+  journal={IEEE Robotics and Automation Letters}, 
+  title={Polylidar - Polygons From Triangular Meshes}, 
+  year={2020},
+  volume={5},
+  number={3},
+  pages={4634-4641}
+}
+```
+
+If you are using Polylidar for 3D work please cite:
+
+```
+TBA
+```
 
 ## License
 
