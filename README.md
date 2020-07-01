@@ -19,7 +19,7 @@
   <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
 </p>
 
-[![Docs](assets/api-doc.svg)](https://jeremybyu.github.io/Polylidar3D/)
+[![Docs](https://img.shields.io/badge/API-docs-blue)](https://jeremybyu.github.io/Polylidar3D/)
 [![Cite](https://img.shields.io/badge/cite-%2010.1109--LRA.2020.3002212-red)](https://ieeexplore.ieee.org/document/9117017)
 
 ## Key Features
