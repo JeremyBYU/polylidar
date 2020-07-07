@@ -61,7 +61,7 @@ def down_sample_normals(triangle_normals, down_sample_fraction=0.12, min_samples
 
 
 def get_image_peaks(ico_chart, ga, level=2, with_o3d=False,
-                    find_peaks_kwargs=dict(threshold_abs=15, min_distance=1, exclude_border=True, indices=False),
+                    find_peaks_kwargs=dict(threshold_abs=30, min_distance=1, exclude_border=True, indices=False),
                     cluster_kwargs=dict(t=0.10, criterion='distance'),
                     average_filter=dict(min_total_weight=0.01),
                     **kwargs):

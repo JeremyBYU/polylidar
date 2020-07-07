@@ -3,7 +3,7 @@
 #include "Polylidar/Mesh/MeshHelper.hpp"
 #include <iostream>
 #include <cmath>
-#include "eigen3/Eigen/Dense"
+#include "Eigen/Dense"
 #include "FastExp/fastexp.h"
 
 #define PL_OMP_MAX_THREAD_CENTROIDS 8
