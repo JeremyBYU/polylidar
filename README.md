@@ -11,6 +11,7 @@
   <a href="#polylidar-use-cases">Use Cases</a> •
   <a href="#credits">Credits</a> •
   <a href="#related-methods">Related</a> •
+  <a href="#citation">Citations</a> •
   <a href="#license">License</a>
 </p>
 
@@ -41,9 +42,9 @@ Currently this repo (named Polylidar3D) has all the front-end modules and the pl
 
 ## Branches and Documentation
 
-Please see [documentation](https://jeremybyu.github.io/Polylidar3D/). Note Polylidar went though major changes in July 2020 for 3D work, now called `Polylidar3D`. The old repository for 2D work is found in the branch `polylidar2D`. Polylidar3D can still handle 2D pointsets but the API is different and may not be as fast compared to `polylidar2D` because it is no longer the focus.
+Please see [documentation](https://jeremybyu.github.io/Polylidar3D/) for installation, api, and examples. Note that Polylidar went though major changes in July 2020 for 3D work, now called `Polylidar3D`. The old repository for 2D work (and some *basic* 3D) is found in the branch [polylidar2D](https://github.com/JeremyBYU/polylidar/tree/polylidar2d) and is connected to the this [paper](https://ieeexplore.ieee.org/document/9117017). `Polylidar3D` can still handle 2D point sets but the API is different and not the focus of this repo.
 
-*Eventually* I am going to make a standalone cpp/header file for 2D point set -> polygon extraction for those that don't need any of the features of Polylidar3D.
+*Eventually* I am going to make a standalone cpp/header file for 2D point set -> polygon extraction for those that don't need any of the features of `Polylidar3D`. For papers referencing Polylidar2D and Polylidar3D please see <a href="#citation">Citations</a>. 
 
 ## Polylidar Use Cases
 
@@ -93,7 +94,7 @@ If are using Polylidar for 2D work please cite:
 }
 ```
 
-If you are using Polylidar for 3D work please cite:
+If you are using Polylidar3D for 3D work please cite:
 
 ```
 TBA
