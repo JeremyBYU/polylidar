@@ -20,7 +20,7 @@
   <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
 </p>
 
-[![Docs](https://img.shields.io/badge/API-docs-blue)](https://jeremybyu.github.io/Polylidar3D/)
+[![Docs](https://img.shields.io/badge/API-docs-blue)](https://jeremybyu.github.io/polylidar/)
 [![Cite](https://img.shields.io/badge/cite-%2010.1109--LRA.2020.3002212-red)](https://ieeexplore.ieee.org/document/9117017)
 
 ## Key Features
@@ -42,7 +42,7 @@ Currently this repo (named Polylidar3D) has all the front-end modules and the pl
 
 ## Documentation and Branches
 
-Please see [documentation](https://jeremybyu.github.io/Polylidar3D/) for installation, api, and examples. Note that Polylidar went though major changes in July 2020 for 3D work, now called `Polylidar3D`. The old repository for 2D work (and some *basic* 3D) is found in the branch [polylidar2D](https://github.com/JeremyBYU/polylidar/tree/polylidar2d) and is connected to this [paper](https://ieeexplore.ieee.org/document/9117017). `Polylidar3D` can still handle 2D point sets but the API is different and not the focus of this repo. For papers referencing Polylidar2D and Polylidar3D please see <a href="#citation">Citations</a>. 
+Please see [documentation](https://jeremybyu.github.io/polylidar/) for installation, api, and examples. Note that Polylidar went though major changes in July 2020 for 3D work, now called `Polylidar3D`. The old repository for 2D work (and some *basic* 3D) is found in the branch [polylidar2D](https://github.com/JeremyBYU/polylidar/tree/polylidar2d) and is connected to this [paper](https://ieeexplore.ieee.org/document/9117017). `Polylidar3D` can still handle 2D point sets but the API is different and not the focus of this repo. For papers referencing Polylidar2D and Polylidar3D please see <a href="#citation">Citations</a>. 
 
 *Eventually* I am going to make a standalone cpp/header file for 2D point set -> polygon extraction for those that don't need any of the features of `Polylidar3D`. 
 
