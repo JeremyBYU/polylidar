@@ -1,0 +1,427 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Program Listing for File Types.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="../_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Program Listing for File Types.hpp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="program-listing-for-file-types-hpp">
+<span id="program-listing-file-include-polylidar-types-hpp"></span><h1>Program Listing for File Types.hpp<a class="headerlink" href="#program-listing-for-file-types-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file_include_Polylidar_Types.hpp.html#file-include-polylidar-types-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include/Polylidar/Types.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef POLYLIDAR_TYPES</span>
+<span class="cp">#define POLYLIDAR_TYPES</span>
+<span class="cp">#define _USE_MATH_DEFINES</span>
+<span class="cp">#include</span> <span class="cpf">&lt;limits&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cstdint&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;array&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;unordered_map&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;deque&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;memory&gt;</span><span class="cp"></span>
+
+<span class="c1">// include a fast parallel hash map implementation</span>
+<span class="cp">#ifdef PL_USE_STD_UNORDERED_MAP</span>
+<span class="cp">#include</span> <span class="cpf">&lt;parallel_hashmap/phmap.h&gt;</span><span class="cp"></span>
+<span class="cp">#endif</span>
+
+<span class="cp">#ifndef M_PI</span>
+<span class="cp">#define M_PI 3.14159265358979323846</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#define PL_DEFAULT_ALPHA 0.0</span>
+<span class="cp">#define PL_DEFAULT_LMAX 1.0</span>
+<span class="cp">#define PL_DEFAULT_MINTRIANGLES 20</span>
+<span class="cp">#define PL_DEFAULT_MINHOLEVERTICES 3</span>
+<span class="cp">#define PL_DEFAULT_MINBBOX 100.0</span>
+<span class="cp">#define PL_DEFAULT_ZTHRESH 0.0</span>
+<span class="cp">#define PL_DEFAULT_NORMTHRESH 0.90</span>
+<span class="cp">#define PL_DEFAULT_NORMTHRESH_MIN 0.90</span>
+<span class="cp">#define PL_DEFAULT_STRIDE 2</span>
+<span class="cp">#define PL_DEFAULT_CALC_NORMALS true</span>
+<span class="cp">#define PL_DEFAULT_TASK_THREADS 4</span>
+<span class="cp">#define PL_EPS_RADIAN 0.001</span>
+
+<span class="k">namespace</span> <span class="n">Polylidar</span> <span class="p">{</span>
+
+<span class="k">using</span> <span class="n">VUI</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">VVUI</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VUI</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">Planes</span> <span class="o">=</span> <span class="n">VVUI</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">PlanesGroup</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Planes</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="c1">// Use Parallel Hash Map unless asked not to</span>
+<span class="cp">#ifdef PL_USE_STD_UNORDERED_MAP</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">G</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">unordered_map</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#else</span>
+<span class="c1">// template &lt;typename T, typename G&gt;</span>
+<span class="c1">// using unordered_map = phmap::flat_hash_map&lt;T, G&gt;;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">G</span><span class="o">&gt;</span>
+<span class="k">using</span> <span class="n">unordered_map</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="cp">#endif</span>
+
+<span class="k">using</span> <span class="n">PointHash</span> <span class="o">=</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+<span class="c1">// TODO Change to unordered_set</span>
+<span class="k">using</span> <span class="n">EdgeSet</span> <span class="o">=</span> <span class="n">unordered_map</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="kt">size_t</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">PL_DEFAULT_DESIRED_VECTOR</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">UP_VECTOR</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">DOWN_VECTOR</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">};</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">9</span><span class="o">&gt;</span> <span class="n">PL_DEFAULT_IDENTITY_RM</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">ZERO_UINT8</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">ONE_UINT8</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">MAX_UINT8</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>
+
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="o">&gt;</span>
+<span class="k">class</span> <span class="nc">Matrix</span>
+<span class="p">{</span>
+  <span class="k">public</span><span class="o">:</span>
+    <span class="kt">bool</span> <span class="n">own_data</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">T</span><span class="o">*</span> <span class="n">ptr</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">rows</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">cols</span><span class="p">;</span>
+
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">T</span><span class="o">*</span> <span class="n">ptr_</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">rows_</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">cols_</span><span class="p">)</span> <span class="o">:</span> <span class="n">own_data</span><span class="p">(</span><span class="nb">false</span><span class="p">),</span> <span class="n">data</span><span class="p">(),</span> <span class="n">ptr</span><span class="p">(</span><span class="n">ptr_</span><span class="p">),</span> <span class="n">rows</span><span class="p">(</span><span class="n">rows_</span><span class="p">),</span> <span class="n">cols</span><span class="p">(</span><span class="n">cols_</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">:</span> <span class="n">own_data</span><span class="p">(</span><span class="nb">true</span><span class="p">),</span> <span class="n">data</span><span class="p">(),</span> <span class="n">ptr</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">()),</span> <span class="n">rows</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">cols</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{}</span>
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;&amp;</span> <span class="n">old_vector</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">rows_</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">cols_</span><span class="p">)</span>
+        <span class="o">:</span> <span class="n">own_data</span><span class="p">(</span><span class="nb">true</span><span class="p">),</span> <span class="n">data</span><span class="p">(),</span> <span class="n">ptr</span><span class="p">(</span><span class="k">nullptr</span><span class="p">),</span> <span class="n">rows</span><span class="p">(</span><span class="n">rows_</span><span class="p">),</span> <span class="n">cols</span><span class="p">(</span><span class="n">cols_</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">old_vector</span><span class="p">);</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">own_data</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">own_data</span><span class="p">),</span> <span class="n">data</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">data</span><span class="p">),</span> <span class="n">ptr</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">rows</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rows</span><span class="p">),</span> <span class="n">cols</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">cols</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">own_data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="k">const</span> <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">)</span> <span class="o">:</span> <span class="n">own_data</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">own_data</span><span class="p">),</span> <span class="n">data</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">data</span><span class="p">),</span> <span class="n">ptr</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">ptr</span><span class="p">),</span> <span class="n">rows</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">rows</span><span class="p">),</span> <span class="n">cols</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">cols</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">own_data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+    <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&amp;</span> <span class="n">a</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">own_data</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">own_data</span><span class="p">;</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">ptr</span><span class="p">;</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">rows</span><span class="p">;</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">a</span><span class="p">.</span><span class="n">cols</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">own_data</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="kt">void</span> <span class="nf">UpdatePtrFromData</span><span class="p">()</span> <span class="p">{</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">UpdatePtrFromData</span><span class="p">(</span><span class="k">const</span> <span class="kt">size_t</span> <span class="n">rows_</span><span class="p">,</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">cols_</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">rows</span> <span class="o">=</span> <span class="n">rows_</span><span class="p">;</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">cols_</span><span class="p">;</span>
+        <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span> <span class="n">i</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">j</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="c1">// assert(i &gt;= 0 &amp;&amp; i &lt; rows);</span>
+        <span class="c1">// assert(j &gt;= 0 &amp;&amp; j &lt; cols);</span>
+        <span class="k">return</span> <span class="n">ptr</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">cols</span> <span class="o">+</span> <span class="n">j</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
+    <span class="p">{</span>
+        <span class="c1">// assert(i &gt;= 0 &amp;&amp; i &lt; rows);</span>
+        <span class="c1">// assert(j &gt;= 0 &amp;&amp; j &lt; cols);</span>
+        <span class="k">return</span> <span class="n">ptr</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">G</span><span class="o">&gt;</span>
+    <span class="k">static</span> <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">CopyFromDifferentType</span><span class="p">(</span><span class="n">G</span><span class="o">*</span> <span class="n">ptr_from</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">rows</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">cols</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Matrix</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">matrix</span><span class="p">;</span>
+        <span class="k">auto</span><span class="o">&amp;</span> <span class="n">matrix_data</span> <span class="o">=</span> <span class="n">matrix</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+        <span class="k">auto</span> <span class="n">total_elements</span> <span class="o">=</span> <span class="n">rows</span> <span class="o">*</span> <span class="n">cols</span><span class="p">;</span>
+        <span class="n">matrix_data</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">total_elements</span><span class="p">);</span>
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">total_elements</span><span class="p">;</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">matrix_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">ptr_from</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
+        <span class="n">matrix</span><span class="p">.</span><span class="n">UpdatePtrFromData</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">);</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">matrix</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">Polygon</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span> <span class="n">shell</span><span class="p">;</span>
+    <span class="n">VVUI</span> <span class="n">holes</span><span class="p">;</span>
+    <span class="n">Polygon</span><span class="p">()</span> <span class="o">:</span> <span class="n">shell</span><span class="p">(),</span> <span class="n">holes</span><span class="p">()</span> <span class="p">{}</span>
+    <span class="n">VVUI</span> <span class="n">getHoles</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">holes</span><span class="p">;</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="n">setHoles</span><span class="p">(</span><span class="n">VVUI</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">holes</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">ExtremePoint</span>
+<span class="p">{</span>
+    <span class="kt">size_t</span> <span class="n">xr_he</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">xr_pi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">xr_val</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">infinity</span><span class="p">();</span>
+    <span class="kt">size_t</span> <span class="n">xl_he</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">size_t</span> <span class="n">xl_pi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="kt">double</span> <span class="n">xl_val</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">infinity</span><span class="p">();</span>
+<span class="p">};</span>
+
+<span class="k">struct</span> <span class="n">PlaneData</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">plane_normal</span> <span class="o">=</span> <span class="n">PL_DEFAULT_DESIRED_VECTOR</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">9</span><span class="o">&gt;</span> <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">PL_DEFAULT_IDENTITY_RM</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">need_rotation</span> <span class="o">=</span> <span class="nb">false</span><span class="p">;</span>
+    <span class="kt">uint8_t</span> <span class="n">normal_id</span> <span class="o">=</span> <span class="n">ONE_UINT8</span><span class="p">;</span>
+<span class="p">};</span>
+<span class="k">using</span> <span class="n">Polygons</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Polygon</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">PolygonsGroup</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Polygons</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="p">}</span> <span class="c1">// namespace Polylidar</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

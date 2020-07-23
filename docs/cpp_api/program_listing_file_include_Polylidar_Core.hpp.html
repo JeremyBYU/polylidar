@@ -1,0 +1,363 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Program Listing for File Core.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="../_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Program Listing for File Core.hpp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="program-listing-for-file-core-hpp">
+<span id="program-listing-file-include-polylidar-core-hpp"></span><h1>Program Listing for File Core.hpp<a class="headerlink" href="#program-listing-for-file-core-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file_include_Polylidar_Core.hpp.html#file-include-polylidar-core-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include/Polylidar/Core.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef POLYLIDAR_CORE</span>
+<span class="cp">#define POLYLIDAR_CORE</span>
+<span class="cp">#include</span> <span class="cpf">&lt;queue&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;Polylidar/Types.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;Polylidar/Utility.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;Polylidar/Mesh/MeshHelper.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">Polylidar</span> <span class="p">{</span>
+
+<span class="k">namespace</span> <span class="n">Core</span> <span class="p">{</span>
+
+
+
+<span class="kt">void</span> <span class="n">ExtractMeshSet</span><span class="p">(</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span> <span class="n">tri_set</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">seed_idx</span><span class="p">,</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="k">const</span> <span class="n">PlaneData</span> <span class="o">&amp;</span><span class="n">plane_data</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">z_thresh</span><span class="p">);</span>
+<span class="kt">void</span> <span class="nf">ConstructPointHash</span><span class="p">(</span><span class="n">VUI</span><span class="o">&amp;</span> <span class="n">plane</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">PointHash</span><span class="o">&amp;</span> <span class="n">point_hash</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="o">&amp;</span> <span class="n">edge_hash</span><span class="p">,</span>
+                        <span class="n">ExtremePoint</span><span class="o">&amp;</span> <span class="n">xPoint</span><span class="p">,</span> <span class="n">PlaneData</span><span class="o">&amp;</span> <span class="n">plane_data</span><span class="p">);</span>
+
+<span class="n">Polygons</span> <span class="nf">ExtractConcaveHulls</span><span class="p">(</span><span class="n">Planes</span> <span class="o">&amp;</span><span class="n">planes</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span> <span class="o">&amp;</span><span class="n">mesh</span><span class="p">,</span> <span class="n">PlaneData</span> <span class="o">&amp;</span><span class="n">plane_data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">min_hole_vertices_</span><span class="p">);</span>
+<span class="n">Polygon</span> <span class="nf">ExtractConcaveHull</span><span class="p">(</span><span class="n">VUI</span> <span class="o">&amp;</span><span class="n">plane</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span> <span class="o">&amp;</span><span class="n">mesh</span><span class="p">,</span> <span class="n">PlaneData</span> <span class="o">&amp;</span><span class="n">plane_data</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">min_hole_vertices_</span><span class="p">);</span>
+
+
+<span class="c1">// Inline Function</span>
+
+
+
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">PassPlaneConstraints</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">plane_set</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">min_triangles</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">plane_set</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">min_triangles</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kr">inline</span> <span class="kt">size_t</span> <span class="nf">fast_mod</span><span class="p">(</span><span class="k">const</span> <span class="kt">size_t</span> <span class="n">i</span><span class="p">,</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">c</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="n">c</span> <span class="o">?</span> <span class="n">i</span> <span class="o">%</span> <span class="nl">c</span> <span class="p">:</span> <span class="n">i</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kr">inline</span> <span class="kt">size_t</span> <span class="nf">nextHalfedge</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">fast_mod</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="o">?</span> <span class="n">e</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">:</span> <span class="n">e</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span> <span class="p">}</span>
+
+<span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">GetVector</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">edge</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">9</span><span class="o">&gt;&amp;</span> <span class="n">rm</span><span class="p">,</span>
+                                       <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">need_rotation</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">flip</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">auto</span><span class="o">&amp;</span> <span class="n">coords</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">;</span>
+    <span class="k">auto</span><span class="o">&amp;</span> <span class="n">triangles</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">triangles</span><span class="p">.</span><span class="n">data</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">pi</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">[</span><span class="n">edge</span><span class="p">];</span>
+    <span class="k">auto</span> <span class="n">piNext</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">[</span><span class="n">nextHalfedge</span><span class="p">(</span><span class="n">edge</span><span class="p">)];</span>
+
+    <span class="c1">// Points projected on 2D plane, assumes normal is [0,0,1]</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">p0</span> <span class="o">=</span> <span class="p">{</span><span class="n">coords</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">coords</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">1</span><span class="p">)};</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">p1</span> <span class="o">=</span> <span class="p">{</span><span class="n">coords</span><span class="p">(</span><span class="n">piNext</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">coords</span><span class="p">(</span><span class="n">piNext</span><span class="p">,</span> <span class="mi">1</span><span class="p">)};</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">result</span><span class="p">;</span>
+
+    <span class="c1">// Check if points need to be projected onto a different plane</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">need_rotation</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// std::cout&lt;&lt; &quot;rotating points for edge: &quot; &lt;&lt; edge &lt;&lt; std::endl;</span>
+        <span class="c1">// print_matrix(rm);</span>
+        <span class="k">auto</span> <span class="n">rotated_point</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">::</span><span class="n">Math</span><span class="o">::</span><span class="n">RotateVector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">coords</span><span class="p">(</span><span class="n">pi</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rm</span><span class="p">);</span>
+        <span class="c1">// std::cout&lt;&lt; &quot;p0 before: &quot; &lt;&lt; PL_PRINT_ARRAY2(p0) &lt;&lt; std::endl;</span>
+        <span class="n">p0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotated_point</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">p0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotated_point</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="c1">// std::cout&lt;&lt; &quot;p0 after: &quot; &lt;&lt; PL_PRINT_ARRAY2(p0) &lt;&lt; std::endl;</span>
+        <span class="k">auto</span> <span class="n">rotated_point_2</span> <span class="o">=</span> <span class="n">Utility</span><span class="o">::</span><span class="n">Math</span><span class="o">::</span><span class="n">RotateVector</span><span class="p">(</span><span class="o">&amp;</span><span class="n">coords</span><span class="p">(</span><span class="n">piNext</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">rm</span><span class="p">);</span>
+        <span class="c1">// std::cout&lt;&lt; &quot;p1 before: &quot; &lt;&lt; PL_PRINT_ARRAY2(p1) &lt;&lt; std::endl;</span>
+        <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotated_point_2</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">rotated_point_2</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+        <span class="c1">// std::cout&lt;&lt; &quot;p1 after: &quot; &lt;&lt; PL_PRINT_ARRAY2(p1) &lt;&lt; std::endl;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">flip</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">p0</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+        <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">p1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">p0</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// RVO</span>
+<span class="p">}</span>
+
+
+<span class="kr">inline</span> <span class="kt">size_t</span> <span class="n">GetHullEdge</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&amp;</span> <span class="n">v1</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">outgoingEdges</span><span class="p">,</span>
+                          <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">9</span><span class="o">&gt;&amp;</span> <span class="n">rm</span><span class="p">,</span> <span class="kt">bool</span><span class="o">&amp;</span> <span class="n">need_rotation</span><span class="p">,</span>
+                          <span class="k">const</span> <span class="kt">bool</span> <span class="n">is_ccw</span> <span class="o">=</span> <span class="nb">false</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&gt;</span> <span class="n">otherVectors</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">outgoingEdges</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">outgoingEdges</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">otherVectors</span><span class="p">),</span>
+                   <span class="p">[</span><span class="o">&amp;</span><span class="n">mesh</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">rm</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">need_rotation</span><span class="p">](</span><span class="kt">size_t</span> <span class="n">edge</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="p">{</span>
+                       <span class="k">return</span> <span class="n">GetVector</span><span class="p">(</span><span class="n">edge</span><span class="p">,</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">rm</span><span class="p">,</span> <span class="n">need_rotation</span><span class="p">,</span> <span class="nb">false</span><span class="p">);</span>
+                   <span class="p">});</span>
+
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">angleDist</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">otherVectors</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">otherVectors</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">back_inserter</span><span class="p">(</span><span class="n">angleDist</span><span class="p">),</span>
+                   <span class="p">[</span><span class="o">&amp;</span><span class="n">v1</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;&amp;</span> <span class="n">outVector</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">double</span> <span class="p">{</span> <span class="k">return</span> <span class="n">Utility</span><span class="o">::</span><span class="n">Math</span><span class="o">::</span><span class="n">Get360Angle</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">outVector</span><span class="p">);</span> <span class="p">});</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">is_ccw</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">min_pos</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">angleDist</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">min_element</span><span class="p">(</span><span class="n">angleDist</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">angleDist</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+        <span class="k">return</span> <span class="n">outgoingEdges</span><span class="p">[</span><span class="n">min_pos</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">else</span>
+    <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">max_pos</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">angleDist</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">std</span><span class="o">::</span><span class="n">max_element</span><span class="p">(</span><span class="n">angleDist</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span> <span class="n">angleDist</span><span class="p">.</span><span class="n">end</span><span class="p">()));</span>
+        <span class="k">return</span> <span class="n">outgoingEdges</span><span class="p">[</span><span class="n">max_pos</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span> <span class="n">ConcaveSection</span><span class="p">(</span><span class="n">PointHash</span><span class="o">&amp;</span> <span class="n">pointHash</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="o">&amp;</span> <span class="n">edgeHash</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span>
+                                   <span class="kt">size_t</span> <span class="n">startEdge</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">stopPoint</span><span class="p">,</span> <span class="n">PlaneData</span><span class="o">&amp;</span> <span class="n">plane_data</span><span class="p">);</span>
+
+<span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&gt;</span> <span class="n">ExtractInteriorHoles</span><span class="p">(</span><span class="n">PointHash</span><span class="o">&amp;</span> <span class="n">pointHash</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="o">&amp;</span> <span class="n">edgeHash</span><span class="p">,</span>
+                                                      <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">PlaneData</span><span class="o">&amp;</span> <span class="n">plane_data</span><span class="p">);</span>
+
+<span class="p">}</span> <span class="c1">// namespace Core</span>
+
+<span class="p">}</span> <span class="c1">// namespace Polylidar</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

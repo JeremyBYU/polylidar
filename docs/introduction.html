@@ -1,0 +1,381 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introducing Polylidar3D &mdash; Polylidar3D 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Install Instructions" href="install_instructions.html" />
+    <link rel="prev" title="Polylidar3D: Fast Polygon Extraction from 2D &amp; 3D Data" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introducing Polylidar3D</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#key-features">Key Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#documentation-and-branches">Documentation and Branches</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#polylidar-use-cases">Polylidar Use Cases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#credits">Credits</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#related-methods">Related Methods</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d-concavehull-extraction">2D ConcaveHull Extraction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="python_api/polylidar.html">polylidar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_api/cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Introducing Polylidar3D</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="introducing-polylidar3d">
+<span id="introduction"></span><h1>Introducing Polylidar3D<a class="headerlink" href="#introducing-polylidar3d" title="Permalink to this headline">¶</a></h1>
+<h1 align="center">
+  Polylidar3D
+  <br>
+</h1><h4 align="center">Polygon Extraction from 2D Point Sets, Unorganized/Organized 3D Point Clouds, and Triangular Meshes</h4><p align="center">
+  <a href="#key-features">Key Features</a> •
+  <a href="#documentation-and-branches">Documentation</a> •
+  <a href="#polylidar-use-cases">Use Cases</a> •
+  <a href="#credits">Credits</a> •
+  <a href="#related-methods">Related</a> •
+  <a href="#citation">Citations</a> •
+  <a href="#license">License</a>
+</p><p align="middle">
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" height="100%" />
+  <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
+</p><a class="reference external image-reference" href="https://jeremybyu.github.io/Polylidar3D/"><img alt="Docs" src="https://img.shields.io/badge/API-docs-blue" /></a>
+<a class="reference external image-reference" href="https://ieeexplore.ieee.org/document/9117017"><img alt="Cite" src="https://img.shields.io/badge/cite-%2010.1109--LRA.2020.3002212-red" /></a>
+<div class="section" id="key-features">
+<h2>Key Features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Fast (Multi)Polygon Extraction from multiple sources of 3D Data</p>
+<ul>
+<li><p>Written in C++ for portability</p></li>
+<li><p>Extremely fast single-threaded but includes CPU multi-threading using data and task-based parallelism</p></li>
+<li><p>Polygons with holes may be returned</p></li>
+</ul>
+</li>
+<li><p>Python3 bindings using PyBind11</p>
+<ul>
+<li><p>Low overhead for calling python/cpp interface (no copying of point cloud data)</p></li>
+</ul>
+</li>
+<li><p>Python and C++ Examples</p>
+<ul>
+<li><p>Examples from 2D Point Sets, Unorganized 3D point clouds, Organized 3D point clouds (i.e., range images), and user provided meshes</p></li>
+</ul>
+</li>
+<li><p>Cross platform</p>
+<ul>
+<li><p>Windows and Linux ready.</p></li>
+</ul>
+</li>
+</ul>
+<p>Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized point clouds (e.g., range images), or user provided meshes. The non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an overview of Polylidar3D’s data input, frontend, backend, and output. The frontend transforms input data into a <em>half-edge</em> triangular mesh.  This representation provides a common level of abstraction such that the the back-end core algorithms may efficiently operate on. The back-end is composed of four core algorithms: mesh smoothing, dominant plane normal estimation, planar segment extraction, and finally polygon extraction.  Polylidar3D outputs <em>planar triangular segments</em>, sets of flat connected triangles, and their polygonal representations. Polylidar3D is extremely fast, taking as little as a few milliseconds and makes use of CPU multi-threading and GPU acceleration when available.</p>
+<p>Currently this repo (named Polylidar3D) has all the front-end modules and the plane/polygon extraction of the back-end core algorithms. The GPU accelerated mesh smoothing procedures for organized points clouds are found in a separate repo titled <a class="reference external" href="https://github.com/JeremyBYU/OrganizedPointFilters">OrganizedPointFilters</a>. This must be installed if you desire fast mesh smoothing for organized point clouds (i.e., denoising). The dominant plane normal estimation procedure is general and implemented in a separate repo titled <a class="reference external" href="https://github.com/JeremyBYU/FastGaussianAccumulator">Fast Gaussian Accumulator (FastGA)</a>. This must be installed if you don’t know the dominant plane normals in your data input (very likely for organized point clouds and meshes). These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions. One day I will try to ease installation burden and automatically pull these dependencies into the build process.</p>
+</div>
+<div class="section" id="documentation-and-branches">
+<h2>Documentation and Branches<a class="headerlink" href="#documentation-and-branches" title="Permalink to this headline">¶</a></h2>
+<p>Please see <a class="reference external" href="https://jeremybyu.github.io/Polylidar3D/">documentation</a> for installation, api, and examples. Note that Polylidar went though major changes in July 2020 for 3D work, now called <code class="docutils literal notranslate"><span class="pre">Polylidar3D</span></code>. The old repository for 2D work (and some <em>basic</em> 3D) is found in the branch <a class="reference external" href="https://github.com/JeremyBYU/polylidar/tree/polylidar2d">polylidar2D</a> and is connected to this <a class="reference external" href="https://ieeexplore.ieee.org/document/9117017">paper</a>. <code class="docutils literal notranslate"><span class="pre">Polylidar3D</span></code> can still handle 2D point sets but the API is different and not the focus of this repo. For papers referencing Polylidar2D and Polylidar3D please see <span class="raw-html-m2r"><a href="#citation">Citations</a></span>.</p>
+<p><em>Eventually</em> I am going to make a standalone cpp/header file for 2D point set -&gt; polygon extraction for those that don’t need any of the features of <code class="docutils literal notranslate"><span class="pre">Polylidar3D</span></code>.</p>
+</div>
+<div class="section" id="polylidar-use-cases">
+<h2>Polylidar Use Cases<a class="headerlink" href="#polylidar-use-cases" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidar-realsense">Polylidar-RealSense</a> - Live ground floor detection with Intel RealSense camera using Polylidar</p></li>
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidar-kitti">Polylidar-KITTI</a> - Street surface and obstacle detection from autonomous driving platform.</p></li>
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidarweb">PolylidarWeb</a>. An very old Typescript (javascript) version with live demos of Polylidar2D.</p></li>
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/concavehull-evaluation">Concave-Evaluation</a> - Evaluates and benchmarks several competing concavehull algorithms.</p></li>
+</ul>
+</div>
+<div class="section" id="credits">
+<h2>Credits<a class="headerlink" href="#credits" title="Permalink to this headline">¶</a></h2>
+<p>This software is only possible because of the great work from the following open source packages:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/mapbox/delaunator">Delaunator</a> - Original triangulation library</p></li>
+<li><p><a class="reference external" href="https://github.com/delfrrr/delaunator-cpp">DelaunatorCPP</a> - Delaunator ported to C++ (used)</p></li>
+<li><p><a class="reference external" href="https://github.com/greg7mdp/parallel-hashmap">parallel-hashmap</a> - Very fast hashmap library (used)</p></li>
+<li><p><a class="reference external" href="https://github.com/pybind/pybind11">PyBind11</a> - Python C++ Binding (used)</p></li>
+<li><p><a class="reference external" href="https://www.cs.cmu.edu/~quake/robust.html">Robust Geometric Predicates</a> - Original Robust Geometric predicates</p></li>
+<li><p><a class="reference external" href="https://github.com/danshapero/predicates">Updated Predicates</a> -Updated geometric predicate library (used)</p></li>
+</ul>
+</div>
+<div class="section" id="related-methods">
+<h2>Related Methods<a class="headerlink" href="#related-methods" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="d-concavehull-extraction">
+<h3>2D ConcaveHull Extraction<a class="headerlink" href="#d-concavehull-extraction" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://doc.cgal.org/latest/Alpha_shapes_2/index.html">CGAL Alpha Shapes</a> - MultiPolygon with holes.</p></li>
+<li><p><a class="reference external" href="http://postgis.net/docs/ST_ConcaveHull.html">PostGIS ConcaveHull</a> - Single Polygon with holes.</p></li>
+<li><p><a class="reference external" href="https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0">Spatialite ConcaveHull</a> - MultiPolygon with holes.</p></li>
+<li><p><a class="reference external" href="https://github.com/mapbox/concaveman">Concaveman</a> - A 2D concave hull extraction algorithm for 2D point sets.</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+<p>Any help or suggestions would be appreciated!</p>
+</div>
+<div class="section" id="citation">
+<h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<p>If are using Polylidar for 2D work please cite:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>@ARTICLE{9117017,
+  author={J. {Castagno} and E. {Atkins}},
+  journal={IEEE Robotics and Automation Letters},
+  title={Polylidar - Polygons From Triangular Meshes},
+  year={2020},
+  volume={5},
+  number={3},
+  pages={4634-4641}
+}
+</pre></div>
+</div>
+<p>If you are using Polylidar3D for 3D work please cite:</p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>TBA
+</pre></div>
+</div>
+</div>
+<div class="section" id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">¶</a></h2>
+<p>MIT</p>
+<hr class="docutils" />
+<blockquote>
+<div><p>GitHub <a class="reference external" href="https://github.com/JeremyBYU">&#64;jeremybyu</a></p>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install_instructions.html" class="btn btn-neutral float-right" title="Install Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="Polylidar3D: Fast Polygon Extraction from 2D &amp; 3D Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

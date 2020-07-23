@@ -1,0 +1,397 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>polylidar.Polylidar3D &mdash; Polylidar3D 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="polylidar.VectorDouble" href="polylidar.VectorDouble.html" />
+    <link rel="prev" title="polylidar.Polygon" href="polylidar.Polygon.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="../_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="polylidar.html">polylidar</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="polylidar.Delaunator.html">Delaunator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.HalfEdgeTriangulation.html">HalfEdgeTriangulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.MatrixDouble.html">MatrixDouble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.MatrixFloat.html">MatrixFloat</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.MatrixInt.html">MatrixInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.MatrixULongInt.html">MatrixULongInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.Polygon.html">Polygon</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Polylidar3D</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.VectorDouble.html">VectorDouble</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.VectorInt.html">VectorInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.VectorUInt8.html">VectorUInt8</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.VectorULongInt.html">VectorULongInt</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.bilateral_filter_normals.html">bilateral_filter_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.create_tri_mesh_copy.html">create_tri_mesh_copy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.extract_point_cloud_from_float_depth.html">extract_point_cloud_from_float_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.extract_tri_mesh_from_float_depth.html">extract_tri_mesh_from_float_depth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.extract_tri_mesh_from_organized_point_cloud.html">extract_tri_mesh_from_organized_point_cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.get_polylidar_version.html">get_polylidar_version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.robust_predicates_activated.html">robust_predicates_activated</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="polylidar.html">polylidar</a> &raquo;</li>
+        
+      <li>polylidar.Polylidar3D</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="polylidar-polylidar3d">
+<h1>polylidar.Polylidar3D<a class="headerlink" href="#polylidar-polylidar3d" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="polylidar.Polylidar3D">
+<em class="property">class </em><code class="sig-prename descclassname">polylidar.</code><code class="sig-name descname">Polylidar3D</code><a class="headerlink" href="#polylidar.Polylidar3D" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class handles all data inputs: 2D points sets, 3D point clouds, 3D meshes. Will extract polygons from data.</p>
+<dl class="method">
+<dt id="polylidar.Polylidar3D.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">alpha=0.0</em>, <em class="sig-param">lmax=1.0</em>, <em class="sig-param">min_triangles=20</em>, <em class="sig-param">min_hole_vertices=3</em>, <em class="sig-param">z_thresh=0.0</em>, <em class="sig-param">norm_thresh=0.9</em>, <em class="sig-param">norm_thresh_min=0.9</em>, <em class="sig-param">task_threads=4</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.Polylidar3D.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constructs a Polylidar3D object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=0.0</em>) – Maximum circumcircle radius of a triangle. Filters ‘big’ triangles. Only applicable for 2D point sets. A value of 0.0 makes this parameter ignored.</p></li>
+<li><p><strong>lmax</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=1.0</em>) – Maximum triangle edge length of a triangle in a planar segment. Filters ‘big’ triangles.</p></li>
+<li><p><strong>min_triangles</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default=20</em>) – Minimum number of triangles in a planar triangle segment. Filters small planar segments very fast.</p></li>
+<li><p><strong>min_hole_vertices</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default=3</em>) – Minimum number of vertices for a hole in a polygon. Filters small holes very fast.</p></li>
+<li><p><strong>z_thresh</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=0.0</em>) – Maximum point to plane distance during region growing (3D only). Forces planarity constraints. A value of 0.0 ignores this constraint.</p></li>
+<li><p><strong>norm_thresh</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=0.9</em>) – IGNORE - will be deprecated or repurposed (3D only)</p></li>
+<li><p><strong>norm_thresh_min</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=0.9</em>) – Minimum value of the dot product between a triangle and surface normal being extracted. Forces planarity constraint.</p></li>
+<li><p><strong>task_threads</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default=4</em>) – Number of task threads that can be spawned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.extract_planes_and_polygons">
+<code class="sig-name descname">extract_planes_and_polygons</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.Polylidar3D.extract_planes_and_polygons" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>extract_planes_and_polygons(self: polylidar.polylidar.Polylidar3D, points: polylidar.polylidar.MatrixDouble, plane_normal: List[float[3]] = [0.0, 0.0, 1.0]) -&gt; Tuple[polylidar.polylidar.HalfEdgeTriangulation, List[polylidar.polylidar.VectorULongInt], List[polylidar.polylidar.Polygon]]</p></li>
+</ol>
+<p>Extract Planes and Polygons from a 2D point sets or unorganized 3D point clouds. Uses 2D Delaunay triangulation for 2D point sets. Uses 2.5 Delaunay triangulation for 3D point clouds. Only send 3D point clouds whose desired surface for extraction is already aligned with the XY Plane (e.g., airborne LiDAR point clouds)</p>
+<ol class="arabic simple" start="2">
+<li><p>extract_planes_and_polygons(self: polylidar.polylidar.Polylidar3D, mesh: polylidar.polylidar.HalfEdgeTriangulation, plane_normal: List[float[3]] = [0.0, 0.0, 1.0]) -&gt; Tuple[List[polylidar.polylidar.VectorULongInt], List[polylidar.polylidar.Polygon]]</p></li>
+</ol>
+<p>Extracts planes and polygons from a half-edge triangular mesh given a plane normal</p>
+<ol class="arabic simple" start="3">
+<li><p>extract_planes_and_polygons(self: polylidar.polylidar.Polylidar3D, mesh: polylidar.polylidar.HalfEdgeTriangulation, plane_normals: polylidar.polylidar.MatrixDouble) -&gt; Tuple[List[List[polylidar.polylidar.VectorULongInt]], List[List[polylidar.polylidar.Polygon]]]</p></li>
+</ol>
+<p>Extracts planes and polygons from a half-edge triangular mesh given <strong>multiple</strong> dominant plane normals.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.extract_planes_and_polygons_optimized">
+<code class="sig-name descname">extract_planes_and_polygons_optimized</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.Polylidar3D.extract_planes_and_polygons_optimized" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overloaded function.</p>
+<ol class="arabic simple">
+<li><p>extract_planes_and_polygons_optimized(self: polylidar.polylidar.Polylidar3D, mesh: polylidar.polylidar.HalfEdgeTriangulation, plane_normal: List[float[3]] = [0.0, 0.0, 1.0]) -&gt; Tuple[List[polylidar.polylidar.VectorULongInt], List[polylidar.polylidar.Polygon]]</p></li>
+</ol>
+<p>Extracts planes and polygons from a half-edge triangular mesh given a plane normal and makes use of task-based parallelism</p>
+<ol class="arabic simple" start="2">
+<li><p>extract_planes_and_polygons_optimized(self: polylidar.polylidar.Polylidar3D, mesh: polylidar.polylidar.HalfEdgeTriangulation, plane_normals: polylidar.polylidar.MatrixDouble) -&gt; Tuple[List[List[polylidar.polylidar.VectorULongInt]], List[List[polylidar.polylidar.Polygon]]]</p></li>
+</ol>
+<p>Extracts planes and polygons from a half-edge triangular mesh given <strong>multiple</strong> dominant plane normals. Uses task-based parallelism.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.extract_tri_set">
+<code class="sig-name descname">extract_tri_set</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">mesh</em>, <em class="sig-param">plane_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.Polylidar3D.extract_tri_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the triangle set (dominant planar grouping) for each triangle. This is used for debugging/visualization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> (<em>polylidar.polylidar.HalfEdgeTriangulation</em>) – </p></li>
+<li><p><strong>plane_normals</strong> (<em>polylidar.polylidar.MatrixDouble</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>polylidar.polylidar.VectorUInt8</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.alpha">
+<em class="property">property </em><code class="sig-name descname">alpha</code><a class="headerlink" href="#polylidar.Polylidar3D.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum circumcircle radius of a triangle. Filters ‘big’ triangles. Only applicable for 2D point sets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.lmax">
+<em class="property">property </em><code class="sig-name descname">lmax</code><a class="headerlink" href="#polylidar.Polylidar3D.lmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum triangle edge length of a triangle in a planar segment. Filters ‘big’ triangles.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.min_hole_vertices">
+<em class="property">property </em><code class="sig-name descname">min_hole_vertices</code><a class="headerlink" href="#polylidar.Polylidar3D.min_hole_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum number of vertices for a hole in a polygon. Filters small holes very fast.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.min_triangles">
+<em class="property">property </em><code class="sig-name descname">min_triangles</code><a class="headerlink" href="#polylidar.Polylidar3D.min_triangles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum number of triangles in a planar triangle segment. Filters small planar segments very fast.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.norm_thresh">
+<em class="property">property </em><code class="sig-name descname">norm_thresh</code><a class="headerlink" href="#polylidar.Polylidar3D.norm_thresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>IGNORE - will be deprecated or repurposed (3D only)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.norm_thresh_min">
+<em class="property">property </em><code class="sig-name descname">norm_thresh_min</code><a class="headerlink" href="#polylidar.Polylidar3D.norm_thresh_min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum value of the dot product between a triangle and surface normal being extracted. Forces planar constraints.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.Polylidar3D.z_thresh">
+<em class="property">property </em><code class="sig-name descname">z_thresh</code><a class="headerlink" href="#polylidar.Polylidar3D.z_thresh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maximum point to plane distance during region growing (3D only). Forces planarity constraints. A value of 0.0 disables this constraint.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="polylidar.VectorDouble.html" class="btn btn-neutral float-right" title="polylidar.VectorDouble" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="polylidar.Polygon.html" class="btn btn-neutral float-left" title="polylidar.Polygon" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

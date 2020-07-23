@@ -1,0 +1,332 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Class Delaunator &mdash; Polylidar3D 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class Matrix" href="classPolylidar_1_1Matrix.html" />
+    <link rel="prev" title="Struct Polygon" href="structPolylidar_1_1Polygon.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="../_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cpp_library_root.html">C++ Library API</a> &raquo;</li>
+        
+      <li>Class Delaunator</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="class-delaunator">
+<span id="exhale-class-classpolylidar-1-1delaunator-1-1delaunator"></span><h1>Class Delaunator<a class="headerlink" href="#class-delaunator" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_Polylidar_Delaunator_Delaunator.hpp.html#file-include-polylidar-delaunator-delaunator-hpp"><span class="std std-ref">File Delaunator.hpp</span></a></p></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">Polylidar::MeshHelper::HalfEdgeTriangulation</span></code> (<a class="reference internal" href="classPolylidar_1_1MeshHelper_1_1HalfEdgeTriangulation.html#exhale-class-classpolylidar-1-1meshhelper-1-1halfedgetriangulation"><span class="std std-ref">Class HalfEdgeTriangulation</span></a>)</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N9Polylidar10Delaunator10DelaunatorE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator"></span><em class="property">class </em><code class="sig-name descname">Delaunator</code> : <em class="property">public</em> Polylidar::MeshHelper::<a class="reference internal" href="classPolylidar_1_1MeshHelper_1_1HalfEdgeTriangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10DelaunatorE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERR6MatrixIdE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a99633c8b1525f8dec9050c725346a0c1"></span><code class="sig-name descname">Delaunator</code><span class="sig-paren">(</span>Matrix&lt;double&gt; &amp;&amp;<em>in_vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERR6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERK6MatrixIdE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1ac32a64c7d31c898f8949c6e3add5c8fe"></span><code class="sig-name descname">Delaunator</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;double&gt; &amp;<em>in_vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator11triangulateEv">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a468efb3328ca3e65d4fabb42fdd84526"></span>void <code class="sig-name descname">triangulate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator11triangulateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator13get_hull_areaEv">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a9ad30760e390ca5d0fda73ee62c5cdd1"></span>double <code class="sig-name descname">get_hull_area</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13get_hull_areaEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator13triangles_refE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1ab958123ff19cec3b28cea2e5157b0577"></span>std::vector&lt;size_t&gt; &amp;<code class="sig-name descname">triangles_ref</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13triangles_refE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator13halfedges_refE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a66319cc583cf051c5fa720581591c760"></span>std::vector&lt;size_t&gt; &amp;<code class="sig-name descname">halfedges_ref</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13halfedges_refE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator9hull_prevE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a328838a54ef8472e7016074004693ae9"></span>std::vector&lt;std::size_t&gt; <code class="sig-name descname">hull_prev</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator9hull_prevE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator9hull_nextE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a484e475ebe2c5a41c6b1783d936f39ed"></span>std::vector&lt;std::size_t&gt; <code class="sig-name descname">hull_next</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator9hull_nextE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator8hull_triE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1abdf725620d7b9046cb612698434853c0"></span>std::vector&lt;std::size_t&gt; <code class="sig-name descname">hull_tri</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator8hull_triE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator10hull_startE">
+<span class="target" id="classPolylidar_1_1Delaunator_1_1Delaunator_1a275082341c88d3081ef845dfe17c45a0"></span>std::size_t <code class="sig-name descname">hull_start</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10hull_startE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="classPolylidar_1_1Matrix.html" class="btn btn-neutral float-right" title="Template Class Matrix" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="structPolylidar_1_1Polygon.html" class="btn btn-neutral float-left" title="Struct Polygon" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

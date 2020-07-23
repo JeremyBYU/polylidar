@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
-  <a href="#documentation">Documentation</a> •
+  <a href="#documentation-and-branches">Documentation</a> •
   <a href="#polylidar-use-cases">Use Cases</a> •
   <a href="#credits">Credits</a> •
   <a href="#related-methods">Related</a> •
@@ -40,7 +40,7 @@ Polylidar3D is a non-convex polygon extraction algorithm which takes as input ei
 
 Currently this repo (named Polylidar3D) has all the front-end modules and the plane/polygon extraction of the back-end core algorithms. The GPU accelerated mesh smoothing procedures for organized points clouds are found in a separate repo titled [OrganizedPointFilters](https://github.com/JeremyBYU/OrganizedPointFilters). This must be installed if you desire fast mesh smoothing for organized point clouds (i.e., denoising). The dominant plane normal estimation procedure is general and implemented in a separate repo titled [Fast Gaussian Accumulator (FastGA)](https://github.com/JeremyBYU/FastGaussianAccumulator). This must be installed if you don't know the dominant plane normals in your data input (very likely for organized point clouds and meshes). These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions. One day I will try to ease installation burden and automatically pull these dependencies into the build process.
 
-## Branches and Documentation
+## Documentation and Branches
 
 Please see [documentation](https://jeremybyu.github.io/Polylidar3D/) for installation, api, and examples. Note that Polylidar went though major changes in July 2020 for 3D work, now called `Polylidar3D`. The old repository for 2D work (and some *basic* 3D) is found in the branch [polylidar2D](https://github.com/JeremyBYU/polylidar/tree/polylidar2d) and is connected to this [paper](https://ieeexplore.ieee.org/document/9117017). `Polylidar3D` can still handle 2D point sets but the API is different and not the focus of this repo. For papers referencing Polylidar2D and Polylidar3D please see <a href="#citation">Citations</a>. 
 

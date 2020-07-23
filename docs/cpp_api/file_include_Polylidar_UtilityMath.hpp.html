@@ -1,0 +1,302 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>File UtilityMath.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="../_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>File UtilityMath.hpp</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="file-utilitymath-hpp">
+<span id="file-include-polylidar-utilitymath-hpp"></span><h1>File UtilityMath.hpp<a class="headerlink" href="#file-utilitymath-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="dir_include_Polylidar.html#dir-include-polylidar"><span class="std std-ref">Parent directory</span></a> (<code class="docutils literal notranslate"><span class="pre">include/Polylidar</span></code>)</p>
+<div class="contents local topic" id="contents">
+<p class="topic-title">Contents</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#definition-include-polylidar-utilitymath-hpp" id="id1">Definition (<code class="docutils literal notranslate"><span class="pre">include/Polylidar/UtilityMath.hpp</span></code>)</a></p></li>
+<li><p><a class="reference internal" href="#includes" id="id2">Includes</a></p></li>
+<li><p><a class="reference internal" href="#included-by" id="id3">Included By</a></p></li>
+<li><p><a class="reference internal" href="#namespaces" id="id4">Namespaces</a></p></li>
+<li><p><a class="reference internal" href="#functions" id="id5">Functions</a></p></li>
+</ul>
+</div>
+<div class="section" id="definition-include-polylidar-utilitymath-hpp">
+<h2>Definition (<code class="docutils literal notranslate"><span class="pre">include/Polylidar/UtilityMath.hpp</span></code>)<a class="headerlink" href="#definition-include-polylidar-utilitymath-hpp" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="program_listing_file_include_Polylidar_UtilityMath.hpp.html">Program Listing for File UtilityMath.hpp</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="includes">
+<h2>Includes<a class="headerlink" href="#includes" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Polylidar/Types.hpp</span></code> (<a class="reference internal" href="file_include_Polylidar_Types.hpp.html#file-include-polylidar-types-hpp"><span class="std std-ref">File Types.hpp</span></a>)</p></li>
+</ul>
+</div>
+<div class="section" id="included-by">
+<h2>Included By<a class="headerlink" href="#included-by" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="file_include_Polylidar_Mesh_MeshHelper.hpp.html#file-include-polylidar-mesh-meshhelper-hpp"><span class="std std-ref">File MeshHelper.hpp</span></a></p></li>
+<li><p><a class="reference internal" href="file_include_Polylidar_Utility.hpp.html#file-include-polylidar-utility-hpp"><span class="std std-ref">File Utility.hpp</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="namespaces">
+<h2>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="namespace_Polylidar.html#namespace-polylidar"><span class="std std-ref">Namespace Polylidar</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_Polylidar__Utility.html#namespace-polylidar-utility"><span class="std std-ref">Namespace Polylidar::Utility</span></a></p></li>
+<li><p><a class="reference internal" href="namespace_Polylidar__Utility__Math.html#namespace-polylidar-utility-math"><span class="std std-ref">Namespace Polylidar::Utility::Math</span></a></p></li>
+</ul>
+</div>
+<div class="section" id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1ab351e1cc4562b6020b29024a078b2848.html#exhale-function-utilitymath-8hpp-1ab351e1cc4562b6020b29024a078b2848"><span class="std std-ref">Function Polylidar::Utility::Math::AxisAngleFromVectors</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a19ec01c8a073e3740c1c965bb52ff883.html#exhale-function-utilitymath-8hpp-1a19ec01c8a073e3740c1c965bb52ff883"><span class="std std-ref">Function Polylidar::Utility::Math::AxisAngleToRotationMatrix</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a72028d52fab531c7e7d3402e2459214b.html#exhale-function-utilitymath-8hpp-1a72028d52fab531c7e7d3402e2459214b"><span class="std std-ref">Function Polylidar::Utility::Math::CrossProduct3</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1ae03792bc59ac31647991255e5943c95d.html#exhale-function-utilitymath-8hpp-1ae03792bc59ac31647991255e5943c95d"><span class="std std-ref">Function Polylidar::Utility::Math::Determinant</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a468a3acbfb944236a42464f59fb3fd2c.html#exhale-function-utilitymath-8hpp-1a468a3acbfb944236a42464f59fb3fd2c"><span class="std std-ref">Function Polylidar::Utility::Math::DotProduct2</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a2eb226872f1b37bf51e22ce02cab642f.html#exhale-function-utilitymath-8hpp-1a2eb226872f1b37bf51e22ce02cab642f"><span class="std std-ref">Function Polylidar::Utility::Math::DotProduct3(const std::array&lt;double, 3&gt;&amp;, const std::array&lt;double, 3&gt;&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1ad4cf028794ad41b5b96aa3410f5ee676.html#exhale-function-utilitymath-8hpp-1ad4cf028794ad41b5b96aa3410f5ee676"><span class="std std-ref">Function Polylidar::Utility::Math::DotProduct3(const double *, const std::array&lt;double, 3&gt;&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a8244427fefea52816f58db3d959c1f51.html#exhale-function-utilitymath-8hpp-1a8244427fefea52816f58db3d959c1f51"><span class="std std-ref">Function Polylidar::Utility::Math::Get360Angle</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1af05c745bac954b5612ce0770794c7ee7.html#exhale-function-utilitymath-8hpp-1af05c745bac954b5612ce0770794c7ee7"><span class="std std-ref">Function Polylidar::Utility::Math::L2Norm</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a63c41a05f6be15da2be8b5c1aeb76e3b.html#exhale-function-utilitymath-8hpp-1a63c41a05f6be15da2be8b5c1aeb76e3b"><span class="std std-ref">Function Polylidar::Utility::Math::L2Norm3D</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1aae7fdef8c6c54ef9852b116ac45be081.html#exhale-function-utilitymath-8hpp-1aae7fdef8c6c54ef9852b116ac45be081"><span class="std std-ref">Function Polylidar::Utility::Math::Normalize3</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1aae27ed71239bf4146bd8391c55fa4d07.html#exhale-function-utilitymath-8hpp-1aae27ed71239bf4146bd8391c55fa4d07"><span class="std std-ref">Function Polylidar::Utility::Math::RotateVector</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1af16ec1926a2335a668880e0951205474.html#exhale-function-utilitymath-8hpp-1af16ec1926a2335a668880e0951205474"><span class="std std-ref">Function Polylidar::Utility::Math::Subtract(const double *, const double *, std::array&lt;double, 3&gt;&amp;)</span></a></p></li>
+<li><p><a class="reference internal" href="function_UtilityMath_8hpp_1a466c1d74ae5b142b06bbce541aa90053.html#exhale-function-utilitymath-8hpp-1a466c1d74ae5b142b06bbce541aa90053"><span class="std std-ref">Function Polylidar::Utility::Math::Subtract(const std::array&lt;double, 3&gt;&amp;, const std::array&lt;double, 3&gt;&amp;, std::array&lt;double, 3&gt;&amp;)</span></a></p></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
