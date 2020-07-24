@@ -97,7 +97,14 @@ If are using Polylidar for 2D work please cite:
 If you are using Polylidar3D for 3D work please cite:
 
 ```
-TBA
+@misc{castagno2020polylidar3d,
+    title={Polylidar3D -- Fast Polygon Extraction from 3D Data},
+    author={Jeremy Castagno and Ella Atkins},
+    year={2020},
+    eprint={2007.12065},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
+}
 ```
 
 ## License
