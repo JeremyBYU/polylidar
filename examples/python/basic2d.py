@@ -12,7 +12,7 @@ np.random.seed(1)
 
 
 def main():
-    kwargs = dict(num_groups=2, group_size=1000, dist=100.0, seed=1)
+    kwargs = dict(num_groups=2, group_size=4, dist=100.0, seed=1)
     # generate 2 random normally distributed clusters of points, 200 X 2 numpy array.
     points = generate_test_points(**kwargs)
     lmax = get_estimated_lmax(**kwargs)
@@ -36,6 +36,7 @@ def main():
     # plot points
     ax.scatter(points[:, 0], points[:, 1], c='k')
     # plot all triangles
+    # plt.triplot(points[:,0], points[:,1], triangles) # better alternative
     plot_triangles(get_triangles_from_list(triangles, points), ax)
     # plot seperated planar triangular segments
     triangle_meshes = get_colored_planar_segments(planes, triangles, points)

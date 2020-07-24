@@ -161,7 +161,8 @@ def get_estimated_lmax(num_groups=2, dist=100, group_size=10, scale_factor=4, **
 
 def get_triangles_from_list(triangles:np.ndarray, points):
     triangle_list = []
-    for i in range(0, len(triangles), 3):
+    skip = 3 if triangles.ndim == 1 else 1
+    for i in range(0, len(triangles), skip):
         # print(triangles)
         triangle = []
         if triangles.ndim == 1:
