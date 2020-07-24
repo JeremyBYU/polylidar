@@ -94,7 +94,7 @@ If are using Polylidar for 2D work please cite:
 }
 ```
 
-If you are using Polylidar3D for 3D work please cite:
+If you are using Polylidar3D for 3D work please cite this preprint:
 
 ```
 @misc{castagno2020polylidar3d,
