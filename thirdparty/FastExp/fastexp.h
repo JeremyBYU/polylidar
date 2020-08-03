@@ -32,7 +32,9 @@ enum class Approximation {IEEE, PRODUCT};
  * \param x The argument of the exponential function.
  * \return The approximated value of the exponential function.
  */
+#ifndef _WIN32
 #pragma omp declare simd notinbranch
+#endif
 template
 <
     typename Real,
