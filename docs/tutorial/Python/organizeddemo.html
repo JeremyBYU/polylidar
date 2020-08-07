@@ -106,6 +106,13 @@
 <li class="toctree-l2"><a class="reference internal" href="basicdemo.html#Unorganized-2D-Point-Sets">Unorganized 2D Point Sets</a></li>
 <li class="toctree-l2"><a class="reference internal" href="basicdemo.html#Unorganized-3D-Point-Clouds">Unorganized 3D Point Clouds</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Organized 3D Point Clouds</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#Extract-Dominant-Planes-From-Organized-Point">Extract Dominant Planes From Organized Point</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Visualize-the-Raw-Organized-Point-Cloud">Visualize the Raw Organized Point Cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Smooth-Point-Cloud-and-Create-Mesh">Smooth Point Cloud and Create Mesh</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Identify-Dominant-Plane-Normals">Identify Dominant Plane Normals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Extract-Planes-and-Polygons-with-Polylidar3D">Extract Planes and Polygons with Polylidar3D</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../C++/index.html">C++</a></li>
@@ -441,7 +448,7 @@ div.rendered_html tbody tr:hover {
 <h1>Organized 3D Point Clouds<a class="headerlink" href="#Organized-3D-Point-Clouds" title="Permalink to this headline">¶</a></h1>
 <p>We demonstrate Polylidar3D being applied to an organized point cloud. Depth images from an Intel RealSense D435i will be processed. This example is taken from the much more thorough script titled <code class="docutils literal notranslate"><span class="pre">realsense_mesh.py</span></code>. Refer to that script for more details.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[ ]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -449,6 +456,7 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="n">SRC_DOCS</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;src_docs&#39;</span><span class="p">,</span> <span class="s1">&#39;_static&#39;</span> <span class="p">))</span>
 <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;../../../&#39;</span><span class="p">)</span>
@@ -456,7 +464,7 @@ div.rendered_html tbody tr:hover {
 </div>
 </div>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -464,6 +472,8 @@ div.rendered_html tbody tr:hover {
 <span class="kn">import</span> <span class="nn">open3d</span> <span class="k">as</span> <span class="nn">o3d</span>
 <span class="kn">from</span> <span class="nn">open3d</span> <span class="kn">import</span> <span class="n">JVisualizer</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">from</span> <span class="nn">scipy.spatial.transform</span> <span class="kn">import</span> <span class="n">Rotation</span> <span class="k">as</span> <span class="n">R</span>
 
 <span class="kn">from</span> <span class="nn">examples.python.util.realsense_util</span> <span class="kn">import</span> <span class="p">(</span><span class="n">get_realsense_data</span><span class="p">,</span> <span class="n">get_frame_data</span><span class="p">,</span> <span class="n">R_Standard_d400</span><span class="p">,</span> <span class="n">prep_mesh</span><span class="p">,</span>
                                                  <span class="n">create_open3d_pc</span><span class="p">,</span> <span class="n">extract_mesh_planes</span><span class="p">,</span> <span class="n">COLOR_PALETTE</span><span class="p">)</span>
@@ -474,14 +484,14 @@ div.rendered_html tbody tr:hover {
 <span class="kn">from</span> <span class="nn">polylidar.polylidarutil.open3d_util</span> <span class="kn">import</span> <span class="n">construct_grid</span><span class="p">,</span> <span class="n">create_lines</span><span class="p">,</span> <span class="n">flatten</span><span class="p">,</span> <span class="n">create_open_3d_mesh_from_tri_mesh</span>
 <span class="kn">from</span> <span class="nn">polylidar.polylidarutil.plane_filtering</span> <span class="kn">import</span> <span class="n">filter_planes_and_holes</span>
 
-<span class="kn">from</span> <span class="nn">examples.python.realsense_mesh</span> <span class="kn">import</span> <span class="n">filter_and_create_open3d_polygons</span><span class="p">,</span> <span class="n">run_test</span><span class="p">,</span> <span class="n">callback</span>
+<span class="kn">from</span> <span class="nn">examples.python.realsense_mesh</span> <span class="kn">import</span> <span class="n">run_test</span><span class="p">,</span> <span class="n">callback</span>
 
 </pre></div>
 </div>
 </div>
 <p>First we gather the data and visualize. The point cloud is colored by z-height,the blue points represent the floor of my basement.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[41]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -502,7 +512,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </pre></div></div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -511,7 +521,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -519,7 +529,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -528,12 +538,12 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 </div>
 <div class="nboutput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-&lt;matplotlib.image.AxesImage at 0x7f54a4ae3fd0&gt;
+&lt;matplotlib.image.AxesImage at 0x7f6a2bc62f50&gt;
 </pre></div></div>
 </div>
 <div class="nboutput nblast docutils container">
@@ -544,7 +554,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -553,7 +563,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -561,7 +571,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 </div>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[43]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -574,14 +584,14 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </div>
 <div class="output_area stderr docutils container">
 <div class="highlight"><pre>
-INFO:root:Treated as **Unorganized** Point Cloud - 2.5D Delaunay Triangulation with Polygon Extraction took 14.71 milliseconds
-INFO:root:Treated as **Organized** Point Cloud - Right-Cut Triangulation/Uniform Mesh (Mesh only) took 1.33 milliseconds
-INFO:root:Polygon Extraction on Uniform Mesh (only one dominant plane normal) took 2.62 milliseconds
+INFO:root:Treated as **Unorganized** Point Cloud - 2.5D Delaunay Triangulation with Polygon Extraction took 14.41 milliseconds
+INFO:root:Treated as **Organized** Point Cloud - Right-Cut Triangulation/Uniform Mesh (Mesh only) took 1.71 milliseconds
+INFO:root:Polygon Extraction on Uniform Mesh (only one dominant plane normal) took 2.77 milliseconds
 </pre></div></div>
 </div>
 <p>This is the result of generating a Right-Cut Triangulaton/Uniform Mesh from the organized point cloud. It only took around a millisecond.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -590,7 +600,7 @@ INFO:root:Polygon Extraction on Uniform Mesh (only one dominant plane normal) to
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -600,7 +610,7 @@ INFO:root:Polygon Extraction on Uniform Mesh (only one dominant plane normal) to
 <p>Here is the result of using Polylidar3D to extract planar triangular segments and their polygonal representations which have similar orienation to the floor normal. The basement floor is extracted as a polygon (green line). Notice that there were small holes in the mesh; these were filtered out with the parameter <code class="docutils literal notranslate"><span class="pre">min_hole_vertices</span></code>. Notice other planar segments were extracted (purple, red, orange, etc.). These can/were filtered out by either <code class="docutils literal notranslate"><span class="pre">min_triangles</span></code> or polygon post-processing with
 minimum area requirements.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -609,7 +619,7 @@ minimum area requirements.</p>
 </div>
 </div>
 <div class="nboutput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
 </pre></div>
 </div>
 <div class="output_area docutils container">
@@ -624,7 +634,7 @@ minimum area requirements.</p>
 </ol>
 <p>Note that Polylidar3D can just take an organized point cloud <em>directly</em> if you have it: <a class="reference internal" href="../../python_api/polylidar.extract_tri_mesh_from_organized_point_cloud.html"><span class="doc">extract_tri_mesh_from_organized_point_cloud</span></a></p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
@@ -664,6 +674,364 @@ Number of planar segments: 5
 Number of polygons : 5
 Number of polygons after filtering: 1
 </pre></div></div>
+</div>
+</div>
+<div class="section" id="Extract-Dominant-Planes-From-Organized-Point">
+<h1>Extract Dominant Planes From Organized Point<a class="headerlink" href="#Extract-Dominant-Planes-From-Organized-Point" title="Permalink to this headline">¶</a></h1>
+<p>Here we will show another scene where multiple surfaces will be extracted that have different surface normals. Note that you <strong>must</strong> have <a class="reference external" href="https://github.com/JeremyBYU/FastGaussianAccumulator">FastGA</a> installed as well as <a class="reference external" href="https://github.com/JeremyBYU/OrganizedPointFilters">OrganizedPointFilters</a> for this example to work.</p>
+<p>First lets look at some data I took from an L515 RealSense Sensor in my basement. We will load the depth image, our generated <em>organized</em> point cloud from the depth image, and any meta data we will need.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[69]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">examples.python.util.realsense_util</span> <span class="kn">import</span> <span class="n">REALSENSE_DIR</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="n">example_one</span> <span class="o">=</span> <span class="s1">&#39;opc_example_one&#39;</span>
+<span class="n">depth_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">REALSENSE_DIR</span><span class="p">,</span> <span class="n">example_one</span><span class="p">,</span> <span class="s1">&#39;L515_Depth.npy&#39;</span><span class="p">))</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">REALSENSE_DIR</span><span class="p">,</span> <span class="n">example_one</span><span class="p">,</span> <span class="s1">&#39;L515_meta.json&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Depth Intriniscs: &quot;</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;intrinsics&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Depth Intriniscs:
+[[228.90548706054688, 0.0, 160.26693725585938],
+ [0.0, 229.06289672851562, 94.28375244140625],
+ [0.0, 0.0, 1.0]]
+</pre></div></div>
+</div>
+<p>We can convert this depth image into an organized point cloud. This is with the following procedure:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[71]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">intrinsics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;intrinsics&#39;</span><span class="p">])</span>
+<span class="n">extrinsics</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">stride</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">points</span> <span class="o">=</span> <span class="n">extract_point_cloud_from_float_depth</span><span class="p">(</span><span class="n">MatrixFloat</span><span class="p">(</span>
+    <span class="n">depth_image</span><span class="p">),</span> <span class="n">MatrixDouble</span><span class="p">(</span><span class="n">intrinsics</span><span class="p">),</span> <span class="n">MatrixDouble</span><span class="p">(</span><span class="n">extrinsics</span><span class="p">),</span> <span class="n">stride</span><span class="o">=</span><span class="n">stride</span><span class="p">)</span>
+<span class="n">new_shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">depth_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="n">stride</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">depth_image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">stride</span><span class="p">),</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">opc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">points</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">new_shape</span><span class="p">)</span>  <span class="c1"># organized point cloud (will have NaNs!)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">opc</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">opc</span><span class="p">[:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">,:</span><span class="mi">3</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Note than any invalid depth measurments (e.g. 0) must be converted to nan values!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(180, 320, 3)
+[[[        nan         nan         nan]
+  [        nan         nan         nan]
+  [-0.87670461 -0.52191696  1.26800013]]
+
+ [[        nan         nan         nan]
+  [        nan         nan         nan]
+  [-0.87929737 -0.5179085   1.27175009]]
+
+ [[        nan         nan         nan]
+  [        nan         nan         nan]
+  [-0.880853   -0.51326298  1.27400005]]]
+Note than any invalid depth measurments (e.g. 0) must be converted to nan values!
+</pre></div></div>
+</div>
+<div class="section" id="Visualize-the-Raw-Organized-Point-Cloud">
+<h2>Visualize the Raw Organized Point Cloud<a class="headerlink" href="#Visualize-the-Raw-Organized-Point-Cloud" title="Permalink to this headline">¶</a></h2>
+<p>Look at that beautiful L515 Sensor!</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[72]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="c1"># pcd_np = np.array([[0,0,0], [1, 1, 1]])</span>
+<span class="n">pcd_np</span> <span class="o">=</span> <span class="n">opc</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">opc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">opc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">pcd_np</span> <span class="o">=</span> <span class="n">pcd_np</span><span class="p">[</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">pcd_np</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span> <span class="c1"># cant have nans in o3d...boooo!!!</span>
+<span class="n">pcd</span> <span class="o">=</span> <span class="n">o3d</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">PointCloud</span><span class="p">(</span><span class="n">o3d</span><span class="o">.</span><span class="n">utility</span><span class="o">.</span><span class="n">Vector3dVector</span><span class="p">(</span><span class="n">pcd_np</span><span class="p">))</span>
+<span class="n">o3d</span><span class="o">.</span><span class="n">visualization</span><span class="o">.</span><span class="n">draw_geometries</span><span class="p">([</span><span class="n">pcd</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">Image</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SRC_DOCS</span><span class="si">}</span><span class="s2">/organized/l515_opc.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorial_Python_organizeddemo_22_0.png" src="../../_images/tutorial_Python_organizeddemo_22_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Smooth-Point-Cloud-and-Create-Mesh">
+<h2>Smooth Point Cloud and Create Mesh<a class="headerlink" href="#Smooth-Point-Cloud-and-Create-Mesh" title="Permalink to this headline">¶</a></h2>
+<p>First we need to smooth the point cloud and create a mesh. I have provided a helper module that uses <code class="docutils literal notranslate"><span class="pre">OrganizedPointFilters</span></code> to smooth the OPC. It used both Laplacian and Bilateral filtering. The mesh is then created using procedures in <code class="docutils literal notranslate"><span class="pre">Polylidar3D</span></code> itself. Here are the parameters:</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;use_cuda&#39;: True,
+ &#39;stride&#39;: 1,
+ &#39;filter&#39;: {&#39;loops_laplacian&#39;: 1,
+  &#39;_lambda&#39;: 1.0,
+  &#39;kernel_size&#39;: 3,
+  &#39;loops_bilateral&#39;: 3,
+  &#39;sigma_length&#39;: 0.2,
+  &#39;sigma_angle&#39;: 0.15}}
+</pre></div></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>`use_cuda` - Use your GPU for smoothing to make procedures much faster
+`loops_laplacian` - how many iterations of Laplacian smoothing
+`_lambda` - Weight factor for laplacian smoothing. Leave at 1.0
+`kernel_size` - The Laplacian kernel size. Can be 3 or 5. 3 will use get 8 neighbors, 5 will be 27 Neighbors. For very dense point cloud that are very noisy use 5.
+`sigma_length` - bilater filtering parameter
+`sigma_angle` -  bilateral filtering parameter
+</pre></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[73]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">examples.python.util.helper_mesh</span> <span class="kn">import</span> <span class="n">create_meshes_cuda</span><span class="p">,</span> <span class="n">create_meshes</span>
+<span class="n">use_cuda</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">if</span> <span class="n">use_cuda</span><span class="p">:</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">timings</span> <span class="o">=</span> <span class="n">create_meshes_cuda</span><span class="p">(</span><span class="n">opc</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">][</span><span class="s1">&#39;filter&#39;</span><span class="p">])</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">timings</span> <span class="o">=</span> <span class="n">create_meshes</span><span class="p">(</span><span class="n">opc</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">][</span><span class="s1">&#39;filter&#39;</span><span class="p">])</span>
+
+<span class="n">mesh_o3d</span> <span class="o">=</span> <span class="n">create_open_3d_mesh_from_tri_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">o3d</span><span class="o">.</span><span class="n">visualization</span><span class="o">.</span><span class="n">draw_geometries</span><span class="p">([</span><span class="n">mesh_o3d</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">Image</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SRC_DOCS</span><span class="si">}</span><span class="s2">/organized/l515_mesh_smooth.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorial_Python_organizeddemo_27_0.png" src="../../_images/tutorial_Python_organizeddemo_27_0.png" />
+</div>
+</div>
+</div>
+<div class="section" id="Identify-Dominant-Plane-Normals">
+<h2>Identify Dominant Plane Normals<a class="headerlink" href="#Identify-Dominant-Plane-Normals" title="Permalink to this headline">¶</a></h2>
+<p>Now we will use FastGA to identify all the dominant planes. Here are some helper functions:</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">fastga</span> <span class="kn">import</span> <span class="n">GaussianAccumulatorS2</span><span class="p">,</span> <span class="n">MatX3d</span><span class="p">,</span> <span class="n">IcoCharts</span>
+<span class="kn">from</span> <span class="nn">fastga.peak_and_cluster</span> <span class="kn">import</span> <span class="n">find_peaks_from_ico_charts</span>
+
+
+<span class="k">def</span> <span class="nf">down_sample_normals</span><span class="p">(</span><span class="n">triangle_normals</span><span class="p">,</span> <span class="n">down_sample_fraction</span><span class="o">=</span><span class="mf">0.12</span><span class="p">,</span> <span class="n">min_samples</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">flip_normals</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">num_normals</span> <span class="o">=</span> <span class="n">triangle_normals</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">to_sample</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">down_sample_fraction</span> <span class="o">*</span> <span class="n">num_normals</span><span class="p">)</span>
+    <span class="n">to_sample</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">([</span><span class="n">num_normals</span><span class="p">,</span> <span class="n">min_samples</span><span class="p">]),</span> <span class="n">to_sample</span><span class="p">)</span>
+    <span class="n">ds_step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_normals</span> <span class="o">/</span> <span class="n">to_sample</span><span class="p">)</span>
+    <span class="n">triangle_normals_ds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">triangle_normals</span><span class="p">[:</span><span class="n">num_normals</span><span class="p">:</span><span class="n">ds_step</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="k">if</span> <span class="n">flip_normals</span><span class="p">:</span>
+        <span class="n">triangle_normals_ds</span> <span class="o">=</span> <span class="n">triangle_normals_ds</span> <span class="o">*</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="k">return</span> <span class="n">triangle_normals_ds</span>
+
+<span class="k">def</span> <span class="nf">get_image_peaks</span><span class="p">(</span><span class="n">ico_chart</span><span class="p">,</span> <span class="n">ga</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                    <span class="n">find_peaks_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">threshold_abs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">min_distance</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exclude_border</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">indices</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+                    <span class="n">cluster_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="mf">0.10</span><span class="p">,</span> <span class="n">criterion</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">),</span>
+                    <span class="n">average_filter</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">min_total_weight</span><span class="o">=</span><span class="mf">0.01</span><span class="p">),</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="n">normalized_bucket_counts_by_vertex</span> <span class="o">=</span> <span class="n">ga</span><span class="o">.</span><span class="n">get_normalized_bucket_counts_by_vertex</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">t1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">ico_chart</span><span class="o">.</span><span class="n">fill_image</span><span class="p">(</span><span class="n">normalized_bucket_counts_by_vertex</span><span class="p">)</span>  <span class="c1"># this takes microseconds</span>
+<span class="c1">#     plt.imshow(np.asarray(ico_chart.image))</span>
+<span class="c1">#     plt.show()</span>
+    <span class="n">peaks</span><span class="p">,</span> <span class="n">clusters</span><span class="p">,</span> <span class="n">avg_peaks</span><span class="p">,</span> <span class="n">avg_weights</span> <span class="o">=</span> <span class="n">find_peaks_from_ico_charts</span><span class="p">(</span><span class="n">ico_chart</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span>
+        <span class="n">normalized_bucket_counts_by_vertex</span><span class="p">),</span> <span class="n">find_peaks_kwargs</span><span class="p">,</span> <span class="n">cluster_kwargs</span><span class="p">,</span> <span class="n">average_filter</span><span class="p">)</span>
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+
+    <span class="n">gaussian_normals_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">ico_chart</span><span class="o">.</span><span class="n">sphere_mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+
+
+    <span class="k">return</span> <span class="n">avg_peaks</span>
+
+<span class="k">def</span> <span class="nf">extract_all_dominant_plane_normals</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">ga_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ico_chart_</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="n">triangle_normals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tri_mesh</span><span class="o">.</span><span class="n">triangle_normals</span><span class="p">)</span>
+    <span class="n">triangle_normals_ds</span> <span class="o">=</span> <span class="n">down_sample_normals</span><span class="p">(</span><span class="n">triangle_normals</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">triangle_normals_ds_mat</span> <span class="o">=</span> <span class="n">MatX3d</span><span class="p">(</span><span class="n">triangle_normals_ds</span><span class="p">)</span>
+
+    <span class="n">ga</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">triangle_normals_ds_mat</span><span class="p">)</span>
+
+    <span class="n">avg_peaks</span> <span class="o">=</span> <span class="n">get_image_peaks</span><span class="p">(</span>
+        <span class="n">ico_chart</span><span class="p">,</span> <span class="n">ga</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">ga</span><span class="o">.</span><span class="n">clear_count</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">avg_peaks</span>
+</pre></div>
+</div>
+</div>
+<p>Please see the FastGA Documentation to understand these parameters</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;fastga&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;level&#39;: 4,
+ &#39;down_sample_fraction&#39;: 0.12,
+ &#39;find_peaks_kwargs&#39;: {&#39;threshold_abs&#39;: 50,
+  &#39;min_distance&#39;: 1,
+  &#39;exclude_border&#39;: True,
+  &#39;indices&#39;: False},
+ &#39;cluster_kwargs&#39;: {&#39;t&#39;: 0.28, &#39;criterion&#39;: &#39;distance&#39;},
+ &#39;average_filter&#39;: {&#39;min_total_weight&#39;: 0.1}}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[33]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">ga</span> <span class="o">=</span> <span class="n">GaussianAccumulatorS2</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;fastga&#39;</span><span class="p">][</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+<span class="n">ico_chart</span> <span class="o">=</span> <span class="n">IcoCharts</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;fastga&#39;</span><span class="p">][</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+<span class="n">avg_peaks</span> <span class="o">=</span> <span class="n">extract_all_dominant_plane_normals</span><span class="p">(</span>
+    <span class="n">mesh</span><span class="p">,</span> <span class="n">ga_</span><span class="o">=</span><span class="n">ga</span><span class="p">,</span> <span class="n">ico_chart_</span><span class="o">=</span><span class="n">ico_chart</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;fastga&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The dominant plane surface normals in the sensor frame of refererence: &quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">avg_peaks</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+The dominant plane surface normals in the sensor frame of refererence:
+[[ 0.          0.52573111 -0.85065081]
+ [ 0.         -0.85065081 -0.52573111]]
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Extract-Planes-and-Polygons-with-Polylidar3D">
+<h2>Extract Planes and Polygons with Polylidar3D<a class="headerlink" href="#Extract-Planes-and-Polygons-with-Polylidar3D" title="Permalink to this headline">¶</a></h2>
+<p>Once again here is a heper function</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="k">def</span> <span class="nf">filter_and_create_open3d_polygons</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">polygons</span><span class="p">,</span> <span class="n">rm</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="s2">&quot; Apply polygon filtering algorithm, return Open3D Mesh Lines &quot;</span>
+    <span class="n">config_pp</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">filter</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">hole_area</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.025</span><span class="p">,</span> <span class="nb">max</span><span class="o">=</span><span class="mf">100.0</span><span class="p">),</span> <span class="n">hole_vertices</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mi">6</span><span class="p">),</span> <span class="n">plane_area</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="nb">min</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)),</span>
+                     <span class="n">positive_buffer</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span> <span class="n">negative_buffer</span><span class="o">=</span><span class="mf">0.00</span><span class="p">,</span> <span class="n">simplify</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">planes</span><span class="p">,</span> <span class="n">obstacles</span> <span class="o">=</span> <span class="n">filter_planes_and_holes</span><span class="p">(</span><span class="n">polygons</span><span class="p">,</span> <span class="n">points</span><span class="p">,</span> <span class="n">config_pp</span><span class="p">,</span> <span class="n">rm</span><span class="p">)</span>
+    <span class="n">all_poly_lines</span> <span class="o">=</span> <span class="n">create_lines</span><span class="p">(</span><span class="n">planes</span><span class="p">,</span> <span class="n">obstacles</span><span class="p">,</span> <span class="n">line_radius</span><span class="o">=</span><span class="mf">0.01</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">all_poly_lines</span>
+
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[67]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">polylidar_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">lmax</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">min_triangles</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+                      <span class="n">z_thresh</span><span class="o">=</span><span class="mf">0.15</span><span class="p">,</span> <span class="n">norm_thresh</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">norm_thresh_min</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span> <span class="n">min_hole_vertices</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">task_threads</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">pl</span> <span class="o">=</span> <span class="n">Polylidar3D</span><span class="p">(</span><span class="o">**</span><span class="n">polylidar_kwargs</span><span class="p">)</span>
+
+<span class="n">avg_peaks_mat</span> <span class="o">=</span> <span class="n">MatrixDouble</span><span class="p">(</span><span class="n">avg_peaks</span><span class="p">)</span>
+<span class="n">all_planes</span><span class="p">,</span> <span class="n">all_polygons</span> <span class="o">=</span> <span class="n">pl</span><span class="o">.</span><span class="n">extract_planes_and_polygons_optimized</span><span class="p">(</span><span class="n">mesh</span><span class="p">,</span> <span class="n">avg_peaks_mat</span><span class="p">)</span>
+
+<span class="n">vertices_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">vertices</span><span class="p">)</span>
+<span class="n">triangles_np</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">mesh</span><span class="o">.</span><span class="n">triangles</span><span class="p">)</span>
+
+<span class="n">mesh_3d_polylidar</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">avg_peaks</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+    <span class="n">avg_peak</span> <span class="o">=</span> <span class="n">avg_peaks</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">rm</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">R</span><span class="o">.</span><span class="n">align_vectors</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]],</span> <span class="p">[</span><span class="n">avg_peak</span><span class="p">])</span>
+    <span class="n">all_poly_lines</span> <span class="o">=</span> <span class="n">filter_and_create_open3d_polygons</span><span class="p">(</span><span class="n">vertices_np</span><span class="p">,</span> <span class="n">all_polygons</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">rm</span><span class="p">)</span>
+    <span class="n">mesh_3d_polylidar</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">flatten</span><span class="p">([</span><span class="n">line_mesh</span><span class="o">.</span><span class="n">cylinder_segments</span> <span class="k">for</span> <span class="n">line_mesh</span> <span class="ow">in</span> <span class="n">all_poly_lines</span><span class="p">]))</span>
+
+<span class="n">o3d</span><span class="o">.</span><span class="n">visualization</span><span class="o">.</span><span class="n">draw_geometries</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">mesh_o3d</span><span class="p">,</span> <span class="o">*</span><span class="n">mesh_3d_polylidar</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">Image</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">SRC_DOCS</span><span class="si">}</span><span class="s2">/organized/l515_polygons.png&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../../_images/tutorial_Python_organizeddemo_37_0.png" src="../../_images/tutorial_Python_organizeddemo_37_0.png" />
+</div>
+</div>
 </div>
 </div>
 
