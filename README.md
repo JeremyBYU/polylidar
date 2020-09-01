@@ -81,6 +81,8 @@ Any help or suggestions would be appreciated!
 
 ## Citation
 
+### 2D
+
 If are using Polylidar for 2D work please cite: 
 
 J. Castagno and E. Atkins, "Polylidar - Polygons From Triangular Meshes," in IEEE Robotics and Automation Letters, vol. 5, no. 3, pp. 4634-4641, July 2020, doi: 10.1109/LRA.2020.3002212.
@@ -98,10 +100,26 @@ J. Castagno and E. Atkins, "Polylidar - Polygons From Triangular Meshes," in IEE
 }
 ```
 
+### 3D
+
 If you are using Polylidar3D for 3D work please cite:
 
-Castagno, J.; Atkins, E. Polylidar3D-Fast Polygon Extraction from 3D Data. Sensors 2020, 20, 4819. 
+J. Castagno and E. Atkins, "Polylidar3D - Fast Polygon Extraction from 3D Data," in MDPI Sensors, vol. 20, no.17, 4819, September 2020, doi: 10.3390/s20174819
 [Link to Paper](https://www.mdpi.com/1424-8220/20/17/4819)
+
+```
+@Article{s20174819,
+AUTHOR = {Castagno, Jeremy and Atkins, Ella},
+TITLE = {Polylidar3D-Fast Polygon Extraction from 3D Data},
+JOURNAL = {Sensors},
+VOLUME = {20},
+YEAR = {2020},
+NUMBER = {17},
+ARTICLE-NUMBER = {4819},
+URL = {https://www.mdpi.com/1424-8220/20/17/4819},
+ISSN = {1424-8220}
+}
+```
 
 
 ## License
