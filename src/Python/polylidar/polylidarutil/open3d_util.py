@@ -54,6 +54,9 @@ def create_open_3d_mesh(triangles, points, triangle_normals=None, color=COLOR_PA
     if not counter_clock_wise:
         triangles = np.ascontiguousarray(np.flip(triangles, 1))
     mesh_o3d.triangles = o3d.utility.Vector3iVector(triangles)
+
+    mask = np.isnan(points).any(axis=1) # I think that we need this with open3d 0.10.0
+    points[mask, :] = [0,0,0]
     mesh_o3d.vertices = o3d.utility.Vector3dVector(points)
     if triangle_normals is None:
         mesh_o3d.compute_vertex_normals()
