@@ -84,7 +84,7 @@ class LineMesh(object):
             if axis is not None:
                 axis_a = axis * angle
                 rotation_3x3 = cylinder_segment.get_rotation_matrix_from_axis_angle(axis_a)
-                cylinder_segment = cylinder_segment.rotate(rotation_3x3, center=True,)
+                cylinder_segment = cylinder_segment.rotate(rotation_3x3, center=cylinder_segment.get_center())
             # color cylinder
             color = self.colors if self.colors.ndim == 1 else self.colors[i, :]
             cylinder_segment.paint_uniform_color(color)

@@ -185,7 +185,7 @@ def main():
         if idx < 2:
             continue
         pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
-        pcd = pcd.rotate(R_Standard_d400[:3, :3], center=False)
+        pcd = pcd.rotate(R_Standard_d400[:3, :3], center=pcd.get_center())
 
         logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])
