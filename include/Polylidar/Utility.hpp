@@ -105,6 +105,17 @@ inline double GetMaxEdgeLength3D(size_t t, MeshHelper::HalfEdgeTriangulation& me
     return std::max(std::max(l1, l2), l3);
 }
 
+inline bool GetAllVertexClasses(size_t t, MeshHelper::HalfEdgeTriangulation& mesh)
+{
+    auto& triangles = mesh.triangles;
+    auto& points = mesh.vertices;
+    auto& pa = triangles(t, 0_z);
+    auto& pb = triangles(t, 1_z);
+    auto& pc = triangles(t, 2_z);
+    // get max length of triangle
+    return mesh.vertex_classes(pa) && mesh.vertex_classes(pb) && mesh.vertex_classes(pc);
+}
+
 inline double CircumsribedRadius(size_t t, MeshHelper::HalfEdgeTriangulation& mesh)
 {
     auto& triangles = mesh.triangles;

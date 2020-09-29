@@ -7,20 +7,20 @@ constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
 const static double PL_NAN = std::numeric_limits<double>::quiet_NaN();
 
 // Half Edge Constructors
-HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges(), triangle_normals(), counter_clock_wise(true) {}
+HalfEdgeTriangulation::HalfEdgeTriangulation() : vertices(), triangles(), halfedges(), triangle_normals(), vertex_classes(), counter_clock_wise(true) {}
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(const Matrix<double>& in_vertices)
-    : vertices(in_vertices), triangles(), halfedges(), triangle_normals(), counter_clock_wise(true)
+    : vertices(in_vertices), triangles(), halfedges(), triangle_normals(), vertex_classes(), counter_clock_wise(true)
 {
 }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices)
-    : vertices(std::move(in_vertices)), triangles(), halfedges(), triangle_normals(), counter_clock_wise(true)
+    : vertices(std::move(in_vertices)), triangles(), halfedges(), triangle_normals(), vertex_classes(), counter_clock_wise(true)
 {
 }
 
 HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matrix<size_t>&& in_triangles)
-    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(), triangle_normals(), counter_clock_wise(true)
+    : vertices(std::move(in_vertices)), triangles(std::move(in_triangles)), halfedges(), triangle_normals(), vertex_classes(), counter_clock_wise(true)
 {
     ExtractHalfEdgesMatrix(triangles, halfedges);
 }
@@ -31,6 +31,7 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
       triangles(std::move(in_triangles)),
       halfedges(std::move(in_halfedges)),
       triangle_normals(),
+      vertex_classes(),
       counter_clock_wise(true)
 {
 }
@@ -48,6 +49,7 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
       triangles(std::move(in_triangles)),
       halfedges(std::move(in_halfedges)),
       triangle_normals(std::move(in_triangle_normals)),
+      vertex_classes(),
       counter_clock_wise(true)
 {
 }
@@ -55,6 +57,19 @@ HalfEdgeTriangulation::HalfEdgeTriangulation(Matrix<double>&& in_vertices, Matri
 void HalfEdgeTriangulation::SetTriangleNormals(const Matrix<double> &in_triangle_normals)
 {
     triangle_normals = in_triangle_normals;
+}
+
+void HalfEdgeTriangulation::SetVertexClasses(const Matrix<uint8_t> &in_vertex_classes, bool copy)
+{
+    vertex_classes = in_vertex_classes;
+    // if in_vertices_classes does NOT own the data then vertex_classes will also NOT own the data.
+    // However, copy=True indicates that the data should be copied into vertex_classes and wil own the data
+    if (copy && !in_vertex_classes.own_data)
+    {
+        vertex_classes.data = in_vertex_classes.data;
+        vertex_classes.ptr = vertex_classes.data.data();
+    }
+
 }
 
 void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matrix<size_t>& triangles,

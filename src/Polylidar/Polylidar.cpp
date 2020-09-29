@@ -1,4 +1,4 @@
-#include <mutex>          // std::mutex
+#include <mutex> // std::mutex
 #include "Polylidar/Polylidar.hpp"
 #include "Polylidar/Core.hpp"
 
@@ -28,9 +28,8 @@ Polylidar3D::Polylidar3D(const double _alpha, const double _lmax, const size_t _
       scheduler(nullptr)
 {
     // TODO check if marl scheduler has already been constructed
-    // TODO do i need to somehow bind this to my shared ptr, its seems to be just a raw pointer. Should I be managing the memory?
-    // auto something = marl::Scheduler::get();
-    // Build the scheduler into marl
+    // TODO do i need to somehow bind this to my shared ptr, its seems to be just a raw pointer. Should I be managing
+    // the memory? auto something = marl::Scheduler::get(); Build the scheduler into marl
     marl::Scheduler::Config cfg;
     cfg.setWorkerThreadCount(_task_threads);
     scheduler = std::make_shared<marl::Scheduler>(cfg);
@@ -55,9 +54,9 @@ Polylidar3D::ExtractPlanesAndPolygons(const Matrix<double>& points, const std::a
     {
         z_thresh = 0.0;
         // TODO Ah yes, the code smell of bad design choices. Really should separate 2D from 3D.
-        std::cerr << "Warning! Sent a 2D point cloud put passed in z_thresh>0. Z_thresh is only for 3D pont clouds. I set it to 0.0.";
+        std::cerr << "Warning! Sent a 2D point cloud put passed in z_thresh>0. Z_thresh is only for 3D pont clouds. I "
+                     "set it to 0.0.";
     }
-    
 
     // Create Plane Data Structure, informs Polylidar which normal to extract on
     PlaneData plane_data{plane_normal};
@@ -110,14 +109,11 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesAndPolygonsOptimized(Mesh
     Planes planes = std::move(planes_group[0]);
     Polygons polygons = std::move(polygons_group[0]);
 
-
     return std::make_tuple(std::move(planes), std::move(polygons));
 }
 
-
-std::vector<uint8_t>
-Polylidar3D::ExtractTriSet(MeshHelper::HalfEdgeTriangulation& mesh,
-                                               const Matrix<double>& plane_normals)
+std::vector<uint8_t> Polylidar3D::ExtractTriSet(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                const Matrix<double>& plane_normals)
 {
     auto plane_data_list = Utility::CreateMultiplePlaneDataFromNormals(plane_normals);
 
@@ -125,7 +121,6 @@ Polylidar3D::ExtractTriSet(MeshHelper::HalfEdgeTriangulation& mesh,
     std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
     CreateTriSet3OptimizedForMultiplePlanes(tri_set, mesh, plane_data_list);
     return tri_set;
-
 }
 
 std::tuple<PlanesGroup, PolygonsGroup>
@@ -175,7 +170,7 @@ Polylidar3D::ExtractPlanesAndPolygonsOptimized(MeshHelper::HalfEdgeTriangulation
     // wait here until all plane groups have been processed
     plane_data_wg.wait();
 
-    // std::cout << "Total time took " << timer  << std::endl; 
+    // std::cout << "Total time took " << timer  << std::endl;
 
     return std::make_tuple(std::move(planes_group), std::move(polygons_group));
 }
@@ -207,8 +202,46 @@ std::tuple<PlanesGroup, PolygonsGroup> Polylidar3D::ExtractPlanesAndPolygons(Mes
         polygons_group.emplace_back(std::move(polygons));
         // std::cout << "Move data" << timer << " us" << std::endl;
     }
-    
-    // std::cout << "Total time took (NO)" << timer << std::endl; 
+
+    // std::cout << "Total time took (NO)" << timer << std::endl;
+
+    return std::make_tuple(std::move(planes_group), std::move(polygons_group));
+}
+
+std::tuple<PlanesGroup, PolygonsGroup>
+Polylidar3D::ExtractPlanesAndPolygonsOptimizedClassified(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                         const Matrix<double>& plane_normals)
+{
+    if (mesh.vertex_classes.rows != mesh.vertices.rows)
+    {
+        throw std::runtime_error("Mesh must be classified. vertex_classes.rows != vertices.rows");
+    }
+
+    auto plane_data_list = Utility::CreateMultiplePlaneDataFromNormals(plane_normals);
+    // Create tri_set
+    size_t max_triangles = mesh.triangles.rows;
+    std::vector<uint8_t> tri_set(max_triangles, ZERO_UINT8);
+    // Check the entire triset from the start.
+    Utility::Timer timer(true);
+    CreateTriSet3ClassifiedOptimizedForMultiplePlanes(tri_set, mesh, plane_data_list);
+    // std::cout << "Create TriSet3Optimized took: " << timer << " us" << std::endl;
+    // vectors for our planes and polygons, each element is for each normal to be expanded upon
+    PlanesGroup planes_group;
+    PolygonsGroup polygons_group;
+
+    // All done in serial
+    for (auto& plane_data : plane_data_list)
+    {
+        auto planes = ExtractPlanes(mesh, tri_set, plane_data, true);
+        // std::cout << "Got Planes in " << timer << " us" << std::endl;
+        auto polygons = Core::ExtractConcaveHulls(planes, mesh, plane_data, min_hole_vertices);
+        // std::cout << "Got Polygons in " << timer<< " us" << std::endl;
+        planes_group.emplace_back(std::move(planes));
+        polygons_group.emplace_back(std::move(polygons));
+        // std::cout << "Move data" << timer << " us" << std::endl;
+    }
+
+    // std::cout << "Total time took (NO)" << timer << std::endl;
 
     return std::make_tuple(std::move(planes_group), std::move(polygons_group));
 }
@@ -245,7 +278,7 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesWithTasks(MeshHelper::Hal
 
             VUI plane_set;
             // Plane extraction occurs in serial, but polygon extraction is in parallel through tasks
-            
+
             Core::ExtractMeshSet(mesh, tri_set, t, plane_set, plane_data, z_thresh);
             if (Core::PassPlaneConstraints(plane_set, min_triangles))
             {
@@ -256,16 +289,17 @@ std::tuple<Planes, Polygons> Polylidar3D::ExtractPlanesWithTasks(MeshHelper::Hal
                     polygons.emplace_back();
                 }
                 polygons_wg.add(1);
-                marl::schedule([this, &planes_deque, plane_counter, &mesh, &plane_data, &polygons, &polygons_mutex,polygons_wg] {
-                    defer(polygons_wg.done()); // Decrement polygons_wg when task is done
-                    auto& plane =
-                        planes_deque[plane_counter - 1]; // get the plane, reference is stable when using deque
-                    auto polygon = Core::ExtractConcaveHull(plane, mesh, plane_data, min_hole_vertices);
-                    {
-                        const std::lock_guard<std::mutex> lock(polygons_mutex);
-                        polygons[plane_counter - 1] = std::move(polygon);
-                    }
-                });
+                marl::schedule(
+                    [this, &planes_deque, plane_counter, &mesh, &plane_data, &polygons, &polygons_mutex, polygons_wg] {
+                        defer(polygons_wg.done()); // Decrement polygons_wg when task is done
+                        auto& plane =
+                            planes_deque[plane_counter - 1]; // get the plane, reference is stable when using deque
+                        auto polygon = Core::ExtractConcaveHull(plane, mesh, plane_data, min_hole_vertices);
+                        {
+                            const std::lock_guard<std::mutex> lock(polygons_mutex);
+                            polygons[plane_counter - 1] = std::move(polygon);
+                        }
+                    });
             }
         }
     }
@@ -354,7 +388,6 @@ void Polylidar3D::CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& 
     Eigen::Map<RowMatrixX3lui> triangles_e(mesh.triangles.ptr, mesh.triangles.rows, 3);
     Eigen::Map<RowMatrixX3d> triangles_normals_e(mesh.triangle_normals.ptr, mesh.triangle_normals.rows, 3);
 
-
 #if defined(_OPENMP)
     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
     num_threads = std::max(1, num_threads);
@@ -380,6 +413,46 @@ void Polylidar3D::CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& 
         uint8_t valid2D = Utility::ValidateTriangleLength(t, mesh, lmax) ? ZERO_UINT8 : MAX_UINT8;
         uint8_t valid3D = std::abs(maxDotProduct) > norm_thresh_min ? plane_data_list[idx].normal_id : ZERO_UINT8;
         tri_set[t] = valid2D | valid3D;
+    }
+}
+
+void Polylidar3D::CreateTriSet3ClassifiedOptimizedForMultiplePlanes(std::vector<uint8_t>& tri_set,
+                                                                    MeshHelper::HalfEdgeTriangulation& mesh,
+                                                                    std::vector<PlaneData>& plane_data_list)
+{
+    int numTriangles = static_cast<int>(mesh.triangles.rows);
+    RowMatrixX3d plane_normal_matrix = CreatePlaneNormalMatrix(plane_data_list);
+    // Map to Eigen data types
+    Eigen::Map<RowMatrixX3d> vertices_e(mesh.vertices.ptr, mesh.vertices.rows, 3);
+    Eigen::Map<RowMatrixX3lui> triangles_e(mesh.triangles.ptr, mesh.triangles.rows, 3);
+    Eigen::Map<RowMatrixX3d> triangles_normals_e(mesh.triangle_normals.ptr, mesh.triangle_normals.rows, 3);
+
+#if defined(_OPENMP)
+    int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
+    num_threads = std::max(1, num_threads);
+#pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
+#endif
+    for (int t = 0; t < numTriangles; t++)
+    {
+        int idx = 0;
+        double maxDotProduct = -1.0;
+        // SIGNIFICANT slow down compared to raw for loop
+        // auto this_normal = triangles_normals_e.row(t).transpose();
+        // auto maxDotProduct = (plane_normal_matrix * this_normal).maxCoeff(&idx);
+        for (int i = 0; i < static_cast<int>(plane_data_list.size()); ++i)
+        {
+            auto dotproduct = triangles_normals_e.row(t).dot(plane_normal_matrix.row(i));
+            if (dotproduct > maxDotProduct)
+            {
+                idx = i;
+                maxDotProduct = dotproduct;
+            }
+        }
+
+        uint8_t valid2D = Utility::ValidateTriangleLength(t, mesh, lmax) ? ZERO_UINT8 : MAX_UINT8;
+        uint8_t valid4D = Utility::GetAllVertexClasses(t, mesh) ? ZERO_UINT8 : MAX_UINT8;
+        uint8_t valid3D = std::abs(maxDotProduct) > norm_thresh_min ? plane_data_list[idx].normal_id : ZERO_UINT8;
+        tri_set[t] = valid2D | valid3D | valid4D;
     }
 }
 
@@ -409,30 +482,5 @@ void Polylidar3D::CreateTriSet3Optimized(std::vector<uint8_t>& tri_set, MeshHelp
         tri_set[t] = valid2D | valid3D;
     }
 }
-
-// void Polylidar3D::CreateTriSet3(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
-//                                 PlaneData& plane_data)
-// {
-//     // std::cout << "Calling CreateTriSet3" << std::endl;
-//     int numTriangles = static_cast<int>(mesh.triangles.rows);
-
-// // Ensure that each thread has at least PL_OMP_ELEM_PER_THREAD_TRISET
-// // Experimentation has found that too many threads will kill this loop if not enough work is present
-// #if defined(_OPENMP)
-//     int num_threads = std::min(omp_get_max_threads(), static_cast<int>(numTriangles / PL_OMP_ELEM_PER_THREAD_TRISET));
-//     num_threads = std::max(1, num_threads);
-// #pragma omp parallel for schedule(guided, PL_OMP_CHUNK_SIZE_TRISET) num_threads(num_threads)
-// #endif
-//     for (int t = 0; t < numTriangles; t++)
-//     {
-//         if (tri_set[t] != ZERO_UINT8) continue;
-//         uint8_t valid2D = Utility::ValidateTriangle2D(t, mesh, alpha, lmax) ? ZERO_UINT8 : MAX_UINT8;
-//         uint8_t valid3D = Utility::ValidateTriangle3D(static_cast<size_t>(t), mesh, z_thresh, norm_thresh,
-//                                                       norm_thresh_min, plane_data.plane_normal)
-//                               ? plane_data.normal_id
-//                               : ZERO_UINT8;
-//         tri_set[t] = valid2D | valid3D;
-//     }
-// }
 
 } // namespace Polylidar

@@ -47,6 +47,8 @@ class HalfEdgeTriangulation
     Matrix<size_t> halfedges;
     /** @brief Triangle normals in the mesh (normalized), K X 3 */
     Matrix<double> triangle_normals;
+    /** @brief Class ids for each vertex in mesh (normalized), K X 3 */
+    Matrix<uint8_t> vertex_classes;
     /** @brief Direction of travel for oriented half-edges around a triangle */
     bool counter_clock_wise;
 
@@ -111,6 +113,12 @@ class HalfEdgeTriangulation
      * @param in_triangle_normals
      */
     void SetTriangleNormals(const Matrix<double>& in_triangle_normals);
+    /**
+     * @brief Set the Vertex classes of the mesh
+     *
+     * @param in_vertex_classes
+     */
+    void SetVertexClasses(const Matrix<uint8_t>& in_vertex_classes, bool copy=true);
     /**
      * @brief Compute triangle normals using vertex and triangle datastructures
      *

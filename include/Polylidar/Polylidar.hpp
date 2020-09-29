@@ -55,7 +55,8 @@ class Polylidar3D
      * @param _lmax               Maximum triangle edge length in a planar triangle segment
      * @param _min_triangles      Minimum number of triangles in a planar triangle segment
      * @param _min_hole_vertices  Minimum number of vertices for an interior hole in a polygon
-     * @param _z_thresh           Maximum point to plane distance during region growing (3D only). A value of 0.0 ignores this constraint.
+     * @param _z_thresh           Maximum point to plane distance during region growing (3D only). A value of 0.0
+     * ignores this constraint.
      * @param _norm_thresh        IGNORE - will be deprecated or repurposed (3D only)
      * @param _norm_thresh_min    Minimum value of the dot product between a triangle and surface normal being extracted
      * (3D only)
@@ -126,6 +127,19 @@ class Polylidar3D
                                                                              const Matrix<double>& plane_normals);
 
     /**
+     * @brief Extracts planes and polygons from a classified half-edge triangular mesh given multiple dominant plane
+     * normals. Uses task-based parallelism.
+     *
+     * @param mesh              A classified half-edge mesh previously created.
+     * @param plane_normals     The set of dominant plane normal in the mesh to extract planes and polygons from. Size
+     * LX3, L=number of dominant planes.
+     * @return std::tuple<PlanesGroup, PolygonsGroup>
+     */
+    std::tuple<PlanesGroup, PolygonsGroup>
+    ExtractPlanesAndPolygonsOptimizedClassified(MeshHelper::HalfEdgeTriangulation& mesh,
+                                                const Matrix<double>& plane_normals);
+
+    /**
      * @brief Extract the triangle set (dominant planar grouping) for each triangle. This is used for
      * debugging/visualization.
      *
@@ -170,6 +184,9 @@ class Polylidar3D
                                 PlaneData& plane_data);
     void CreateTriSet3OptimizedForMultiplePlanes(std::vector<uint8_t>& tri_set, MeshHelper::HalfEdgeTriangulation& mesh,
                                                  std::vector<PlaneData>& plane_data_list);
+    void CreateTriSet3ClassifiedOptimizedForMultiplePlanes(std::vector<uint8_t>& tri_set,
+                                                                        MeshHelper::HalfEdgeTriangulation& mesh,
+                                                                        std::vector<PlaneData>& plane_data_list);
 };
 
 } // namespace Polylidar
