@@ -68,6 +68,7 @@ void HalfEdgeTriangulation::SetVertexClasses(const Matrix<uint8_t> &in_vertex_cl
     {
         vertex_classes.data = in_vertex_classes.data;
         vertex_classes.ptr = vertex_classes.data.data();
+        vertex_classes.own_data = true;
     }
 
 }
