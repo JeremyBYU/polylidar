@@ -13,7 +13,9 @@ License: MIT
 """
 import numpy as np
 import open3d as o3d
+from open3d import __version__ as o3d_version
 
+o3d_major_version = int(o3d_version.split('.')[1])
 
 def align_vector_to_another(a=np.array([0, 0, 1]), b=np.array([1, 0, 0])):
     """
@@ -84,7 +86,8 @@ class LineMesh(object):
             if axis is not None:
                 axis_a = axis * angle
                 rotation_3x3 = cylinder_segment.get_rotation_matrix_from_axis_angle(axis_a)
-                cylinder_segment = cylinder_segment.rotate(rotation_3x3, center=cylinder_segment.get_center())
+                center = cylinder_segment.get_center() if o3d_major_version > 9 else True
+                cylinder_segment = cylinder_segment.rotate(rotation_3x3, center=center)
             # color cylinder
             color = self.colors if self.colors.ndim == 1 else self.colors[i, :]
             cylinder_segment.paint_uniform_color(color)

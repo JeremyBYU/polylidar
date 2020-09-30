@@ -6,7 +6,7 @@ scratch
 cmake-build
 assets/scratch
 tests/fixtures/meshes
-
+o3d_slow_down
 # Documentation Sphinx
 src_docs/_build
 src_docs/_out
