@@ -71,6 +71,20 @@ PYBIND11_MODULE(polylidar, m)
                                     sizeof(double)});
         });
 
+    py::class_<Polylidar::Matrix<uint8_t>>(
+        m, "MatrixUInt8", py::buffer_protocol(),
+        "Matrix (UInt8) representation of numpy array. Use np.asarray() to get numpy array.")
+        .def(py::init<>(&py_array_to_matrix<uint8_t>), "Creates a Matrix", "points"_a, "copy"_a = false)
+        .def_buffer([](Polylidar::Matrix<uint8_t>& m) -> py::buffer_info {
+            return py::buffer_info(m.ptr,                                   /* Pointer to buffer */
+                                   sizeof(uint8_t),                          /* Size of one scalar */
+                                   py::format_descriptor<uint8_t>::format(), /* Python struct-style format descriptor */
+                                   2UL,                                     /* Number of dimensions */
+                                   {m.rows, m.cols},                        /* Buffer dimensions */
+                                   {sizeof(uint8_t) * m.cols,                /* Strides (in bytes) for each index */
+                                    sizeof(uint8_t)});
+        });
+
     docstring::ClassMethodDocInject(
         m, "MatrixDouble", "__init__",
         {{"points", "Matrix-like numpy array"}, {"copy", "Make copy of data or use numpy memory buffer."}}, true);
@@ -140,10 +154,13 @@ PYBIND11_MODULE(polylidar, m)
                       "half-edge id. e.g., The twin half-edge of first edge for the triangle k is halfedges(k, 0)")
         .def_readonly("triangle_normals", &MeshHelper::HalfEdgeTriangulation::triangle_normals,
                       "Triangle normals in the mesh (normalized), K X 3")
+        .def_readonly("vertex_classes", &MeshHelper::HalfEdgeTriangulation::vertex_classes, "Vertex classes in the mesh, N X 1")
         .def_readonly("counter_clock_wise", &MeshHelper::HalfEdgeTriangulation::counter_clock_wise,
                       "Direction of travel for oriented half-edges around a triangle")
         .def("set_triangle_normals", &MeshHelper::HalfEdgeTriangulation::SetTriangleNormals,
              "Sets Triangle Normals from input", "triangle_normals"_a)
+        .def("set_vertex_classes", &MeshHelper::HalfEdgeTriangulation::SetVertexClasses,
+             "Sets vertex classes from input", "vertex_classes"_a, "copy"_a=true)
         .def("compute_triangle_normals", &MeshHelper::HalfEdgeTriangulation::ComputeTriangleNormals,
              "Computes Triangle Normals");
 
@@ -190,6 +207,11 @@ PYBIND11_MODULE(polylidar, m)
              py::overload_cast<MeshHelper::HalfEdgeTriangulation&, const Matrix<double>&>(
                  &Polylidar::Polylidar3D::ExtractPlanesAndPolygonsOptimized),
              "Extracts planes and polygons from a half-edge triangular mesh given **multiple** dominant plane normals. "
+             "Uses task-based parallelism.",
+             "mesh"_a, "plane_normals"_a)
+        .def("extract_planes_and_polygons_optimized_classified",
+             &Polylidar::Polylidar3D::ExtractPlanesAndPolygonsOptimizedClassified,
+             "Extracts planes and polygons from a classified half-edge triangular mesh given **multiple** dominant plane normals. "
              "Uses task-based parallelism.",
              "mesh"_a, "plane_normals"_a)
         .def("extract_tri_set", &Polylidar::Polylidar3D::ExtractTriSet,

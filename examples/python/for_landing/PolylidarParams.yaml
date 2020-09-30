@@ -1,0 +1,46 @@
+mesh:
+  use_cuda: true # use GPU CUDA acceleration for mesh smoothing
+  stride: 1 # skip rows/columns
+  filter:
+    loops_laplacian: 1 # how many iterations
+    _lambda: 0.65 # weight factor for laplacian update
+    kernel_size: 3 # only changes for laplacian
+    loops_bilateral: 4 # how many iterations
+    sigma_length: 0.3 # std of distance between triangles centroids
+    sigma_angle: 0.2 # std of distance between triangles normals
+polylidar: # Parameters we send to polylidar. Determine plane and polygon extraction from point clouds.
+  alpha: 0.0 # must be set to 0.0 if using lmax
+  lmax: 2.5 # maximum distance between points in plane for spatial connection
+  z_thresh: 0.2 # enforce point to plane distance constraints during region growing.
+  norm_thresh: 0.96 # Not used, set to the same as norm_thresh_min. Will deprecate later.
+  norm_thresh_min: 0.96 # triangles must have a minimum amount of planarity.
+  min_hole_vertices: 4 # minimum number of vertices in a hole to return
+  min_triangles: 100 # minimum number of triangles needed to make a plane
+fastga: # Parameters used for dominant plane normal estimation
+  level: 5 # refinement level of the gaussian accumulator
+  down_sample_fraction: 0.50 # only use X% of triangle normals from mesh for integration, lower the faster
+  find_peaks_kwargs: # peak detection arguments
+    threshold_abs: 50 # [0-255], minimum value of normalized histogram of S2 to be a peak
+    min_distance: 1 # 1 = 3X3 kernel for peak detector. I recommend to not change
+    exclude_border: true
+    indices: false # must return mask
+  cluster_kwargs: # Agglomerative hierarchal clustering
+    t: 0.28 # min distance in 3D space of peaks (surface normals on sphere) before merging
+    criterion: "distance"
+  average_filter: # A merge group must have at least x% of value in all of histogram, this doesn't have much meaning and will probably be deprecated
+    min_total_weight: 0.1
+polygon:
+  postprocess: # post processing of polygons returned from polylidar for ground/obstacle identification
+    filter: # obstacles must have these characteristics
+      hole_area:
+        min: 0.10 # m^2
+        max: 10000.0 # m^2
+      hole_vertices:
+        min: 4
+      plane_area:
+        min: 4 # m^2
+        max: 400
+    # These parameters correspond to Shapely polygon geometry operations
+    positive_buffer: 0.1 # m, Positively expand polygon.  Fills in small holes
+    negative_buffer: 0.2 # m, Negative buffer to polygon. Expands holes and constricts outer hull of polygon
+    simplify: 0.3 # m, simplify edges of polygon

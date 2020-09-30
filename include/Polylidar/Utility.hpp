@@ -108,7 +108,6 @@ inline double GetMaxEdgeLength3D(size_t t, MeshHelper::HalfEdgeTriangulation& me
 inline bool GetAllVertexClasses(size_t t, MeshHelper::HalfEdgeTriangulation& mesh)
 {
     auto& triangles = mesh.triangles;
-    auto& points = mesh.vertices;
     auto& pa = triangles(t, 0_z);
     auto& pb = triangles(t, 1_z);
     auto& pc = triangles(t, 2_z);

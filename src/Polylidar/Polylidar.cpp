@@ -214,7 +214,7 @@ Polylidar3D::ExtractPlanesAndPolygonsOptimizedClassified(MeshHelper::HalfEdgeTri
 {
     if (mesh.vertex_classes.rows != mesh.vertices.rows)
     {
-        throw std::runtime_error("Mesh must be classified. vertex_classes.rows != vertices.rows");
+        throw std::domain_error("Mesh must be classified. vertex_classes.rows != vertices.rows");
     }
 
     auto plane_data_list = Utility::CreateMultiplePlaneDataFromNormals(plane_normals);

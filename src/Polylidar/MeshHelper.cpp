@@ -61,16 +61,17 @@ void HalfEdgeTriangulation::SetTriangleNormals(const Matrix<double> &in_triangle
 
 void HalfEdgeTriangulation::SetVertexClasses(const Matrix<uint8_t> &in_vertex_classes, bool copy)
 {
-    vertex_classes = in_vertex_classes;
     // if in_vertices_classes does NOT own the data then vertex_classes will also NOT own the data.
     // However, copy=True indicates that the data should be copied into vertex_classes and wil own the data
     if (copy && !in_vertex_classes.own_data)
     {
-        vertex_classes.data = in_vertex_classes.data;
-        vertex_classes.ptr = vertex_classes.data.data();
-        vertex_classes.own_data = true;
+        vertex_classes = Matrix<uint8_t>::CopyFromDifferentType(in_vertex_classes.ptr, in_vertex_classes.rows, in_vertex_classes.cols);
     }
-
+    else
+    {
+        vertex_classes = in_vertex_classes;
+    }
+    
 }
 
 void ComputeTriangleNormalsFromMatrix(const Matrix<double>& vertices, const Matrix<size_t>& triangles,
