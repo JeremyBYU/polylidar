@@ -8,6 +8,7 @@ import logging
 
 import numpy as np
 from polylidar.polylidarutil import COLOR_PALETTE
+from polylidar.polylidarutil.line_mesh import o3d_major_version
 import open3d as o3d
 from scipy.spatial.transform import Rotation as R
 
@@ -30,7 +31,8 @@ def get_mesh_data_iterator():
     for i, (mesh_fpath, r) in enumerate(zip(ALL_MESHES, ALL_MESHES_ROTATIONS)):
         example_mesh = o3d.io.read_triangle_mesh(str(mesh_fpath))
         if r is not None:
-            example_mesh = example_mesh.rotate(r.as_matrix(), center=[0,0,0])
+            center = [0, 0, 0] if o3d_major_version > 9 else True
+            example_mesh = example_mesh.rotate(r.as_matrix(), center=center)
         example_mesh_filtered = example_mesh
         example_mesh_filtered.compute_triangle_normals()
         yield example_mesh_filtered

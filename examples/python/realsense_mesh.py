@@ -17,6 +17,7 @@ from polylidar import (Polylidar3D, MatrixDouble, MatrixFloat, extract_tri_mesh_
 
 from polylidar.polylidarutil.open3d_util import construct_grid, create_lines, flatten, create_open_3d_mesh_from_tri_mesh
 from polylidar.polylidarutil.plane_filtering import filter_planes_and_holes
+from polylidar.polylidarutil.line_mesh import o3d_major_version
 
 import open3d as o3d
 
@@ -185,7 +186,8 @@ def main():
         if idx < 2:
             continue
         pcd, rgbd, extrinsics = get_frame_data(idx, color_files, depth_files, traj, intrinsics, stride=2)
-        pcd = pcd.rotate(R_Standard_d400[:3, :3], center=pcd.get_center())
+        center = pcd.get_center() if o3d_major_version > 9 else True
+        pcd = pcd.rotate(R_Standard_d400[:3, :3], center=center)
 
         logging.info("File %r - Point Cloud; Size: %r", idx, np.asarray(pcd.points).shape[0])
         o3d.visualization.draw_geometries([pcd, grid_ls, axis_frame])

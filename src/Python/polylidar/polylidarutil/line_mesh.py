@@ -17,7 +17,6 @@ from open3d import __version__ as o3d_version
 
 o3d_major_version = int(o3d_version.split('.')[1])
 
-
 def align_vector_to_another(a=np.array([0, 0, 1]), b=np.array([1, 0, 0])):
     """
     Aligns vector a to vector b with axis angle rotation
