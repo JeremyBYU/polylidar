@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Program Listing for File Polylidar.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Program Listing for File Polylidar.hpp &mdash; Polylidar3D latest (defaae2) documentation</title>
   
 
   
@@ -25,8 +25,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.0.0
+                latest (defaae2)
               </div>
             
           
@@ -198,7 +198,7 @@
 </style>
 <div class="section" id="program-listing-for-file-polylidar-hpp">
 <span id="program-listing-file-include-polylidar-polylidar-hpp"></span><h1>Program Listing for File Polylidar.hpp<a class="headerlink" href="#program-listing-for-file-polylidar-hpp" title="Permalink to this headline">¶</a></h1>
-<p>↰ <a class="reference internal" href="file_include_Polylidar_Polylidar.hpp.html#file-include-polylidar-polylidar-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include/Polylidar/Polylidar.hpp</span></code>)</p>
+<p>↰ <a class="reference internal" href="file_include_Polylidar_Polylidar.hpp.html#file-include-polylidar-polylidar-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include\Polylidar\Polylidar.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// MIT License</span>
 
 <span class="c1">// Copyright (c) 2020 Jeremy Castagno</span>
@@ -265,6 +265,10 @@
     <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">PlanesGroup</span><span class="p">,</span> <span class="n">PolygonsGroup</span><span class="o">&gt;</span> <span class="n">ExtractPlanesAndPolygonsOptimized</span><span class="p">(</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span>
                                                                              <span class="k">const</span> <span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">plane_normals</span><span class="p">);</span>
 
+    <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">PlanesGroup</span><span class="p">,</span> <span class="n">PolygonsGroup</span><span class="o">&gt;</span>
+    <span class="n">ExtractPlanesAndPolygonsOptimizedClassified</span><span class="p">(</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span>
+                                                <span class="k">const</span> <span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">plane_normals</span><span class="p">);</span>
+
     <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">ExtractTriSet</span><span class="p">(</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="k">const</span> <span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;</span> <span class="n">plane_normals</span><span class="p">);</span>
 
   <span class="k">public</span><span class="o">:</span>
@@ -292,6 +296,9 @@
                                 <span class="n">PlaneData</span><span class="o">&amp;</span> <span class="n">plane_data</span><span class="p">);</span>
     <span class="kt">void</span> <span class="nf">CreateTriSet3OptimizedForMultiplePlanes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span> <span class="n">tri_set</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span>
                                                  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">PlaneData</span><span class="o">&gt;&amp;</span> <span class="n">plane_data_list</span><span class="p">);</span>
+    <span class="kt">void</span> <span class="nf">CreateTriSet3ClassifiedOptimizedForMultiplePlanes</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span> <span class="n">tri_set</span><span class="p">,</span>
+                                                                        <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span>
+                                                                        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">PlaneData</span><span class="o">&gt;&amp;</span> <span class="n">plane_data_list</span><span class="p">);</span>
 <span class="p">};</span>
 
 <span class="p">}</span> <span class="c1">// namespace Polylidar</span>

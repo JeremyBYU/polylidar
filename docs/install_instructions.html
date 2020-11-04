@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Install Instructions &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Install Instructions &mdash; Polylidar3D latest (defaae2) documentation</title>
   
 
   
@@ -25,8 +25,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
-        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script src="_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.0.0
+                latest (defaae2)
               </div>
             
           
@@ -225,10 +225,15 @@ PL_WITH_OPENMP:BOOL=ON // PL - Build with OpenMP Support
 </div>
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">cmake-build</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">cmake-build</span></code> - create build folder directory</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">..</span> <span class="pre">-DCMAKE_BUILD_TYPE=Release</span> <span class="pre">-DFETCHCONTENT_QUIET=OFF</span></code> - For windows also add <code class="docutils literal notranslate"><span class="pre">-DCMAKE_GENERATOR_PLATFORM=x64</span></code>. This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break!</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">..</span> <span class="pre">-DCMAKE_BUILD_TYPE=Release</span> <span class="pre">-DFETCHCONTENT_QUIET=OFF</span> <span class="pre">-DPYTHON_EXECUTABLE=$(python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">sys;</span> <span class="pre">print(sys.executable)&quot;)</span></code> - For windows also add <code class="docutils literal notranslate"><span class="pre">-DCMAKE_GENERATOR_PLATFORM=x64</span></code>. This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break!</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">.</span> <span class="pre">-j4</span></code> - Build Polylidar3D, change <code class="docutils literal notranslate"><span class="pre">-j4</span></code> to how many processors/threads you have.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">..</span> <span class="pre">&amp;&amp;</span> <span class="pre">./cmake-build/polylidar-simple</span></code> - Simple test program.</p></li>
 </ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>There have been some recent issues with CMake not identifying the activated python virtual environment, see <a class="reference external" href="https://github.com/JeremyBYU/polylidar/issues/5">Issue</a> . To fix this add <code class="docutils literal notranslate"><span class="pre">-DPYTHON_EXECUTABLE=$(python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">sys;</span> <span class="pre">print(sys.executable)&quot;)</span></code> to force pybind11 to use your virtualenv python environment.
+I have also noticed that things just “work again” if you use CMake 3.15 or higher as well as upgrade <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> to version 2.6.0. However setting the python executable is simpler and less intrusive.</p>
+</div>
 </div>
 <div class="section" id="build-and-install-python-extension">
 <h2>Build and Install Python Extension<a class="headerlink" href="#build-and-install-python-extension" title="Permalink to this headline">¶</a></h2>

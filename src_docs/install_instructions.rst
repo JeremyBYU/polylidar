@@ -22,9 +22,13 @@ There are several config options which can be specified here during step (2):
 
 
 1. ``mkdir cmake-build && cd cmake-build`` - create build folder directory
-2. ``cmake .. -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_QUIET=OFF`` - For windows also add ``-DCMAKE_GENERATOR_PLATFORM=x64``. This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break! 
+2. ``cmake .. -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_QUIET=OFF -DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")`` - For windows also add ``-DCMAKE_GENERATOR_PLATFORM=x64``. This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break! 
 3. ``cmake --build . -j4`` - Build Polylidar3D, change ``-j4`` to how many processors/threads you have. 
 4. ``cd .. && ./cmake-build/polylidar-simple`` - Simple test program.
+
+.. note::
+    There have been some recent issues with CMake not identifying the activated python virtual environment, see `Issue <https://github.com/JeremyBYU/polylidar/issues/5>`_ . To fix this add ``-DPYTHON_EXECUTABLE=$(python3 -c "import sys; print(sys.executable)")`` to force pybind11 to use your virtualenv python environment.
+    I have also noticed that things just "work again" if you use CMake 3.15 or higher as well as upgrade ``pybind11`` to version 2.6.0. However setting the python executable is simpler and less intrusive.
 
 Build and Install Python Extension
 ------------------------------------

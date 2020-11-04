@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Organized 3D Point Clouds &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Organized 3D Point Clouds &mdash; Polylidar3D latest (defaae2) documentation</title>
   
 
   
@@ -25,8 +25,8 @@
         <script src="../../_static/underscore.js"></script>
         <script src="../../_static/doctools.js"></script>
         <script src="../../_static/language_data.js"></script>
-        <script src="../../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="../../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script src="../../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
+        <script src="../../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.0.0
+                latest (defaae2)
               </div>
             
           
@@ -525,7 +525,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorial_Python_organizeddemo_5_0.jpg" src="../../_images/tutorial_Python_organizeddemo_5_0.jpg" />
+<img alt="../../_images/tutorial_Python_organizeddemo_5_0.jpeg" src="../../_images/tutorial_Python_organizeddemo_5_0.jpeg" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -836,6 +836,8 @@ Note than any invalid depth measurments (e.g. 0) must be converted to nan values
 <span class="k">else</span><span class="p">:</span>
     <span class="n">mesh</span><span class="p">,</span> <span class="n">timings</span> <span class="o">=</span> <span class="n">create_meshes</span><span class="p">(</span><span class="n">opc</span><span class="p">,</span> <span class="o">**</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;mesh&#39;</span><span class="p">][</span><span class="s1">&#39;filter&#39;</span><span class="p">])</span>
 
+<span class="c1"># Note that open3d can not have nan points in its vertices structure (since version 0.10.0), even if the vertices are not used in triangulation,</span>
+<span class="c1"># must set them to 0 or some finite number, https://github.com/intel-isl/Open3D/issues/1188</span>
 <span class="n">mesh_o3d</span> <span class="o">=</span> <span class="n">create_open_3d_mesh_from_tri_mesh</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 <span class="n">o3d</span><span class="o">.</span><span class="n">visualization</span><span class="o">.</span><span class="n">draw_geometries</span><span class="p">([</span><span class="n">mesh_o3d</span><span class="p">])</span>
 </pre></div>

@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Template Class Matrix &mdash; Polylidar3D latest (defaae2) documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Class HalfEdgeTriangulation" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html" />
+    <link rel="prev" title="Class Delaunator" href="class_polylidar_1_1_delaunator_1_1_delaunator.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Polylidar3D
+          
+
+          
+            
+            <img src="../_static/pl_logo.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                latest (defaae2)
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorial</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Python API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
+</ul>
+<p class="caption"><span class="caption-text">C++ API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Polylidar3D</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="cpp_library_root.html">C++ Library API</a> &raquo;</li>
+        
+      <li>Template Class Matrix</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="template-class-matrix">
+<span id="exhale-class-class-polylidar-1-1-matrix"></span><h1>Template Class Matrix<a class="headerlink" href="#template-class-matrix" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Defined in <a class="reference internal" href="file_include_Polylidar_Types.hpp.html#file-include-polylidar-types-hpp"><span class="std std-ref">File Types.hpp</span></a></p></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4I0EN9Polylidar6MatrixE">
+<span class="target" id="class_polylidar_1_1_matrix"></span>template&lt;class <code class="sig-name descname">T</code>&gt;<br /><em class="property">class </em><code class="sig-name descname">Matrix</code><a class="headerlink" href="#_CPPv4I0EN9Polylidar6MatrixE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This class hold a generic matrix datastructure used to hold much of the data in our meshes (vertices, triangles, etc.). It can own the data or it may not. It can also take ownserhip of a memory buffer. Over time I have become concerned with this datastructure because of this flexibility which can bring bugs if one is not careful. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix6MatrixEP1T6size_t6size_t">
+<span class="target" id="class_polylidar_1_1_matrix_1a58f48083b752ec6ea8a7dc1564994d8f"></span><code class="sig-name descname">Matrix</code><span class="sig-paren">(</span>T *<em>ptr_</em>, size_t <em>rows_</em>, size_t <em>cols_</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix6MatrixEP1T6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new Matrix&lt; T&gt; object. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ptr_</span></code>: Raw pointer to underlying data we DON’T own </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rows_</span></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cols_</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix6MatrixEv">
+<span class="target" id="class_polylidar_1_1_matrix_1adccfca5d1f372cfe487b7343367b30d0"></span><code class="sig-name descname">Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix6MatrixEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new Matrix&lt; T&gt; object, everything is empty but is owned. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix6MatrixERRNSt6vectorI1TEE6size_t6size_t">
+<span class="target" id="class_polylidar_1_1_matrix_1a0097324de1e34c21a3e15a4eed59195a"></span><code class="sig-name descname">Matrix</code><span class="sig-paren">(</span>std::vector&lt;T&gt; &amp;&amp;<em>old_vector</em>, size_t <em>rows_</em>, size_t <em>cols_</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix6MatrixERRNSt6vectorI1TEE6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new Matrix&lt; T&gt; object. We will take ownership of this data buffer. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">old_vector</span></code>: Old vector that will moved and managed by this new <a class="reference internal" href="#class_polylidar_1_1_matrix"><span class="std std-ref">Matrix</span></a> Object </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rows_</span></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cols_</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6MatrixD0Ev">
+<span class="target" id="class_polylidar_1_1_matrix_1a6d9194fed2435f92d487e0ca8064de9d"></span><code class="sig-name descname">~Matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6MatrixD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix6MatrixER6MatrixI1TE">
+<span class="target" id="class_polylidar_1_1_matrix_1a9732ddd5fd07c1e9d3a678f8150eac13"></span><code class="sig-name descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N9Polylidar6Matrix6MatrixEP1T6size_t6size_t" title="Polylidar::Matrix::Matrix">Matrix</a>&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix6MatrixER6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new Matrix&lt; T&gt; object, Copy Constructor. Will take an existing matrix and will perform a copy. If the data is owned it will be copied, if not it wont be copied. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix6MatrixERK6MatrixI1TE">
+<span class="target" id="class_polylidar_1_1_matrix_1a4a00ec7f581d481649d52f95889d3287"></span><code class="sig-name descname">Matrix</code><span class="sig-paren">(</span><em class="property">const</em> <a class="reference internal" href="#_CPPv4N9Polylidar6Matrix6MatrixEP1T6size_t6size_t" title="Polylidar::Matrix::Matrix">Matrix</a>&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix6MatrixERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Construct a new Matrix&lt; T&gt; object, Copy Constructor. Will take an existing matrix and will perform a copy. If the data is owned it will be copied, if not it wont be copied. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix6MatrixERR6MatrixI1TE">
+<span class="target" id="class_polylidar_1_1_matrix_1ab29486c589f7b2505fb7a3abb82da27f"></span><code class="sig-name descname">Matrix</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N9Polylidar6Matrix6MatrixEP1T6size_t6size_t" title="Polylidar::Matrix::Matrix">Matrix</a>&lt;T&gt; &amp;&amp;<em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix6MatrixERR6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Default move constructor, take ownership of all the data of <code class="docutils literal notranslate"><span class="pre">other</span></code> </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">other</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6MatrixaSERK6MatrixI1TE">
+<span class="target" id="class_polylidar_1_1_matrix_1af30dc1ccc8cdf6f06dc901b2967b1fdf"></span>Matrix&lt;T&gt; &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6MatrixaSERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Copy assignment operator This one is a little tricky. We make a copy of every element in the data. However if we own the data we reassign <code class="docutils literal notranslate"><span class="pre">ptr</span></code> to belong to our new copied buffer. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Matrix&lt;T&gt;&amp; </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix17UpdatePtrFromDataEv">
+<span class="target" id="class_polylidar_1_1_matrix_1ac70b2b405849ae262a62624d15063e41"></span>void <code class="sig-name descname">UpdatePtrFromData</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix17UpdatePtrFromDataEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simple helper function to change our <code class="docutils literal notranslate"><span class="pre">ptr</span></code> to point to our own buffer. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N9Polylidar6Matrix17UpdatePtrFromDataEK6size_tK6size_t">
+<span class="target" id="class_polylidar_1_1_matrix_1a8f4721d0a1b33b62346880af2352f33b"></span>void <code class="sig-name descname">UpdatePtrFromData</code><span class="sig-paren">(</span><em class="property">const</em> size_t <em>rows_</em>, <em class="property">const</em> size_t <em>cols_</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix17UpdatePtrFromDataEK6size_tK6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Simply updates our rows and columns and data. </p>
+<p><dl class="simple">
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">rows_</span></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cols_</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9Polylidar6MatrixclE6size_t6size_t">
+<span class="target" id="class_polylidar_1_1_matrix_1a189b2f3705d5e26d96a2c971410a6d6b"></span><em class="property">const</em> T &amp;<code class="sig-name descname">operator()</code><span class="sig-paren">(</span>size_t <em>i</em>, size_t <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9Polylidar6MatrixclE6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Acces an element of the <a class="reference internal" href="#class_polylidar_1_1_matrix"><span class="std std-ref">Matrix</span></a> using 2D indices. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>const T&amp; </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">i</span></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">j</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK9Polylidar6MatrixclE6size_t">
+<span class="target" id="class_polylidar_1_1_matrix_1abdcd70b6323ec7bb8dfb3d6966bb275c"></span><em class="property">const</em> T &amp;<code class="sig-name descname">operator()</code><span class="sig-paren">(</span>size_t <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9Polylidar6MatrixclE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Access an element in the matrix using its underlying buffer 1D index. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>const T&amp; </p>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">index</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Members</p>
+<dl class="member">
+<dt id="_CPPv4N9Polylidar6Matrix8own_dataE">
+<span class="target" id="class_polylidar_1_1_matrix_1a86212ee0c4ef6a348b4d5a17482ec02b"></span>bool <code class="sig-name descname">own_data</code><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix8own_dataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Does the matrix own the data pointed to by <code class="docutils literal notranslate"><span class="pre">ptr</span></code>. If yes then ptr == data.data(). </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar6Matrix4dataE">
+<span class="target" id="class_polylidar_1_1_matrix_1a9a76df621a2661ded08025ea93776c9d"></span>std::vector&lt;T&gt; <code class="sig-name descname">data</code><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix4dataE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Buffer of memory that may/may-not be used based upon own_data flag </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar6Matrix3ptrE">
+<span class="target" id="class_polylidar_1_1_matrix_1afadbdaa7dc5e22751e1c5fcdc5ef2527"></span>T *<code class="sig-name descname">ptr</code><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix3ptrE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This is raw pointer that never needs to be freed. It either point to memory in <code class="docutils literal notranslate"><span class="pre">data</span></code> which will be automatically freed during object destruction (<code class="docutils literal notranslate"><span class="pre">own_data</span></code> = true). Or it points some other managed memory controlled by the user (<code class="docutils literal notranslate"><span class="pre">own_data</span></code> = false) </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar6Matrix4rowsE">
+<span class="target" id="class_polylidar_1_1_matrix_1abf746aca307672fcc619d8942b9b0928"></span>size_t <code class="sig-name descname">rows</code><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix4rowsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Rows in the matrix </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N9Polylidar6Matrix4colsE">
+<span class="target" id="class_polylidar_1_1_matrix_1a2f75716b398053eb9490cdfc1c7584f4"></span>size_t <code class="sig-name descname">cols</code><a class="headerlink" href="#_CPPv4N9Polylidar6Matrix4colsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Columns in the matrix </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t">
+<span class="target" id="class_polylidar_1_1_matrix_1abb771623be1ae371269f0e03a75612d2"></span>template&lt;class <code class="sig-name descname">G</code>&gt;<br /><em class="property">static</em> Matrix&lt;T&gt; <code class="sig-name descname">CopyFromDifferentType</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t" title="Polylidar::Matrix::CopyFromDifferentType::G">G</a> *<em>ptr_from</em>, size_t <em>rows</em>, size_t <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>This actually performs a memory copy from an unknown buffer of one type (G) to <em>our</em> buffer of a different type (T). We own this new copied data. </p>
+<p><dl class="simple">
+<dt><strong>Return</strong></dt><dd><p>Matrix&lt;T&gt; </p>
+</dd>
+<dt><strong>Template Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">G</span></code>: </p></li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ptr_from</span></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rows</span></code>: </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cols</span></code>: </p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html" class="btn btn-neutral float-right" title="Class HalfEdgeTriangulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="class_polylidar_1_1_delaunator_1_1_delaunator.html" class="btn btn-neutral float-left" title="Class Delaunator" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, Jeremy Castagno
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

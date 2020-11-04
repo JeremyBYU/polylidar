@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introducing Polylidar3D &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Introducing Polylidar3D &mdash; Polylidar3D latest (defaae2) documentation</title>
   
 
   
@@ -25,8 +25,8 @@
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
         <script src="_static/language_data.js"></script>
-        <script src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script src="_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
+        <script src="_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                1.0.0
+                latest (defaae2)
               </div>
             
           
@@ -105,7 +105,11 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#d">2D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">3D</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
@@ -228,7 +232,8 @@
   <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" height="100%" />
   <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
 </p><a class="reference external image-reference" href="https://jeremybyu.github.io/polylidar/"><img alt="Docs" src="https://img.shields.io/badge/API-docs-blue" /></a>
-<a class="reference external image-reference" href="https://ieeexplore.ieee.org/document/9117017"><img alt="Cite" src="https://img.shields.io/badge/cite-%2010.1109--LRA.2020.3002212-red" /></a>
+<a class="reference external image-reference" href="https://ieeexplore.ieee.org/document/9117017"><img alt="Cite 2D" src="https://img.shields.io/badge/Cite%202D-%2010.1109--LRA.2020.3002212-red" /></a>
+<a class="reference external image-reference" href="https://www.mdpi.com/1424-8220/20/17/4819"><img alt="Cite 3D" src="https://img.shields.io/badge/Cite%203D-10.3390%2Fs20174819-red" /></a>
 <div class="section" id="key-features">
 <h2>Key Features<a class="headerlink" href="#key-features" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -302,7 +307,11 @@
 </div>
 <div class="section" id="citation">
 <h2>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="d">
+<h3>2D<a class="headerlink" href="#d" title="Permalink to this headline">¶</a></h3>
 <p>If are using Polylidar for 2D work please cite:</p>
+<p>J. Castagno and E. Atkins, “Polylidar - Polygons From Triangular Meshes,” in IEEE Robotics and Automation Letters, vol. 5, no. 3, pp. 4634-4641, July 2020, doi: 10.1109/LRA.2020.3002212.
+<a class="reference external" href="https://ieeexplore.ieee.org/document/9117017">Link to Paper</a></p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>@ARTICLE{9117017,
   author={J. {Castagno} and E. {Atkins}},
   journal={IEEE Robotics and Automation Letters},
@@ -314,16 +323,25 @@
 }
 </pre></div>
 </div>
-<p>If you are using Polylidar3D for 3D work please cite this preprint:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>@misc{castagno2020polylidar3d,
-    title={Polylidar3D -- Fast Polygon Extraction from 3D Data},
-    author={Jeremy Castagno and Ella Atkins},
-    year={2020},
-    eprint={2007.12065},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+</div>
+<div class="section" id="id1">
+<h3>3D<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>If you are using Polylidar3D for 3D work please cite:</p>
+<p>J. Castagno and E. Atkins, “Polylidar3D - Fast Polygon Extraction from 3D Data,” in MDPI Sensors, vol. 20, no.17, 4819, September 2020, doi: 10.3390/s20174819
+<a class="reference external" href="https://www.mdpi.com/1424-8220/20/17/4819">Link to Paper</a></p>
+<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>@Article{s20174819,
+AUTHOR = {Castagno, Jeremy and Atkins, Ella},
+TITLE = {Polylidar3D-Fast Polygon Extraction from 3D Data},
+JOURNAL = {Sensors},
+VOLUME = {20},
+YEAR = {2020},
+NUMBER = {17},
+ARTICLE-NUMBER = {4819},
+URL = {https://www.mdpi.com/1424-8220/20/17/4819},
+ISSN = {1424-8220}
 }
 </pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="license">

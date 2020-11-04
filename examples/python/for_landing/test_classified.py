@@ -145,8 +145,8 @@ def main():
 
     all_polys, all_meshes = handle_shapes(planes, obstacles)
     all_meshes = [mesh_o3d, *all_meshes]
-    for i, mesh in enumerate(all_meshes):
-        o3d.io.write_triangle_mesh(f"o3d_slow_down/mesh_test_{i:02d}.ply", mesh)
+    # for i, mesh in enumerate(all_meshes):
+    #     o3d.io.write_triangle_mesh(f"o3d_slow_down/mesh_test_{i:02d}.ply", mesh)
     o3d.visualization.draw_geometries([mesh_o3d, pcd, *all_meshes])
 
     

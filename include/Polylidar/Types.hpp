@@ -194,6 +194,7 @@ class Matrix
         rows = rows_;
         cols = cols_;
         ptr = data.data();
+        own_data = true;
     }
 
     /**

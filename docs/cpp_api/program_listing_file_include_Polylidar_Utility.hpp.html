@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Program Listing for File Utility.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Program Listing for File Utility.hpp &mdash; Polylidar3D latest (defaae2) documentation</title>
   
 
   
@@ -25,8 +25,8 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
         <script src="../_static/language_data.js"></script>
-        <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
-        <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
+        <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
         <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
@@ -67,7 +67,7 @@
             
             
               <div class="version">
-                1.0.0
+                latest (defaae2)
               </div>
             
           
@@ -198,7 +198,7 @@
 </style>
 <div class="section" id="program-listing-for-file-utility-hpp">
 <span id="program-listing-file-include-polylidar-utility-hpp"></span><h1>Program Listing for File Utility.hpp<a class="headerlink" href="#program-listing-for-file-utility-hpp" title="Permalink to this headline">¶</a></h1>
-<p>↰ <a class="reference internal" href="file_include_Polylidar_Utility.hpp.html#file-include-polylidar-utility-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include/Polylidar/Utility.hpp</span></code>)</p>
+<p>↰ <a class="reference internal" href="file_include_Polylidar_Utility.hpp.html#file-include-polylidar-utility-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include\Polylidar\Utility.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef POLYLIDAR_UTILITY</span>
 <span class="cp">#define POLYLIDAR_UTILITY</span>
 
@@ -304,6 +304,16 @@
     <span class="k">auto</span> <span class="n">l2</span> <span class="o">=</span> <span class="n">Math</span><span class="o">::</span><span class="n">L2Norm3D</span><span class="p">(</span><span class="n">points</span><span class="p">(</span><span class="n">pb</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">points</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">points</span><span class="p">(</span><span class="n">pb</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">points</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">points</span><span class="p">(</span><span class="n">pb</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">points</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
     <span class="k">auto</span> <span class="n">l3</span> <span class="o">=</span> <span class="n">Math</span><span class="o">::</span><span class="n">L2Norm3D</span><span class="p">(</span><span class="n">points</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">points</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">points</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">points</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">points</span><span class="p">(</span><span class="n">pc</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">points</span><span class="p">(</span><span class="n">pa</span><span class="p">,</span> <span class="mi">2</span><span class="p">));</span>
     <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">),</span> <span class="n">l3</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="n">GetAllVertexClasses</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">t</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">auto</span><span class="o">&amp;</span> <span class="n">triangles</span> <span class="o">=</span> <span class="n">mesh</span><span class="p">.</span><span class="n">triangles</span><span class="p">;</span>
+    <span class="k">auto</span><span class="o">&amp;</span> <span class="n">pa</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">0</span><span class="n">_z</span><span class="p">);</span>
+    <span class="k">auto</span><span class="o">&amp;</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">1</span><span class="n">_z</span><span class="p">);</span>
+    <span class="k">auto</span><span class="o">&amp;</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">2</span><span class="n">_z</span><span class="p">);</span>
+    <span class="c1">// get max length of triangle</span>
+    <span class="k">return</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pc</span><span class="p">);</span>
 <span class="p">}</span>
 
 <span class="kr">inline</span> <span class="kt">double</span> <span class="n">CircumsribedRadius</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">t</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">)</span>
