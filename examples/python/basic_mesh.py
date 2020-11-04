@@ -73,7 +73,7 @@ def get_image_peaks(ico_chart, ga, level=2, with_o3d=False,
     # plt.imshow(np.asarray(ico_chart.image))
     # plt.show()
     peaks, clusters, avg_peaks, avg_weights = find_peaks_from_ico_charts(ico_chart, np.asarray(
-        normalized_bucket_counts_by_vertex), find_peaks_kwargs, cluster_kwargs, average_filter)
+        normalized_bucket_counts_by_vertex), find_peaks_kwargs=find_peaks_kwargs, cluster_kwargs=cluster_kwargs, average_filter=average_filter)
     t2 = time.perf_counter()
 
     gaussian_normals_sorted = np.asarray(ico_chart.sphere_mesh.vertices)
@@ -184,7 +184,7 @@ def main():
                                       z_thresh=0.08, norm_thresh=0.95, norm_thresh_min=0.95, min_hole_vertices=6)
 
     config_pp_main_floor = dict(filter=dict(hole_area=dict(min=0.1, max=100.0), hole_vertices=dict(min=6), plane_area=dict(min=0.25)),
-                                positive_buffer=0.02, negative_buffer=0.05, simplify=0.02)
+                                positive_buffer=0.02, negative_buffer=0.05, simplify=0.05)
 
     polylidar_kwargs = [polylidar_kwargs_mainfloor, None, polylidar_kwargs_basement]
     config_pp = [config_pp_main_floor, None, config_pp_basement]
