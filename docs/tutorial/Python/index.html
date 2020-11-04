@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Python &mdash; Polylidar3D latest (defaae2) documentation</title>
+  <title>Python &mdash; Polylidar3D 1.0.0 documentation</title>
   
 
   
@@ -69,7 +69,7 @@
             
             
               <div class="version">
-                latest (defaae2)
+                1.0.0
               </div>
             
           
@@ -222,6 +222,12 @@
 </ul>
 </li>
 </ul>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Polylidar3D uses Open3D to visualize 3D geometries (pointclouds, polygons, meshes, etc.). A recent version of Open3D has a serious performance regression which causes severe slowdown during visualization.
+This regression is on versions 0.10 and 0.11 of Open3D. Regression details: <a class="reference external" href="https://github.com/intel-isl/Open3D/pull/2523">Link</a> , <a class="reference external" href="https://github.com/intel-isl/Open3D/issues/2472">Issue1</a> , <a class="reference external" href="https://github.com/intel-isl/Open3D/issues/2157">Issue2</a>.
+I recommend that you stick with 0.9.0, build from master, or wait for 0.12.</p>
 </div>
 </div>
 
