@@ -314,7 +314,7 @@ def filter_planes(polygons, points, config_pp, rm=None):
         t1 = time.perf_counter()
         poly_shape = Polygon(shell=shell_coords, holes=hole_coords)
         t2 = time.perf_counter()
-        # print(poly_shape.is_valid)
+        # print("Before: ", poly_shape.is_valid)
         # fig, ax = plt.subplots(figsize=(10, 10), nrows=1, ncols=1)
         # plot_poly(poly_shape, ax, poly)
         # plt.axis('equal')
@@ -408,8 +408,9 @@ def filter_planes(polygons, points, config_pp, rm=None):
         t11 = time.perf_counter()
         rm_inv = rm.inv()
         for i, (poly, z_value) in enumerate(planes):
-            points = np.asarray(poly.exterior)
-            new_poly = Polygon(rm_inv.apply(points))
+            shell_points = rm_inv.apply(np.asarray(poly.exterior))
+            hole_points = [rm_inv.apply(np.asarray(hole_lr)) for hole_lr in poly.interiors]
+            new_poly = Polygon(shell=shell_points, holes=hole_points)
             planes[i] = (new_poly, z_value)
         t12 = time.perf_counter()
         logging.debug("Revert Rotation and Create New Polygons: {:2f}".format((t12 - t11) * 1000))

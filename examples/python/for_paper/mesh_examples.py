@@ -63,7 +63,7 @@ def get_image_peaks(ico_chart, ga, level=2, with_o3d=False,
     # plt.imshow(np.asarray(ico_chart.image))
     # plt.show()
     peaks, clusters, avg_peaks, avg_weights = find_peaks_from_ico_charts(ico_chart, np.asarray(
-        normalized_bucket_counts_by_vertex), find_peaks_kwargs, cluster_kwargs, average_filter)
+        normalized_bucket_counts_by_vertex), find_peaks_kwargs=find_peaks_kwargs, cluster_kwargs=cluster_kwargs, average_filter=average_filter)
     t2 = time.perf_counter()
 
     gaussian_normals_sorted = np.asarray(ico_chart.sphere_mesh.vertices)

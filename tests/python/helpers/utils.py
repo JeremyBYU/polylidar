@@ -14,8 +14,8 @@ def get_poly_coords(outline, points):
 def get_point(pi, points):
     return [points[pi, 0], points[pi, 1]]
 
-def load_csv(file):
-    return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=',', dtype=np.float64, skiprows=1)
+def load_csv(file, delimeter=','):
+    return np.loadtxt(path.join(FIXTURES_DIR, file), delimiter=delimeter, dtype=np.float64, skiprows=1)
 
 def load_npy(file):
     return np.load(path.join(FIXTURES_DIR, file))
