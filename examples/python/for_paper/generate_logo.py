@@ -72,8 +72,13 @@ def main():
     # Plot Data
     if points.shape[0] < 100000:
         fig, ax = plt.subplots(figsize=(10, 10), nrows=1, ncols=1)
+        ax.set_xticks([])
+        ax.set_yticks([])
+        plt.axis('equal')
+        plt.axis('off')
         # plot points
         plot_points(points, ax)
+        fig.savefig('assets/scratch/pl_logo_points.png', bbox_inches='tight', transparent=True)
         # plot all triangles
         plot_triangles(get_triangles_from_list(triangles, points), ax)
         # plot mesh triangles
@@ -82,10 +87,6 @@ def main():
         # plot polygons
         plot_polygons(polygons, points, ax, linewidth=4.0)
 
-        ax.set_xticks([])
-        ax.set_yticks([])
-        plt.axis('equal')
-        plt.axis('off')
         plt.subplots_adjust(wspace=0.185, hspace=0.185,left=0.110,top=0.535,right=0.750,bottom=0.110) 
         fig.savefig('assets/scratch/pl_logo.png', bbox_inches='tight', transparent=True)
         plt.show()
