@@ -41,7 +41,7 @@
   <link rel="stylesheet" href="_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Install Instructions" href="install_instructions.html" />
+    <link rel="next" title="Software Overview" href="install_instructions.html" />
     <link rel="prev" title="Polylidar3D: Fast Polygon Extraction from 2D &amp; 3D Data" href="index.html" /> 
 </head>
 
@@ -113,7 +113,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_instructions.html">Software Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="builddocs.html">Building Documentation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
@@ -229,8 +230,10 @@
   <a href="#citation">Citations</a> •
   <a href="#license">License</a>
 </p><p align="middle">
-  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" height="100%" />
-  <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_logo.png" height="100%" />
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_3d.png" height="100%" />
+  <!-- <img src="./assets/pl_logo.png" height="100%" />
+  <img src="./assets/pl_3d.png" height="100%" />  -->
 </p><a class="reference external image-reference" href="https://jeremybyu.github.io/polylidar/"><img alt="Docs" src="https://img.shields.io/badge/API-docs-blue" /></a>
 <a class="reference external image-reference" href="https://ieeexplore.ieee.org/document/9117017"><img alt="Cite 2D" src="https://img.shields.io/badge/Cite%202D-%2010.1109--LRA.2020.3002212-red" /></a>
 <a class="reference external image-reference" href="https://www.mdpi.com/1424-8220/20/17/4819"><img alt="Cite 3D" src="https://img.shields.io/badge/Cite%203D-10.3390%2Fs20174819-red" /></a>
@@ -260,8 +263,8 @@
 </ul>
 </li>
 </ul>
-<p>Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized point clouds (e.g., range images), or user provided meshes. The non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an overview of Polylidar3D’s data input, frontend, backend, and output. The frontend transforms input data into a <em>half-edge</em> triangular mesh.  This representation provides a common level of abstraction such that the the back-end core algorithms may efficiently operate on. The back-end is composed of four core algorithms: mesh smoothing, dominant plane normal estimation, planar segment extraction, and finally polygon extraction.  Polylidar3D outputs <em>planar triangular segments</em>, sets of flat connected triangles, and their polygonal representations. Polylidar3D is extremely fast, taking as little as a few milliseconds and makes use of CPU multi-threading and GPU acceleration when available.</p>
-<p>Currently this repo (named Polylidar3D) has all the front-end modules and the plane/polygon extraction of the back-end core algorithms. The GPU accelerated mesh smoothing procedures for organized points clouds are found in a separate repo titled <a class="reference external" href="https://github.com/JeremyBYU/OrganizedPointFilters">OrganizedPointFilters</a>. This must be installed if you desire fast mesh smoothing for organized point clouds (i.e., denoising). The dominant plane normal estimation procedure is general and implemented in a separate repo titled <a class="reference external" href="https://github.com/JeremyBYU/FastGaussianAccumulator">Fast Gaussian Accumulator (FastGA)</a>. This must be installed if you don’t know the dominant plane normals in your data input (very likely for organized point clouds and meshes). These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions. One day I will try to ease installation burden and automatically pull these dependencies into the build process.</p>
+<p>Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized 3D point clouds (e.g., range images), or user provided meshes. In 3D, the non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an examples of Polylidar3D extracting polygons from a 2D point set and a 3D triangular mesh; green is the concave hull and orange are interior holes. Polylidar3D outputs <em>planar</em> triangular segments and their polygonal representations. Polylidar3D is extremely fast, taking as little as a few milliseconds and makes use of CPU multi-threading and GPU acceleration when available.</p>
+<p>Here is a small introductory blog-post about <a class="reference external" href="https://robosim.dev/posts/polylidar/">Polylidar3D</a>.</p>
 </div>
 <div class="section" id="documentation-and-branches">
 <h2>Documentation and Branches<a class="headerlink" href="#documentation-and-branches" title="Permalink to this headline">¶</a></h2>
@@ -362,7 +365,7 @@ ISSN = {1424-8220}
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="install_instructions.html" class="btn btn-neutral float-right" title="Install Instructions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="install_instructions.html" class="btn btn-neutral float-right" title="Software Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="index.html" class="btn btn-neutral float-left" title="Polylidar3D: Fast Polygon Extraction from 2D &amp; 3D Data" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

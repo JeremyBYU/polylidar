@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Install Instructions &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Software Overview &mdash; Polylidar3D 1.0.0 documentation</title>
   
 
   
@@ -96,7 +96,8 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducing Polylidar3D</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Install Instructions</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Software Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#id1">Install Instructions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#build-project-library">Build Project Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-and-install-python-extension">Build and Install Python Extension</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#download-example-fixture-data">Download Example/Fixture Data</a></li>
@@ -167,7 +168,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Install Instructions</li>
+      <li>Software Overview</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -208,8 +209,23 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="install-instructions">
-<span id="id1"></span><h1>Install Instructions<a class="headerlink" href="#install-instructions" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="software-overview">
+<span id="install-instructions"></span><h1>Software Overview<a class="headerlink" href="#software-overview" title="Permalink to this headline">¶</a></h1>
+<img alt="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" src="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" />
+<p>Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized point clouds (e.g., range images), or user provided meshes.
+The non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an overview of Polylidar3D’s data input, frontend, backend, and output.
+The frontend transforms input data into a half-edge triangular mesh. This representation provides a common level of abstraction such that the the back-end core algorithms may efficiently operate on.
+The back-end is composed of four core algorithms: mesh smoothing, dominant plane normal estimation, planar segment extraction, and finally polygon extraction.</p>
+<p>Currently this repo (named Polylidar3D) has all the front-end modules and the plane/polygon extraction of the back-end core algorithms.
+The GPU accelerated mesh smoothing procedures for organized points clouds are found in a separate repo titled <a class="reference external" href="https://github.com/JeremyBYU/OrganizedPointFilters">OrganizedPointFilters</a>.
+This must be installed if you desire fast mesh smoothing for organized point clouds (i.e., denoising).
+The dominant plane normal estimation procedure is general and implemented in a separate repo titled <a class="reference external" href="https://github.com/JeremyBYU/FastGaussianAccumulator">Fast Gaussian Accumulator (FastGA)</a>.
+This must be installed if you don’t know the dominant plane normals in your data input (very likely for organized point clouds and meshes).
+These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions.
+One day I will try to ease installation burden and automatically pull these dependencies into the build process.</p>
+</div>
+<div class="section" id="id1">
+<h1>Install Instructions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>Installation is entirely through CMake now. You must have CMake 3.14 or higher installed and a C++ compiler with C++ 14 or higher. No built binaries are included currently.</p>
 <div class="section" id="build-project-library">
 <h2>Build Project Library<a class="headerlink" href="#build-project-library" title="Permalink to this headline">¶</a></h2>

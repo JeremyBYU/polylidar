@@ -94,7 +94,8 @@
               <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorial</span></p>
@@ -313,7 +314,7 @@
     <span class="k">auto</span><span class="o">&amp;</span> <span class="n">pb</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">1</span><span class="n">_z</span><span class="p">);</span>
     <span class="k">auto</span><span class="o">&amp;</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">triangles</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="mi">2</span><span class="n">_z</span><span class="p">);</span>
     <span class="c1">// get max length of triangle</span>
-    <span class="k">return</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pc</span><span class="p">);</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pa</span><span class="p">)</span> <span class="o">+</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pb</span><span class="p">)</span> <span class="o">+</span> <span class="n">mesh</span><span class="p">.</span><span class="n">vertex_classes</span><span class="p">(</span><span class="n">pc</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kr">inline</span> <span class="kt">double</span> <span class="n">CircumsribedRadius</span><span class="p">(</span><span class="kt">size_t</span> <span class="n">t</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">)</span>
