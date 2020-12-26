@@ -16,8 +16,10 @@
 </p>
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" height="100%" />
-  <!-- <img src="https://raw.githubusercontent.com/JeremyBYU/polylidarv2/master/assets/polylidar_3D_architecture.png" height="100%" />  -->
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_logo.png" height="100%" />
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_3d.png" height="100%" /> 
+  <!-- <img src="./assets/pl_logo.png" height="100%" />
+  <img src="./assets/pl_3d.png" height="100%" />  -->
 </p>
 
 [![Docs](https://img.shields.io/badge/API-docs-blue)](https://jeremybyu.github.io/polylidar/)
@@ -37,11 +39,9 @@
 * Cross platform
   * Windows and Linux ready.
 
-Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized point clouds (e.g., range images), or user provided meshes. The non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an overview of Polylidar3D's data input, frontend, backend, and output. The frontend transforms input data into a *half-edge* triangular mesh.  This representation provides a common level of abstraction such that the the back-end core algorithms may efficiently operate on. The back-end is composed of four core algorithms: mesh smoothing, dominant plane normal estimation, planar segment extraction, and finally polygon extraction.  Polylidar3D outputs *planar triangular segments*, sets of flat connected triangles, and their polygonal representations. Polylidar3D is extremely fast, taking as little as a few milliseconds and makes use of CPU multi-threading and GPU acceleration when available.
+Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized 3D point clouds (e.g., range images), or user provided meshes. In 3D, the non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an examples of Polylidar3D extracting polygons from a 2D point set and a 3D triangular mesh; green is the concave hull and orange are interior holes. Polylidar3D outputs *planar* triangular segments and their polygonal representations. Polylidar3D is extremely fast, taking as little as a few milliseconds and makes use of CPU multi-threading and GPU acceleration when available.
 
-Currently this repo (named Polylidar3D) has all the front-end modules and the plane/polygon extraction of the back-end core algorithms. The GPU accelerated mesh smoothing procedures for organized points clouds are found in a separate repo titled [OrganizedPointFilters](https://github.com/JeremyBYU/OrganizedPointFilters). This must be installed if you desire fast mesh smoothing for organized point clouds (i.e., denoising). The dominant plane normal estimation procedure is general and implemented in a separate repo titled [Fast Gaussian Accumulator (FastGA)](https://github.com/JeremyBYU/FastGaussianAccumulator). This must be installed if you don't know the dominant plane normals in your data input (very likely for organized point clouds and meshes). These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions. One day I will try to ease installation burden and automatically pull these dependencies into the build process.
-
-Here is a small blog-post about [Polylidar3D](https://robosim.dev/posts/polylidar/).
+Here is a small introductory blog-post about [Polylidar3D](https://robosim.dev/posts/polylidar/).
 
 ## Documentation and Branches
 

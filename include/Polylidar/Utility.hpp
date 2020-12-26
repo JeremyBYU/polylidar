@@ -112,7 +112,7 @@ inline bool GetAllVertexClasses(size_t t, MeshHelper::HalfEdgeTriangulation& mes
     auto& pb = triangles(t, 1_z);
     auto& pc = triangles(t, 2_z);
     // get max length of triangle
-    return mesh.vertex_classes(pa) && mesh.vertex_classes(pb) && mesh.vertex_classes(pc);
+    return (mesh.vertex_classes(pa) + mesh.vertex_classes(pb) + mesh.vertex_classes(pc)) >= 2;
 }
 
 inline double CircumsribedRadius(size_t t, MeshHelper::HalfEdgeTriangulation& mesh)
