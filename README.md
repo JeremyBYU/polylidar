@@ -28,7 +28,7 @@
 
 ## Key Features
 
-* Fast (Multi)Polygon Extraction from multiple sources of 3D Data
+* Fast (Multi)Polygon Extraction from multiple sources of 2D and 3D Data
   * Written in C++ for portability
   * Extremely fast single-threaded but includes CPU multi-threading using data and task-based parallelism
   * Polygons with holes may be returned
