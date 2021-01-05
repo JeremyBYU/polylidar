@@ -79,6 +79,9 @@ def main():
         # plot points
         plot_points(points, ax)
         fig.savefig('assets/scratch/pl_logo_points.png', bbox_inches='tight', transparent=True)
+        # plot polygons
+        plot_polygons(polygons, points, ax, linewidth=6.0)
+        fig.savefig('assets/scratch/pl_logo_poly.png', bbox_inches='tight', transparent=True)
         # plot all triangles
         plot_triangles(get_triangles_from_list(triangles, points), ax)
         # plot mesh triangles

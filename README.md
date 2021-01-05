@@ -16,7 +16,7 @@
 </p>
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_logo.png" height="100%" />
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_logo_poly.png" height="100%" />
   <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_3d.png" height="100%" /> 
   <!-- <img src="./assets/pl_logo.png" height="100%" />
   <img src="./assets/pl_3d.png" height="100%" />  -->
