@@ -16,7 +16,7 @@
 </p>
 
 <p align="middle">
-  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_logo.png" height="100%" />
+  <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_logo_poly.png" height="100%" />
   <img src="https://raw.githubusercontent.com/JeremyBYU/polylidar/master/assets/pl_3d.png" height="100%" /> 
   <!-- <img src="./assets/pl_logo.png" height="100%" />
   <img src="./assets/pl_3d.png" height="100%" />  -->
@@ -28,7 +28,7 @@
 
 ## Key Features
 
-* Fast (Multi)Polygon Extraction from multiple sources of 3D Data
+* Fast (Multi)Polygon Extraction from multiple sources of 2D and 3D Data
   * Written in C++ for portability
   * Extremely fast single-threaded but includes CPU multi-threading using data and task-based parallelism
   * Polygons with holes may be returned
