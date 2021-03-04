@@ -451,7 +451,8 @@ void Polylidar3D::CreateTriSet3ClassifiedOptimizedForMultiplePlanes(std::vector<
 
         uint8_t valid2D = Utility::ValidateTriangleLength(t, mesh, lmax) ? ZERO_UINT8 : MAX_UINT8;
         uint8_t valid4D = Utility::GetAllVertexClasses(t, mesh) ? ZERO_UINT8 : MAX_UINT8;
-        uint8_t valid3D = std::abs(maxDotProduct) > norm_thresh_min ? plane_data_list[idx].normal_id : ZERO_UINT8;
+        auto threshold = valid4D == 0 ? norm_thresh : norm_thresh_min;
+        uint8_t valid3D = std::abs(maxDotProduct) > threshold ? plane_data_list[idx].normal_id : ZERO_UINT8;
         tri_set[t] = valid2D | valid3D | valid4D;
     }
 }
