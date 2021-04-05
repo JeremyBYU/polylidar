@@ -402,16 +402,18 @@ def filter_planes(polygons, points, config_pp, rm=None):
                             valid_holes.append(hole_lr)
 
                 new_plane_polygon = Polygon(shell=poly_shape.exterior, holes=valid_holes)
-                planes.append((new_plane_polygon, z_value))
+                planes.append((new_plane_polygon, dict(z_value=z_value, area=new_plane_polygon.area)))
     
     if rm is not None:
         t11 = time.perf_counter()
         rm_inv = rm.inv()
-        for i, (poly, z_value) in enumerate(planes):
+        for i, (poly, meta) in enumerate(planes):
             shell_points = rm_inv.apply(np.asarray(poly.exterior))
             hole_points = [rm_inv.apply(np.asarray(hole_lr)) for hole_lr in poly.interiors]
             new_poly = Polygon(shell=shell_points, holes=hole_points)
-            planes[i] = (new_poly, z_value)
+            meta['poly_2D'] = poly
+            meta['rm_inv'] = rm_inv
+            planes[i] = (new_poly, meta)
         t12 = time.perf_counter()
         logging.debug("Revert Rotation and Create New Polygons: {:2f}".format((t12 - t11) * 1000))
     return planes
