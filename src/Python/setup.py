@@ -42,7 +42,7 @@ setup(
     # Name of the package on PyPI
     name="@PYPI_PACKAGE_NAME@",
     packages=[
-        'polylidar',
+        'polylidar','polylidar.polylidarutil'
     ],
     project_urls={
         'Documentation': '@PROJECT_DOCS@',
