@@ -43,7 +43,7 @@ Polylidar::Matrix<T> py_array_to_matrix(py::array_t<T, py::array::c_style | py::
     }
 }
 
-PYBIND11_MODULE(polylidar, m)
+PYBIND11_MODULE(polylidar_pybind, m)
 {
     m.doc() = "Python binding of Polylidar";
 

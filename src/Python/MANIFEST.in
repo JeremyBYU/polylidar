@@ -6,6 +6,7 @@ include requirements.txt
 # Compiled module
 include polylidar/polylidar*.pyd
 include polylidar/polylidar*.so
+include polylidar_pybind*.so
 
 # Exclude
 global-exclude *.py[co]

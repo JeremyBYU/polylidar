@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Pulled from Open3D
-# CPPLib documentation build configuration file, created by
+# Polylidar documentation build configuration file, created by
 # sphinx-quickstart on Mon Apr  3 14:18:28 2017.
 #
 # This file is execfile()d with the current directory set to its
@@ -33,7 +33,7 @@ def get_git_short_hash():
 
 
 # Import polylidar raw python package with the highest priority
-# This is a trick to show polylidar.polylidar as poylidar in the docs
+# This is a trick to show polylidar.polylidar as polylidar in the docs
 # Only tested to work on Unix
 current_file_dir = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(

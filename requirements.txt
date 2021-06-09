@@ -1,0 +1,4 @@
+numpy>=1.15.0
+shapely
+matplotlib
+descartes

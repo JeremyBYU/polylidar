@@ -1,0 +1,21 @@
+include *.txt
+include LICENSE
+recursive-include bench *.cpp
+recursive-include bench *.txt
+recursive-include cmake *.cmake
+recursive-include examples *.cpp
+recursive-include examples *.py
+recursive-include examples *.txt
+recursive-include include *.hpp
+recursive-include scripts *.py
+recursive-include scripts *.sh
+recursive-include src *.cmake
+recursive-include src *.cpp
+recursive-include src *.hpp
+recursive-include src *.in
+recursive-include src *.md
+recursive-include src *.py
+recursive-include src *.txt
+recursive-include tests *.cpp
+recursive-include tests *.txt
+recursive-include thirdparty *.txt

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.11)
+cmake_minimum_required(VERSION 3.14)
 # Project Details
 set(PROJECT_NAME "Polylidar")
 set(PROJECT_VERSION 1.0.0)
@@ -22,20 +22,19 @@ if(NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE Release)
 endif()
 
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+# Include cmake folder
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Extras.cmake)
+
+set(ORIG_CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
 # Output Folders
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
-# CMake Functions
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/Extras.cmake)
-
-# Build Options
-# Options for Polylidar
-option(PL_USE_ROBUST_PREDICATES "PL - Use Robust Geometric Predicates" OFF)
-option(PL_BUILD_PYMODULE "PL - Build Python Module" ON)
+# Options for PL
+option(PL_BUILD_PYMODULE "PL -Build Python Module" ON)
 option(PL_BUILD_TESTS "PL - Build Tests" ON)
 option(PL_BUILD_BENCHMARKS "PL - Build Benchmarks" OFF)
 option(PL_BUILD_EXAMPLES "PL - Build Examples" ON)

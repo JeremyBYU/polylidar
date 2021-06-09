@@ -82,7 +82,6 @@ class PyAPIDocsBuilder:
 
     def generate_rst(self):
         _create_or_clear_dir(self.output_dir)
-
         for module_name, module_type in self.module_names:
             module = self._get_polylidar_module(module_name)
             PyAPIDocsBuilder._generate_sub_module_class_function_docs(
@@ -199,13 +198,13 @@ class PyAPIDocsBuilder:
                                                  class_name, output_path)
 
         # Function docs
-        if module_type == '':
+        if module_type == 'python_only':
             function_names = [
-                obj[0] for obj in getmembers(sub_module) if isbuiltin(obj[1])
+                obj[0] for obj in getmembers(sub_module) if isfunction(obj[1]) and obj[1].__module__ == sub_module.__name__
             ]
         else:
             function_names = [
-                obj[0] for obj in getmembers(sub_module) if isfunction(obj[1]) and obj[1].__module__ == sub_module.__name__
+                obj[0] for obj in getmembers(sub_module) if isbuiltin(obj[1])
             ]
         for function_name in function_names:
             file_name = "%s.%s.rst" % (sub_module_full_name, function_name)
@@ -231,7 +230,7 @@ class SphinxDocsBuilder:
     (3) Calls `sphinx-build` with the user argument
     """
 
-    def __init__(self, html_output_dir, is_release):
+    def __init__(self, html_output_dir, is_release=True):
 
         # Get the modules for which we want to build the documentation.
         # We use the modules listed in the index.rst file here.
@@ -249,7 +248,8 @@ class SphinxDocsBuilder:
         module_names = []
         with open('index.rst', 'r') as f:
             for line in f:
-                m = re.match('\s*MAKE_DOCS/python_api/([^\s]*)\s*(.*)\s*$', line)
+                m = re.match(
+                    '\s*MAKE_DOCS/python_api/([^\s]*)\s*(.*)\s*$', line)
                 # m = re.match('^\s*python_api/(.*)\s*$', line)
                 if m:
                     module_names.append((m.group(1), m.group(2)))
@@ -326,13 +326,8 @@ if __name__ == "__main__":
     parser.add_argument("--copy",
                         dest="copy",
                         action="store_true",
-                        default=False,
+                        default=True,
                         help="Copy HTML website to docs folder")
-    parser.add_argument("--is_release",
-                        dest="is_release",
-                        action="store_true",
-                        default=False,
-                        help="Show Polylidar version number rather than git hash.")
     args = parser.parse_args()
 
     pwd = os.path.dirname(os.path.realpath(__file__))
@@ -356,7 +351,7 @@ if __name__ == "__main__":
     # To customize build, run sphinx-build manually
     if args.build_sphinx:
         print("Sphinx build enabled")
-        sdb = SphinxDocsBuilder(html_output_dir, args.is_release)
+        sdb = SphinxDocsBuilder(html_output_dir)
         sdb.run()
     else:
         print("Sphinx build disabled, use --sphinx to enable")
@@ -369,4 +364,5 @@ if __name__ == "__main__":
             shutil.rmtree(doc_folder)
         print("Copying Folder")
         shutil.copytree(html_out, doc_folder)
-        shutil.copy(os.path.join(pwd, '.nojekyll'), os.path.join(doc_folder, '.nojekyll'))
+        shutil.copy(os.path.join(pwd, '.nojekyll'),
+                    os.path.join(doc_folder, '.nojekyll'))

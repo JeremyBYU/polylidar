@@ -1,0 +1,10 @@
+
+[build-system]
+requires = ["setuptools", "wheel", "cmake>=3.14.0"]
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -v"
+testpaths = [
+    "tests/python"
+]
