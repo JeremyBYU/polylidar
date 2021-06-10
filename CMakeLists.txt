@@ -34,11 +34,12 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
 
 # Options for PL
-option(PL_BUILD_PYMODULE "PL -Build Python Module" ON)
+option(PL_BUILD_PYMODULE "PL - Build Python Module" ON)
 option(PL_BUILD_TESTS "PL - Build Tests" ON)
 option(PL_BUILD_BENCHMARKS "PL - Build Benchmarks" OFF)
 option(PL_BUILD_EXAMPLES "PL - Build Examples" ON)
 option(PL_WITH_OPENMP "PL - Build with OpenMP Support" ON)
+option(PL_BUILD_FASTGA "PL - Build FastGA with Example" ON)
 option(PL_BUILD_WERROR "PL - Add Werror flag to build (turns warnings into errors)" OFF)
 
 # Add any dependencies needed by our library

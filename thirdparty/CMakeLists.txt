@@ -28,6 +28,13 @@ FetchContent_Declare(
   GIT_PROGRESS   TRUE
 )
 
+FetchContent_Declare(
+  extern_fastga
+  GIT_REPOSITORY https://github.com/JeremyBYU/FastGaussianAccumulator
+  GIT_TAG        origin/master
+  GIT_PROGRESS   TRUE
+)
+
 
 # Build Robust Predicates if requested
 if (PL_USE_ROBUST_PREDICATES)
@@ -35,6 +42,20 @@ if (PL_USE_ROBUST_PREDICATES)
     add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/predicates")
 endif()
 
-
 # After the following call, the library will be installed
 FetchContent_MakeAvailable(extern_parallel_hashmap extern_pybind11 extern_eigen extern_marl)
+
+# Build Robust Predicates if requested
+if (PL_BUILD_FASTGA AND PL_BUILD_EXAMPLES)
+    MESSAGE(STATUS "Building Examples with FastGA")
+    # Add fastga but dont build examples and unit tests
+    FetchContent_GetProperties(extern_fastga)
+    if(NOT extern_fastga_POPULATED)
+      FetchContent_Populate(extern_fastga)
+      set(GA_BUILD_PYMODULE OFF CACHE BOOL "GA -Build Python Module" FORCE)
+      set(GA_BUILD_TESTS OFF CACHE BOOL "GA - Build Tests" FORCE)
+      set(GA_BUILD_BENCHMARKS OFF CACHE BOOL "GA - Build Benchmarks" FORCE)
+      set(GA_BUILD_EXAMPLES OFF CACHE BOOL "GA - Build Examples" FORCE)
+      add_subdirectory(${extern_fastga_SOURCE_DIR} ${extern_fastga_BINARY_DIR})
+    endif()
+endif()
