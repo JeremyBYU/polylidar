@@ -4,9 +4,9 @@
 
 ### Getting Open3D to Compile with Polylidar3D
 
-It can be quite difficult to get Open3D to compile with this project (polylidar) on Windows. Open3D, by default, links with a STATIC Windows **runtime** (dont confuse this with static library). This is done with msvc with the flag `\MT`. However CMAKE by defualt will use a DYNAMIC windows **runtime** (see [here](https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html)). This is the `\MD` flag when compiling. If you are going to compile Open3D into your project they both have to use the *same* runtime. If you dont you get a bunch of errors like this: `error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in`
+It can be quite difficult to get Open3D to compile with this project (polylidar) on Windows. Open3D, by default, links with a STATIC Windows **runtime** (don't confuse this with static library). This is done with msvc with the flag `\MT`. However CMAKE by defualt will use a DYNAMIC windows **runtime** (see [here](https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html)). This is the `\MD` flag when compiling. If you are going to compile Open3D into any external project they both have to use the *same* runtime. If you don't you get a bunch of errors like this: `error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MT_StaticRelease' doesn't match value 'MD_DynamicRelease' in`
 
-An oh my can it be really hard to make sure that CMake compiled all your code and all your possible dendencies with the same runtime. For this reason, I recommend that you compile Open3D by hand and switch it to use the dyamic runtime for Windows. I could never get it to work using Open3D 0.13.0, so I just stick with 0.12.0. These are the commands I used to build Open3D on my windows machine.
+An oh my can it be really hard to make sure that CMake compiled all your code and all your possible dendencies with the same runtime. For this reason, I recommend that you compile Open3D by hand and switch it to use the dyamic runtime for Windows. I could never get it to work using Open3D 0.13.0, so I just stick with 0.12.0. These are the commands I used to build Open3D on my windows machine. I bet this will be easier on linux.
 
 
 ```bash

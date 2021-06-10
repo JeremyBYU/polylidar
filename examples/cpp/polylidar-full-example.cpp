@@ -1,6 +1,5 @@
 
 #include <tuple>
-#include <iomanip>
 #include <random>
 #include <algorithm>
 #include <cmath>
@@ -44,12 +43,31 @@ int main(int argc, char const* argv[])
     bool fortran_order;
     std::vector<double> data;
     std::cout << "Loading previously captured Organized Point Cloud from an L515 Camera." << std::endl;
-    npy::LoadArrayFromNumpy("../fixtures/realsense/opc_example_one/L515_OPC.npy", shape, fortran_order, data);
-    std::cout << "Shape of Point Cloud is: " << shape << std::endl;
+    try
+    {
+        std::cout << "Attempting to load OPC file from ./fixtures/realsense/opc_example_one/L515_OPC.npy" << std::endl;
+        npy::LoadArrayFromNumpy("./fixtures/realsense/opc_example_one/L515_OPC.npy", shape, fortran_order, data);
+    }
+    catch (const std::exception& e)
+    {
+        try
+        {
+            std::cout << "Last chance. Trying to load OPC file from ../fixtures/realsense/opc_example_one/L515_OPC.npy"
+                      << std::endl;
+            npy::LoadArrayFromNumpy("../fixtures/realsense/opc_example_one/L515_OPC.npy", shape, fortran_order, data);
+        }
+        catch (const std::exception& e)
+        {
+            std::cout << "Can't find L515_OPC.npy file. Exiting..." << std::endl;
+            std::exit(1);
+        }
+    }
 
+    // Create Matrix Wrapper around Point Cloud Data (no copy)
+    std::cout << "Shape of Point Cloud is: " << shape << std::endl;
     auto num_points = shape[0] * shape[1];
     auto cols = shape[2]; // 3
-    // Create Matrix Wrapper around Point Cloud Data (no copy)
+    // Expected to be a num_points X 3 array but **organized* in memory
     Polylidar::Matrix<double> opc(data.data(), num_points, cols);
 
     // Visualize Point Cloud
@@ -108,7 +126,9 @@ int main(int argc, char const* argv[])
             to_draw.push_back(ls);
         }
     }
-    std::cout << "Visualing Planes and Polygon. Each plane segment is color coded. Polgyons are shown as thin lines (OpenGL has no thickness): " << std::endl;
+    std::cout << "Visualing Planes and Polygon. Each plane segment is color coded. Polgyons are shown as thin lines "
+                 "(OpenGL has no thickness): "
+              << std::endl;
     to_draw.push_back(o3d_mesh);
     open3d::visualization::DrawGeometries(to_draw);
 
