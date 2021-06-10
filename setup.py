@@ -74,6 +74,9 @@ class CMakeBuild(build_ext):
             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={}".format(extdir),
             "-DPYTHON_EXECUTABLE={}".format(sys.executable),
             "-DCMAKE_BUILD_TYPE={}".format(cfg),  # not used on MSVC, but no harm
+            "-DPL_BUILD_TESTS=OFF",
+            "-DPL_BUILD_BENCHMARKS=OFF",
+            "-DPL_BUILD_EXAMPLES=OFF",
         ]
         build_args = []
 
@@ -116,6 +119,8 @@ class CMakeBuild(build_ext):
             if hasattr(self, "parallel") and self.parallel:
                 # CMake 3.12+ only.
                 build_args += ["-j{}".format(self.parallel)]
+            else:
+                build_args += ["-j4"]
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
