@@ -182,7 +182,7 @@ class Matrix
      * @brief Simple helper function to change our `ptr` to point to our own buffer
      * 
      */
-    void UpdatePtrFromData() { ptr = data.data(); }
+    void UpdatePtrFromData() { ptr = data.data(); own_data=true; }
     /**
      * @brief Simply updates our rows and columns and data
      * 

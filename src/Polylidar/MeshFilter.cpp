@@ -5,6 +5,7 @@
 #include <cmath>
 #include "Eigen/Dense"
 #include "FastExp/fastexp.h"
+#include <unordered_set>
 
 #define PL_OMP_MAX_THREAD_CENTROIDS 8
 #define PL_OMP_MAX_THREAD_BILATERAL 8
@@ -16,6 +17,56 @@ namespace Polylidar {
 namespace MeshHelper {
 
 constexpr std::size_t INVALID_INDEX = std::numeric_limits<std::size_t>::max();
+
+namespace LaplacianCore
+{
+    void LaplacianLoop(Matrix<double>& vertices_in, Matrix<size_t>& triangles,
+                            Matrix<double>& vertices_out, double lambda)
+    {
+        const int num_vertices = static_cast<int>(vertices_in.rows);
+        Eigen::Map<RowMatrixX3d> vertices_in_e(vertices_in.ptr, vertices_in.rows, 3);
+        Eigen::Map<RowMatrixX3d> vertices_out_e(vertices_out.ptr, vertices_out.rows, 3);
+
+        std::vector<std::unordered_set<int>> adjacency_list(num_vertices);
+        for (size_t i=0; i < triangles.rows; ++i) {
+            adjacency_list[triangles(i, 0)].insert(triangles(i, 1));
+            adjacency_list[triangles(i, 0)].insert(triangles(i, 2));
+            adjacency_list[triangles(i, 1)].insert(triangles(i, 0));
+            adjacency_list[triangles(i, 1)].insert(triangles(i, 2));
+            adjacency_list[triangles(i, 2)].insert(triangles(i, 0));
+            adjacency_list[triangles(i, 2)].insert(triangles(i, 1));
+        }
+
+        // std::cout << "SO far so good" << std::endl;
+
+        for (size_t vidx = 0; vidx < vertices_in.rows; ++vidx) {
+            Eigen::Vector3d vertex = vertices_in_e.row(vidx);
+            Eigen::Vector3d vertex_sum(0, 0, 0);
+            double total_weight = 0.0;
+            for (int nbidx : adjacency_list[vidx]) {
+                Eigen::Vector3d nbr_vertex = vertices_in_e.row(nbidx);
+                auto dist = (vertex - nbr_vertex).norm();
+                double weight = 1. / (dist + 1e-12);
+                total_weight += weight;
+                vertex_sum += weight * nbr_vertex;
+            }
+            if (total_weight == 0.0)
+            {
+                // std::cout << "skipping...: " << vidx << std::endl;
+                continue;
+            }
+            // std::cout << vertex_sum << std::endl;
+            // std::cout << std::endl;
+            vertices_out_e.row(vidx) = vertex + lambda * (vertex_sum / total_weight - vertex);
+            // std::cout <<  vertices_out_e.row(vidx) <<std::endl;
+            // std::cout << std::endl;
+
+        }
+
+        // std::cout << "Finsiehd one loop" << std::endl;
+    }
+
+}
 
 namespace BilateralCore
 
@@ -173,6 +224,37 @@ void BilateralFilterNormals(HalfEdgeTriangulation& mesh, int iterations, double 
     {
         normals.data.swap(new_normals.data);
         normals.ptr = normals.data.data();
+    }
+}
+
+
+void LaplacianFilterVertices(HalfEdgeTriangulation& mesh, int iterations, double lambda)
+{
+    auto &triangles = mesh.triangles;
+    auto &vertices = mesh.vertices;
+
+    // Create new datastructures
+    auto new_vertices = Matrix<double>::CopyFromDifferentType<double>(vertices.ptr, vertices.rows, vertices.cols);
+    
+    bool need_copy = false;
+    for (int i = 0; i < iterations; ++i)
+    {
+        if (i % 2 == 0)
+        {
+            LaplacianCore::LaplacianLoop(vertices, triangles, new_vertices, lambda);
+            need_copy = false;
+        }
+        else
+        {
+            LaplacianCore::LaplacianLoop(new_vertices, triangles, vertices, lambda);
+            need_copy = true;
+        }
+    }
+
+    if (!need_copy)
+    {
+        vertices.data.swap(new_vertices.data);
+        vertices.UpdatePtrFromData();
     }
 }
 

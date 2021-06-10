@@ -248,6 +248,17 @@ void ComputeTriangleNormals(const Matrix<double>& vertices, const std::vector<si
 HalfEdgeTriangulation CreateTriMeshFromVectors(std::vector<double>&& vertices, std::vector<size_t>&& triangles,
                                                std::vector<size_t>&& halfedges);
 
+
+/**
+ * @brief Perform Laplacian Filtering on the triangular mesh. Only the normals are smoothed. Neighbors are in 1-ring
+ * edge adjecency. 
+ *
+ * @param mesh
+ * @param iterations            Number of iterations
+ * @param sigma_length          Weighting for each iteration
+ */
+void LaplacianFilterVertices(HalfEdgeTriangulation& mesh, int iterations, double lambda);
+
 /**
  * @brief Perform Bilateral Filtering on the triangular mesh. Only the normals are smoothed. Neighbors are in 1-ring
  * edge adjecency. \rst :math:`n_o = K \cdot \sum_{j =1}^{N} W_c(||c_i - c_j||) \cdot W_s(|| n_i -n_j||) \cdot n_j`
