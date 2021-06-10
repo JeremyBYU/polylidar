@@ -6,5 +6,5 @@ requires = ["setuptools", "wheel", "cmake>=3.14.0"]
 minversion = "6.0"
 addopts = "-ra -v"
 testpaths = [
-    "tests/python/shape_test.py"
+    "tests/python/generated_test.py"
 ]
