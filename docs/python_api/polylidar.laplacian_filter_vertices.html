@@ -9,7 +9,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.bilateral_filter_normals &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>polylidar.laplacian_filter_vertices &mdash; Polylidar3D 1.0.5 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="polylidar.create_tri_mesh_copy" href="polylidar.create_tri_mesh_copy.html" />
-    <link rel="prev" title="polylidar.VectorULongInt" href="polylidar.VectorULongInt.html" /> 
+    <link rel="next" title="polylidar.robust_predicates_activated" href="polylidar.robust_predicates_activated.html" />
+    <link rel="prev" title="polylidar.get_polylidar_version" href="polylidar.get_polylidar_version.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -122,13 +122,13 @@
 <li class="toctree-l2"><a class="reference internal" href="polylidar.VectorInt.html">VectorInt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.VectorUInt8.html">VectorUInt8</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.VectorULongInt.html">VectorULongInt</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">bilateral_filter_normals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="polylidar.bilateral_filter_normals.html">bilateral_filter_normals</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.create_tri_mesh_copy.html">create_tri_mesh_copy</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.extract_point_cloud_from_float_depth.html">extract_point_cloud_from_float_depth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.extract_tri_mesh_from_float_depth.html">extract_tri_mesh_from_float_depth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.extract_tri_mesh_from_organized_point_cloud.html">extract_tri_mesh_from_organized_point_cloud</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.get_polylidar_version.html">get_polylidar_version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="polylidar.laplacian_filter_vertices.html">laplacian_filter_vertices</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">laplacian_filter_vertices</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polylidar.robust_predicates_activated.html">robust_predicates_activated</a></li>
 </ul>
 </li>
@@ -184,7 +184,7 @@
         
           <li><a href="polylidar.html">polylidar</a> &raquo;</li>
         
-      <li>polylidar.bilateral_filter_normals</li>
+      <li>polylidar.laplacian_filter_vertices</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -225,12 +225,12 @@
     text-align: unset;
 }
 </style>
-<section id="polylidar-bilateral-filter-normals">
-<h1>polylidar.bilateral_filter_normals<a class="headerlink" href="#polylidar-bilateral-filter-normals" title="Permalink to this headline">¶</a></h1>
+<section id="polylidar-laplacian-filter-vertices">
+<h1>polylidar.laplacian_filter_vertices<a class="headerlink" href="#polylidar-laplacian-filter-vertices" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="polylidar.bilateral_filter_normals">
-<code class="sig-prename descclassname">polylidar.</code><code class="sig-name descname">bilateral_filter_normals</code><span class="sig-paren">(</span><em class="sig-param">mesh: polylidar_pybind.HalfEdgeTriangulation</em>, <em class="sig-param">iterations: int</em>, <em class="sig-param">sigma_length: float</em>, <em class="sig-param">sigma_angle: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.bilateral_filter_normals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform Bilateral Filtering on the triangular mesh. Only the normals are smoothed. Neighbors are in 1-ring vertex adjacency</p>
+<dt id="polylidar.laplacian_filter_vertices">
+<code class="sig-prename descclassname">polylidar.</code><code class="sig-name descname">laplacian_filter_vertices</code><span class="sig-paren">(</span><em class="sig-param">mesh: polylidar_pybind.HalfEdgeTriangulation</em>, <em class="sig-param">iterations: int</em>, <em class="sig-param">_lambda: float</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.laplacian_filter_vertices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform Laplacian Filtering on the triangular mesh vertices. Only the vertices are smoothed. Neighbors are in 1-ring vertex adjacency</p>
 </dd></dl>
 
 </section>
@@ -243,10 +243,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="polylidar.create_tri_mesh_copy.html" class="btn btn-neutral float-right" title="polylidar.create_tri_mesh_copy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="polylidar.robust_predicates_activated.html" class="btn btn-neutral float-right" title="polylidar.robust_predicates_activated" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="polylidar.VectorULongInt.html" class="btn btn-neutral float-left" title="polylidar.VectorULongInt" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="polylidar.get_polylidar_version.html" class="btn btn-neutral float-left" title="polylidar.get_polylidar_version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

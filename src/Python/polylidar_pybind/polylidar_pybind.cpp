@@ -258,6 +258,11 @@ PYBIND11_MODULE(polylidar_pybind, m)
           "vertex adjacency",
           "mesh"_a, "iterations"_a, "sigma_length"_a, "sigma_angle"_a);
 
+    m.def("laplacian_filter_vertices", &MeshHelper::LaplacianFilterVertices,
+          "Perform Laplacian Filtering on the triangular mesh vertices. Only the vertices are smoothed. Neighbors are in 1-ring "
+          "vertex adjacency",
+          "mesh"_a, "iterations"_a, "_lambda"_a);
+
     m.def("extract_tri_mesh_from_float_depth", &MeshHelper::ExtractTriMeshFromFloatDepth,
           "Extracts a Half-Edge Triangulated mesh (Uniform Mesh/Right Cut Mesh) from a depth image", "image"_a,
           "intrinsics"_a, "extrinsics"_a, "stride"_a = PL_DEFAULT_STRIDE, "calc_normals"_a = PL_DEFAULT_CALC_NORMALS);
