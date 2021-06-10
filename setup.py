@@ -30,6 +30,7 @@ install_requires = [line.strip() for line in lines if line]
 # Read Version
 with open('src/version.txt', 'r') as f:
     lines = f.readlines()
+print(lines)
 version = ".".join([line.split(' ')[1].strip() for line in lines if line])
 print("The version is {}".format(version))
 

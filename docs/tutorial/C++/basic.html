@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>C++ interface &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>C++ interface &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,14 +94,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../Python/index.html">Python</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">C++</a><ul class="current">
@@ -108,12 +109,12 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -204,10 +205,135 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="c-interface">
+<section id="c-interface">
 <span id="cplusplus-basic-tutorial"></span><h1>C++ interface<a class="headerlink" href="#c-interface" title="Permalink to this headline">¶</a></h1>
-<p>Explain Interface here…</p>
+<p>Take a look at <cite>examples/cpp/polylidar-full-example.cpp</cite>.</p>
+<p>First we load a numpy file of an organized point cloud that has been previosly captured.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">unsigned</span> <span class="kt">long</span><span class="o">&gt;</span> <span class="n">shape</span><span class="p">;</span>
+    <span class="kt">bool</span> <span class="n">fortran_order</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">data</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Loading previously captured Organized Point Cloud from an L515 Camera.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Attempting to load OPC file from ./fixtures/realsense/opc_example_one/L515_OPC.npy&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+        <span class="n">npy</span><span class="o">::</span><span class="n">LoadArrayFromNumpy</span><span class="p">(</span><span class="s">&quot;./fixtures/realsense/opc_example_one/L515_OPC.npy&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">fortran_order</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">try</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Last chance. Trying to load OPC file from ../fixtures/realsense/opc_example_one/L515_OPC.npy&quot;</span>
+                      <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">npy</span><span class="o">::</span><span class="n">LoadArrayFromNumpy</span><span class="p">(</span><span class="s">&quot;../fixtures/realsense/opc_example_one/L515_OPC.npy&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">fortran_order</span><span class="p">,</span> <span class="n">data</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">catch</span> <span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">exception</span><span class="o">&amp;</span> <span class="n">e</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Can&#39;t find L515_OPC.npy file. Exiting...&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
 </div>
+<p>Then we convert the vector to a matrix wrapper (no copy) that Polylidar uses.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="c1">// Create Matrix Wrapper around Point Cloud Data (no copy)</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Shape of Point Cloud is: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">shape</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">num_points</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="k">auto</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span> <span class="c1">// 3</span>
+    <span class="c1">// Expected to be a num_points X 3 array but **organized* in memory</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">opc</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">num_points</span><span class="p">,</span> <span class="n">cols</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Then we visualize the point cloud:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="c1">// Visualize Point Cloud</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Visualizing Point Cloud. Rotate View. Close Open3D window when satisfied...&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">pcd_eigen</span> <span class="o">=</span> <span class="n">VisUtility</span><span class="o">::</span><span class="n">MapEigen</span><span class="o">&lt;</span><span class="n">Eigen</span><span class="o">::</span><span class="n">Vector3d</span><span class="o">&gt;</span><span class="p">(</span><span class="n">opc</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">open3d</span><span class="o">::</span><span class="n">geometry</span><span class="o">::</span><span class="n">PointCloud</span><span class="o">&gt;</span> <span class="n">pointcloud_ptr</span><span class="p">(</span><span class="k">new</span> <span class="n">open3d</span><span class="o">::</span><span class="n">geometry</span><span class="o">::</span><span class="n">PointCloud</span><span class="p">(</span><span class="n">pcd_eigen</span><span class="p">));</span>
+    <span class="n">open3d</span><span class="o">::</span><span class="n">visualization</span><span class="o">::</span><span class="n">DrawGeometries</span><span class="p">({</span><span class="n">pointcloud_ptr</span><span class="p">});</span>
+</pre></div>
+</div>
+<img alt="../../_images/opc.png" src="../../_images/opc.png" />
+<p>Then we create and visualize the mesh:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="c1">// Create Mesh From Point Cloud</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Creating Mesh and smoothing. NOT using optimized filters, see OrganizedPointFilters&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span> <span class="n">tri_mesh</span><span class="p">;</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">VUI</span> <span class="n">valid_idx</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">tie</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">,</span> <span class="n">valid_idx</span><span class="p">)</span> <span class="o">=</span>
+        <span class="n">Polylidar</span><span class="o">::</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">ExtractTriMeshFromOrganizedPointCloud</span><span class="p">(</span><span class="n">opc</span><span class="p">,</span> <span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">true</span><span class="p">);</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">LaplacianFilterVertices</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">);</span>
+    <span class="n">tri_mesh</span><span class="p">.</span><span class="n">ComputeTriangleNormals</span><span class="p">();</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">BilateralFilterNormals</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">);</span>
+
+    <span class="c1">// Visualize Mesh</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Visualizing mesh. Rotate View.&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="k">auto</span> <span class="n">o3d_mesh</span> <span class="o">=</span> <span class="n">VisUtility</span><span class="o">::</span><span class="n">CreateOpen3DMesh</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">);</span>
+    <span class="n">open3d</span><span class="o">::</span><span class="n">visualization</span><span class="o">::</span><span class="n">DrawGeometries</span><span class="p">({</span><span class="n">o3d_mesh</span><span class="p">});</span>
+</pre></div>
+</div>
+<img alt="../../_images/opc_mesh.png" src="../../_images/opc_mesh.png" />
+<p>Then we find the dominant plane normals using FastGA:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="c1">// Find Dominant Plane Normals</span>
+    <span class="n">FastGA</span><span class="o">::</span><span class="n">GaussianAccumulatorS2Beta</span> <span class="nf">fastgac</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+    <span class="k">auto</span> <span class="n">downsampled_normals</span> <span class="o">=</span> <span class="n">DownSampleNormals</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">.</span><span class="n">triangle_normals</span><span class="p">);</span>
+    <span class="n">fastgac</span><span class="p">.</span><span class="n">Integrate</span><span class="p">(</span><span class="n">downsampled_normals</span><span class="p">);</span>
+    <span class="n">FastGA</span><span class="o">::</span><span class="n">MatX3d</span> <span class="n">peaks</span> <span class="o">=</span> <span class="n">fastgac</span><span class="p">.</span><span class="n">FindPeaks</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">);</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Detected Peaks with FastGaussianAccumulator. Here are the detected peaks: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">peaks</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>Then we extract the Planes and Polygons:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="c1">// Extracting Planes and Polygons</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Extracting Polygons from all detected peaks: &quot;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span> <span class="n">peaks_mat</span> <span class="o">=</span> <span class="n">ConvertMatX3dtoMatrix</span><span class="p">(</span><span class="n">peaks</span><span class="p">);</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">Polylidar3D</span> <span class="nf">pl</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">500</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">);</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">PlanesGroup</span> <span class="n">planes_group</span><span class="p">;</span>
+    <span class="n">Polylidar</span><span class="o">::</span><span class="n">PolygonsGroup</span> <span class="n">polygons_group</span><span class="p">;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">tie</span><span class="p">(</span><span class="n">planes_group</span><span class="p">,</span> <span class="n">polygons_group</span><span class="p">)</span> <span class="o">=</span> <span class="n">pl</span><span class="p">.</span><span class="n">ExtractPlanesAndPolygons</span><span class="p">(</span><span class="n">tri_mesh</span><span class="p">,</span> <span class="n">peaks_mat</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Then we colorize the Open3D mesh by plane segments and create the corresponding polygons:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span>    <span class="c1">// Paint Planes for visualization</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">plane_group</span> <span class="p">:</span> <span class="n">planes_group</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">plane_segment</span> <span class="p">:</span> <span class="n">plane_group</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">color</span> <span class="o">=</span> <span class="n">VisUtility</span><span class="o">::</span><span class="n">NextColor</span><span class="p">();</span>
+            <span class="n">VisUtility</span><span class="o">::</span><span class="n">PaintPlane</span><span class="p">(</span><span class="n">o3d_mesh</span><span class="p">,</span> <span class="n">plane_segment</span><span class="p">,</span> <span class="n">color</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">// Create Open3D Polygons (LineSets (no thickness))</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="k">const</span> <span class="n">open3d</span><span class="o">::</span><span class="n">geometry</span><span class="o">::</span><span class="n">Geometry</span><span class="o">&gt;&gt;</span> <span class="n">to_draw</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">polygon_group</span> <span class="p">:</span> <span class="n">polygons_group</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">polygon</span> <span class="p">:</span> <span class="n">polygon_group</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">ls</span> <span class="o">=</span> <span class="n">VisUtility</span><span class="o">::</span><span class="n">CreateLineSetFromPolygon</span><span class="p">(</span><span class="n">polygon</span><span class="p">,</span> <span class="n">tri_mesh</span><span class="p">.</span><span class="n">vertices</span><span class="p">);</span>
+            <span class="n">to_draw</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">ls</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&quot;Visualing Planes and Polygon. Each plane segment is color coded. Polgyons are shown as thin lines &quot;</span>
+                 <span class="s">&quot;(OpenGL has no thickness): &quot;</span>
+              <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+    <span class="n">to_draw</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">o3d_mesh</span><span class="p">);</span>
+    <span class="n">open3d</span><span class="o">::</span><span class="n">visualization</span><span class="o">::</span><span class="n">DrawGeometries</span><span class="p">(</span><span class="n">to_draw</span><span class="p">);</span>
+</pre></div>
+</div>
+<img alt="../../_images/opc_polygons.png" src="../../_images/opc_polygons.png" />
+<p>Full output:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ ./cmake-build/bin/Release/polylidar-full.exe
+A more <span class="nb">complete</span> example of using Polylidar3D with 3D Data. Needs Open3D and FastGA.
+Loading previously captured Organized Point Cloud from an L515 Camera.
+Attempting to load OPC file from ./fixtures/realsense/opc_example_one/L515_OPC.npy
+Shape of Point Cloud is: <span class="o">[</span><span class="m">180</span>, <span class="m">320</span>, <span class="m">3</span><span class="o">]</span>
+Visualizing Point Cloud. Rotate View. Close Open3D window when satisfied...
+Creating Mesh and smoothing. NOT using optimized filters, see OrganizedPointFilters
+Visualizing mesh. Rotate View.
+Detected Peaks with FastGaussianAccumulator. Here are the detected peaks: <span class="o">[</span><span class="m">0</span>.0641286, <span class="m">0</span>.525564, -0.848333<span class="o">]</span>, <span class="o">[</span><span class="m">0</span>.00935028, -0.849775, -0.527063<span class="o">]</span>,
+
+Extracting Polygons from all detected peaks:
+Visualing Planes and Polygon. Each plane segment is color coded. Polgyons are shown as thin lines <span class="o">(</span>OpenGL has no thickness<span class="o">)</span>:
+</pre></div>
+</div>
+</section>
 
 
            </div>

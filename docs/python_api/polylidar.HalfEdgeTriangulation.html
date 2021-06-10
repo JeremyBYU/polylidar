@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.HalfEdgeTriangulation &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>polylidar.HalfEdgeTriangulation &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,19 +94,19 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="polylidar.html">polylidar</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="polylidar.Delaunator.html">Delaunator</a></li>
@@ -132,7 +133,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -223,7 +224,7 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="polylidar-halfedgetriangulation">
+<section id="polylidar-halfedgetriangulation">
 <h1>polylidar.HalfEdgeTriangulation<a class="headerlink" href="#polylidar-halfedgetriangulation" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="polylidar.HalfEdgeTriangulation">
@@ -231,25 +232,25 @@
 <dd><p>This class hold all the datastructures in our meshes (vertices, triangles, halfedges, etc.).</p>
 <dl class="method">
 <dt id="polylidar.HalfEdgeTriangulation.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar.polylidar.HalfEdgeTriangulation</em>, <em class="sig-param">in_vertices: polylidar.polylidar.MatrixDouble</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.HalfEdgeTriangulation</em>, <em class="sig-param">in_vertices: polylidar_pybind.MatrixDouble</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a HalfEdge Triangular Mesh</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="polylidar.HalfEdgeTriangulation.compute_triangle_normals">
-<code class="sig-name descname">compute_triangle_normals</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar.polylidar.HalfEdgeTriangulation</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.compute_triangle_normals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">compute_triangle_normals</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.HalfEdgeTriangulation</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.compute_triangle_normals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes Triangle Normals</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="polylidar.HalfEdgeTriangulation.set_triangle_normals">
-<code class="sig-name descname">set_triangle_normals</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar.polylidar.HalfEdgeTriangulation</em>, <em class="sig-param">triangle_normals: polylidar.polylidar.MatrixDouble</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.set_triangle_normals" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_triangle_normals</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.HalfEdgeTriangulation</em>, <em class="sig-param">triangle_normals: polylidar_pybind.MatrixDouble</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.set_triangle_normals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets Triangle Normals from input</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="polylidar.HalfEdgeTriangulation.set_vertex_classes">
-<code class="sig-name descname">set_vertex_classes</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar.polylidar.HalfEdgeTriangulation</em>, <em class="sig-param">vertex_classes: polylidar.polylidar.MatrixUInt8</em>, <em class="sig-param">copy: bool = True</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.set_vertex_classes" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">set_vertex_classes</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.HalfEdgeTriangulation</em>, <em class="sig-param">vertex_classes: polylidar_pybind.MatrixUInt8</em>, <em class="sig-param">copy: bool = True</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.HalfEdgeTriangulation.set_vertex_classes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sets vertex classes from input</p>
 </dd></dl>
 
@@ -291,7 +292,7 @@
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>

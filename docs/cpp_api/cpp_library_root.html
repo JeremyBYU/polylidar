@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>C++ Library API &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>C++ Library API &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,24 +94,24 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">C++ Library API</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#class-hierarchy">Class Hierarchy</a></li>
@@ -161,6 +162,7 @@
 <li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1af2f5a484e368296155be589dc1582d17.html">Function Polylidar::MeshHelper::ExtractTriMeshFromFloatDepth</a></li>
 <li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1af40fc576d59f20f9eb24f59334aa8367.html">Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud</a></li>
 <li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1abd9072f82e376876267cfabb6d1623c9.html">Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a394d710b518258deec8d884b9737d5bc.html">Function Polylidar::MeshHelper::LaplacianFilterVertices</a></li>
 <li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a1f9f63580a80812a401deff72b328fd2.html">Function Polylidar::RobustPredicatesActivated</a></li>
 <li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1adf0acd4d7f0129216d005c5048828863.html">Function Polylidar::Utility::CheckZThresh</a></li>
 <li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1ad3899922c5306e5c2fe940b0b5116302.html">Function Polylidar::Utility::CircumsribedRadius</a></li>
@@ -322,9 +324,9 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="c-library-api">
+<section id="c-library-api">
 <h1>C++ Library API<a class="headerlink" href="#c-library-api" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="class-hierarchy">
+<section id="class-hierarchy">
 <h2>Class Hierarchy<a class="headerlink" href="#class-hierarchy" title="Permalink to this headline">¶</a></h2>
 <ul class="treeView" id="class-treeView">
   <li>
@@ -332,8 +334,8 @@
       <li class="lastChild">Namespace <a href="namespace_Polylidar.html#namespace-Polylidar">Polylidar</a><ul><li>Namespace <a href="namespace_Polylidar__Delaunator.html#namespace-Polylidar-Delaunator">Polylidar::Delaunator</a><ul><li class="lastChild">Class <a href="class_polylidar_1_1_delaunator_1_1_delaunator.html#exhale-class-class-polylidar-1-1-delaunator-1-1-delaunator">Delaunator</a></li></ul></li><li>Namespace <a href="namespace_Polylidar__MeshHelper.html#namespace-Polylidar-MeshHelper">Polylidar::MeshHelper</a><ul><li class="lastChild">Class <a href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#exhale-class-class-polylidar-1-1-mesh-helper-1-1-half-edge-triangulation">HalfEdgeTriangulation</a></li></ul></li><li>Namespace <a href="namespace_Polylidar__Utility.html#namespace-Polylidar-Utility">Polylidar::Utility</a><ul><li class="lastChild">Class <a href="class_polylidar_1_1_utility_1_1_timer.html#exhale-class-class-polylidar-1-1-utility-1-1-timer">Timer</a></li></ul></li><li>Struct <a href="struct_polylidar_1_1_extreme_point.html#exhale-struct-struct-polylidar-1-1-extreme-point">ExtremePoint</a></li><li>Struct <a href="struct_polylidar_1_1_plane_data.html#exhale-struct-struct-polylidar-1-1-plane-data">PlaneData</a></li><li>Struct <a href="struct_polylidar_1_1_polygon.html#exhale-struct-struct-polylidar-1-1-polygon">Polygon</a></li><li>Template Class <a href="class_polylidar_1_1_matrix.html#exhale-class-class-polylidar-1-1-matrix">Matrix</a></li><li class="lastChild">Class <a href="class_polylidar_1_1_polylidar3_d.html#exhale-class-class-polylidar-1-1-polylidar3-d">Polylidar3D</a></li></ul></li>
     </ul>
   </li><!-- only tree view element -->
-</ul><!-- /treeView class-treeView --></div>
-<div class="section" id="file-hierarchy">
+</ul><!-- /treeView class-treeView --></section>
+<section id="file-hierarchy">
 <h2>File Hierarchy<a class="headerlink" href="#file-hierarchy" title="Permalink to this headline">¶</a></h2>
 <ul class="treeView" id="file-treeView">
   <li>
@@ -341,10 +343,10 @@
       <li class="lastChild">Directory <a href="dir_include.html#dir-include">include</a><ul><li class="lastChild">Directory <a href="dir_include_Polylidar.html#dir-include-Polylidar">Polylidar</a><ul><li>Directory <a href="dir_include_Polylidar_Delaunator.html#dir-include-Polylidar-Delaunator">Delaunator</a><ul><li class="lastChild">File <a href="file_include_Polylidar_Delaunator_Delaunator.hpp.html#file-include-Polylidar-Delaunator-Delaunator.hpp">Delaunator.hpp</a></li></ul></li><li>Directory <a href="dir_include_Polylidar_Mesh.html#dir-include-Polylidar-Mesh">Mesh</a><ul><li class="lastChild">File <a href="file_include_Polylidar_Mesh_MeshHelper.hpp.html#file-include-Polylidar-Mesh-MeshHelper.hpp">MeshHelper.hpp</a></li></ul></li><li>File <a href="file_include_Polylidar_Core.hpp.html#file-include-Polylidar-Core.hpp">Core.hpp</a></li><li>File <a href="file_include_Polylidar_Polylidar.hpp.html#file-include-Polylidar-Polylidar.hpp">Polylidar.hpp</a></li><li>File <a href="file_include_Polylidar_Types.hpp.html#file-include-Polylidar-Types.hpp">Types.hpp</a></li><li>File <a href="file_include_Polylidar_Utility.hpp.html#file-include-Polylidar-Utility.hpp">Utility.hpp</a></li><li class="lastChild">File <a href="file_include_Polylidar_UtilityMath.hpp.html#file-include-Polylidar-UtilityMath.hpp">UtilityMath.hpp</a></li></ul></li></ul></li>
     </ul>
   </li><!-- only tree view element -->
-</ul><!-- /treeView file-treeView --></div>
-<div class="section" id="full-api">
+</ul><!-- /treeView file-treeView --></section>
+<section id="full-api">
 <h2>Full API<a class="headerlink" href="#full-api" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="namespaces">
+<section id="namespaces">
 <h3>Namespaces<a class="headerlink" href="#namespaces" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
@@ -403,8 +405,8 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="classes-and-structs">
+</section>
+<section id="classes-and-structs">
 <h3>Classes and Structs<a class="headerlink" href="#classes-and-structs" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
@@ -478,8 +480,8 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="functions">
+</section>
+<section id="functions">
 <h3>Functions<a class="headerlink" href="#functions" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
@@ -669,6 +671,14 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="function__mesh_helper_8hpp_1abd9072f82e376876267cfabb6d1623c9.html">Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="function__mesh_helper_8hpp_1abd9072f82e376876267cfabb6d1623c9.html#function-documentation">Function Documentation</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="function__mesh_helper_8hpp_1a394d710b518258deec8d884b9737d5bc.html">Function Polylidar::MeshHelper::LaplacianFilterVertices</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="function__mesh_helper_8hpp_1a394d710b518258deec8d884b9737d5bc.html#function-documentation">Function Documentation</a></li>
 </ul>
 </li>
 </ul>
@@ -881,8 +891,8 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="variables">
+</section>
+<section id="variables">
 <h3>Variables<a class="headerlink" href="#variables" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
@@ -948,8 +958,8 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="defines">
+</section>
+<section id="defines">
 <h3>Defines<a class="headerlink" href="#defines" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
@@ -1071,8 +1081,8 @@
 </li>
 </ul>
 </div>
-</div>
-<div class="section" id="typedefs">
+</section>
+<section id="typedefs">
 <h3>Typedefs<a class="headerlink" href="#typedefs" title="Permalink to this headline">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
@@ -1162,9 +1172,9 @@
 </li>
 </ul>
 </div>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
            </div>

@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.polylidarutil.plane_filtering.Polygon &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>polylidar.polylidarutil.plane_filtering.Polygon &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,19 +94,19 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="polylidar.html">polylidar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a><ul class="current">
@@ -123,7 +124,7 @@
 </ul>
 </li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -214,7 +215,7 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="polylidar-polylidarutil-plane-filtering-polygon">
+<section id="polylidar-polylidarutil-plane-filtering-polygon">
 <h1>polylidar.polylidarutil.plane_filtering.Polygon<a class="headerlink" href="#polylidar-polylidarutil-plane-filtering-polygon" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon">
@@ -280,38 +281,57 @@ approximately equal and in the same order for all components of a geometry.</p>
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.buffer">
 <code class="sig-name descname">buffer</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">resolution=16</em>, <em class="sig-param">quadsegs=None</em>, <em class="sig-param">cap_style=1</em>, <em class="sig-param">join_style=1</em>, <em class="sig-param">mitre_limit=5.0</em>, <em class="sig-param">single_sided=False</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.buffer" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns a geometry with an envelope at a distance from the object’s
-envelope</p>
+<dd><p>Get a geometry that represents all points within a distance
+of this geometry.</p>
+<p>A positive distance produces a dilation, a negative distance an
+erosion. A very small or zero distance may sometimes be used to
+“tidy” a polygon.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>distance</strong> (<em>float</em>) – The distance to buffer around the object. A negative distance has a “shrink” effect.
-A zero distance may be used to “tidy” a polygon.</p></li>
-<li><p><strong>resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – The resolution of the buffer around each vertex of the object.</p></li>
-<li><p><strong>quadsegs</strong> (<em>int</em><em>, </em><em>optional</em>) – Sets the number of line segments used to approximate an angle fillet.
-Note: the use of a <cite>quadsegs</cite> parameter is deprecated and will be gone from
-the next major release.</p></li>
-<li><p><strong>cap_style</strong> (<em>int</em><em>, </em><em>optional</em>) – The styles of caps are: CAP_STYLE.round (1), CAP_STYLE.flat (2), and
-CAP_STYLE.square (3).</p></li>
-<li><p><strong>join_style</strong> (<em>int</em><em>, </em><em>optional</em>) – The styles of joins between offset segments are: JOIN_STYLE.round (1),
-JOIN_STYLE.mitre (2), and JOIN_STYLE.bevel (3).</p></li>
-<li><p><strong>mitre_limit</strong> (<em>float</em><em>, </em><em>optional</em>) – The mitre limit ratio is used for very sharp corners. The mitre ratio
-is the ratio of the distance from the corner to the end of the mitred
-offset corner. When two line segments meet at a sharp angle, a miter
-join will extend the original geometry. To prevent unreasonable
-geometry, the mitre limit allows controlling the maximum length of the
-join corner. Corners with a ratio which exceed the limit will be
-beveled.</p></li>
-<li><p><strong>single_side</strong> (<em>bool</em><em>, </em><em>optional</em>) – <dl class="simple">
-<dt>The side used is determined by the sign of the buffer distance:</dt><dd><p>a positive distance indicates the left-hand side
+<li><p><strong>distance</strong> (<em>float</em>) – The distance to buffer around the object.</p></li>
+<li><p><strong>resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – The resolution of the buffer around each vertex of the
+object.</p></li>
+<li><p><strong>quadsegs</strong> (<em>int</em><em>, </em><em>optional</em>) – Sets the number of line segments used to approximate an
+angle fillet.  Note: the use of a <cite>quadsegs</cite> parameter is
+deprecated and will be gone from the next major release.</p></li>
+<li><p><strong>cap_style</strong> (<em>int</em><em>, </em><em>optional</em>) – The styles of caps are: CAP_STYLE.round (1), CAP_STYLE.flat
+(2), and CAP_STYLE.square (3).</p></li>
+<li><p><strong>join_style</strong> (<em>int</em><em>, </em><em>optional</em>) – The styles of joins between offset segments are:
+JOIN_STYLE.round (1), JOIN_STYLE.mitre (2), and
+JOIN_STYLE.bevel (3).</p></li>
+<li><p><strong>mitre_limit</strong> (<em>float</em><em>, </em><em>optional</em>) – The mitre limit ratio is used for very sharp corners. The
+mitre ratio is the ratio of the distance from the corner to
+the end of the mitred offset corner. When two line segments
+meet at a sharp angle, a miter join will extend the original
+geometry. To prevent unreasonable geometry, the mitre limit
+allows controlling the maximum length of the join corner.
+Corners with a ratio which exceed the limit will be beveled.</p></li>
+<li><p><strong>single_side</strong> (<em>bool</em><em>, </em><em>optional</em>) – <p>The side used is determined by the sign of the buffer
+distance:</p>
+<blockquote>
+<div><p>a positive distance indicates the left-hand side
 a negative distance indicates the right-hand side</p>
+</div></blockquote>
+<p>The single-sided buffer of point geometries is the same as
+the regular buffer.  The End Cap Style for single-sided
+buffers is always ignored, and forced to the equivalent of
+CAP_FLAT.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Geometry</p>
 </dd>
 </dl>
-<p>The single-sided buffer of point geometries is the same as the regular buffer.
-The End Cap Style for single-sided buffers is always ignored, and forced to the
-equivalent of CAP_FLAT.</p>
-</p></li>
-<li><p><strong>Example</strong> – <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
+<p class="rubric">Notes</p>
+<p>The return value is a strictly two-dimensional geometry. All
+Z coordinates of the original geometry will be ignored.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s1">&#39;POINT (0.0 0.0)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>        <span class="c1"># 16-gon approx of a unit radius circle</span>
 <span class="go">3.1365484905459389</span>
@@ -325,10 +345,6 @@ equivalent of CAP_FLAT.</p>
 <span class="go">4.0</span>
 </pre></div>
 </div>
-</p></li>
-</ul>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="method">
@@ -369,7 +385,7 @@ equivalent of CAP_FLAT.</p>
 
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.empty">
-<code class="sig-name descname">empty</code><span class="sig-paren">(</span><em class="sig-param">val=2291624810320</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.empty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">empty</code><span class="sig-paren">(</span><em class="sig-param">val=2315954601120</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.empty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -609,7 +625,7 @@ triangular polygon.</p>
 
 <dl class="attribute">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.impl">
-<code class="sig-name descname">impl</code><em class="property"> = &lt;GEOSImpl object: GEOS C API version (1, 8, 0)&gt;</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.impl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">impl</code><em class="property"> = &lt;GEOSImpl object: GEOS C API version (1, 10, 0)&gt;</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -657,6 +673,12 @@ else False</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="polylidar.polylidarutil.plane_filtering.Polygon.minimum_clearance">
+<em class="property">property </em><code class="sig-name descname">minimum_clearance</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.minimum_clearance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Unitless distance by which a node could be moved to produce an invalid geometry (float)</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.minimum_rotated_rectangle">
 <em class="property">property </em><code class="sig-name descname">minimum_rotated_rectangle</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.minimum_rotated_rectangle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the general minimum bounding rectangle of
@@ -696,7 +718,7 @@ is returned.</p>
 
 </dd></dl>
 
-</div>
+</section>
 
 
            </div>

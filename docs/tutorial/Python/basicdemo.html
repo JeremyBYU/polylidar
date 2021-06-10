@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Python Module Overview &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Python Module Overview &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,14 +94,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Python</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Python Module Overview</a></li>
@@ -112,12 +113,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -439,7 +440,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Python-Module-Overview">
+<section id="Python-Module-Overview">
 <h1>Python Module Overview<a class="headerlink" href="#Python-Module-Overview" title="Permalink to this headline">¶</a></h1>
 <p>The <code class="docutils literal notranslate"><span class="pre">Polylidar3D</span></code> and <code class="docutils literal notranslate"><span class="pre">MatrixDouble</span></code> class should be imported from the <code class="docutils literal notranslate"><span class="pre">polylidar</span></code> python module. The <code class="docutils literal notranslate"><span class="pre">Polyldar3D</span></code> has routines to work with 2D point sets. The <code class="docutils literal notranslate"><span class="pre">MatrixDouble</span></code> is simply a wrapper around a numpy object.</p>
 <div class="nbinput nblast docutils container">
@@ -473,8 +474,8 @@ div.rendered_html tbody tr:hover {
 </pre></div>
 </div>
 </div>
-</div>
-<div class="section" id="Unorganized-2D-Point-Sets">
+</section>
+<section id="Unorganized-2D-Point-Sets">
 <h1>Unorganized 2D Point Sets<a class="headerlink" href="#Unorganized-2D-Point-Sets" title="Permalink to this headline">¶</a></h1>
 <p>First we generate two clusters of a 2D point set. Each cluster should have around 1000 points and should be about 100 units away from eachother.</p>
 <div class="nbinput docutils container">
@@ -648,8 +649,8 @@ The first hole of the first polygon, which is associated with the first plane (p
 <img alt="../../_images/tutorial_Python_basicdemo_14_0.png" src="../../_images/tutorial_Python_basicdemo_14_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Unorganized-3D-Point-Clouds">
+</section>
+<section id="Unorganized-3D-Point-Clouds">
 <h1>Unorganized 3D Point Clouds<a class="headerlink" href="#Unorganized-3D-Point-Clouds" title="Permalink to this headline">¶</a></h1>
 <p>Polylidar3D also can create applied to unorganized 3D point clouds. Note this method is only suitable if you know the dominant surface normal of the plane you desire to extract. The 3D point cloud must be rotated such that this surface normal is [0,0,1], i.e., the plane is aligned with the XY Plane. The method relies upon 3D-&gt;2D Projection and performs 2.5D Delaunay Triangulation.</p>
 <p>First we generate a simulated rooftop building with noise. Notice there are two flat surfaces, the blue points and the yellow ponts.</p>
@@ -759,7 +760,7 @@ Should see two planes extracted, please rotate.
 
 </pre></div></div>
 </div>
-</div>
+</section>
 
 
            </div>

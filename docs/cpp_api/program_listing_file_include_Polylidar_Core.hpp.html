@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Program Listing for File Core.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Program Listing for File Core.hpp &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -67,7 +68,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -91,24 +92,24 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -197,7 +198,7 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="program-listing-for-file-core-hpp">
+<section id="program-listing-for-file-core-hpp">
 <span id="program-listing-file-include-polylidar-core-hpp"></span><h1>Program Listing for File Core.hpp<a class="headerlink" href="#program-listing-for-file-core-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file_include_Polylidar_Core.hpp.html#file-include-polylidar-core-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include\Polylidar\Core.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef POLYLIDAR_CORE</span>
@@ -208,13 +209,13 @@
 <span class="cp">#include</span> <span class="cpf">&quot;Polylidar/Utility.hpp&quot;</span><span class="cp"></span>
 <span class="cp">#include</span> <span class="cpf">&quot;Polylidar/Mesh/MeshHelper.hpp&quot;</span><span class="cp"></span>
 
-<span class="k">namespace</span> <span class="n">Polylidar</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="nn">Polylidar</span> <span class="p">{</span>
 
-<span class="k">namespace</span> <span class="n">Core</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="nn">Core</span> <span class="p">{</span>
 
 
 
-<span class="kt">void</span> <span class="n">ExtractMeshSet</span><span class="p">(</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span> <span class="n">tri_set</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">seed_idx</span><span class="p">,</span>
+<span class="kt">void</span> <span class="nf">ExtractMeshSet</span><span class="p">(</span><span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span> <span class="n">tri_set</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">seed_idx</span><span class="p">,</span>
                     <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;</span> <span class="n">candidates</span><span class="p">,</span> <span class="k">const</span> <span class="n">PlaneData</span> <span class="o">&amp;</span><span class="n">plane_data</span><span class="p">,</span> <span class="k">const</span> <span class="kt">double</span> <span class="o">&amp;</span><span class="n">z_thresh</span><span class="p">);</span>
 <span class="kt">void</span> <span class="nf">ConstructPointHash</span><span class="p">(</span><span class="n">VUI</span><span class="o">&amp;</span> <span class="n">plane</span><span class="p">,</span> <span class="n">MeshHelper</span><span class="o">::</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="n">PointHash</span><span class="o">&amp;</span> <span class="n">point_hash</span><span class="p">,</span> <span class="n">EdgeSet</span><span class="o">&amp;</span> <span class="n">edge_hash</span><span class="p">,</span>
                         <span class="n">ExtremePoint</span><span class="o">&amp;</span> <span class="n">xPoint</span><span class="p">,</span> <span class="n">PlaneData</span><span class="o">&amp;</span> <span class="n">plane_data</span><span class="p">);</span>
@@ -319,7 +320,7 @@
 <span class="cp">#endif</span>
 </pre></div>
 </div>
-</div>
+</section>
 
 
            </div>

@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Software Overview &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Software Overview &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,7 +94,7 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Software Overview</a></li>
@@ -110,17 +111,17 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -209,7 +210,7 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="software-overview">
+<section id="software-overview">
 <span id="install-instructions"></span><h1>Software Overview<a class="headerlink" href="#software-overview" title="Permalink to this headline">¶</a></h1>
 <img alt="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" src="https://raw.githubusercontent.com/JeremyBYU/polylidar/major_changes_refactor/assets/polylidar_3D_architecture.jpg" />
 <p>Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized point clouds (e.g., range images), or user provided meshes.
@@ -223,11 +224,11 @@ The dominant plane normal estimation procedure is general and implemented in a s
 This must be installed if you don’t know the dominant plane normals in your data input (very likely for organized point clouds and meshes).
 These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions.
 One day I will try to ease installation burden and automatically pull these dependencies into the build process.</p>
-</div>
-<div class="section" id="id1">
+</section>
+<section id="id1">
 <h1>Install Instructions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
 <p>Installation is entirely through CMake now. You must have CMake 3.14 or higher installed and a C++ compiler with C++ 14 or higher. No built binaries are included currently.</p>
-<div class="section" id="build-project-library">
+<section id="build-project-library">
 <h2>Build Project Library<a class="headerlink" href="#build-project-library" title="Permalink to this headline">¶</a></h2>
 <p>There are several config options which can be specified here during step (2):</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PL_BUILD_BENCHMARKS:BOOL=OFF // PL - Build Benchmarks
@@ -242,7 +243,7 @@ PL_WITH_OPENMP:BOOL=ON // PL - Build with OpenMP Support
 <ol class="arabic simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">mkdir</span> <span class="pre">cmake-build</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">cmake-build</span></code> - create build folder directory</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">..</span> <span class="pre">-DCMAKE_BUILD_TYPE=Release</span> <span class="pre">-DFETCHCONTENT_QUIET=OFF</span> <span class="pre">-DPYTHON_EXECUTABLE=$(python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">sys;</span> <span class="pre">print(sys.executable)&quot;)</span></code> - For windows also add <code class="docutils literal notranslate"><span class="pre">-DCMAKE_GENERATOR_PLATFORM=x64</span></code>. This will take 10-20 minutes while dependencies are being downloaded from Github. Sorry, take a break!</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">.</span> <span class="pre">-j4</span></code> - Build Polylidar3D, change <code class="docutils literal notranslate"><span class="pre">-j4</span></code> to how many processors/threads you have.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">.</span> <span class="pre">--config</span> <span class="pre">Release</span> <span class="pre">-j4</span></code> - Build Polylidar3D, change <code class="docutils literal notranslate"><span class="pre">-j4</span></code> to how many processors/threads you have.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">..</span> <span class="pre">&amp;&amp;</span> <span class="pre">./cmake-build/polylidar-simple</span></code> - Simple test program.</p></li>
 </ol>
 <div class="admonition note">
@@ -250,8 +251,8 @@ PL_WITH_OPENMP:BOOL=ON // PL - Build with OpenMP Support
 <p>There have been some recent issues with CMake not identifying the activated python virtual environment, see <a class="reference external" href="https://github.com/JeremyBYU/polylidar/issues/5">Issue</a> . To fix this add <code class="docutils literal notranslate"><span class="pre">-DPYTHON_EXECUTABLE=$(python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">sys;</span> <span class="pre">print(sys.executable)&quot;)</span></code> to force pybind11 to use your virtualenv python environment.
 I have also noticed that things just “work again” if you use CMake 3.15 or higher as well as upgrade <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> to version 2.6.0. However setting the python executable is simpler and less intrusive.</p>
 </div>
-</div>
-<div class="section" id="build-and-install-python-extension">
+</section>
+<section id="build-and-install-python-extension">
 <h2>Build and Install Python Extension<a class="headerlink" href="#build-and-install-python-extension" title="Permalink to this headline">¶</a></h2>
 <p>The basic setup here is that CMake will build the python extension (.so or .dll) into a standalone folder. Then you use <cite>pip</cite> to install from that folder.</p>
 <ol class="arabic simple">
@@ -269,14 +270,14 @@ I have also noticed that things just “work again” if you use CMake 3.15 or h
 This regression is on versions 0.10 and 0.11 of Open3D. Regression details: <a class="reference external" href="https://github.com/intel-isl/Open3D/pull/2523">Link</a> , <a class="reference external" href="https://github.com/intel-isl/Open3D/issues/2472">Issue1</a> , <a class="reference external" href="https://github.com/intel-isl/Open3D/issues/2157">Issue2</a>.
 I recommend that you stick with 0.9.0, build from master, or wait for 0.12.</p>
 </div>
-</div>
-<div class="section" id="download-example-fixture-data">
+</section>
+<section id="download-example-fixture-data">
 <h2>Download Example/Fixture Data<a class="headerlink" href="#download-example-fixture-data" title="Permalink to this headline">¶</a></h2>
 <p>You can download example data <a class="reference external" href="https://drive.google.com/file/d/1T5u7Cn8H_rWZpugcr_h3VrRx_onTpcX7/view?usp=sharinghttps://drive.google.com/file/d/1T5u7Cn8H_rWZpugcr_h3VrRx_onTpcX7/view?usp=sharing">here</a> . Everything should be placed in the <code class="docutils literal notranslate"><span class="pre">`fixtures`</span></code> folder.</p>
-</div>
-<div class="section" id="c-projects">
+</section>
+<section id="c-projects">
 <h2>C++ Projects<a class="headerlink" href="#c-projects" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="cmake-integration">
+<section id="cmake-integration">
 <h3>CMake Integration<a class="headerlink" href="#cmake-integration" title="Permalink to this headline">¶</a></h3>
 <p>To integrate with a <em>different</em> CMake Project do the following:</p>
 <ol class="arabic simple">
@@ -288,16 +289,16 @@ I recommend that you stick with 0.9.0, build from master, or wait for 0.12.</p>
 target_link_libraries(MY_BINARY polylidar)
 </pre></div>
 </div>
-</div>
-</div>
-<div class="section" id="robust-geometric-predicates">
+</section>
+</section>
+<section id="robust-geometric-predicates">
 <h2>Robust Geometric Predicates<a class="headerlink" href="#robust-geometric-predicates" title="Permalink to this headline">¶</a></h2>
 <p>Delaunator (the 2D triangulation library used for 2D Point Sets and Unorganized 3D Point Clouds) does not use <a class="reference external" href="https://github.com/mikolalysenko/robust-arithmetic-notes">robust geometric predicates</a> for its orientation and incircle tests; <a class="reference external" href="https://github.com/mapbox/delaunator/issues/43">reference</a>.
 This means that the triangulation can be incorrect when points are nearly colinear or cocircular. A library developed by Jonathan Richard Shewchuk provides very fast adaptive precision floating point arithmetic for <a class="reference external" href="https://www.cs.cmu.edu/~quake/robust.html">geometric predicates</a>.
 This library is released in the public domain and an updated version of it is maintained at this <a class="reference external" href="https://github.com/danshapero/predicates">repository</a>. I have included this source code in the folder <code class="docutils literal notranslate"><span class="pre">polylidar/predicates</span></code> .</p>
 <p>If you desire to have robust geometric predicates built into Delaunator you must build with the CMake option. For example <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">..</span> <span class="pre">-DCMAKE_BUILD_TYPE=Release</span> <span class="pre">-DFETCHCONTENT_QUIET=OFF</span> <span class="pre">-DPL_USE_ROBUST_PREDICATES=ON</span></code>.</p>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>

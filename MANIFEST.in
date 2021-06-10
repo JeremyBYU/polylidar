@@ -22,6 +22,8 @@ recursive-include tests *.txt
 recursive-include thirdparty *.cmake
 recursive-include thirdparty *.cpp
 recursive-include thirdparty *.hpp
+recursive-include thirdparty *.h
+recursive-include thirdparty *LICENSE
 recursive-include thirdparty *.in
 recursive-include thirdparty *.md
 recursive-include thirdparty *.py

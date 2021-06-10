@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Program Listing for File Types.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Program Listing for File Types.hpp &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -67,7 +68,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -91,24 +92,24 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -197,7 +198,7 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="program-listing-for-file-types-hpp">
+<section id="program-listing-for-file-types-hpp">
 <span id="program-listing-file-include-polylidar-types-hpp"></span><h1>Program Listing for File Types.hpp<a class="headerlink" href="#program-listing-for-file-types-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file_include_Polylidar_Types.hpp.html#file-include-polylidar-types-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include\Polylidar\Types.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef POLYLIDAR_TYPES</span>
@@ -233,7 +234,7 @@
 <span class="cp">#define PL_DEFAULT_TASK_THREADS 4</span>
 <span class="cp">#define PL_EPS_RADIAN 0.001</span>
 
-<span class="k">namespace</span> <span class="n">Polylidar</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="nn">Polylidar</span> <span class="p">{</span>
 
 <span class="k">using</span> <span class="n">VUI</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="k">using</span> <span class="n">VVUI</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">VUI</span><span class="o">&gt;</span><span class="p">;</span>
@@ -242,12 +243,12 @@
 
 <span class="c1">// Use Parallel Hash Map unless asked not to</span>
 <span class="cp">#ifdef PL_USE_STD_UNORDERED_MAP</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">G</span><span class="o">&gt;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">G</span><span class="o">&gt;</span>
 <span class="k">using</span> <span class="n">unordered_map</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="cp">#else</span>
 <span class="c1">// template &lt;typename T, typename G&gt;</span>
 <span class="c1">// using unordered_map = phmap::flat_hash_map&lt;T, G&gt;;</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">G</span><span class="o">&gt;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">G</span><span class="o">&gt;</span>
 <span class="k">using</span> <span class="n">unordered_map</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="cp">#endif</span>
 
@@ -257,7 +258,7 @@
 
 <span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">PL_DEFAULT_DESIRED_VECTOR</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 <span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">UP_VECTOR</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
-<span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">DOWN_VECTOR</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">};</span>
+<span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">2</span><span class="o">&gt;</span> <span class="n">DOWN_VECTOR</span> <span class="o">=</span> <span class="p">{</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">-1.0</span><span class="p">};</span>
 <span class="k">static</span> <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">9</span><span class="o">&gt;</span> <span class="n">PL_DEFAULT_IDENTITY_RM</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">};</span>
 <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">ZERO_UINT8</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint8_t</span> <span class="n">ONE_UINT8</span> <span class="o">=</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -312,7 +313,7 @@
         <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
     <span class="p">};</span>
 
-    <span class="kt">void</span> <span class="nf">UpdatePtrFromData</span><span class="p">()</span> <span class="p">{</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span> <span class="p">}</span>
+    <span class="kt">void</span> <span class="nf">UpdatePtrFromData</span><span class="p">()</span> <span class="p">{</span> <span class="n">ptr</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="n">data</span><span class="p">();</span> <span class="n">own_data</span><span class="o">=</span><span class="nb">true</span><span class="p">;</span> <span class="p">}</span>
     <span class="kt">void</span> <span class="nf">UpdatePtrFromData</span><span class="p">(</span><span class="k">const</span> <span class="kt">size_t</span> <span class="n">rows_</span><span class="p">,</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">cols_</span><span class="p">)</span>
     <span class="p">{</span>
         <span class="n">rows</span> <span class="o">=</span> <span class="n">rows_</span><span class="p">;</span>
@@ -321,13 +322,13 @@
         <span class="n">own_data</span> <span class="o">=</span> <span class="nb">true</span><span class="p">;</span>
     <span class="p">}</span>
 
-    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span> <span class="n">i</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">j</span><span class="p">)</span> <span class="k">const</span>
+    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="nf">operator</span><span class="p">()(</span><span class="kt">size_t</span> <span class="n">i</span><span class="p">,</span> <span class="kt">size_t</span> <span class="n">j</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">// assert(i &gt;= 0 &amp;&amp; i &lt; rows);</span>
         <span class="c1">// assert(j &gt;= 0 &amp;&amp; j &lt; cols);</span>
         <span class="k">return</span> <span class="n">ptr</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">cols</span> <span class="o">+</span> <span class="n">j</span><span class="p">];</span>
     <span class="p">}</span>
-    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="k">operator</span><span class="p">()(</span><span class="kt">size_t</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
+    <span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="nf">operator</span><span class="p">()(</span><span class="kt">size_t</span> <span class="n">index</span><span class="p">)</span> <span class="k">const</span>
     <span class="p">{</span>
         <span class="c1">// assert(i &gt;= 0 &amp;&amp; i &lt; rows);</span>
         <span class="c1">// assert(j &gt;= 0 &amp;&amp; j &lt; cols);</span>
@@ -350,7 +351,7 @@
     <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="k">struct</span> <span class="n">Polygon</span>
+<span class="k">struct</span> <span class="nc">Polygon</span>
 <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;</span> <span class="n">shell</span><span class="p">;</span>
     <span class="n">VVUI</span> <span class="n">holes</span><span class="p">;</span>
@@ -359,17 +360,17 @@
     <span class="kt">void</span> <span class="n">setHoles</span><span class="p">(</span><span class="n">VVUI</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span> <span class="n">holes</span> <span class="o">=</span> <span class="n">x</span><span class="p">;</span> <span class="p">}</span>
 <span class="p">};</span>
 
-<span class="k">struct</span> <span class="n">ExtremePoint</span>
+<span class="k">struct</span> <span class="nc">ExtremePoint</span>
 <span class="p">{</span>
     <span class="kt">size_t</span> <span class="n">xr_he</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">size_t</span> <span class="n">xr_pi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="kt">double</span> <span class="n">xr_val</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">infinity</span><span class="p">();</span>
+    <span class="kt">double</span> <span class="n">xr_val</span> <span class="o">=</span> <span class="mi">-1</span> <span class="o">*</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">infinity</span><span class="p">();</span>
     <span class="kt">size_t</span> <span class="n">xl_he</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">size_t</span> <span class="n">xl_pi</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
     <span class="kt">double</span> <span class="n">xl_val</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;::</span><span class="n">infinity</span><span class="p">();</span>
 <span class="p">};</span>
 
-<span class="k">struct</span> <span class="n">PlaneData</span>
+<span class="k">struct</span> <span class="nc">PlaneData</span>
 <span class="p">{</span>
     <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">3</span><span class="o">&gt;</span> <span class="n">plane_normal</span> <span class="o">=</span> <span class="n">PL_DEFAULT_DESIRED_VECTOR</span><span class="p">;</span>
     <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span> <span class="mi">9</span><span class="o">&gt;</span> <span class="n">rotation_matrix</span> <span class="o">=</span> <span class="n">PL_DEFAULT_IDENTITY_RM</span><span class="p">;</span>
@@ -384,7 +385,7 @@
 <span class="cp">#endif</span>
 </pre></div>
 </div>
-</div>
+</section>
 
 
            </div>

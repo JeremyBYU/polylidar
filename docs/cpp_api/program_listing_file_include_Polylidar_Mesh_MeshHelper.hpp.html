@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Program Listing for File MeshHelper.hpp &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Program Listing for File MeshHelper.hpp &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -67,7 +68,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -91,24 +92,24 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -197,7 +198,7 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="program-listing-for-file-meshhelper-hpp">
+<section id="program-listing-for-file-meshhelper-hpp">
 <span id="program-listing-file-include-polylidar-mesh-meshhelper-hpp"></span><h1>Program Listing for File MeshHelper.hpp<a class="headerlink" href="#program-listing-for-file-meshhelper-hpp" title="Permalink to this headline">¶</a></h1>
 <p>↰ <a class="reference internal" href="file_include_Polylidar_Mesh_MeshHelper.hpp.html#file-include-polylidar-mesh-meshhelper-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">include\Polylidar\Mesh\MeshHelper.hpp</span></code>)</p>
 <div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#ifndef MESHHELPER</span>
@@ -216,15 +217,15 @@
 <span class="cp">#define PL_OMP_MAX_THREAD_DEPTH_TO_PC 8</span>
 <span class="cp">#endif</span>
 
-<span class="k">namespace</span> <span class="n">Polylidar</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="nn">Polylidar</span> <span class="p">{</span>
 
-<span class="k">namespace</span> <span class="n">MeshHelper</span> <span class="p">{</span>
+<span class="k">namespace</span> <span class="nn">MeshHelper</span> <span class="p">{</span>
 
 <span class="cp">#ifdef PL_USE_STD_UNORDERED_MAP</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">G</span><span class="o">&gt;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">G</span><span class="o">&gt;</span>
 <span class="k">using</span> <span class="n">unordered_map</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">unordered_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="cp">#else</span>
-<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">G</span><span class="o">&gt;</span>
+<span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="nc">T</span><span class="p">,</span> <span class="k">typename</span> <span class="nc">G</span><span class="o">&gt;</span>
 <span class="k">using</span> <span class="n">unordered_map</span> <span class="o">=</span> <span class="n">phmap</span><span class="o">::</span><span class="n">flat_hash_map</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">G</span><span class="o">&gt;</span><span class="p">;</span>
 <span class="cp">#endif</span>
 
@@ -339,6 +340,9 @@
 <span class="n">HalfEdgeTriangulation</span> <span class="nf">CreateTriMeshFromVectors</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;&amp;&amp;</span> <span class="n">vertices</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;&amp;</span> <span class="n">triangles</span><span class="p">,</span>
                                                <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;&amp;&amp;</span> <span class="n">halfedges</span><span class="p">);</span>
 
+
+<span class="kt">void</span> <span class="nf">LaplacianFilterVertices</span><span class="p">(</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iterations</span><span class="p">,</span> <span class="kt">double</span> <span class="n">lambda</span><span class="p">);</span>
+
 <span class="kt">void</span> <span class="nf">BilateralFilterNormals</span><span class="p">(</span><span class="n">HalfEdgeTriangulation</span><span class="o">&amp;</span> <span class="n">mesh</span><span class="p">,</span> <span class="kt">int</span> <span class="n">iterations</span><span class="p">,</span> <span class="kt">double</span> <span class="n">sigma_length</span><span class="p">,</span> <span class="kt">double</span> <span class="n">sigma_angle</span><span class="p">);</span>
 <span class="c1">// TriMesh CreateTriMeshCopy(const double* vertices_ptr, size_t num_vertices, const size_t* triangles_ptr,</span>
 <span class="c1">//                           size_t num_triangles);</span>
@@ -369,7 +373,7 @@
 <span class="cp">#endif</span>
 </pre></div>
 </div>
-</div>
+</section>
 
 
            </div>

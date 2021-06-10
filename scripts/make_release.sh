@@ -14,3 +14,4 @@ then
     python scripts/manage_versions.py --tag
     echo -e "Dont forget to push:\n \t git push origin dev --tags"
 fi
+

@@ -5,10 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Organized 3D Point Clouds &mdash; Polylidar3D 1.0.0 documentation</title>
+  <title>Organized 3D Point Clouds &mdash; Polylidar3D 1.0.1 documentation</title>
   
 
   
@@ -69,7 +70,7 @@
             
             
               <div class="version">
-                1.0.0
+                1.0.1
               </div>
             
           
@@ -93,14 +94,14 @@
               
             
             
-              <p class="caption"><span class="caption-text">Getting Started</span></p>
+              <p><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install_instructions.html">Software Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../builddocs.html">Building Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Tutorial</span></p>
+<p><span class="caption-text">Tutorial</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="index.html">Python</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="basicdemo.html">Python Module Overview</a></li>
@@ -118,12 +119,12 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../C++/index.html">C++</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Python API</span></p>
+<p><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p class="caption"><span class="caption-text">C++ API</span></p>
+<p><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -445,7 +446,7 @@ div.rendered_html tbody tr:hover {
     text-align: unset;
 }
 </style>
-<div class="section" id="Organized-3D-Point-Clouds">
+<section id="Organized-3D-Point-Clouds">
 <h1>Organized 3D Point Clouds<a class="headerlink" href="#Organized-3D-Point-Clouds" title="Permalink to this headline">¶</a></h1>
 <p>We demonstrate Polylidar3D being applied to an organized point cloud. Depth images from an Intel RealSense D435i will be processed. This example is taken from the much more thorough script titled <code class="docutils literal notranslate"><span class="pre">realsense_mesh.py</span></code>. Refer to that script for more details.</p>
 <div class="nbinput nblast docutils container">
@@ -526,7 +527,7 @@ INFO:root:File 4 - Point Cloud; Size: 24817
 </pre></div>
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorial_Python_organizeddemo_5_0.jpeg" src="../../_images/tutorial_Python_organizeddemo_5_0.jpeg" />
+<img alt="../../_images/tutorial_Python_organizeddemo_5_0.jpg" src="../../_images/tutorial_Python_organizeddemo_5_0.jpg" />
 </div>
 </div>
 <div class="nbinput docutils container">
@@ -676,8 +677,8 @@ Number of polygons : 5
 Number of polygons after filtering: 1
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Extract-Dominant-Planes-From-Organized-Point">
+</section>
+<section id="Extract-Dominant-Planes-From-Organized-Point">
 <h1>Extract Dominant Planes From Organized Point<a class="headerlink" href="#Extract-Dominant-Planes-From-Organized-Point" title="Permalink to this headline">¶</a></h1>
 <p>Here we will show another scene where multiple surfaces will be extracted that have different surface normals. Note that you <strong>must</strong> have <a class="reference external" href="https://github.com/JeremyBYU/FastGaussianAccumulator">FastGA</a> installed as well as <a class="reference external" href="https://github.com/JeremyBYU/OrganizedPointFilters">OrganizedPointFilters</a> for this example to work.</p>
 <p>First lets look at some data I took from an L515 RealSense Sensor in my basement. We will load the depth image, our generated <em>organized</em> point cloud from the depth image, and any meta data we will need.</p>
@@ -755,7 +756,7 @@ Depth Intriniscs:
 Note than any invalid depth measurments (e.g. 0) must be converted to nan values!
 </pre></div></div>
 </div>
-<div class="section" id="Visualize-the-Raw-Organized-Point-Cloud">
+<section id="Visualize-the-Raw-Organized-Point-Cloud">
 <h2>Visualize the Raw Organized Point Cloud<a class="headerlink" href="#Visualize-the-Raw-Organized-Point-Cloud" title="Permalink to this headline">¶</a></h2>
 <p>Look at that beautiful L515 Sensor!</p>
 <div class="nbinput nblast docutils container">
@@ -788,8 +789,8 @@ Note than any invalid depth measurments (e.g. 0) must be converted to nan values
 <img alt="../../_images/tutorial_Python_organizeddemo_22_0.png" src="../../_images/tutorial_Python_organizeddemo_22_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Smooth-Point-Cloud-and-Create-Mesh">
+</section>
+<section id="Smooth-Point-Cloud-and-Create-Mesh">
 <h2>Smooth Point Cloud and Create Mesh<a class="headerlink" href="#Smooth-Point-Cloud-and-Create-Mesh" title="Permalink to this headline">¶</a></h2>
 <p>First we need to smooth the point cloud and create a mesh. I have provided a helper module that uses <code class="docutils literal notranslate"><span class="pre">OrganizedPointFilters</span></code> to smooth the OPC. It used both Laplacian and Bilateral filtering. The mesh is then created using procedures in <code class="docutils literal notranslate"><span class="pre">Polylidar3D</span></code> itself. Here are the parameters:</p>
 <div class="nbinput docutils container">
@@ -861,8 +862,8 @@ Note than any invalid depth measurments (e.g. 0) must be converted to nan values
 <img alt="../../_images/tutorial_Python_organizeddemo_27_0.png" src="../../_images/tutorial_Python_organizeddemo_27_0.png" />
 </div>
 </div>
-</div>
-<div class="section" id="Identify-Dominant-Plane-Normals">
+</section>
+<section id="Identify-Dominant-Plane-Normals">
 <h2>Identify Dominant Plane Normals<a class="headerlink" href="#Identify-Dominant-Plane-Normals" title="Permalink to this headline">¶</a></h2>
 <p>Now we will use FastGA to identify all the dominant planes. Here are some helper functions:</p>
 <div class="nbinput nblast docutils container">
@@ -971,8 +972,8 @@ The dominant plane surface normals in the sensor frame of refererence:
  [ 0.         -0.85065081 -0.52573111]]
 </pre></div></div>
 </div>
-</div>
-<div class="section" id="Extract-Planes-and-Polygons-with-Polylidar3D">
+</section>
+<section id="Extract-Planes-and-Polygons-with-Polylidar3D">
 <h2>Extract Planes and Polygons with Polylidar3D<a class="headerlink" href="#Extract-Planes-and-Polygons-with-Polylidar3D" title="Permalink to this headline">¶</a></h2>
 <p>Once again here is a heper function</p>
 <div class="nbinput nblast docutils container">
@@ -1035,8 +1036,8 @@ The dominant plane surface normals in the sensor frame of refererence:
 <img alt="../../_images/tutorial_Python_organizeddemo_37_0.png" src="../../_images/tutorial_Python_organizeddemo_37_0.png" />
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
 
            </div>
