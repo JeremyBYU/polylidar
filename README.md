@@ -35,9 +35,9 @@
 * Python3 bindings using PyBind11
   * Low overhead for calling python/cpp interface (no copying of point cloud data)
 * Python and C++ Examples
-  * Examples from 2D Point Sets, Unorganized 3D point clouds, Organized 3D point clouds (i.e., range images), and user provided meshes
+  * Examples from 2D point sets, unorganized 3D point clouds, organized 3D point clouds (i.e., range images), and user provided meshes
 * Cross platform
-  * Windows and Linux ready.
+  * Windows and Linux ready
 
 Polylidar3D is a non-convex polygon extraction algorithm which takes as input either unorganized 2D point sets, unorganized 3D point clouds (e.g., airborne LiDAR point clouds), organized 3D point clouds (e.g., range images), or user provided meshes. In 3D, the non-convex polygons extracted represent flat surfaces in an environment, while interior holes represent obstacles on said surfaces. The picture above provides an examples of Polylidar3D extracting polygons from a 2D point set and a 3D triangular mesh; green is the concave hull and orange are interior holes. Polylidar3D outputs *planar* triangular segments and their polygonal representations. Polylidar3D is extremely fast, taking as little as a few milliseconds and makes use of CPU multi-threading and GPU acceleration when available.
 
@@ -52,17 +52,18 @@ Please see [documentation](https://jeremybyu.github.io/polylidar/) for installat
 ## Polylidar Use Cases
 
 * [Polylidar-RealSense](https://github.com/JeremyBYU/polylidar-realsense) - Live ground floor detection with Intel RealSense camera using Polylidar
-* [Polylidar-KITTI](https://github.com/JeremyBYU/polylidar-kitti) - Street surface and obstacle detection from autonomous driving platform.
-* [PolylidarWeb](https://github.com/JeremyBYU/polylidarweb). An very old Typescript (javascript) version with live demos of Polylidar2D.
-* [Concave-Evaluation](https://github.com/JeremyBYU/concavehull-evaluation) - Evaluates and benchmarks several competing concavehull algorithms.
+* [Polylidar-KITTI](https://github.com/JeremyBYU/polylidar-kitti) - Street surface and obstacle detection from autonomous driving platform
+* [PolylidarWeb](https://github.com/JeremyBYU/polylidarweb). An very old Typescript (javascript) version with live demos of Polylidar2D
+* [Concave-Evaluation](https://github.com/JeremyBYU/concavehull-evaluation) - Evaluates and benchmarks several competing concavehull algorithms
 
 ## Credits
 
 This software is only possible because of the great work from the following open source packages:
 
-* [Delaunator](https://github.com/mapbox/delaunator) - Original triangulation library 
+* [Delaunator](https://github.com/mapbox/delaunator) - Original triangulation library
 * [DelaunatorCPP](https://github.com/delfrrr/delaunator-cpp) - Delaunator ported to C++ (used)
-* [parallel-hashmap](https://github.com/greg7mdp/parallel-hashmap) - Very fast hashmap library (used)
+* [parallel-hashmap](https://github.com/greg7mdp/parallel-hashmap) - Fast hashmap library (used)
+* [marl](https://github.com/google/marl) - A parallel thread/fiber task scheduler (used)
 * [PyBind11](https://github.com/pybind/pybind11) - Python C++ Binding (used)
 * [Robust Geometric Predicates](https://www.cs.cmu.edu/~quake/robust.html) - Original Robust Geometric predicates
 * [Updated Predicates](https://github.com/danshapero/predicates) -Updated geometric predicate library (used)
@@ -71,10 +72,10 @@ This software is only possible because of the great work from the following open
 
 ### 2D ConcaveHull Extraction
 
-* [CGAL Alpha Shapes](https://doc.cgal.org/latest/Alpha_shapes_2/index.html) - MultiPolygon with holes.
-* [PostGIS ConcaveHull](http://postgis.net/docs/ST_ConcaveHull.html) - Single Polygon with holes.
-* [Spatialite ConcaveHull](https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0) - MultiPolygon with holes.
-* [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets.
+* [CGAL Alpha Shapes](https://doc.cgal.org/latest/Alpha_shapes_2/index.html) - MultiPolygon with holes
+* [PostGIS ConcaveHull](http://postgis.net/docs/ST_ConcaveHull.html) - Single Polygon with holes
+* [Spatialite ConcaveHull](https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0) - MultiPolygon with holes
+* [Concaveman](https://github.com/mapbox/concaveman) - A 2D concave hull extraction algorithm for 2D point sets
 
 
 ## Contributing
@@ -111,15 +112,15 @@ J. Castagno and E. Atkins, "Polylidar3D - Fast Polygon Extraction from 3D Data,"
 
 ```
 @Article{s20174819,
-AUTHOR = {Castagno, Jeremy and Atkins, Ella},
-TITLE = {Polylidar3D-Fast Polygon Extraction from 3D Data},
-JOURNAL = {Sensors},
-VOLUME = {20},
-YEAR = {2020},
-NUMBER = {17},
-ARTICLE-NUMBER = {4819},
-URL = {https://www.mdpi.com/1424-8220/20/17/4819},
-ISSN = {1424-8220}
+author = {Castagno, Jeremy and Atkins, Ella},
+title = {Polylidar3D-Fast Polygon Extraction from 3D Data},
+journal = {Sensors},
+volume = {20},
+year = {2020},
+number = {17},
+article-number = {4819},
+url = {https://www.mdpi.com/1424-8220/20/17/4819},
+issn = {1424-8220}
 }
 ```
 
