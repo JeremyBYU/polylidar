@@ -2,6 +2,8 @@ name: Wheels
 
 on:
   push:
+    branches:
+      - dev
     tags:
       - v*
 env:
@@ -73,7 +75,7 @@ jobs:
           #   python-arch: x86
           #   cmake-arch: -A Win32
     env:
-      CIBW_SKIP: "cp27-* cp35-* pp27-* pp36-* pp37-*"
+      CIBW_SKIP: "cp27-* cp35-* pp*"
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
@@ -81,7 +83,7 @@ jobs:
       - name: Set up Python version
         uses: actions/setup-python@v2
         with:
-          python-version: 3.6
+          python-version: 3.8
 
       - name: Install OpenMP for MacOS
         if: ${{ matrix.os == 'macos-latest' }}

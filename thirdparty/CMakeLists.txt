@@ -3,7 +3,7 @@ include(FetchContent)
 FetchContent_Declare(
   extern_pybind11
   GIT_REPOSITORY https://github.com/pybind/pybind11.git
-  GIT_TAG        v2.4.3
+  GIT_TAG        v2.9.1
   GIT_PROGRESS   TRUE
 )
 
