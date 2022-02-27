@@ -19,6 +19,10 @@ jobs:
       matrix:
         os: ['ubuntu-latest', 'windows-latest', 'macos-latest']
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10' ]
+        exclude:
+          # excludes 3.10 on macOS
+          - os: macos-latest
+            python-version: '3.10'
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -29,9 +33,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           architecture: x64
 
-      - name: Install OpenMP for MacOS
-        if: ${{ matrix.os == 'macos-latest' }}
-        run: brew install libomp
+      # - name: Install OpenMP for MacOS
+      #   if: ${{ matrix.os == 'macos-latest' }}
+      #   run: brew install libomp
 
       - name: Setup CMake
         uses: jwlawson/actions-setup-cmake@v1.9

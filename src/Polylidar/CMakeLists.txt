@@ -72,7 +72,7 @@ get_target_property(phmap_include_dirs phmap INTERFACE_INCLUDE_DIRECTORIES)
 target_include_directories(${PROJECT_NAME} SYSTEM PUBLIC ${phmap_include_dirs})
 
 # OPTION Build with OpenMP Support
-if (PL_WITH_OPENMP)
+if (PL_WITH_OPENMP AND NOT APPLE)
   find_package(OpenMP)
   target_link_libraries(${PROJECT_NAME} PRIVATE OpenMP::OpenMP_CXX)
 endif()
