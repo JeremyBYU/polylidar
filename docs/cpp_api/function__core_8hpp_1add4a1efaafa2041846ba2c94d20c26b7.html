@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Function Polylidar::Utility::CreateMultiplePlaneDataFromNormals &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>Function Polylidar::Core::ConcaveSection &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Function Polylidar::Utility::GetAllVertexClasses" href="function__utility_8hpp_1abd490d4eba9cfea63b99fa22b66e095b.html" />
-    <link rel="prev" title="Function Polylidar::Utility::CircumsribedRadius" href="function__utility_8hpp_1ad3899922c5306e5c2fe940b0b5116302.html" /> 
+    <link rel="next" title="Function Polylidar::Core::ConstructPointHash" href="function__core_8hpp_1a85802683bd9f7f8dba26d1729ad120cf.html" />
+    <link rel="prev" title="Class Timer" href="class_polylidar_1_1_utility_1_1_timer.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -161,7 +161,7 @@
         
           <li><a href="cpp_library_root.html">C++ Library API</a> &raquo;</li>
         
-      <li>Function Polylidar::Utility::CreateMultiplePlaneDataFromNormals</li>
+      <li>Function Polylidar::Core::ConcaveSection</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -202,16 +202,16 @@
     text-align: unset;
 }
 </style>
-<section id="function-polylidar-utility-createmultipleplanedatafromnormals">
-<span id="exhale-function-utility-8hpp-1a65067c8fdc2aa0938ff50e7d1a06e30d"></span><h1>Function Polylidar::Utility::CreateMultiplePlaneDataFromNormals<a class="headerlink" href="#function-polylidar-utility-createmultipleplanedatafromnormals" title="Permalink to this headline">¶</a></h1>
+<section id="function-polylidar-core-concavesection">
+<span id="exhale-function-core-8hpp-1add4a1efaafa2041846ba2c94d20c26b7"></span><h1>Function Polylidar::Core::ConcaveSection<a class="headerlink" href="#function-polylidar-core-concavesection" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_include_Polylidar_Utility.hpp.html#file-include-polylidar-utility-hpp"><span class="std std-ref">File Utility.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_include_Polylidar_Core.hpp.html#file-include-polylidar-core-hpp"><span class="std std-ref">File Core.hpp</span></a></p></li>
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="_CPPv4N9Polylidar7Utility34CreateMultiplePlaneDataFromNormalsERK6MatrixIdE">
-<span class="target" id="_utility_8hpp_1a65067c8fdc2aa0938ff50e7d1a06e30d"></span>std::vector&lt;<a class="reference internal" href="struct_polylidar_1_1_plane_data.html#_CPPv4N9Polylidar9PlaneDataE" title="Polylidar::PlaneData">PlaneData</a>&gt; <code class="sig-prename descclassname">Polylidar::Utility<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">CreateMultiplePlaneDataFromNormals</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;double&gt; &amp;<em>normals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar7Utility34CreateMultiplePlaneDataFromNormalsERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9Polylidar4Core14ConcaveSectionER9PointHashR7EdgeSetRN10MeshHelper21HalfEdgeTriangulationE6size_t6size_tR9PlaneData">
+<span class="target" id="_core_8hpp_1add4a1efaafa2041846ba2c94d20c26b7"></span>std::vector&lt;size_t&gt; <code class="sig-prename descclassname">Polylidar::Core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ConcaveSection</code><span class="sig-paren">(</span><a class="reference internal" href="typedef__types_8hpp_1a1e2a29b8f7fee3fa66e78ab6aa1f7767.html#_CPPv4N9Polylidar9PointHashE" title="Polylidar::PointHash">PointHash</a> &amp;<em>pointHash</em>, <a class="reference internal" href="typedef__types_8hpp_1ac93001b58b8f7837585ecb11570954e2.html#_CPPv4N9Polylidar7EdgeSetE" title="Polylidar::EdgeSet">EdgeSet</a> &amp;<em>edgeHash</em>, MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, size_t <em>startEdge</em>, size_t <em>stopPoint</em>, <a class="reference internal" href="struct_polylidar_1_1_plane_data.html#_CPPv4N9Polylidar9PlaneDataE" title="Polylidar::PlaneData">PlaneData</a> &amp;<em>plane_data</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar4Core14ConcaveSectionER9PointHashR7EdgeSetRN10MeshHelper21HalfEdgeTriangulationE6size_t6size_tR9PlaneData" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </section>
@@ -225,10 +225,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="function__utility_8hpp_1abd490d4eba9cfea63b99fa22b66e095b.html" class="btn btn-neutral float-right" title="Function Polylidar::Utility::GetAllVertexClasses" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="function__core_8hpp_1a85802683bd9f7f8dba26d1729ad120cf.html" class="btn btn-neutral float-right" title="Function Polylidar::Core::ConstructPointHash" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="function__utility_8hpp_1ad3899922c5306e5c2fe940b0b5116302.html" class="btn btn-neutral float-left" title="Function Polylidar::Utility::CircumsribedRadius" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="class_polylidar_1_1_utility_1_1_timer.html" class="btn btn-neutral float-left" title="Class Timer" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

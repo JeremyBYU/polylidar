@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Function Polylidar::Core::GetVector &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>Function Polylidar::Utility::Math::RotateVector &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Function Polylidar::Core::nextHalfedge" href="function__core_8hpp_1ab98cac6c050263d49ddef3bcf0d14036.html" />
-    <link rel="prev" title="Function Polylidar::Core::GetHullEdge" href="function__core_8hpp_1a1f316f22f93e14c1a249b69beebba10b.html" /> 
+    <link rel="next" title="Function Polylidar::Utility::Math::Subtract(const std::array&lt;double, 3&gt;&amp;, const std::array&lt;double, 3&gt;&amp;, std::array&lt;double, 3&gt;&amp;)" href="function__utility_math_8hpp_1a466c1d74ae5b142b06bbce541aa90053.html" />
+    <link rel="prev" title="Function Polylidar::Utility::Math::Normalize3" href="function__utility_math_8hpp_1aae7fdef8c6c54ef9852b116ac45be081.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -161,7 +161,7 @@
         
           <li><a href="cpp_library_root.html">C++ Library API</a> &raquo;</li>
         
-      <li>Function Polylidar::Core::GetVector</li>
+      <li>Function Polylidar::Utility::Math::RotateVector</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -202,16 +202,16 @@
     text-align: unset;
 }
 </style>
-<section id="function-polylidar-core-getvector">
-<span id="exhale-function-core-8hpp-1a7cc0d7e17f881358aef19cdd492e9052"></span><h1>Function Polylidar::Core::GetVector<a class="headerlink" href="#function-polylidar-core-getvector" title="Permalink to this headline">¶</a></h1>
+<section id="function-polylidar-utility-math-rotatevector">
+<span id="exhale-function-utility-math-8hpp-1ad83063c4e395cce3d244fe54abdaee46"></span><h1>Function Polylidar::Utility::Math::RotateVector<a class="headerlink" href="#function-polylidar-utility-math-rotatevector" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><p>Defined in <a class="reference internal" href="file_include_Polylidar_Core.hpp.html#file-include-polylidar-core-hpp"><span class="std std-ref">File Core.hpp</span></a></p></li>
+<li><p>Defined in <a class="reference internal" href="file_include_Polylidar_UtilityMath.hpp.html#file-include-polylidar-utilitymath-hpp"><span class="std std-ref">File UtilityMath.hpp</span></a></p></li>
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="_CPPv4N9Polylidar4Core9GetVectorE6size_tRN10MeshHelper21HalfEdgeTriangulationERNSt5arrayIdXL9EEEERbb">
-<span class="target" id="_core_8hpp_1a7cc0d7e17f881358aef19cdd492e9052"></span>std::array&lt;double, 2&gt; <code class="sig-prename descclassname">Polylidar::Core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">GetVector</code><span class="sig-paren">(</span>size_t <em>edge</em>, MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, std::array&lt;double, 9&gt; &amp;<em>rm</em>, bool &amp;<em>need_rotation</em>, bool <em>flip</em> = false<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar4Core9GetVectorE6size_tRN10MeshHelper21HalfEdgeTriangulationERNSt5arrayIdXL9EEEERbb" title="Permalink to this definition">¶</a><br /></dt>
+<dt id="_CPPv4N9Polylidar7Utility4Math12RotateVectorEPKdRKNSt5arrayIdXL9EEEE">
+<span class="target" id="_utility_math_8hpp_1ad83063c4e395cce3d244fe54abdaee46"></span>std::array&lt;double, 3&gt; <code class="sig-prename descclassname">Polylidar::Utility::Math<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">RotateVector</code><span class="sig-paren">(</span><em class="property">const</em> double *<em>v1</em>, <em class="property">const</em> std::array&lt;double, 9&gt; &amp;<em>rm</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar7Utility4Math12RotateVectorEPKdRKNSt5arrayIdXL9EEEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </section>
@@ -225,10 +225,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="function__core_8hpp_1ab98cac6c050263d49ddef3bcf0d14036.html" class="btn btn-neutral float-right" title="Function Polylidar::Core::nextHalfedge" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="function__utility_math_8hpp_1a466c1d74ae5b142b06bbce541aa90053.html" class="btn btn-neutral float-right" title="Function Polylidar::Utility::Math::Subtract(const std::array&lt;double, 3&gt;&amp;, const std::array&lt;double, 3&gt;&amp;, std::array&lt;double, 3&gt;&amp;)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="function__core_8hpp_1a1f316f22f93e14c1a249b69beebba10b.html" class="btn btn-neutral float-left" title="Function Polylidar::Core::GetHullEdge" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="function__utility_math_8hpp_1aae7fdef8c6c54ef9852b116ac45be081.html" class="btn btn-neutral float-left" title="Function Polylidar::Utility::Math::Normalize3" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

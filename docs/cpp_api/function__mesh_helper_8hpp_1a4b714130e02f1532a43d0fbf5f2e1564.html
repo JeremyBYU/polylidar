@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -42,8 +42,8 @@
   <link rel="stylesheet" href="../_static/theme_overrides.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Function Polylidar::MeshHelper::LaplacianFilterVertices" href="function__mesh_helper_8hpp_1a394d710b518258deec8d884b9737d5bc.html" />
-    <link rel="prev" title="Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud" href="function__mesh_helper_8hpp_1af40fc576d59f20f9eb24f59334aa8367.html" /> 
+    <link rel="next" title="Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth" href="function__mesh_helper_8hpp_1ac0df864c0d84953a2168aae444463f45.html" />
+    <link rel="prev" title="Function Polylidar::MeshHelper::ExtractTriMeshFromFloatDepth" href="function__mesh_helper_8hpp_1af2f5a484e368296155be589dc1582d17.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -161,7 +161,7 @@
         
           <li><a href="cpp_library_root.html">C++ Library API</a> &raquo;</li>
         
-      <li>Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth</li>
+      <li>Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -202,25 +202,26 @@
     text-align: unset;
 }
 </style>
-<section id="function-polylidar-meshhelper-extractuniformmeshfromfloatdepth">
-<span id="exhale-function-mesh-helper-8hpp-1abd9072f82e376876267cfabb6d1623c9"></span><h1>Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth<a class="headerlink" href="#function-polylidar-meshhelper-extractuniformmeshfromfloatdepth" title="Permalink to this headline">¶</a></h1>
+<section id="function-polylidar-meshhelper-extracttrimeshfromorganizedpointcloud">
+<span id="exhale-function-mesh-helper-8hpp-1a4b714130e02f1532a43d0fbf5f2e1564"></span><h1>Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud<a class="headerlink" href="#function-polylidar-meshhelper-extracttrimeshfromorganizedpointcloud" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
 <li><p>Defined in <a class="reference internal" href="file_include_Polylidar_Mesh_MeshHelper.hpp.html#file-include-polylidar-mesh-meshhelper-hpp"><span class="std std-ref">File MeshHelper.hpp</span></a></p></li>
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
-<dt id="_CPPv4N9Polylidar10MeshHelper32ExtractUniformMeshFromFloatDepthERK6MatrixIfERK6MatrixIdERK6MatrixIdEK6size_t">
-<span class="target" id="_mesh_helper_8hpp_1abd9072f82e376876267cfabb6d1623c9"></span>std::tuple&lt;std::vector&lt;double&gt;, std::vector&lt;size_t&gt;, std::vector&lt;size_t&gt;&gt; <code class="sig-prename descclassname">Polylidar::MeshHelper<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ExtractUniformMeshFromFloatDepth</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;float&gt; &amp;<em>im</em>, <em class="property">const</em> Matrix&lt;double&gt; &amp;<em>intrinsics</em>, <em class="property">const</em> Matrix&lt;double&gt; &amp;<em>extrinsics</em>, <em class="property">const</em> size_t <em>stride</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10MeshHelper32ExtractUniformMeshFromFloatDepthERK6MatrixIfERK6MatrixIdERK6MatrixIdEK6size_t" title="Permalink to this definition">¶</a><br /></dt>
-<dd><p>Extracts a Half-Edge Triangulated mesh (Uniform Mesh/Right Cut Mesh) from a depth image Mesh is returned as vertices, triangles, and halfedges TODO: Make this private? </p>
+<dt id="_CPPv4N9Polylidar10MeshHelper37ExtractTriMeshFromOrganizedPointCloudER6MatrixIdEK6size_tK6size_tK6size_tKb">
+<span class="target" id="_mesh_helper_8hpp_1a4b714130e02f1532a43d0fbf5f2e1564"></span>std::tuple&lt;<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a>, <a class="reference internal" href="typedef__types_8hpp_1a9d00629f79c841e79a258bb36637cb32.html#_CPPv4N9Polylidar3VUIE" title="Polylidar::VUI">VUI</a>&gt; <code class="sig-prename descclassname">Polylidar::MeshHelper<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">ExtractTriMeshFromOrganizedPointCloud</code><span class="sig-paren">(</span>Matrix&lt;double&gt; &amp;<em>points_2D</em>, <em class="property">const</em> size_t <em>rows</em>, <em class="property">const</em> size_t <em>cols</em>, <em class="property">const</em> size_t <em>stride</em>, <em class="property">const</em> bool <em>calc_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10MeshHelper37ExtractTriMeshFromOrganizedPointCloudER6MatrixIdEK6size_tK6size_tK6size_tKb" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Extracts a Half-Edge Triangulated mesh (Uniform Mesh/Right Cut Mesh) from an organized point cloud Returns mesh and T_map. T_map is the valid triangle set that maps between the complete fully connected mesh and all triangles returned. You will mostly likely <em>not</em> need T_map and can safely discard. </p>
 <p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;std::vector&lt;double&gt;, std::vector&lt;size_t&gt;, std::vector&lt;size_t&gt;&gt; </p>
+<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;HalfEdgeTriangulation, VUI&gt; </p>
 </dd>
 <dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">im</span></code>: The float depth image. Organized into rows and columns and gives distance along z-axis to surface </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">intrinsics</span></code>: Intrinsics of the camera sensor (3 X 3) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">extrinsics</span></code>: Extrinsics of the camera, send identity matrix when in doubt (4 X 4) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">stride</span></code>: Can stride over rows/cols for faster computation </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">points_2D</span></code>: Organized Point Cloud </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">rows</span></code>: Rows in organized point clouds </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">cols</span></code>: Columns in organized point cloud </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stride</span></code>: Stride Level </p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">calc_normals</span></code>: Will calculate triangle normals if requested </p></li>
 </ul>
 </dd>
 </dl>
@@ -238,10 +239,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="function__mesh_helper_8hpp_1a394d710b518258deec8d884b9737d5bc.html" class="btn btn-neutral float-right" title="Function Polylidar::MeshHelper::LaplacianFilterVertices" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="function__mesh_helper_8hpp_1ac0df864c0d84953a2168aae444463f45.html" class="btn btn-neutral float-right" title="Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="function__mesh_helper_8hpp_1af40fc576d59f20f9eb24f59334aa8367.html" class="btn btn-neutral float-left" title="Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="function__mesh_helper_8hpp_1af2f5a484e368296155be589dc1582d17.html" class="btn btn-neutral float-left" title="Function Polylidar::MeshHelper::ExtractTriMeshFromFloatDepth" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

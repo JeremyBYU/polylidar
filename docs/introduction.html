@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Introducing Polylidar3D &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>Introducing Polylidar3D &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -108,14 +108,14 @@
 <li class="toctree-l2"><a class="reference internal" href="#contributing">Contributing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#citation">Citation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#d">2D</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1">3D</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#d-1">3D</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#license">License</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -255,12 +255,12 @@
 </li>
 <li><p>Python and C++ Examples</p>
 <ul>
-<li><p>Examples from 2D Point Sets, Unorganized 3D point clouds, Organized 3D point clouds (i.e., range images), and user provided meshes</p></li>
+<li><p>Examples from 2D point sets, unorganized 3D point clouds, organized 3D point clouds (i.e., range images), and user provided meshes</p></li>
 </ul>
 </li>
 <li><p>Cross platform</p>
 <ul>
-<li><p>Windows and Linux ready.</p></li>
+<li><p>Windows and Linux ready</p></li>
 </ul>
 </li>
 </ul>
@@ -276,9 +276,9 @@
 <h2>Polylidar Use Cases<a class="headerlink" href="#polylidar-use-cases" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidar-realsense">Polylidar-RealSense</a> - Live ground floor detection with Intel RealSense camera using Polylidar</p></li>
-<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidar-kitti">Polylidar-KITTI</a> - Street surface and obstacle detection from autonomous driving platform.</p></li>
-<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidarweb">PolylidarWeb</a>. An very old Typescript (javascript) version with live demos of Polylidar2D.</p></li>
-<li><p><a class="reference external" href="https://github.com/JeremyBYU/concavehull-evaluation">Concave-Evaluation</a> - Evaluates and benchmarks several competing concavehull algorithms.</p></li>
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidar-kitti">Polylidar-KITTI</a> - Street surface and obstacle detection from autonomous driving platform</p></li>
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/polylidarweb">PolylidarWeb</a>. An very old Typescript (javascript) version with live demos of Polylidar2D</p></li>
+<li><p><a class="reference external" href="https://github.com/JeremyBYU/concavehull-evaluation">Concave-Evaluation</a> - Evaluates and benchmarks several competing concavehull algorithms</p></li>
 </ul>
 </section>
 <section id="credits">
@@ -287,7 +287,8 @@
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/mapbox/delaunator">Delaunator</a> - Original triangulation library</p></li>
 <li><p><a class="reference external" href="https://github.com/delfrrr/delaunator-cpp">DelaunatorCPP</a> - Delaunator ported to C++ (used)</p></li>
-<li><p><a class="reference external" href="https://github.com/greg7mdp/parallel-hashmap">parallel-hashmap</a> - Very fast hashmap library (used)</p></li>
+<li><p><a class="reference external" href="https://github.com/greg7mdp/parallel-hashmap">parallel-hashmap</a> - Fast hashmap library (used)</p></li>
+<li><p><a class="reference external" href="https://github.com/google/marl">marl</a> - A parallel thread/fiber task scheduler (used)</p></li>
 <li><p><a class="reference external" href="https://github.com/pybind/pybind11">PyBind11</a> - Python C++ Binding (used)</p></li>
 <li><p><a class="reference external" href="https://www.cs.cmu.edu/~quake/robust.html">Robust Geometric Predicates</a> - Original Robust Geometric predicates</p></li>
 <li><p><a class="reference external" href="https://github.com/danshapero/predicates">Updated Predicates</a> -Updated geometric predicate library (used)</p></li>
@@ -298,10 +299,10 @@
 <section id="d-concavehull-extraction">
 <h3>2D ConcaveHull Extraction<a class="headerlink" href="#d-concavehull-extraction" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p><a class="reference external" href="https://doc.cgal.org/latest/Alpha_shapes_2/index.html">CGAL Alpha Shapes</a> - MultiPolygon with holes.</p></li>
-<li><p><a class="reference external" href="http://postgis.net/docs/ST_ConcaveHull.html">PostGIS ConcaveHull</a> - Single Polygon with holes.</p></li>
-<li><p><a class="reference external" href="https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0">Spatialite ConcaveHull</a> - MultiPolygon with holes.</p></li>
-<li><p><a class="reference external" href="https://github.com/mapbox/concaveman">Concaveman</a> - A 2D concave hull extraction algorithm for 2D point sets.</p></li>
+<li><p><a class="reference external" href="https://doc.cgal.org/latest/Alpha_shapes_2/index.html">CGAL Alpha Shapes</a> - MultiPolygon with holes</p></li>
+<li><p><a class="reference external" href="http://postgis.net/docs/ST_ConcaveHull.html">PostGIS ConcaveHull</a> - Single Polygon with holes</p></li>
+<li><p><a class="reference external" href="https://www.gaia-gis.it/fossil/libspatialite/wiki?name=tesselations-4.0">Spatialite ConcaveHull</a> - MultiPolygon with holes</p></li>
+<li><p><a class="reference external" href="https://github.com/mapbox/concaveman">Concaveman</a> - A 2D concave hull extraction algorithm for 2D point sets</p></li>
 </ul>
 </section>
 </section>
@@ -328,21 +329,21 @@
 </pre></div>
 </div>
 </section>
-<section id="id1">
-<h3>3D<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<section id="d-1">
+<h3>3D<a class="headerlink" href="#d-1" title="Permalink to this headline">¶</a></h3>
 <p>If you are using Polylidar3D for 3D work please cite:</p>
 <p>J. Castagno and E. Atkins, “Polylidar3D - Fast Polygon Extraction from 3D Data,” in MDPI Sensors, vol. 20, no.17, 4819, September 2020, doi: 10.3390/s20174819
 <a class="reference external" href="https://www.mdpi.com/1424-8220/20/17/4819">Link to Paper</a></p>
 <div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>@Article{s20174819,
-AUTHOR = {Castagno, Jeremy and Atkins, Ella},
-TITLE = {Polylidar3D-Fast Polygon Extraction from 3D Data},
-JOURNAL = {Sensors},
-VOLUME = {20},
-YEAR = {2020},
-NUMBER = {17},
-ARTICLE-NUMBER = {4819},
-URL = {https://www.mdpi.com/1424-8220/20/17/4819},
-ISSN = {1424-8220}
+author = {Castagno, Jeremy and Atkins, Ella},
+title = {Polylidar3D-Fast Polygon Extraction from 3D Data},
+journal = {Sensors},
+volume = {20},
+year = {2020},
+number = {17},
+article-number = {4819},
+url = {https://www.mdpi.com/1424-8220/20/17/4819},
+issn = {1424-8220}
 }
 </pre></div>
 </div>

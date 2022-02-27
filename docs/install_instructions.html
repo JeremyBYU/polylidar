@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Software Overview &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>Software Overview &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="#id1">Install Instructions</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="#install-instructions-1">Install Instructions</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#build-project-library">Build Project Library</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build-and-install-python-extension">Build and Install Python Extension</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#download-example-fixture-data">Download Example/Fixture Data</a></li>
@@ -225,18 +225,21 @@ This must be installed if you don’t know the dominant plane normals in your da
 These modules themselves are written in C++ as well with Python bindings; see the respective repos for installation instructions.
 One day I will try to ease installation burden and automatically pull these dependencies into the build process.</p>
 </section>
-<section id="id1">
-<h1>Install Instructions<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<p>Installation is entirely through CMake now. You must have CMake 3.14 or higher installed and a C++ compiler with C++ 14 or higher. No built binaries are included currently.</p>
+<section id="install-instructions-1">
+<h1>Install Instructions<a class="headerlink" href="#install-instructions-1" title="Permalink to this headline">¶</a></h1>
+<p>If you just want to install the python bindings and have a supported architecture, use pip: <cite>pip install polylidar</cite>. Binary wheels have been created for Windows, Linux, and MacOS.
+If this fails see below to install from source.</p>
 <section id="build-project-library">
 <h2>Build Project Library<a class="headerlink" href="#build-project-library" title="Permalink to this headline">¶</a></h2>
-<p>There are several config options which can be specified here during step (2):</p>
+<p>This instructions are for people who want to modify Poylidar3D’s code and are focused on the C++ library. Building and subsequent installation is entirely through CMake now. You must have CMake 3.14 or higher installed and a C++ compiler with C++ 14 or higher. No built binaries are included currently.
+There are several config options which can be specified here during step (2):</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>PL_BUILD_BENCHMARKS:BOOL=OFF // PL - Build Benchmarks
 PL_BUILD_EXAMPLES:BOOL=ON // PL - Build Examples
 PL_BUILD_PYMODULE:BOOL=ON // PL -Build Python Module
 PL_BUILD_TESTS:BOOL=ON // PL - Build Tests
 PL_BUILD_WERROR:BOOL=OFF // PL - Add Werror flag to build (turns warnings into errors)
 PL_USE_ROBUST_PREDICATES:BOOL=OFF // PL - Use Robust Geometric Predicates
+PL_BUILD_FASTGA=OFF // PL - Build FastGA with Example&quot;
 PL_WITH_OPENMP:BOOL=ON // PL - Build with OpenMP Support
 </pre></div>
 </div>
@@ -250,7 +253,7 @@ PL_WITH_OPENMP:BOOL=ON // PL - Build with OpenMP Support
 <p class="admonition-title">Note</p>
 <p>There have been some recent issues with CMake not identifying the activated python virtual environment, see <a class="reference external" href="https://github.com/JeremyBYU/polylidar/issues/5">Issue</a> . To fix this add <code class="docutils literal notranslate"><span class="pre">-DPYTHON_EXECUTABLE=$(python3</span> <span class="pre">-c</span> <span class="pre">&quot;import</span> <span class="pre">sys;</span> <span class="pre">print(sys.executable)&quot;)</span></code> to force pybind11 to use your virtualenv python environment.
 I have also noticed that things just “work again” if you use CMake 3.15 or higher as well as upgrade <code class="docutils literal notranslate"><span class="pre">pybind11</span></code> to version 2.6.0. However setting the python executable is simpler and less intrusive.</p>
-</div>
+</aside>
 </section>
 <section id="build-and-install-python-extension">
 <h2>Build and Install Python Extension<a class="headerlink" href="#build-and-install-python-extension" title="Permalink to this headline">¶</a></h2>
@@ -269,7 +272,7 @@ I have also noticed that things just “work again” if you use CMake 3.15 or h
 <p>Polylidar3D uses Open3D to visualize 3D geometries (pointclouds, polygons, meshes, etc.). A recent version of Open3D has a serious performance regression which causes severe slowdown during visualization.
 This regression is on versions 0.10 and 0.11 of Open3D. Regression details: <a class="reference external" href="https://github.com/intel-isl/Open3D/pull/2523">Link</a> , <a class="reference external" href="https://github.com/intel-isl/Open3D/issues/2472">Issue1</a> , <a class="reference external" href="https://github.com/intel-isl/Open3D/issues/2157">Issue2</a>.
 I recommend that you stick with 0.9.0, build from master, or wait for 0.12.</p>
-</div>
+</aside>
 </section>
 <section id="download-example-fixture-data">
 <h2>Download Example/Fixture Data<a class="headerlink" href="#download-example-fixture-data" title="Permalink to this headline">¶</a></h2>

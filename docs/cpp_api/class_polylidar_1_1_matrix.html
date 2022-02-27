@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Template Class Matrix &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>Template Class Matrix &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -297,7 +297,7 @@
 
 <dl class="function">
 <dt id="_CPPv4N9Polylidar6MatrixaSERK6MatrixI1TE">
-<span class="target" id="class_polylidar_1_1_matrix_1af30dc1ccc8cdf6f06dc901b2967b1fdf"></span>Matrix&lt;T&gt; &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6MatrixaSERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="class_polylidar_1_1_matrix_1a4d1d77d7bca765cd09132b2a9262795b"></span>Matrix&lt;T&gt; &amp;<code class="sig-name descname">operator=</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;T&gt; &amp;<em>a</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar6MatrixaSERK6MatrixI1TE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Copy assignment operator This one is a little tricky. We make a copy of every element in the data. However if we own the data we reassign <code class="docutils literal notranslate"><span class="pre">ptr</span></code> to belong to our new copied buffer. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>Matrix&lt;T&gt;&amp; </p>
@@ -332,7 +332,7 @@
 
 <dl class="function">
 <dt id="_CPPv4NK9Polylidar6MatrixclE6size_t6size_t">
-<span class="target" id="class_polylidar_1_1_matrix_1a189b2f3705d5e26d96a2c971410a6d6b"></span><em class="property">const</em> T &amp;<code class="sig-name descname">operator()</code><span class="sig-paren">(</span>size_t <em>i</em>, size_t <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9Polylidar6MatrixclE6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="class_polylidar_1_1_matrix_1ac888665efad12c6ced8d28441b9a8c93"></span><em class="property">const</em> T &amp;<code class="sig-name descname">operator()</code><span class="sig-paren">(</span>size_t <em>i</em>, size_t <em>j</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9Polylidar6MatrixclE6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Acces an element of the <a class="reference internal" href="#class_polylidar_1_1_matrix"><span class="std std-ref">Matrix</span></a> using 2D indices. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>const T&amp; </p>
@@ -348,7 +348,7 @@
 
 <dl class="function">
 <dt id="_CPPv4NK9Polylidar6MatrixclE6size_t">
-<span class="target" id="class_polylidar_1_1_matrix_1abdcd70b6323ec7bb8dfb3d6966bb275c"></span><em class="property">const</em> T &amp;<code class="sig-name descname">operator()</code><span class="sig-paren">(</span>size_t <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9Polylidar6MatrixclE6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="class_polylidar_1_1_matrix_1aa3cf2634f925e3cc37deaaa0ac9b1b97"></span><em class="property">const</em> T &amp;<code class="sig-name descname">operator()</code><span class="sig-paren">(</span>size_t <em>index</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK9Polylidar6MatrixclE6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Access an element in the matrix using its underlying buffer 1D index. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>const T&amp; </p>
@@ -399,7 +399,7 @@
 <p class="breathe-sectiondef-title rubric">Public Static Functions</p>
 <dl class="function">
 <dt id="_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t">
-<span class="target" id="class_polylidar_1_1_matrix_1abb771623be1ae371269f0e03a75612d2"></span>template&lt;class <code class="sig-name descname">G</code>&gt;<br /><em class="property">static</em> Matrix&lt;T&gt; <code class="sig-name descname">CopyFromDifferentType</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t" title="Polylidar::Matrix::CopyFromDifferentType::G">G</a> *<em>ptr_from</em>, size_t <em>rows</em>, size_t <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<span class="target" id="class_polylidar_1_1_matrix_1af04aae76486ac4fbadc320c1757c0c12"></span>template&lt;class <code class="sig-name descname">G</code>&gt;<br /><em class="property">static</em> Matrix&lt;T&gt; <code class="sig-name descname">CopyFromDifferentType</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t" title="Polylidar::Matrix::CopyFromDifferentType::G">G</a> *<em>ptr_from</em>, size_t <em>rows</em>, size_t <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN9Polylidar6Matrix21CopyFromDifferentTypeE6MatrixI1TEP1G6size_t6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This actually performs a memory copy from an unknown buffer of one type (G) to <em>our</em> buffer of a different type (T). We own this new copied data. </p>
 <p><dl class="simple">
 <dt><strong>Return</strong></dt><dd><p>Matrix&lt;T&gt; </p>

@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.create_tri_mesh_copy &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>polylidar.create_tri_mesh_copy &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -232,14 +232,14 @@
 <code class="sig-prename descclassname">polylidar.</code><code class="sig-name descname">create_tri_mesh_copy</code><span class="sig-paren">(</span><em class="sig-param">vertices</em>, <em class="sig-param">triangles</em>, <em class="sig-param">calc_normals=True</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.create_tri_mesh_copy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a copy of a tri mesh, triangles of int dtype. Mostly used for Open3D triangles.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vertices</strong> (<em>polylidar_pybind.MatrixDouble</em>) – Triangle vertices in Matrix Form</p></li>
 <li><p><strong>triangles</strong> (<em>polylidar_pybind.MatrixInt</em>) – Triangle point indices in Matrix Form</p></li>
 <li><p><strong>calc_normals</strong> (<em>bool</em><em>, </em><em>optional</em><em>, </em><em>default=True</em>) – Compute triangle normals.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>polylidar_pybind.HalfEdgeTriangulation</p>
 </dd>
 </dl>

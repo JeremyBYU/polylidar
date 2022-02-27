@@ -23,11 +23,14 @@ One day I will try to ease installation burden and automatically pull these depe
 Install Instructions
 ====================
 
-Installation is entirely through CMake now. You must have CMake 3.14 or higher installed and a C++ compiler with C++ 14 or higher. No built binaries are included currently.
+
+If you just want to install the python bindings and have a supported architecture, use pip: `pip install polylidar`. Binary wheels have been created for Windows, Linux, and MacOS.
+If this fails see below to install from source.
 
 Build Project Library
 ------------------------------------
 
+This instructions are for people who want to modify Poylidar3D's code and are focused on the C++ library. Building and subsequent installation is entirely through CMake now. You must have CMake 3.14 or higher installed and a C++ compiler with C++ 14 or higher. No built binaries are included currently.
 There are several config options which can be specified here during step (2):
 
 .. code:: text
@@ -38,6 +41,7 @@ There are several config options which can be specified here during step (2):
     PL_BUILD_TESTS:BOOL=ON // PL - Build Tests
     PL_BUILD_WERROR:BOOL=OFF // PL - Add Werror flag to build (turns warnings into errors)
     PL_USE_ROBUST_PREDICATES:BOOL=OFF // PL - Use Robust Geometric Predicates
+    PL_BUILD_FASTGA=OFF // PL - Build FastGA with Example"
     PL_WITH_OPENMP:BOOL=ON // PL - Build with OpenMP Support
 
 

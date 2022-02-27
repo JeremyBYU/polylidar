@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.polylidarutil.plane_filtering.Polygon &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>polylidar.polylidarutil.plane_filtering.Polygon &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -229,7 +229,7 @@ other, the feature is invalid and operations on it may fail.</p>
 <code class="sig-name descname">exterior</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.exterior" title="Permalink to this definition">¶</a></dt>
 <dd><p>The ring which bounds the positive space of the polygon.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>LinearRing</p>
 </dd>
 </dl>
@@ -240,7 +240,7 @@ other, the feature is invalid and operations on it may fail.</p>
 <code class="sig-name descname">interiors</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.interiors" title="Permalink to this definition">¶</a></dt>
 <dd><p>A sequence of rings which bound all existing holes.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>sequence</p>
 </dd>
 </dl>
@@ -250,7 +250,7 @@ other, the feature is invalid and operations on it may fail.</p>
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">holes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>shell</strong> (<em>sequence</em>) – A sequence of (x, y [,z]) numeric coordinate pairs or triples.
 Also can be a sequence of Point objects.</p></li>
@@ -272,10 +272,37 @@ shell parameters above</p></li>
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.almost_equals">
 <code class="sig-name descname">almost_equals</code><span class="sig-paren">(</span><em class="sig-param">other</em>, <em class="sig-param">decimal=6</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.almost_equals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if geometries are equal at all coordinates to a
-specified decimal place</p>
-<p>Refers to approximate coordinate equality, which requires coordinates be
-approximately equal and in the same order for all components of a geometry.</p>
+<dd><p>True if geometries are equal at all coordinates to a
+specified decimal place.</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 1.8.0: </span>The ‘almost_equals()’ method is deprecated
+and will be removed in Shapely 2.0 because the name is
+confusing. The ‘equals_exact()’ method should be used
+instead.</p>
+</div>
+<p>Refers to approximate coordinate equality, which requires
+coordinates to be approximately equal and in the same order for
+all components of a geometry.</p>
+<p>Because of this it is possible for “equals()” to be True for two
+geometries and “almost_equals()” to be False.</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="mf">1e-6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -287,7 +314,7 @@ of this geometry.</p>
 erosion. A very small or zero distance may sometimes be used to
 “tidy” a polygon.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>distance</strong> (<em>float</em>) – The distance to buffer around the object.</p></li>
 <li><p><strong>resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – The resolution of the buffer around each vertex of the
@@ -320,10 +347,10 @@ CAP_FLAT.</p>
 </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p></p>
 </dd>
-<dt class="field-odd">Return type</dt>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Geometry</p>
 </dd>
 </dl>
@@ -334,10 +361,10 @@ Z coordinates of the original geometry will be ignored.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s1">&#39;POINT (0.0 0.0)&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>        <span class="c1"># 16-gon approx of a unit radius circle</span>
-<span class="go">3.1365484905459389</span>
+<span class="go">3.1365484905459...</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>   <span class="c1"># 128-gon approximation</span>
-<span class="go">3.1415138011443009</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>     <span class="c1"># triangle approximation</span>
+<span class="go">3.141513801144...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># triangle approximation</span>
 <span class="go">3.0</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">CAP_STYLE</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 <span class="go">[(1.0, 1.0), (1.0, -1.0), (-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0)]</span>
@@ -351,6 +378,12 @@ Z coordinates of the original geometry will be ignored.</p>
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.contains">
 <code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the geometry contains the other, else False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.polylidarutil.plane_filtering.Polygon.covered_by">
+<code class="sig-name descname">covered_by</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.covered_by" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the geometry is covered by the other, else False</p>
 </dd></dl>
 
 <dl class="method">
@@ -385,24 +418,71 @@ Z coordinates of the original geometry will be ignored.</p>
 
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.empty">
-<code class="sig-name descname">empty</code><span class="sig-paren">(</span><em class="sig-param">val=2116294291136</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.empty" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">empty</code><span class="sig-paren">(</span><em class="sig-param">val=2390515819584</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.empty" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.equals">
 <code class="sig-name descname">equals</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.equals" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if geometries are equal, else False</p>
-<p>Refers to point-set equality (or topological equality), and is equivalent to
-(self.within(other) &amp; self.contains(other))</p>
+<dd><p>Returns True if geometries are equal, else False.</p>
+<p>This method considers point-set equality (or topological
+equality), and is equivalent to (self.within(other) &amp;
+self.contains(other)).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.equals_exact">
 <code class="sig-name descname">equals_exact</code><span class="sig-paren">(</span><em class="sig-param">other</em>, <em class="sig-param">tolerance</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.equals_exact" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if geometries are equal to within a specified
-tolerance</p>
-<p>Refers to coordinate equality, which requires coordinates to be equal
-and in the same order for all components of a geometry</p>
+<dd><p>True if geometries are equal to within a specified
+tolerance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>other</strong> (<em>BaseGeometry</em>) – The other geometry object in this comparison.</p></li>
+<li><p><strong>tolerance</strong> (<em>float</em>) – Absolute tolerance in the same units as coordinates.</p></li>
+<li><p><strong>method considers coordinate equality</strong><strong>, </strong><strong>which requires</strong> (<em>This</em>) – </p></li>
+<li><p><strong>to be equal and in the same order for all components</strong> (<em>coordinates</em>) – </p></li>
+<li><p><strong>a geometry.</strong> (<em>of</em>) – </p></li>
+<li><p><strong>of this it is possible for &quot;equals</strong><strong>(</strong><strong>)</strong><strong>&quot; to be True for two</strong> (<em>Because</em>) – </p></li>
+<li><p><strong>and &quot;equals_exact</strong><strong>(</strong><strong>)</strong><strong>&quot; to be False.</strong> (<em>geometries</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span>
+<span class="gp">... </span><span class="p">)</span><span class="o">.</span><span class="n">equals_exact</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]),</span>
+<span class="gp">... </span>    <span class="mf">1e-6</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -443,6 +523,22 @@ fraction of the geometry’s length.</p>
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.intersects">
 <code class="sig-name descname">intersects</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.intersects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries intersect, else False</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="polylidar.polylidarutil.plane_filtering.Polygon.normalize">
+<code class="sig-name descname">normalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts geometry to normal form (or canonical form).</p>
+<p>This method orders the coordinates, rings of a polygon and parts of
+multi geometries consistently. Typically useful for testing purposes
+(for example in combination with <cite>equals_exact</cite>).</p>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s2">&quot;MULTILINESTRING((0 0, 1 1), (3 3, 2 2))&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span><span class="o">.</span><span class="n">wkt</span>
+<span class="go">&#39;MULTILINESTRING ((2 2, 3 3), (0 0, 1 1))&#39;</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -493,14 +589,15 @@ otherwise invalid geometries.</p>
 
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.svg">
-<code class="sig-name descname">svg</code><span class="sig-paren">(</span><em class="sig-param">scale_factor=1.0</em>, <em class="sig-param">fill_color=None</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.svg" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">svg</code><span class="sig-paren">(</span><em class="sig-param">scale_factor=1.0</em>, <em class="sig-param">fill_color=None</em>, <em class="sig-param">opacity=None</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.svg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns SVG path element for the Polygon geometry.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>scale_factor</strong> (<em>float</em>) – Multiplication factor for the SVG stroke-width.  Default is 1.</p></li>
 <li><p><strong>fill_color</strong> (<em>str</em><em>, </em><em>optional</em>) – Hex string for fill color. Default is to use “#66cc99” if
 geometry is valid, and “#ff3333” if invalid.</p></li>
+<li><p><strong>opacity</strong> (<em>float</em>) – Float number between 0 and 1 for color opacity. Default value is 0.6</p></li>
 </ul>
 </dd>
 </dl>
@@ -512,16 +609,6 @@ geometry is valid, and “#ff3333” if invalid.</p></li>
 <dd><p>Returns the symmetric difference of the geometries
 (Shapely geometry)</p>
 </dd></dl>
-
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.to_wkb">
-<code class="sig-name descname">to_wkb</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.to_wkb" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.to_wkt">
-<code class="sig-name descname">to_wkt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.to_wkt" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 <dl class="method">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.touches">
@@ -581,7 +668,7 @@ convex hull, more or less</p>
 <p>The convex hull of a three member multipoint, for example, is a
 triangular polygon.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type</dt>
+<dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Imagine an elastic band stretched around the geometry</p>
 </dd>
 </dl>
@@ -625,7 +712,7 @@ triangular polygon.</p>
 
 <dl class="attribute">
 <dt id="polylidar.polylidarutil.plane_filtering.Polygon.impl">
-<code class="sig-name descname">impl</code><em class="property"> = &lt;GEOSImpl object: GEOS C API version (1, 10, 0)&gt;</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.impl" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">impl</code><em class="property"> = &lt;GEOSImpl object: GEOS C API version (1, 13, 0)&gt;</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.impl" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">

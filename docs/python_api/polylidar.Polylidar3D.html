@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.Polylidar3D &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>polylidar.Polylidar3D &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -236,7 +236,7 @@
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">alpha=0.0</em>, <em class="sig-param">lmax=1.0</em>, <em class="sig-param">min_triangles=20</em>, <em class="sig-param">min_hole_vertices=3</em>, <em class="sig-param">z_thresh=0.0</em>, <em class="sig-param">norm_thresh=0.9</em>, <em class="sig-param">norm_thresh_min=0.9</em>, <em class="sig-param">task_threads=4</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.Polylidar3D.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Constructs a Polylidar3D object.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>alpha</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=0.0</em>) – Maximum circumcircle radius of a triangle. Filters ‘big’ triangles. Only applicable for 2D point sets. A value of 0.0 makes this parameter ignored.</p></li>
 <li><p><strong>lmax</strong> (<em>float</em><em>, </em><em>optional</em><em>, </em><em>default=1.0</em>) – Maximum triangle edge length of a triangle in a planar segment. Filters ‘big’ triangles.</p></li>
@@ -248,7 +248,7 @@
 <li><p><strong>task_threads</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default=4</em>) – Number of task threads that can be spawned.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>None</p>
 </dd>
 </dl>
@@ -297,13 +297,13 @@
 <code class="sig-name descname">extract_tri_set</code><span class="sig-paren">(</span><em class="sig-param">self</em>, <em class="sig-param">mesh</em>, <em class="sig-param">plane_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.Polylidar3D.extract_tri_set" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extract the triangle set (dominant planar grouping) for each triangle. This is used for debugging/visualization.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>mesh</strong> (<em>polylidar_pybind.HalfEdgeTriangulation</em>) – </p></li>
 <li><p><strong>plane_normals</strong> (<em>polylidar_pybind.MatrixDouble</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>polylidar_pybind.VectorUInt8</p>
 </dd>
 </dl>

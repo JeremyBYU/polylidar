@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.polylidarutil.plane_filtering.filter_planes_and_holes &mdash; Polylidar3D 1.0.5 documentation</title>
+  <title>polylidar.polylidarutil.plane_filtering.filter_planes_and_holes &mdash; Polylidar3D 1.0.6 documentation</title>
   
 
   
@@ -70,7 +70,7 @@
             
             
               <div class="version">
-                1.0.5
+                1.0.6
               </div>
             
           
@@ -98,7 +98,7 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
 <p><span class="caption-text">Tutorial</span></p>
@@ -254,7 +254,7 @@ align with they XY plane (Shapely can only handle 2D polygons with XY coordinate
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>{list</strong><strong>[</strong><strong>Polygons</strong><strong>]</strong><strong>} -- A list of polygons returned from polylidar</strong> (<em>polygons</em>) – </p></li>
 <li><p><strong>{ndarray} -- MX3 array</strong> (<em>points</em>) – </p></li>
@@ -262,7 +262,7 @@ align with they XY plane (Shapely can only handle 2D polygons with XY coordinate
 <li><p><strong>{scipy.spatial.RotationMatrix} -- Rotation matrix applied to 3D polygons to make 2D</strong> (<em>rm</em>) – </p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>tuple – A list of plane shapely polygons and a list of holes in polygons</p>
 </dd>
 </dl>
