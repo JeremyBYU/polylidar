@@ -7,7 +7,7 @@ scipy
 open3d
 
 # Documentation Generation Packages
-notebook==5.7.10
+notebook==6.4.10
 Sphinx==2.4.4
 sphinx_rtd_theme==0.4.3
 exhale==0.2.3
