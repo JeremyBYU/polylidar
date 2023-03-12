@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Function Polylidar::Core::fast_mod &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>Function Polylidar::Core::fast_mod &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,26 +92,92 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_library_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#classes-and-structs">Classes and Structs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_library_root.html#functions">Functions</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1add4a1efaafa2041846ba2c94d20c26b7.html">Function Polylidar::Core::ConcaveSection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1a85802683bd9f7f8dba26d1729ad120cf.html">Function Polylidar::Core::ConstructPointHash</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1a2009c70a2125ad04dd6e40e10bcbdb6a.html">Function Polylidar::Core::ExtractConcaveHull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1a70489c955319359ace18fef3176f2de1.html">Function Polylidar::Core::ExtractConcaveHulls</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1adde24b475c79c5e0be903f2b028b33d9.html">Function Polylidar::Core::ExtractInteriorHoles</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1ac88b3986070c1372fc522341a6514f15.html">Function Polylidar::Core::ExtractMeshSet</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Function Polylidar::Core::fast_mod</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1a1f316f22f93e14c1a249b69beebba10b.html">Function Polylidar::Core::GetHullEdge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1a3263a29f4127df8843e459510f6d97e5.html">Function Polylidar::Core::GetVector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1ab98cac6c050263d49ddef3bcf0d14036.html">Function Polylidar::Core::nextHalfedge</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__core_8hpp_1a4b9651a843a1229e8ca0dbd3156febcc.html">Function Polylidar::Core::PassPlaneConstraints</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a32ed1d575166842388914c19dbf4ee37.html">Function Polylidar::GetPolylidarVersion</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a0a5f2849ec799733e0f81afd6bed52b8.html">Function Polylidar::MeshHelper::BilateralFilterNormals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a8253ecf63b14865cd30a37d80f7ebb7b.html">Function Polylidar::MeshHelper::CantorMapping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a0795f32234b0753964afbba2e25b11f1.html">Function Polylidar::MeshHelper::ComputeTriangleNormals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a0fcc773725c30395ec9e9ffa9039b828.html">Function Polylidar::MeshHelper::ComputeTriangleNormalsFromMatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a3ee540b953482106943613bfc88bb702.html">Function Polylidar::MeshHelper::CreateTriMeshCopy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a6dcf4d32a3ee2497c6a6531242b1ab96.html">Function Polylidar::MeshHelper::CreateTriMeshFromVectors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a2d4bb214cc0b745369fa53d794809aa5.html">Function Polylidar::MeshHelper::ExtractHalfEdges</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1ad5eec264e9112ea3274fd0e482c0b860.html">Function Polylidar::MeshHelper::ExtractHalfEdgesMatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a3f6f46f413ce11ac7ff641e5be6228a8.html">Function Polylidar::MeshHelper::ExtractPointCloudFromFloatDepth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1af2f5a484e368296155be589dc1582d17.html">Function Polylidar::MeshHelper::ExtractTriMeshFromFloatDepth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a4b714130e02f1532a43d0fbf5f2e1564.html">Function Polylidar::MeshHelper::ExtractTriMeshFromOrganizedPointCloud</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1ac0df864c0d84953a2168aae444463f45.html">Function Polylidar::MeshHelper::ExtractUniformMeshFromFloatDepth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__mesh_helper_8hpp_1a394d710b518258deec8d884b9737d5bc.html">Function Polylidar::MeshHelper::LaplacianFilterVertices</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a1f9f63580a80812a401deff72b328fd2.html">Function Polylidar::RobustPredicatesActivated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1adf0acd4d7f0129216d005c5048828863.html">Function Polylidar::Utility::CheckZThresh</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1ad3899922c5306e5c2fe940b0b5116302.html">Function Polylidar::Utility::CircumsribedRadius</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1af486b42b4386373131e33d10effa2089.html">Function Polylidar::Utility::CreateMultiplePlaneDataFromNormals</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1abd490d4eba9cfea63b99fa22b66e095b.html">Function Polylidar::Utility::GetAllVertexClasses</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a0564ff05b3cece45c33d3da2be2a3d18.html">Function Polylidar::Utility::GetMaxEdgeLength</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1af2b8f0dfdf23b0c7867c60290dd20209.html">Function Polylidar::Utility::GetMaxEdgeLength3D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a26a15551cd5a1a9ab3505d972ff59357.html">Function Polylidar::Utility::Math::AxisAngleFromVectors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a5d203b5b0dbaad40858e729adf651b49.html">Function Polylidar::Utility::Math::AxisAngleToRotationMatrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a72028d52fab531c7e7d3402e2459214b.html">Function Polylidar::Utility::Math::CrossProduct3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1ae03792bc59ac31647991255e5943c95d.html">Function Polylidar::Utility::Math::Determinant</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a468a3acbfb944236a42464f59fb3fd2c.html">Function Polylidar::Utility::Math::DotProduct2</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a2eb226872f1b37bf51e22ce02cab642f.html">Function Polylidar::Utility::Math::DotProduct3(const std::array&lt;double, 3&gt;&amp;, const std::array&lt;double, 3&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1ad4cf028794ad41b5b96aa3410f5ee676.html">Function Polylidar::Utility::Math::DotProduct3(const double *, const std::array&lt;double, 3&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a8244427fefea52816f58db3d959c1f51.html">Function Polylidar::Utility::Math::Get360Angle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1af05c745bac954b5612ce0770794c7ee7.html">Function Polylidar::Utility::Math::L2Norm</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a63c41a05f6be15da2be8b5c1aeb76e3b.html">Function Polylidar::Utility::Math::L2Norm3D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1aae7fdef8c6c54ef9852b116ac45be081.html">Function Polylidar::Utility::Math::Normalize3</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1ad83063c4e395cce3d244fe54abdaee46.html">Function Polylidar::Utility::Math::RotateVector</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1a466c1d74ae5b142b06bbce541aa90053.html">Function Polylidar::Utility::Math::Subtract(const std::array&lt;double, 3&gt;&amp;, const std::array&lt;double, 3&gt;&amp;, std::array&lt;double, 3&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_math_8hpp_1af16ec1926a2335a668880e0951205474.html">Function Polylidar::Utility::Math::Subtract(const double *, const double *, std::array&lt;double, 3&gt;&amp;)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a80a81b1bc1d0622a664461278f812c6b.html">Function Polylidar::Utility::operator””_z</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1accdcc0ee5e84acf219e509dd656bae4a.html">Function Polylidar::Utility::UpdatePlaneDataWithRotationInformation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a3492984e36d695d627dbee908655bda9.html">Function Polylidar::Utility::ValidateTriangle2D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a6279e829eac7208343304e98af7edd2c.html">Function Polylidar::Utility::ValidateTriangle3D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="function__utility_8hpp_1a897603d7c94440bdc16cd802109e7322.html">Function Polylidar::Utility::ValidateTriangleLength</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#defines">Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -209,9 +273,9 @@
 </ul>
 <section id="function-documentation">
 <h2>Function Documentation<a class="headerlink" href="#function-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="function">
-<dt id="_CPPv4N9Polylidar4Core8fast_modEK6size_tK6size_t">
-<span class="target" id="_core_8hpp_1af677514aacc51035b4e2d05bba23ca05"></span>size_t <code class="sig-prename descclassname">Polylidar::Core<code class="sig-prename descclassname">::</code></code><code class="sig-name descname">fast_mod</code><span class="sig-paren">(</span><em class="property">const</em> size_t <em>i</em>, <em class="property">const</em> size_t <em>c</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar4Core8fast_modEK6size_tK6size_t" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar4Core8fast_modEK6size_tK6size_t">
+<span class="target" id="_core_8hpp_1af677514aacc51035b4e2d05bba23ca05"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Polylidar</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Core</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">fast_mod</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">c</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar4Core8fast_modEK6size_tK6size_t" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </section>

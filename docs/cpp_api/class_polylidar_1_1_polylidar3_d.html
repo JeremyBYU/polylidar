@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class Polylidar3D &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>Class Polylidar3D &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,26 +92,49 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_library_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_library_root.html#classes-and-structs">Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_extreme_point.html">Struct ExtremePoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_plane_data.html">Struct PlaneData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_polygon.html">Struct Polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_delaunator_1_1_delaunator.html">Class Delaunator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_matrix.html">Template Class Matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html">Class HalfEdgeTriangulation</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Class Polylidar3D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_utility_1_1_timer.html">Class Timer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#defines">Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -209,186 +230,193 @@
 </ul>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="_CPPv4N9Polylidar11Polylidar3DE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d"></span><em class="property">class </em><code class="sig-name descname">Polylidar3D</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3DE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3DE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Polylidar</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Polylidar3D</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3DE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>This class handles all data inputs: 2D points sets, 3D point clouds, 3D meshes. Will extract polygons from data. The only issue is the ‘_alpha’ parameter is only applicable for 2D point sets. TODO - Break up into 2D and 3D classes? </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D11Polylidar3DEKdKdK6size_tK6size_tKdKdKdKi">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1ad364596af53dd07be92ed1e9329eb951"></span><code class="sig-name descname">Polylidar3D</code><span class="sig-paren">(</span><em class="property">const</em> double <em>_alpha</em> = PL_DEFAULT_ALPHA, <em class="property">const</em> double <em>_lmax</em> = PL_DEFAULT_LMAX, <em class="property">const</em> size_t <em>_min_triangles</em> = PL_DEFAULT_MINTRIANGLES, <em class="property">const</em> size_t <em>_min_hole_vertices</em> = PL_DEFAULT_MINHOLEVERTICES, <em class="property">const</em> double <em>_z_thresh</em> = PL_DEFAULT_ZTHRESH, <em class="property">const</em> double <em>_norm_thresh</em> = PL_DEFAULT_NORMTHRESH, <em class="property">const</em> double <em>_norm_thresh_min</em> = PL_DEFAULT_NORMTHRESH_MIN, <em class="property">const</em> int <em>_task_threads</em> = PL_DEFAULT_TASK_THREADS<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D11Polylidar3DEKdKdK6size_tK6size_tKdKdKdKi" title="Permalink to this definition">¶</a><br /></dt>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D11Polylidar3DEKdKdK6size_tK6size_tKdKdKdKi">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1ad364596af53dd07be92ed1e9329eb951"></span><span class="sig-name descname"><span class="n"><span class="pre">Polylidar3D</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_alpha</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_ALPHA</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_lmax</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_LMAX</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_min_triangles</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_MINTRIANGLES</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_min_hole_vertices</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_MINHOLEVERTICES</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_z_thresh</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_ZTHRESH</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_norm_thresh</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_NORMTHRESH</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_norm_thresh_min</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_NORMTHRESH_MIN</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">_task_threads</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="n"><span class="pre">PL_DEFAULT_TASK_THREADS</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D11Polylidar3DEKdKdK6size_tK6size_tKdKdKdKi" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Construct a new Polylidar 3D object. </p>
-<p><dl class="simple">
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">_alpha</span></code>: Maximum circumcircle radius (only applicable for 2D point sets). Leave at 0.0 for 3D Data. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_lmax</span></code>: Maximum triangle edge length in a planar triangle segment </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_min_triangles</span></code>: Minimum number of triangles in a planar triangle segment </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_min_hole_vertices</span></code>: Minimum number of vertices for an interior hole in a polygon </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_z_thresh</span></code>: Maximum point to plane distance during region growing (3D only). A value of 0.0 ignores this constraint. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_norm_thresh</span></code>: IGNORE - will be deprecated or repurposed (3D only) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_norm_thresh_min</span></code>: Minimum value of the dot product between a triangle and surface normal being extracted (3D only) </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">_task_threads</span></code>: Number of threads for task-based parallelism (Marl library) </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>_alpha</strong> – Maximum circumcircle radius (only applicable for 2D point sets). Leave at 0.0 for 3D Data. </p></li>
+<li><p><strong>_lmax</strong> – Maximum triangle edge length in a planar triangle segment </p></li>
+<li><p><strong>_min_triangles</strong> – Minimum number of triangles in a planar triangle segment </p></li>
+<li><p><strong>_min_hole_vertices</strong> – Minimum number of vertices for an interior hole in a polygon </p></li>
+<li><p><strong>_z_thresh</strong> – Maximum point to plane distance during region growing (3D only). A value of 0.0 ignores this constraint. </p></li>
+<li><p><strong>_norm_thresh</strong> – IGNORE - will be deprecated or repurposed (3D only) </p></li>
+<li><p><strong>_norm_thresh_min</strong> – Minimum value of the dot product between a triangle and surface normal being extracted (3D only) </p></li>
+<li><p><strong>_task_threads</strong> – Number of threads for task-based parallelism (Marl library) </p></li>
 </ul>
 </dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERK6MatrixIdEKNSt5arrayIdXL3EEEE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1ad918d125129d838750004d776ce16dae"></span>std::tuple&lt;MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a>, <a class="reference internal" href="typedef__types_8hpp_1a6783a447a165ea396cf8858152752049.html#_CPPv4N9Polylidar6PlanesE" title="Polylidar::Planes">Planes</a>, <a class="reference internal" href="typedef__types_8hpp_1a979e2b7eb8f15adb3f986eccc3fdc0a7.html#_CPPv4N9Polylidar8PolygonsE" title="Polylidar::Polygons">Polygons</a>&gt; <code class="sig-name descname">ExtractPlanesAndPolygons</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;double&gt; &amp;<em>points</em>, <em class="property">const</em> std::array&lt;double, 3&gt; <em>plane_normal</em> = <a class="reference internal" href="variable__types_8hpp_1affa84bf61aeceb782f8b1bd3bac39fc9.html#_CPPv4N9Polylidar25PL_DEFAULT_DESIRED_VECTORE" title="Polylidar::PL_DEFAULT_DESIRED_VECTOR">PL_DEFAULT_DESIRED_VECTOR</a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERK6MatrixIdEKNSt5arrayIdXL3EEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERK6MatrixIdEKNSt5arrayIdXL3EEEE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1ad918d125129d838750004d776ce16dae"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a6783a447a165ea396cf8858152752049.html#_CPPv4N9Polylidar6PlanesE" title="Polylidar::Planes"><span class="n"><span class="pre">Planes</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a979e2b7eb8f15adb3f986eccc3fdc0a7.html#_CPPv4N9Polylidar8PolygonsE" title="Polylidar::Polygons"><span class="n"><span class="pre">Polygons</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractPlanesAndPolygons</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">points</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">plane_normal</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="variable__types_8hpp_1affa84bf61aeceb782f8b1bd3bac39fc9.html#_CPPv4N9Polylidar25PL_DEFAULT_DESIRED_VECTORE" title="Polylidar::PL_DEFAULT_DESIRED_VECTOR"><span class="n"><span class="pre">PL_DEFAULT_DESIRED_VECTOR</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERK6MatrixIdEKNSt5arrayIdXL3EEEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract Planes and Polygons from a 2D point sets or unorganized 3D point clouds Uses 2D Delaunay triangulation for 2D point sets. Uses 2.5 Delaunay triangulation for 3D point clouds. Only send 3D point clouds whose desired surface for extraction is already aligned with the XY Plane (e.g. airborne LiDAR point clouds) </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;MeshHelper::HalfEdgeTriangulation, Planes, Polygons&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">points</span></code>: <a class="reference internal" href="class_polylidar_1_1_matrix.html#class_polylidar_1_1_matrix"><span class="std std-ref">Matrix</span></a> (NX2 or NX3) point cloud. Contiguous Memory. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normal</span></code>: Leave this at the default. It can technically be changed but don’t deviate to greatly from [0,0,1]. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> – <a class="reference internal" href="class_polylidar_1_1_matrix.html#class_polylidar_1_1_matrix"><span class="std std-ref">Matrix</span></a> (NX2 or NX3) point cloud. Contiguous Memory. </p></li>
+<li><p><strong>plane_normal</strong> – Leave this at the default. It can technically be changed but don’t deviate to greatly from [0,0,1]. </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::tuple&lt;MeshHelper::HalfEdgeTriangulation, Planes, Polygons&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a398e50e73bc569ea5f8a79014b7c6348"></span>std::tuple&lt;<a class="reference internal" href="typedef__types_8hpp_1a6783a447a165ea396cf8858152752049.html#_CPPv4N9Polylidar6PlanesE" title="Polylidar::Planes">Planes</a>, <a class="reference internal" href="typedef__types_8hpp_1a979e2b7eb8f15adb3f986eccc3fdc0a7.html#_CPPv4N9Polylidar8PolygonsE" title="Polylidar::Polygons">Polygons</a>&gt; <code class="sig-name descname">ExtractPlanesAndPolygons</code><span class="sig-paren">(</span>MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, <em class="property">const</em> std::array&lt;double, 3&gt; <em>plane_normal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a398e50e73bc569ea5f8a79014b7c6348"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef__types_8hpp_1a6783a447a165ea396cf8858152752049.html#_CPPv4N9Polylidar6PlanesE" title="Polylidar::Planes"><span class="n"><span class="pre">Planes</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a979e2b7eb8f15adb3f986eccc3fdc0a7.html#_CPPv4N9Polylidar8PolygonsE" title="Polylidar::Polygons"><span class="n"><span class="pre">Polygons</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractPlanesAndPolygons</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">plane_normal</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extracts planes and polygons from a half-edge triangular mesh given a plane normal. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;Planes, Polygons&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mesh</span></code>: A half-edge mesh previously created. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normal</span></code>: The unit plane normal to extract planes and polygons from the mesh. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – A half-edge mesh previously created. </p></li>
+<li><p><strong>plane_normal</strong> – The unit plane normal to extract planes and polygons from the mesh. </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::tuple&lt;Planes, Polygons&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a23527ff083a3335c41b29d0542ad6afc"></span>std::tuple&lt;<a class="reference internal" href="typedef__types_8hpp_1a6783a447a165ea396cf8858152752049.html#_CPPv4N9Polylidar6PlanesE" title="Polylidar::Planes">Planes</a>, <a class="reference internal" href="typedef__types_8hpp_1a979e2b7eb8f15adb3f986eccc3fdc0a7.html#_CPPv4N9Polylidar8PolygonsE" title="Polylidar::Polygons">Polygons</a>&gt; <code class="sig-name descname">ExtractPlanesAndPolygonsOptimized</code><span class="sig-paren">(</span>MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, <em class="property">const</em> std::array&lt;double, 3&gt; <em>plane_normal</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a23527ff083a3335c41b29d0542ad6afc"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef__types_8hpp_1a6783a447a165ea396cf8858152752049.html#_CPPv4N9Polylidar6PlanesE" title="Polylidar::Planes"><span class="n"><span class="pre">Planes</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a979e2b7eb8f15adb3f986eccc3fdc0a7.html#_CPPv4N9Polylidar8PolygonsE" title="Polylidar::Polygons"><span class="n"><span class="pre">Polygons</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractPlanesAndPolygonsOptimized</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">plane_normal</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationEKNSt5arrayIdXL3EEEE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extracts planes and polygons from a half-edge triangular mesh and makes use of task-based parallelism. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;Planes, Polygons&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mesh</span></code>: A half-edge mesh previously created. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normal</span></code>: The unit plane normal to extract planes and polygons from the mesh. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – A half-edge mesh previously created. </p></li>
+<li><p><strong>plane_normal</strong> – The unit plane normal to extract planes and polygons from the mesh. </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::tuple&lt;Planes, Polygons&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a0ed27b171401ce04a8173c6100d03974"></span>std::tuple&lt;<a class="reference internal" href="typedef__types_8hpp_1a694d2b6ca322939ac8b1716b80bb919a.html#_CPPv4N9Polylidar11PlanesGroupE" title="Polylidar::PlanesGroup">PlanesGroup</a>, <a class="reference internal" href="typedef__types_8hpp_1a151f5359a0516169fbafa0e6c9951175.html#_CPPv4N9Polylidar13PolygonsGroupE" title="Polylidar::PolygonsGroup">PolygonsGroup</a>&gt; <code class="sig-name descname">ExtractPlanesAndPolygons</code><span class="sig-paren">(</span>MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, <em class="property">const</em> Matrix&lt;double&gt; &amp;<em>plane_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a0ed27b171401ce04a8173c6100d03974"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef__types_8hpp_1a694d2b6ca322939ac8b1716b80bb919a.html#_CPPv4N9Polylidar11PlanesGroupE" title="Polylidar::PlanesGroup"><span class="n"><span class="pre">PlanesGroup</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a151f5359a0516169fbafa0e6c9951175.html#_CPPv4N9Polylidar13PolygonsGroupE" title="Polylidar::PolygonsGroup"><span class="n"><span class="pre">PolygonsGroup</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractPlanesAndPolygons</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plane_normals</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D24ExtractPlanesAndPolygonsERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extracts planes and polygons from a half-edge triangular mesh given multiple dominant plane normals. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;PlanesGroup, PolygonsGroup&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mesh</span></code>: A half-edge mesh previously created. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normals</span></code>: The set of dominant plane normal in the mesh to extract planes and polygons from. Size LX3, L=number of dominant planes. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – A half-edge mesh previously created. </p></li>
+<li><p><strong>plane_normals</strong> – The set of dominant plane normal in the mesh to extract planes and polygons from. Size LX3, L=number of dominant planes. </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::tuple&lt;PlanesGroup, PolygonsGroup&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a4aafc19c642e6f512d34689cb8e90650"></span>std::tuple&lt;<a class="reference internal" href="typedef__types_8hpp_1a694d2b6ca322939ac8b1716b80bb919a.html#_CPPv4N9Polylidar11PlanesGroupE" title="Polylidar::PlanesGroup">PlanesGroup</a>, <a class="reference internal" href="typedef__types_8hpp_1a151f5359a0516169fbafa0e6c9951175.html#_CPPv4N9Polylidar13PolygonsGroupE" title="Polylidar::PolygonsGroup">PolygonsGroup</a>&gt; <code class="sig-name descname">ExtractPlanesAndPolygonsOptimized</code><span class="sig-paren">(</span>MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, <em class="property">const</em> Matrix&lt;double&gt; &amp;<em>plane_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a4aafc19c642e6f512d34689cb8e90650"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef__types_8hpp_1a694d2b6ca322939ac8b1716b80bb919a.html#_CPPv4N9Polylidar11PlanesGroupE" title="Polylidar::PlanesGroup"><span class="n"><span class="pre">PlanesGroup</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a151f5359a0516169fbafa0e6c9951175.html#_CPPv4N9Polylidar13PolygonsGroupE" title="Polylidar::PolygonsGroup"><span class="n"><span class="pre">PolygonsGroup</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractPlanesAndPolygonsOptimized</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plane_normals</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D33ExtractPlanesAndPolygonsOptimizedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extracts planes and polygons from a half-edge triangular mesh given multiple dominant plane normals. Uses task-based parallelism. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;PlanesGroup, PolygonsGroup&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mesh</span></code>: A half-edge mesh previously created. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normals</span></code>: The set of dominant plane normal in the mesh to extract planes and polygons from. Size LX3, L=number of dominant planes. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – A half-edge mesh previously created. </p></li>
+<li><p><strong>plane_normals</strong> – The set of dominant plane normal in the mesh to extract planes and polygons from. Size LX3, L=number of dominant planes. </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::tuple&lt;PlanesGroup, PolygonsGroup&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D43ExtractPlanesAndPolygonsOptimizedClassifiedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1aab840cf713bc9ee3d01286a9d64d1917"></span>std::tuple&lt;<a class="reference internal" href="typedef__types_8hpp_1a694d2b6ca322939ac8b1716b80bb919a.html#_CPPv4N9Polylidar11PlanesGroupE" title="Polylidar::PlanesGroup">PlanesGroup</a>, <a class="reference internal" href="typedef__types_8hpp_1a151f5359a0516169fbafa0e6c9951175.html#_CPPv4N9Polylidar13PolygonsGroupE" title="Polylidar::PolygonsGroup">PolygonsGroup</a>&gt; <code class="sig-name descname">ExtractPlanesAndPolygonsOptimizedClassified</code><span class="sig-paren">(</span>MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, <em class="property">const</em> Matrix&lt;double&gt; &amp;<em>plane_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D43ExtractPlanesAndPolygonsOptimizedClassifiedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D43ExtractPlanesAndPolygonsOptimizedClassifiedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1aab840cf713bc9ee3d01286a9d64d1917"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="typedef__types_8hpp_1a694d2b6ca322939ac8b1716b80bb919a.html#_CPPv4N9Polylidar11PlanesGroupE" title="Polylidar::PlanesGroup"><span class="n"><span class="pre">PlanesGroup</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="typedef__types_8hpp_1a151f5359a0516169fbafa0e6c9951175.html#_CPPv4N9Polylidar13PolygonsGroupE" title="Polylidar::PolygonsGroup"><span class="n"><span class="pre">PolygonsGroup</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractPlanesAndPolygonsOptimizedClassified</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plane_normals</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D43ExtractPlanesAndPolygonsOptimizedClassifiedERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extracts planes and polygons from a classified half-edge triangular mesh given multiple dominant plane normals. Uses task-based parallelism. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::tuple&lt;PlanesGroup, PolygonsGroup&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mesh</span></code>: A classified half-edge mesh previously created. </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normals</span></code>: The set of dominant plane normal in the mesh to extract planes and polygons from. Size LX3, L=number of dominant planes. </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – A classified half-edge mesh previously created. </p></li>
+<li><p><strong>plane_normals</strong> – The set of dominant plane normal in the mesh to extract planes and polygons from. Size LX3, L=number of dominant planes. </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::tuple&lt;PlanesGroup, PolygonsGroup&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar11Polylidar3D13ExtractTriSetERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a6b4929f8172ee6a2ae83dc20aeab5df6"></span>std::vector&lt;uint8_t&gt; <code class="sig-name descname">ExtractTriSet</code><span class="sig-paren">(</span>MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a> &amp;<em>mesh</em>, <em class="property">const</em> Matrix&lt;double&gt; &amp;<em>plane_normals</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D13ExtractTriSetERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D13ExtractTriSetERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a6b4929f8172ee6a2ae83dc20aeab5df6"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">uint8_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ExtractTriSet</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">mesh</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">plane_normals</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D13ExtractTriSetERN10MeshHelper21HalfEdgeTriangulationERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Extract the triangle set (dominant planar grouping) for each triangle. This is used for debugging/visualization. </p>
-<p><dl class="simple">
-<dt><strong>Return</strong></dt><dd><p>std::vector&lt;uint8_t&gt; </p>
-</dd>
-<dt><strong>Parameters</strong></dt><dd><ul class="breatheparameterlist simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">mesh</span></code>: </p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">plane_normals</span></code>: </p></li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mesh</strong> – </p></li>
+<li><p><strong>plane_normals</strong> – </p></li>
 </ul>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>std::vector&lt;uint8_t&gt; </p>
+</dd>
 </dl>
-</p>
 </dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D5alphaE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1ab93367d130bb0cbf4d48a134336b9685"></span>double <code class="sig-name descname">alpha</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D5alphaE" title="Permalink to this definition">¶</a><br /></dt>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D5alphaE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1ab93367d130bb0cbf4d48a134336b9685"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alpha</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D5alphaE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Maximum circumcircle radius of a triangle. Filters ‘big’ triangles. Only applicable for 2D point sets. A value of 0.0 makes this parameter ignored. </p>
 </dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D4lmaxE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a317953679384b2da336937102c278e19"></span>double <code class="sig-name descname">lmax</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D4lmaxE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D4lmaxE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a317953679384b2da336937102c278e19"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lmax</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D4lmaxE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Maximum triangle edge length of a triangle in a planar segment. Filters ‘big’ triangles. </p>
 </dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D13min_trianglesE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1ae6e53bbf48f20f0886078df7f546dbb7"></span>size_t <code class="sig-name descname">min_triangles</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D13min_trianglesE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D13min_trianglesE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1ae6e53bbf48f20f0886078df7f546dbb7"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_triangles</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D13min_trianglesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Minimum number of triangles in a planar triangle segment. Filters small planar segments very fast. </p>
 </dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D17min_hole_verticesE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a6ef6b339e640820885b3d5f1c3456b5d"></span>size_t <code class="sig-name descname">min_hole_vertices</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D17min_hole_verticesE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D17min_hole_verticesE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a6ef6b339e640820885b3d5f1c3456b5d"></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_hole_vertices</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D17min_hole_verticesE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Minimum number of vertices for a hole in a polygon. Filters small holes very fast. </p>
 </dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D8z_threshE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a4df00380102affc8587a971e76fbc833"></span>double <code class="sig-name descname">z_thresh</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D8z_threshE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D8z_threshE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a4df00380102affc8587a971e76fbc833"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">z_thresh</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D8z_threshE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Maximum point to plane distance during region growing (3D only). Forces planarity constraints. A value of 0.0 ignores this constraint. </p>
 </dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D11norm_threshE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a7d224d72d6324adfe1a517c2d2457f59"></span>double <code class="sig-name descname">norm_thresh</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D11norm_threshE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D11norm_threshE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a7d224d72d6324adfe1a517c2d2457f59"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">norm_thresh</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D11norm_threshE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>IGNORE - will be deprecated or repurposed (3D only) </p>
 </dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar11Polylidar3D15norm_thresh_minE">
-<span class="target" id="class_polylidar_1_1_polylidar3_d_1a10ad1f456bbed8e15117f5e08f62308d"></span>double <code class="sig-name descname">norm_thresh_min</code><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D15norm_thresh_minE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar11Polylidar3D15norm_thresh_minE">
+<span class="target" id="class_polylidar_1_1_polylidar3_d_1a10ad1f456bbed8e15117f5e08f62308d"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">norm_thresh_min</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar11Polylidar3D15norm_thresh_minE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Minimum value of the dot product between a triangle and surface normal being extracted. Forces Planar Constraints. </p>
 </dd></dl>
 

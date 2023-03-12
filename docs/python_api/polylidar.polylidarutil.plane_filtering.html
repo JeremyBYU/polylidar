@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.polylidarutil.plane_filtering &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>polylidar.polylidarutil.plane_filtering &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,19 +92,19 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="polylidar.html">polylidar</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">polylidar.polylidarutil.plane_filtering</a><ul>
@@ -124,7 +122,7 @@
 </ul>
 </li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -216,13 +214,17 @@
 <section id="polylidar-polylidarutil-plane-filtering">
 <h1>polylidar.polylidarutil.plane_filtering<a class="headerlink" href="#polylidar-polylidarutil-plane-filtering" title="Permalink to this headline">¶</a></h1>
 <p><strong>Classes</strong></p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.html#polylidar.polylidarutil.plane_filtering.JOIN_STYLE" title="polylidar.polylidarutil.plane_filtering.JOIN_STYLE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JOIN_STYLE</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.html#polylidar.polylidarutil.plane_filtering.JOIN_STYLE" title="polylidar.polylidarutil.plane_filtering.JOIN_STYLE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JOIN_STYLE</span></code></a>()</p></td>
 <td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.Polygon.html#polylidar.polylidarutil.plane_filtering.Polygon" title="polylidar.polylidarutil.plane_filtering.Polygon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polygon</span></code></a>([shell, holes])</p></td>
-<td><p>A two-dimensional figure bounded by a linear ring</p></td>
+<td><p>A geometry type representing an area that is enclosed by a linear ring.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.R.html#polylidar.polylidarutil.plane_filtering.R" title="polylidar.polylidarutil.plane_filtering.R"><code class="xref py py-obj docutils literal notranslate"><span class="pre">R</span></code></a></p></td>
 <td><p>alias of <code class="xref py py-class docutils literal notranslate"><span class="pre">scipy.spatial.transform._rotation.Rotation</span></code></p></td>
@@ -230,7 +232,11 @@
 </tbody>
 </table>
 <p><strong>Functions</strong></p>
-<table class="longtable docutils align-default">
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.add_column.html#polylidar.polylidarutil.plane_filtering.add_column" title="polylidar.polylidarutil.plane_filtering.add_column"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_column</span></code></a>(array, z_value)</p></td>
 <td><p></p></td>
@@ -241,7 +247,7 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.filter_planes.html#polylidar.polylidarutil.plane_filtering.filter_planes" title="polylidar.polylidarutil.plane_filtering.filter_planes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_planes</span></code></a>(polygons, points, config_pp[, rm])</p></td>
 <td><p>Converts polygons from Polylidar to Shapely polygons.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.filter_planes_and_holes.html#polylidar.polylidarutil.plane_filtering.filter_planes_and_holes" title="polylidar.polylidarutil.plane_filtering.filter_planes_and_holes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_planes_and_holes</span></code></a>(polygons, points, …)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.filter_planes_and_holes.html#polylidar.polylidarutil.plane_filtering.filter_planes_and_holes" title="polylidar.polylidarutil.plane_filtering.filter_planes_and_holes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_planes_and_holes</span></code></a>(polygons, points, ...)</p></td>
 <td><p>Extracts the plane and obstacles returned from polylidar.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.get_points.html#polylidar.polylidarutil.plane_filtering.get_points" title="polylidar.polylidarutil.plane_filtering.get_points"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_points</span></code></a>(point_idxs, points)</p></td>

@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Define PL_DEFAULT_MINTRIANGLES &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>Define PL_DEFAULT_MINTRIANGLES &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,26 +92,56 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_library_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#classes-and-structs">Classes and Structs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#variables">Variables</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_library_root.html#defines">Defines</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a525335710b53cb064ca56b936120431e.html">Define _USE_MATH_DEFINES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__delaunator_8hpp_1aab75489dd91b143a909025f8368e4009.html">Define DELAUNATOR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1ae71449b1cc6e6250b91f539153a7a0d3.html">Define M_PI</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1ab2eac6ae5b6808421541f54b4f036372.html">Define PL_DEFAULT_ALPHA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a2d9cb1057a4e14234548ae19b0f3443d.html">Define PL_DEFAULT_CALC_NORMALS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a8cee264b5d4e3db3070756c9746c2151.html">Define PL_DEFAULT_LMAX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a1d095d37fed141ea28ec04974442c0ef.html">Define PL_DEFAULT_MINBBOX</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a7dea8871416165edb4f7173bcb2eda11.html">Define PL_DEFAULT_MINHOLEVERTICES</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Define PL_DEFAULT_MINTRIANGLES</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a42420c51823910aab1a5fdc9dfe3c5d5.html">Define PL_DEFAULT_NORMTHRESH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1af2ca5f5b76596d9bbd6a67a4764ae2be.html">Define PL_DEFAULT_NORMTHRESH_MIN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a70a969a6491e2de5132ae9aba81a4ec9.html">Define PL_DEFAULT_STRIDE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a3f22be63c8fea45a7fa5cad21f12695d.html">Define PL_DEFAULT_TASK_THREADS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1a23804f18a0fbd9b4e157ae31b457bd10.html">Define PL_DEFAULT_ZTHRESH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="define__types_8hpp_1ab43aa29c4419785679216d072ec4cdfb.html">Define PL_EPS_RADIAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -209,9 +237,9 @@
 </ul>
 <section id="define-documentation">
 <h2>Define Documentation<a class="headerlink" href="#define-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="macro">
-<dt id="c.PL_DEFAULT_MINTRIANGLES">
-<span class="target" id="_types_8hpp_1ad8ab559c0f1938709b6e578f862a8ce7"></span><code class="sig-name descname">PL_DEFAULT_MINTRIANGLES</code><a class="headerlink" href="#c.PL_DEFAULT_MINTRIANGLES" title="Permalink to this definition">¶</a></dt>
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.PL_DEFAULT_MINTRIANGLES">
+<span class="target" id="_types_8hpp_1ad8ab559c0f1938709b6e578f862a8ce7"></span><span class="sig-name descname"><span class="n"><span class="pre">PL_DEFAULT_MINTRIANGLES</span></span></span><a class="headerlink" href="#c.PL_DEFAULT_MINTRIANGLES" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </section>

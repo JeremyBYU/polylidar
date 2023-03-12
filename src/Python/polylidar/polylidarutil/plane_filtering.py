@@ -5,7 +5,7 @@ from scipy import spatial
 from scipy.spatial.transform import Rotation as R
 from shapely.geometry import Polygon, JOIN_STYLE
 import logging
-
+from .descartes_patch import PolygonPatch
 IDENTITY = R.identity()
 logging.basicConfig(level=logging.INFO)
 
@@ -18,8 +18,6 @@ def plot_indices_text(indices, points, ax):
 
 
 def plot_poly(polygon: Polygon, ax, polygon_indices=None):
-    from shapely.geometry import Polygon
-    from descartes import PolygonPatch
     outlinePatch = PolygonPatch(Polygon(polygon.exterior), ec='green', fill=False, linewidth=2)
     for i, hole in enumerate(polygon.interiors):
         color = plt.cm.get_cmap('tab20')([i])[0][:3]

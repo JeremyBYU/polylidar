@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Building Documentation &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>Building Documentation &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
         <script src="_static/jquery.js"></script>
         <script src="_static/underscore.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/language_data.js"></script>
         <script src="_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,11 +92,11 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Building Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#build-polylidar3d-from-source">1. Build Polylidar3D from source</a></li>
@@ -110,17 +108,17 @@
 </ul>
 </li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -225,21 +223,21 @@ is generated as xml with <a class="reference external" href="http://www.doxygen.
 <section id="install-sphinx">
 <h3>2. Install Sphinx<a class="headerlink" href="#install-sphinx" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For pip</span>
-pip install sphinx sphinx-autobuild
+pip<span class="w"> </span>install<span class="w"> </span>sphinx<span class="w"> </span>sphinx-autobuild
 
 <span class="c1"># Or, for Conda</span>
-conda install sphinx sphinx-autobuild
+conda<span class="w"> </span>install<span class="w"> </span>sphinx<span class="w"> </span>sphinx-autobuild
 </pre></div>
 </div>
 </section>
 <section id="install-doxygen">
 <h3>3. Install Doxygen<a class="headerlink" href="#install-doxygen" title="Permalink to this headline">¶</a></h3>
 <p><strong>Ubuntu</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get -y install doxygen
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt-get<span class="w"> </span>-y<span class="w"> </span>install<span class="w"> </span>doxygen
 </pre></div>
 </div>
 <p><strong>macOS</strong></p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew install doxygen
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>brew<span class="w"> </span>install<span class="w"> </span>doxygen
 </pre></div>
 </div>
 <p><strong>Windows</strong></p>
@@ -250,10 +248,10 @@ checkout the source or
 </section>
 <section id="build">
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> docs
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs
 
 <span class="c1"># You may optionally select the --sphinx flag</span>
-python make_docs.py --sphinx
+python<span class="w"> </span>make_docs.py<span class="w"> </span>--sphinx
 </pre></div>
 </div>
 <p>The docs html will be saved in <code class="docutils literal notranslate"><span class="pre">docs/_out</span></code> folder.</p>

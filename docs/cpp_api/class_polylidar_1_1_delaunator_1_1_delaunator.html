@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class Delaunator &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>Class Delaunator &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,26 +92,49 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_library_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_library_root.html#classes-and-structs">Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_extreme_point.html">Struct ExtremePoint</a></li>
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_plane_data.html">Struct PlaneData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_polygon.html">Struct Polygon</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Class Delaunator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_matrix.html">Template Class Matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html">Class HalfEdgeTriangulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_polylidar3_d.html">Class Polylidar3D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_utility_1_1_timer.html">Class Timer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#defines">Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -218,62 +239,62 @@
 </section>
 <section id="class-documentation">
 <h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="_CPPv4N9Polylidar10Delaunator10DelaunatorE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator"></span><em class="property">class </em><code class="sig-name descname">Delaunator</code> : <em class="property">public</em> Polylidar::MeshHelper::<a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation">HalfEdgeTriangulation</a><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10DelaunatorE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10DelaunatorE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Polylidar</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">Delaunator</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Delaunator</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Polylidar</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MeshHelper</span></span><span class="p"><span class="pre">::</span></span><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html#_CPPv4N9Polylidar10MeshHelper21HalfEdgeTriangulationE" title="Polylidar::MeshHelper::HalfEdgeTriangulation"><span class="n"><span class="pre">HalfEdgeTriangulation</span></span></a><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10DelaunatorE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Functions</p>
-<dl class="function">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERR6MatrixIdE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a99633c8b1525f8dec9050c725346a0c1"></span><code class="sig-name descname">Delaunator</code><span class="sig-paren">(</span>Matrix&lt;double&gt; &amp;&amp;<em>in_vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERR6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-functions">Public Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERR6MatrixIdE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a99633c8b1525f8dec9050c725346a0c1"></span><span class="sig-name descname"><span class="n"><span class="pre">Delaunator</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">in_vertices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERR6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERK6MatrixIdE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1ac32a64c7d31c898f8949c6e3add5c8fe"></span><code class="sig-name descname">Delaunator</code><span class="sig-paren">(</span><em class="property">const</em> Matrix&lt;double&gt; &amp;<em>in_vertices</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERK6MatrixIdE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1ac32a64c7d31c898f8949c6e3add5c8fe"></span><span class="sig-name descname"><span class="n"><span class="pre">Delaunator</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="class_polylidar_1_1_matrix.html#_CPPv4I0EN9Polylidar6MatrixE" title="Polylidar::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">in_vertices</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10DelaunatorERK6MatrixIdE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator11triangulateEv">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a468efb3328ca3e65d4fabb42fdd84526"></span>void <code class="sig-name descname">triangulate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator11triangulateEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator11triangulateEv">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a468efb3328ca3e65d4fabb42fdd84526"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">triangulate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator11triangulateEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="function">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator13get_hull_areaEv">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a9ad30760e390ca5d0fda73ee62c5cdd1"></span>double <code class="sig-name descname">get_hull_area</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13get_hull_areaEv" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator13get_hull_areaEv">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a9ad30760e390ca5d0fda73ee62c5cdd1"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_hull_area</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13get_hull_areaEv" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator13triangles_refE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1ab958123ff19cec3b28cea2e5157b0577"></span>std::vector&lt;size_t&gt; &amp;<code class="sig-name descname">triangles_ref</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13triangles_refE" title="Permalink to this definition">¶</a><br /></dt>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator13triangles_refE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1ab958123ff19cec3b28cea2e5157b0577"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">triangles_ref</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13triangles_refE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator13halfedges_refE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a66319cc583cf051c5fa720581591c760"></span>std::vector&lt;size_t&gt; &amp;<code class="sig-name descname">halfedges_ref</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13halfedges_refE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator13halfedges_refE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a66319cc583cf051c5fa720581591c760"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="n"><span class="pre">halfedges_ref</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator13halfedges_refE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator9hull_prevE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a328838a54ef8472e7016074004693ae9"></span>std::vector&lt;std::size_t&gt; <code class="sig-name descname">hull_prev</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator9hull_prevE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator9hull_prevE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a328838a54ef8472e7016074004693ae9"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hull_prev</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator9hull_prevE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator9hull_nextE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a484e475ebe2c5a41c6b1783d936f39ed"></span>std::vector&lt;std::size_t&gt; <code class="sig-name descname">hull_next</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator9hull_nextE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator9hull_nextE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a484e475ebe2c5a41c6b1783d936f39ed"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hull_next</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator9hull_nextE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator8hull_triE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1abdf725620d7b9046cb612698434853c0"></span>std::vector&lt;std::size_t&gt; <code class="sig-name descname">hull_tri</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator8hull_triE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator8hull_triE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1abdf725620d7b9046cb612698434853c0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hull_tri</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator8hull_triE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar10Delaunator10Delaunator10hull_startE">
-<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a275082341c88d3081ef845dfe17c45a0"></span>std::size_t <code class="sig-name descname">hull_start</code><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10hull_startE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar10Delaunator10Delaunator10hull_startE">
+<span class="target" id="class_polylidar_1_1_delaunator_1_1_delaunator_1a275082341c88d3081ef845dfe17c45a0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">size_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">hull_start</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar10Delaunator10Delaunator10hull_startE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>

@@ -17,6 +17,16 @@ get_filename_component(PYTHON_COMPILED_MODULE_NAME ${PYTHON_COMPILED_MODULE_PATH
 file(COPY ${PYTHON_COMPILED_MODULE_PATH}
      DESTINATION ${PYTHON_PACKAGE_DST_DIR}/polylidar)
 
+MESSAGE("COPYING THIS FILE ${PYTHON_COMPILED_MODULE_PATH} to ${PYTHON_PACKAGE_DST_DIR}/polylidar ")
+if (PL_USE_ROBUST_PREDICATES)
+     MESSAGE(STATUS "Attempting to copy PL_Predicates.dll to python package destination folder")
+     file(COPY ${ORIG_CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/PL_Predicates.dll
+          DESTINATION ${PYTHON_PACKAGE_DST_DIR}/polylidar)
+endif()
+
+     
+
+
 # 2.5) Copy the compiled module to the parent directory as well, only if this variable is set
 if (ORIG_CMAKE_LIBRARY_OUTPUT_DIRECTORY)
      file(COPY ${PYTHON_COMPILED_MODULE_PATH}

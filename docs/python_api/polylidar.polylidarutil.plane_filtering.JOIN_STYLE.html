@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.polylidarutil.plane_filtering.JOIN_STYLE &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>polylidar.polylidarutil.plane_filtering.JOIN_STYLE &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,19 +92,19 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="polylidar.html">polylidar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a><ul class="current">
@@ -124,7 +122,7 @@
 </ul>
 </li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -217,28 +215,27 @@
 </style>
 <section id="polylidar-polylidarutil-plane-filtering-join-style">
 <h1>polylidar.polylidarutil.plane_filtering.JOIN_STYLE<a class="headerlink" href="#polylidar-polylidarutil-plane-filtering-join-style" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE">
-<em class="property">class </em><code class="sig-prename descclassname">polylidar.polylidarutil.plane_filtering.</code><code class="sig-name descname">JOIN_STYLE</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize self.  See help(type(self)) for accurate signature.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.bevel">
-<code class="sig-name descname">bevel</code><em class="property"> = 3</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.bevel" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polylidar.polylidarutil.plane_filtering.</span></span><span class="sig-name descname"><span class="pre">JOIN_STYLE</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.__init__" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.mitre">
-<code class="sig-name descname">mitre</code><em class="property"> = 2</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.mitre" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.bevel">
+<span class="sig-name descname"><span class="pre">bevel</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.bevel" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="attribute">
-<dt id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.round">
-<code class="sig-name descname">round</code><em class="property"> = 1</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.round" title="Permalink to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.mitre">
+<span class="sig-name descname"><span class="pre">mitre</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.mitre" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.JOIN_STYLE.round">
+<span class="sig-name descname"><span class="pre">round</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.JOIN_STYLE.round" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>

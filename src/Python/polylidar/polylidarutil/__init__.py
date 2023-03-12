@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors 
 from shapely.geometry import Polygon, MultiPolygon
-from descartes import PolygonPatch
+from .descartes_patch import PolygonPatch
 
 COLOR_PALETTE = list(map(colors.to_rgb, plt.rcParams['axes.prop_cycle'].by_key()['color']))
 

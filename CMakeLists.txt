@@ -40,6 +40,7 @@ option(PL_BUILD_BENCHMARKS "PL - Build Benchmarks" OFF)
 option(PL_BUILD_EXAMPLES "PL - Build Examples" ON)
 option(PL_WITH_OPENMP "PL - Build with OpenMP Support" ON)
 option(PL_BUILD_FASTGA "PL - Build FastGA with Example" OFF)
+option(PL_USE_ROBUST_PREDICATES "PL - Build with Fast Geometric Predicates" OFF)
 option(PL_BUILD_WERROR "PL - Add Werror flag to build (turns warnings into errors)" OFF)
 
 # Add any dependencies needed by our library

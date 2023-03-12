@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.Polygon &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>polylidar.Polygon &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,19 +92,19 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="polylidar.html">polylidar</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="polylidar.Delaunator.html">Delaunator</a></li>
@@ -134,7 +132,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -227,25 +225,25 @@
 </style>
 <section id="polylidar-polygon">
 <h1>polylidar.Polygon<a class="headerlink" href="#polylidar-polygon" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="polylidar.Polygon">
-<em class="property">class </em><code class="sig-prename descclassname">polylidar.</code><code class="sig-name descname">Polygon</code><a class="headerlink" href="#polylidar.Polygon" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="polylidar.Polygon">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polylidar.</span></span><span class="sig-name descname"><span class="pre">Polygon</span></span><a class="headerlink" href="#polylidar.Polygon" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contains the linear rings of a polygon. The elements of a linear ring are point indices into a point cloud.</p>
-<dl class="method">
-<dt id="polylidar.Polygon.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.Polygon</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.Polygon.__init__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.Polygon.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polylidar.Polygon" title="polylidar_pybind.Polygon"><span class="pre">polylidar_pybind.Polygon</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#polylidar.Polygon.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a Polygon</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.Polygon.holes">
-<em class="property">property </em><code class="sig-name descname">holes</code><a class="headerlink" href="#polylidar.Polygon.holes" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.Polygon.holes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">holes</span></span><a class="headerlink" href="#polylidar.Polygon.holes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set of linear rings of interior holes in our polygon</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.Polygon.shell">
-<em class="property">property </em><code class="sig-name descname">shell</code><a class="headerlink" href="#polylidar.Polygon.shell" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.Polygon.shell">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">shell</span></span><a class="headerlink" href="#polylidar.Polygon.shell" title="Permalink to this definition">¶</a></dt>
 <dd><p>Linear ring of our exterior shell.</p>
 </dd></dl>
 

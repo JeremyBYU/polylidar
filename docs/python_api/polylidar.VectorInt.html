@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.VectorInt &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>polylidar.VectorInt &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,19 +92,19 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="polylidar.html">polylidar</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="polylidar.Delaunator.html">Delaunator</a></li>
@@ -134,7 +132,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -227,13 +225,13 @@
 </style>
 <section id="polylidar-vectorint">
 <h1>polylidar.VectorInt<a class="headerlink" href="#polylidar-vectorint" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="polylidar.VectorInt">
-<em class="property">class </em><code class="sig-prename descclassname">polylidar.</code><code class="sig-name descname">VectorInt</code><a class="headerlink" href="#polylidar.VectorInt" title="Permalink to this definition">¶</a></dt>
+<dl class="py class">
+<dt class="sig sig-object py" id="polylidar.VectorInt">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polylidar.</span></span><span class="sig-name descname"><span class="pre">VectorInt</span></span><a class="headerlink" href="#polylidar.VectorInt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contiguous buffer of Int32. Use np.asarray() to get to get numpy array.</p>
-<dl class="method">
-<dt id="polylidar.VectorInt.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.VectorInt.__init__" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.VectorInt.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>__init__(self: polylidar_pybind.VectorInt, arg0: buffer) -&gt; None</p></li>
@@ -246,27 +244,27 @@
 </ol>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.append">
-<code class="sig-name descname">append</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.VectorInt</em>, <em class="sig-param">x: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.VectorInt.append" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.append">
+<span class="sig-name descname"><span class="pre">append</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polylidar.VectorInt" title="polylidar_pybind.VectorInt"><span class="pre">polylidar_pybind.VectorInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#polylidar.VectorInt.append" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an item to the end of the list</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.clear">
-<code class="sig-name descname">clear</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.VectorInt</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.VectorInt.clear" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polylidar.VectorInt" title="polylidar_pybind.VectorInt"><span class="pre">polylidar_pybind.VectorInt</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#polylidar.VectorInt.clear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clear the contents</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.count">
-<code class="sig-name descname">count</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.VectorInt</em>, <em class="sig-param">x: int</em><span class="sig-paren">)</span> &#x2192; int<a class="headerlink" href="#polylidar.VectorInt.count" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.count">
+<span class="sig-name descname"><span class="pre">count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polylidar.VectorInt" title="polylidar_pybind.VectorInt"><span class="pre">polylidar_pybind.VectorInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#polylidar.VectorInt.count" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of times <code class="docutils literal notranslate"><span class="pre">x</span></code> appears in the list</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.extend">
-<code class="sig-name descname">extend</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.VectorInt.extend" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.extend">
+<span class="sig-name descname"><span class="pre">extend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.VectorInt.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>extend(self: polylidar_pybind.VectorInt, L: polylidar_pybind.VectorInt) -&gt; None</p></li>
@@ -278,15 +276,15 @@
 <p>Extend the list by appending all the items in the given list</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.insert">
-<code class="sig-name descname">insert</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.VectorInt</em>, <em class="sig-param">i: int</em>, <em class="sig-param">x: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.VectorInt.insert" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.insert">
+<span class="sig-name descname"><span class="pre">insert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polylidar.VectorInt" title="polylidar_pybind.VectorInt"><span class="pre">polylidar_pybind.VectorInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">i</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#polylidar.VectorInt.insert" title="Permalink to this definition">¶</a></dt>
 <dd><p>Insert an item at a given position.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.pop">
-<code class="sig-name descname">pop</code><span class="sig-paren">(</span><em class="sig-param">*args</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.VectorInt.pop" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.pop">
+<span class="sig-name descname"><span class="pre">pop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.VectorInt.pop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overloaded function.</p>
 <ol class="arabic simple">
 <li><p>pop(self: polylidar_pybind.VectorInt) -&gt; int</p></li>
@@ -298,9 +296,9 @@
 <p>Remove and return the item at index <code class="docutils literal notranslate"><span class="pre">i</span></code></p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.VectorInt.remove">
-<code class="sig-name descname">remove</code><span class="sig-paren">(</span><em class="sig-param">self: polylidar_pybind.VectorInt</em>, <em class="sig-param">x: int</em><span class="sig-paren">)</span> &#x2192; None<a class="headerlink" href="#polylidar.VectorInt.remove" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.VectorInt.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#polylidar.VectorInt" title="polylidar_pybind.VectorInt"><span class="pre">polylidar_pybind.VectorInt</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#polylidar.VectorInt.remove" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the first item from the list whose value is x. It is an error if there is no such item.</p>
 </dd></dl>
 

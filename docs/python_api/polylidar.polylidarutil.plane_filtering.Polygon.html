@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>polylidar.polylidarutil.plane_filtering.Polygon &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>polylidar.polylidarutil.plane_filtering.Polygon &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,19 +92,19 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="polylidar.html">polylidar</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a><ul class="current">
@@ -124,7 +122,7 @@
 </ul>
 </li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../cpp_api/cpp_library_root.html">C++ Library API</a></li>
 </ul>
@@ -217,49 +215,48 @@
 </style>
 <section id="polylidar-polylidarutil-plane-filtering-polygon">
 <h1>polylidar.polylidarutil.plane_filtering.Polygon<a class="headerlink" href="#polylidar-polylidarutil-plane-filtering-polygon" title="Permalink to this headline">¶</a></h1>
-<dl class="class">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon">
-<em class="property">class </em><code class="sig-prename descclassname">polylidar.polylidarutil.plane_filtering.</code><code class="sig-name descname">Polygon</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">holes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon" title="Permalink to this definition">¶</a></dt>
-<dd><p>A two-dimensional figure bounded by a linear ring</p>
-<p>A polygon has a non-zero area. It may have one or more negative-space
-“holes” which are also bounded by linear rings. If any rings cross each
-other, the feature is invalid and operations on it may fail.</p>
-<dl class="attribute">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.exterior">
-<code class="sig-name descname">exterior</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.exterior" title="Permalink to this definition">¶</a></dt>
-<dd><p>The ring which bounds the positive space of the polygon.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">polylidar.polylidarutil.plane_filtering.</span></span><span class="sig-name descname"><span class="pre">Polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shell</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">holes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon" title="Permalink to this definition">¶</a></dt>
+<dd><p>A geometry type representing an area that is enclosed by a linear ring.</p>
+<p>A polygon is a two-dimensional feature and has a non-zero area. It may
+have one or more negative-space “holes” which are also bounded by linear
+rings. If any rings cross each other, the feature is invalid and
+operations on it may fail.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>LinearRing</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.interiors">
-<code class="sig-name descname">interiors</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.interiors" title="Permalink to this definition">¶</a></dt>
-<dd><p>A sequence of rings which bound all existing holes.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>sequence</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">shell=None</em>, <em class="sig-param">holes=None</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>shell</strong> (<em>sequence</em>) – A sequence of (x, y [,z]) numeric coordinate pairs or triples.
+<li><p><strong>shell</strong> (<em>sequence</em>) – A sequence of (x, y [,z]) numeric coordinate pairs or triples, or
+an array-like with shape (N, 2) or (N, 3).
 Also can be a sequence of Point objects.</p></li>
 <li><p><strong>holes</strong> (<em>sequence</em>) – A sequence of objects which satisfy the same requirements as the
 shell parameters above</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Example</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.exterior">
+<span class="sig-name descname"><span class="pre">exterior</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.exterior" title="Permalink to this definition">¶</a></dt>
+<dd><p>The ring which bounds the positive space of the polygon.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>LinearRing</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.interiors">
+<span class="sig-name descname"><span class="pre">interiors</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.interiors" title="Permalink to this definition">¶</a></dt>
+<dd><p>A sequence of rings which bound all existing holes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p>sequence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Examples</p>
 <p>Create a square polygon with no holes</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">coords</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">),</span> <span class="p">(</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">),</span> <span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">polygon</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">coords</span><span class="p">)</span>
@@ -267,16 +264,19 @@ shell parameters above</p></li>
 <span class="go">1.0</span>
 </pre></div>
 </div>
-</dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.almost_equals">
-<code class="sig-name descname">almost_equals</code><span class="sig-paren">(</span><em class="sig-param">other</em>, <em class="sig-param">decimal=6</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.almost_equals" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.almost_equals">
+<span class="sig-name descname"><span class="pre">almost_equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decimal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.almost_equals" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if geometries are equal at all coordinates to a
 specified decimal place.</p>
 <div class="deprecated">
 <p><span class="versionmodified deprecated">Deprecated since version 1.8.0: </span>The ‘almost_equals()’ method is deprecated
-and will be removed in Shapely 2.0 because the name is
+and will be removed in Shapely 2.1 because the name is
 confusing. The ‘equals_exact()’ method should be used
 instead.</p>
 </div>
@@ -296,37 +296,37 @@ geometries and “almost_equals()” to be False.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.buffer">
-<code class="sig-name descname">buffer</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">resolution=16</em>, <em class="sig-param">quadsegs=None</em>, <em class="sig-param">cap_style=1</em>, <em class="sig-param">join_style=1</em>, <em class="sig-param">mitre_limit=5.0</em>, <em class="sig-param">single_sided=False</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.buffer" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.buffer">
+<span class="sig-name descname"><span class="pre">buffer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quad_segs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cap_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'round'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">join_style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'round'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mitre_limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">single_sided</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.buffer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a geometry that represents all points within a distance
 of this geometry.</p>
 <p>A positive distance produces a dilation, a negative distance an
 erosion. A very small or zero distance may sometimes be used to
 “tidy” a polygon.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>distance</strong> (<em>float</em>) – The distance to buffer around the object.</p></li>
 <li><p><strong>resolution</strong> (<em>int</em><em>, </em><em>optional</em>) – The resolution of the buffer around each vertex of the
 object.</p></li>
-<li><p><strong>quadsegs</strong> (<em>int</em><em>, </em><em>optional</em>) – Sets the number of line segments used to approximate an
-angle fillet.  Note: the use of a <cite>quadsegs</cite> parameter is
-deprecated and will be gone from the next major release.</p></li>
-<li><p><strong>cap_style</strong> (<em>int</em><em>, </em><em>optional</em>) – The styles of caps are: CAP_STYLE.round (1), CAP_STYLE.flat
-(2), and CAP_STYLE.square (3).</p></li>
-<li><p><strong>join_style</strong> (<em>int</em><em>, </em><em>optional</em>) – The styles of joins between offset segments are:
-JOIN_STYLE.round (1), JOIN_STYLE.mitre (2), and
-JOIN_STYLE.bevel (3).</p></li>
+<li><p><strong>quad_segs</strong> (<em>int</em><em>, </em><em>optional</em>) – Sets the number of line segments used to approximate an
+angle fillet.</p></li>
+<li><p><strong>cap_style</strong> (<em>shapely.BufferCapStyle</em><em> or </em><em>{'round'</em><em>, </em><em>'square'</em><em>, </em><em>'flat'}</em><em>, </em><em>default 'round'</em>) – Specifies the shape of buffered line endings. BufferCapStyle.round (‘round’)
+results in circular line endings (see <code class="docutils literal notranslate"><span class="pre">quad_segs</span></code>). Both BufferCapStyle.square
+(‘square’) and BufferCapStyle.flat (‘flat’) result in rectangular line endings,
+only BufferCapStyle.flat (‘flat’) will end at the original vertex,
+while BufferCapStyle.square (‘square’) involves adding the buffer width.</p></li>
+<li><p><strong>join_style</strong> (<em>shapely.BufferJoinStyle</em><em> or </em><em>{'round'</em><em>, </em><em>'mitre'</em><em>, </em><em>'bevel'}</em><em>, </em><em>default 'round'</em>) – Specifies the shape of buffered line midpoints. BufferJoinStyle.ROUND (‘round’)
+results in rounded shapes. BufferJoinStyle.bevel (‘bevel’) results in a beveled
+edge that touches the original vertex. BufferJoinStyle.mitre (‘mitre’) results
+in a single vertex that is beveled depending on the <code class="docutils literal notranslate"><span class="pre">mitre_limit</span></code> parameter.</p></li>
 <li><p><strong>mitre_limit</strong> (<em>float</em><em>, </em><em>optional</em>) – The mitre limit ratio is used for very sharp corners. The
 mitre ratio is the ratio of the distance from the corner to
 the end of the mitred offset corner. When two line segments
@@ -345,13 +345,11 @@ the regular buffer.  The End Cap Style for single-sided
 buffers is always ignored, and forced to the equivalent of
 CAP_FLAT.</p>
 </p></li>
+<li><p><strong>quadsegs</strong> (<em>int</em><em>, </em><em>optional</em>) – Deprecated alias for <cite>quad_segs</cite>.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p></p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Geometry</p>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>Geometry</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
@@ -360,70 +358,90 @@ Z coordinates of the original geometry will be ignored.</p>
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">g</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s1">&#39;POINT (0.0 0.0)&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>        <span class="c1"># 16-gon approx of a unit radius circle</span>
+</pre></div>
+</div>
+<p>16-gon approx of a unit radius circle:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>  
 <span class="go">3.1365484905459...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>   <span class="c1"># 128-gon approximation</span>
+</pre></div>
+</div>
+<p>128-gon approximation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>  
 <span class="go">3.141513801144...</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">round</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>  <span class="c1"># triangle approximation</span>
+</pre></div>
+</div>
+<p>triangle approximation:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
 <span class="go">3.0</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">CAP_STYLE</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">list</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">BufferCapStyle</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">exterior</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
 <span class="go">[(1.0, 1.0), (1.0, -1.0), (-1.0, -1.0), (-1.0, 1.0), (1.0, 1.0)]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">CAP_STYLE</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">g</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">cap_style</span><span class="o">=</span><span class="n">BufferCapStyle</span><span class="o">.</span><span class="n">square</span><span class="p">)</span><span class="o">.</span><span class="n">area</span>
 <span class="go">4.0</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.contains">
-<code class="sig-name descname">contains</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.contains" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.contains">
+<span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the geometry contains the other, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.covered_by">
-<code class="sig-name descname">covered_by</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.covered_by" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.contains_properly">
+<span class="sig-name descname"><span class="pre">contains_properly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.contains_properly" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the geometry completely contains the other, with no
+common boundary points, else False</p>
+<p>Refer to <cite>shapely.contains_properly</cite> for full documentation.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.covered_by">
+<span class="sig-name descname"><span class="pre">covered_by</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.covered_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the geometry is covered by the other, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.covers">
-<code class="sig-name descname">covers</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.covers" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.covers">
+<span class="sig-name descname"><span class="pre">covers</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.covers" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the geometry covers the other, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.crosses">
-<code class="sig-name descname">crosses</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.crosses" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.crosses">
+<span class="sig-name descname"><span class="pre">crosses</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.crosses" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the geometries cross, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.difference">
-<code class="sig-name descname">difference</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.difference" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the difference of the geometries</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.difference">
+<span class="sig-name descname"><span class="pre">difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the difference of the geometries.</p>
+<p>Refer to <cite>shapely.difference</cite> for full documentation.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.disjoint">
-<code class="sig-name descname">disjoint</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.disjoint" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.disjoint">
+<span class="sig-name descname"><span class="pre">disjoint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.disjoint" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries are disjoint, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.distance">
-<code class="sig-name descname">distance</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.distance" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.distance">
+<span class="sig-name descname"><span class="pre">distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless distance to other geometry (float)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.empty">
-<code class="sig-name descname">empty</code><span class="sig-paren">(</span><em class="sig-param">val=2875876468768</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.empty" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.dwithin">
+<span class="sig-name descname"><span class="pre">dwithin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.dwithin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if geometry is within a given distance from the other, else False.</p>
+<p>Refer to <cite>shapely.dwithin</cite> for full documentation.</p>
+</dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.equals">
-<code class="sig-name descname">equals</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.equals" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.equals">
+<span class="sig-name descname"><span class="pre">equals</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.equals" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries are equal, else False.</p>
 <p>This method considers point-set equality (or topological
 equality), and is equivalent to (self.within(other) &amp;
@@ -438,30 +456,28 @@ self.contains(other)).</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.equals_exact">
-<code class="sig-name descname">equals_exact</code><span class="sig-paren">(</span><em class="sig-param">other</em>, <em class="sig-param">tolerance</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.equals_exact" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.equals_exact">
+<span class="sig-name descname"><span class="pre">equals_exact</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.equals_exact" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if geometries are equal to within a specified
 tolerance.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>other</strong> (<em>BaseGeometry</em>) – The other geometry object in this comparison.</p></li>
 <li><p><strong>tolerance</strong> (<em>float</em>) – Absolute tolerance in the same units as coordinates.</p></li>
-<li><p><strong>method considers coordinate equality</strong><strong>, </strong><strong>which requires</strong> (<em>This</em>) – </p></li>
-<li><p><strong>to be equal and in the same order for all components</strong> (<em>coordinates</em>) – </p></li>
-<li><p><strong>a geometry.</strong> (<em>of</em>) – </p></li>
-<li><p><strong>of this it is possible for &quot;equals</strong><strong>(</strong><strong>)</strong><strong>&quot; to be True for two</strong> (<em>Because</em>) – </p></li>
-<li><p><strong>and &quot;equals_exact</strong><strong>(</strong><strong>)</strong><strong>&quot; to be False.</strong> (<em>geometries</em>) – </p></li>
+<li><p><strong>equality</strong> (<em>This method considers coordinate</em>) – </p></li>
+<li><p><strong>requires</strong> (<em>which</em>) – </p></li>
+<li><p><strong>components</strong> (<em>coordinates to be equal and in the same order for all</em>) – </p></li>
+<li><p><strong>geometry.</strong> (<em>of a</em>) – </p></li>
+<li><p><strong>two</strong> (<em>Because of this it is possible for &quot;equals</em><em>(</em><em>)</em><em>&quot; to be True for</em>) – </p></li>
+<li><p><strong>False.</strong> (<em>geometries and &quot;equals_exact</em><em>(</em><em>)</em><em>&quot; to be</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -476,109 +492,188 @@ tolerance.</p>
 </pre></div>
 </div>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>bool</p>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.from_bounds">
-<em class="property">classmethod </em><code class="sig-name descname">from_bounds</code><span class="sig-paren">(</span><em class="sig-param">xmin</em>, <em class="sig-param">ymin</em>, <em class="sig-param">xmax</em>, <em class="sig-param">ymax</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.from_bounds" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.from_bounds">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_bounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xmin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymin</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xmax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ymax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.from_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Construct a <cite>Polygon()</cite> from spatial bounds.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.geometryType">
-<code class="sig-name descname">geometryType</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.geometryType" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.geometryType">
+<span class="sig-name descname"><span class="pre">geometryType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.geometryType" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.hausdorff_distance">
-<code class="sig-name descname">hausdorff_distance</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.hausdorff_distance" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.hausdorff_distance">
+<span class="sig-name descname"><span class="pre">hausdorff_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.hausdorff_distance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless hausdorff distance to other geometry (float)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.interpolate">
-<code class="sig-name descname">interpolate</code><span class="sig-paren">(</span><em class="sig-param">distance</em>, <em class="sig-param">normalized=False</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.interpolate" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.interpolate">
+<span class="sig-name descname"><span class="pre">interpolate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.interpolate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a point at the specified distance along a linear geometry</p>
 <p>Negative length values are taken as measured in the reverse
 direction from the end of the geometry. Out-of-range index
 values are handled by clamping them to the valid range of values.
 If the normalized arg is True, the distance will be interpreted as a
 fraction of the geometry’s length.</p>
+<p>Alias of <cite>line_interpolate_point</cite>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.intersection">
-<code class="sig-name descname">intersection</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.intersection" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the intersection of the geometries</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.intersection">
+<span class="sig-name descname"><span class="pre">intersection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.intersection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the intersection of the geometries.</p>
+<p>Refer to <cite>shapely.intersection</cite> for full documentation.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.intersects">
-<code class="sig-name descname">intersects</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.intersects" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.intersects">
+<span class="sig-name descname"><span class="pre">intersects</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.intersects" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries intersect, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.normalize">
-<code class="sig-name descname">normalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.normalize" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.line_interpolate_point">
+<span class="sig-name descname"><span class="pre">line_interpolate_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.line_interpolate_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a point at the specified distance along a linear geometry</p>
+<p>Negative length values are taken as measured in the reverse
+direction from the end of the geometry. Out-of-range index
+values are handled by clamping them to the valid range of values.
+If the normalized arg is True, the distance will be interpreted as a
+fraction of the geometry’s length.</p>
+<p>Alias of <cite>interpolate</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.line_locate_point">
+<span class="sig-name descname"><span class="pre">line_locate_point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.line_locate_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the distance along this geometry to a point nearest the
+specified point</p>
+<p>If the normalized arg is True, return the distance normalized to the
+length of the linear geometry.</p>
+<p>Alias of <cite>project</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.normalize">
+<span class="sig-name descname"><span class="pre">normalize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.normalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Converts geometry to normal form (or canonical form).</p>
 <p>This method orders the coordinates, rings of a polygon and parts of
 multi geometries consistently. Typically useful for testing purposes
 (for example in combination with <cite>equals_exact</cite>).</p>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely.wkt</span> <span class="kn">import</span> <span class="n">loads</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span> <span class="o">=</span> <span class="n">loads</span><span class="p">(</span><span class="s2">&quot;MULTILINESTRING((0 0, 1 1), (3 3, 2 2))&quot;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">p</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span><span class="o">.</span><span class="n">wkt</span>
-<span class="go">&#39;MULTILINESTRING ((2 2, 3 3), (0 0, 1 1))&#39;</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">MultiLineString</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span> <span class="o">=</span> <span class="n">MultiLineString</span><span class="p">([[(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span> <span class="p">[(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">line</span><span class="o">.</span><span class="n">normalize</span><span class="p">()</span>
+<span class="go">&lt;MULTILINESTRING ((2 2, 3 3), (0 0, 1 1))&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.overlaps">
-<code class="sig-name descname">overlaps</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.overlaps" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.overlaps">
+<span class="sig-name descname"><span class="pre">overlaps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.overlaps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries overlap, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.project">
-<code class="sig-name descname">project</code><span class="sig-paren">(</span><em class="sig-param">other</em>, <em class="sig-param">normalized=False</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.project" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.point_on_surface">
+<span class="sig-name descname"><span class="pre">point_on_surface</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.point_on_surface" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a point guaranteed to be within the object, cheaply.</p>
+<p>Alias of <cite>representative_point</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.project">
+<span class="sig-name descname"><span class="pre">project</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalized</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.project" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the distance along this geometry to a point nearest the
 specified point</p>
 <p>If the normalized arg is True, return the distance normalized to the
 length of the linear geometry.</p>
+<p>Alias of <cite>line_locate_point</cite>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.relate">
-<code class="sig-name descname">relate</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.relate" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.relate">
+<span class="sig-name descname"><span class="pre">relate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.relate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the DE-9IM intersection matrix for the two geometries
 (string)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.relate_pattern">
-<code class="sig-name descname">relate_pattern</code><span class="sig-paren">(</span><em class="sig-param">other</em>, <em class="sig-param">pattern</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.relate_pattern" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.relate_pattern">
+<span class="sig-name descname"><span class="pre">relate_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.relate_pattern" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if the DE-9IM string code for the relationship between
 the geometries satisfies the pattern, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.representative_point">
-<code class="sig-name descname">representative_point</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.representative_point" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.representative_point">
+<span class="sig-name descname"><span class="pre">representative_point</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.representative_point" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a point guaranteed to be within the object, cheaply.</p>
+<p>Alias of <cite>point_on_surface</cite>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.simplify">
-<code class="sig-name descname">simplify</code><span class="sig-paren">(</span><em class="sig-param">tolerance</em>, <em class="sig-param">preserve_topology=True</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.simplify" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.reverse">
+<span class="sig-name descname"><span class="pre">reverse</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.reverse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of this geometry with the order of coordinates reversed.</p>
+<p>If the geometry is a polygon with interior rings, the interior rings are also
+reversed.</p>
+<p>Points are unchanged.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_ccw</span></code></dt><dd><p>Checks if a geometry is clockwise.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">LineString</span><span class="p">,</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)])</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="go">&lt;LINESTRING (1 2, 0 0)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Polygon</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+<span class="go">&lt;POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.segmentize">
+<span class="sig-name descname"><span class="pre">segmentize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_segment_length</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.segmentize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds vertices to line segments based on maximum segment length.</p>
+<p>Additional vertices will be added to every line segment in an input geometry
+so that segments are no longer than the provided maximum segment length. New
+vertices will evenly subdivide each segment.</p>
+<p>Only linear components of input geometries are densified; other geometries
+are returned unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>max_segment_length</strong> (<em>float</em><em> or </em><em>array_like</em>) – Additional vertices will be added so that all line segments are no
+longer this value.  Must be greater than 0.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">shapely</span> <span class="kn">import</span> <span class="n">LineString</span><span class="p">,</span> <span class="n">Polygon</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">LineString</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">)])</span><span class="o">.</span><span class="n">segmentize</span><span class="p">(</span><span class="n">max_segment_length</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&lt;LINESTRING (0 0, 0 5, 0 10)&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Polygon</span><span class="p">([(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span><span class="o">.</span><span class="n">segmentize</span><span class="p">(</span><span class="n">max_segment_length</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+<span class="go">&lt;POLYGON ((0 0, 5 0, 10 0, 10 5, 10 10, 5 10, 0 10, 0 5, 0 0))&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.simplify">
+<span class="sig-name descname"><span class="pre">simplify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tolerance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_topology</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.simplify" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a simplified geometry produced by the Douglas-Peucker
 algorithm</p>
 <p>Coordinates of the simplified geometry will be no more than the
@@ -587,12 +682,12 @@ option is used, the algorithm may produce self-intersecting or
 otherwise invalid geometries.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.svg">
-<code class="sig-name descname">svg</code><span class="sig-paren">(</span><em class="sig-param">scale_factor=1.0</em>, <em class="sig-param">fill_color=None</em>, <em class="sig-param">opacity=None</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.svg" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.svg">
+<span class="sig-name descname"><span class="pre">svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fill_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.svg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns SVG path element for the Polygon geometry.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>scale_factor</strong> (<em>float</em>) – Multiplication factor for the SVG stroke-width.  Default is 1.</p></li>
 <li><p><strong>fill_color</strong> (<em>str</em><em>, </em><em>optional</em>) – Hex string for fill color. Default is to use “#66cc99” if
@@ -603,203 +698,201 @@ geometry is valid, and “#ff3333” if invalid.</p></li>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.symmetric_difference">
-<code class="sig-name descname">symmetric_difference</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.symmetric_difference" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the symmetric difference of the geometries
-(Shapely geometry)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.symmetric_difference">
+<span class="sig-name descname"><span class="pre">symmetric_difference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.symmetric_difference" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the symmetric difference of the geometries.</p>
+<p>Refer to <cite>shapely.symmetric_difference</cite> for full documentation.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.touches">
-<code class="sig-name descname">touches</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.touches" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.touches">
+<span class="sig-name descname"><span class="pre">touches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.touches" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometries touch, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.union">
-<code class="sig-name descname">union</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.union" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the union of the geometries (Shapely geometry)</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.union">
+<span class="sig-name descname"><span class="pre">union</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grid_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the union of the geometries.</p>
+<p>Refer to <cite>shapely.union</cite> for full documentation.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.within">
-<code class="sig-name descname">within</code><span class="sig-paren">(</span><em class="sig-param">other</em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.within" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.within">
+<span class="sig-name descname"><span class="pre">within</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.within" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns True if geometry is within the other, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.area">
-<em class="property">property </em><code class="sig-name descname">area</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.area" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.area">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">area</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless area of the geometry (float)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.array_interface_base">
-<em class="property">property </em><code class="sig-name descname">array_interface_base</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.array_interface_base" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.boundary">
-<em class="property">property </em><code class="sig-name descname">boundary</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.boundary" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.boundary">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">boundary</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.boundary" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a lower dimension geometry that bounds the object</p>
 <p>The boundary of a polygon is a line, the boundary of a line is a
 collection of points. The boundary of a point is an empty (null)
 collection.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.bounds">
-<em class="property">property </em><code class="sig-name descname">bounds</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.bounds" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.bounds">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">bounds</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns minimum bounding region (minx, miny, maxx, maxy)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.centroid">
-<em class="property">property </em><code class="sig-name descname">centroid</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.centroid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.centroid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">centroid</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.centroid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the geometric center of the object</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.convex_hull">
-<em class="property">property </em><code class="sig-name descname">convex_hull</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.convex_hull" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.convex_hull">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">convex_hull</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.convex_hull" title="Permalink to this definition">¶</a></dt>
 <dd><p>that’s a
 convex hull, more or less</p>
 <p>The convex hull of a three member multipoint, for example, is a
 triangular polygon.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dt class="field-odd">Type</dt>
 <dd class="field-odd"><p>Imagine an elastic band stretched around the geometry</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.coords">
-<em class="property">property </em><code class="sig-name descname">coords</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.coords" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.coords">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">coords</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.coords" title="Permalink to this definition">¶</a></dt>
 <dd><p>Access to geometry’s coordinates (CoordinateSequence)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.ctypes">
-<em class="property">property </em><code class="sig-name descname">ctypes</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.ctypes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return ctypes buffer</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.envelope">
-<em class="property">property </em><code class="sig-name descname">envelope</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.envelope" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.envelope">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">envelope</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.envelope" title="Permalink to this definition">¶</a></dt>
 <dd><p>A figure that envelopes the geometry</p>
 </dd></dl>
 
-<dl class="method">
-<dt>
-<em class="property">property </em><code class="sig-name descname">exterior</code></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id0">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exterior</span></span><a class="headerlink" href="#id0" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.geom_type">
-<em class="property">property </em><code class="sig-name descname">geom_type</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.geom_type" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.geom_type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">geom_type</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.geom_type" title="Permalink to this definition">¶</a></dt>
 <dd><p>Name of the geometry’s type, such as ‘Point’</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.has_z">
-<em class="property">property </em><code class="sig-name descname">has_z</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.has_z" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.has_z">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">has_z</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.has_z" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry’s coordinate sequence(s) have z values (are
 3-dimensional)</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.impl">
-<code class="sig-name descname">impl</code><em class="property"> = &lt;GEOSImpl object: GEOS C API version (1, 13, 0)&gt;</em><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.impl" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="id1">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interiors</span></span><a class="headerlink" href="#id1" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt>
-<em class="property">property </em><code class="sig-name descname">interiors</code></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.is_closed">
-<em class="property">property </em><code class="sig-name descname">is_closed</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_closed" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.is_closed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_closed</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_closed" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is closed, else False</p>
 <p>Applicable only to 1-D geometries.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.is_empty">
-<em class="property">property </em><code class="sig-name descname">is_empty</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_empty" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.is_empty">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_empty</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_empty" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the set of points in this geometry is empty, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.is_ring">
-<em class="property">property </em><code class="sig-name descname">is_ring</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_ring" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.is_ring">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ring</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_ring" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is a closed ring, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.is_simple">
-<em class="property">property </em><code class="sig-name descname">is_simple</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_simple" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.is_simple">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_simple</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_simple" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is simple, meaning that any self-intersections
 are only at boundary points, else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.is_valid">
-<em class="property">property </em><code class="sig-name descname">is_valid</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_valid" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.is_valid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_valid</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.is_valid" title="Permalink to this definition">¶</a></dt>
 <dd><p>True if the geometry is valid (definition depends on sub-class),
 else False</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.length">
-<em class="property">property </em><code class="sig-name descname">length</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.length" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.length">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">length</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.length" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless length of the geometry (float)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.minimum_clearance">
-<em class="property">property </em><code class="sig-name descname">minimum_clearance</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.minimum_clearance" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.minimum_clearance">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_clearance</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.minimum_clearance" title="Permalink to this definition">¶</a></dt>
 <dd><p>Unitless distance by which a node could be moved to produce an invalid geometry (float)</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.minimum_rotated_rectangle">
-<em class="property">property </em><code class="sig-name descname">minimum_rotated_rectangle</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.minimum_rotated_rectangle" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the general minimum bounding rectangle of
-the geometry. Can possibly be rotated. If the convex hull
-of the object is a degenerate (line or point) this same degenerate
-is returned.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.minimum_rotated_rectangle">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">minimum_rotated_rectangle</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.minimum_rotated_rectangle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the oriented envelope (minimum rotated rectangle) that
+encloses the geometry.</p>
+<p>Unlike <cite>envelope</cite> this rectangle is not constrained to be parallel to the
+coordinate axes. If the convex hull of the object is a degenerate (line
+or point) this degenerate is returned.</p>
+<p>Alias of <cite>oriented_envelope</cite>.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.type">
-<em class="property">property </em><code class="sig-name descname">type</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.type" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.oriented_envelope">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">oriented_envelope</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.oriented_envelope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the oriented envelope (minimum rotated rectangle) that
+encloses the geometry.</p>
+<p>Unlike envelope this rectangle is not constrained to be parallel to the
+coordinate axes. If the convex hull of the object is a degenerate (line
+or point) this degenerate is returned.</p>
+<p>Alias of <cite>minimum_rotated_rectangle</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.type" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.wkb">
-<em class="property">property </em><code class="sig-name descname">wkb</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.wkb" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.wkb">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkb</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.wkb" title="Permalink to this definition">¶</a></dt>
 <dd><p>WKB representation of the geometry</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.wkb_hex">
-<em class="property">property </em><code class="sig-name descname">wkb_hex</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.wkb_hex" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.wkb_hex">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkb_hex</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.wkb_hex" title="Permalink to this definition">¶</a></dt>
 <dd><p>WKB hex representation of the geometry</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.wkt">
-<em class="property">property </em><code class="sig-name descname">wkt</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.wkt" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.wkt">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">wkt</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.wkt" title="Permalink to this definition">¶</a></dt>
 <dd><p>WKT representation of the geometry</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="polylidar.polylidarutil.plane_filtering.Polygon.xy">
-<em class="property">property </em><code class="sig-name descname">xy</code><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.xy" title="Permalink to this definition">¶</a></dt>
+<dl class="py property">
+<dt class="sig sig-object py" id="polylidar.polylidarutil.plane_filtering.Polygon.xy">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">xy</span></span><a class="headerlink" href="#polylidar.polylidarutil.plane_filtering.Polygon.xy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Separate arrays of X and Y coordinate values</p>
 </dd></dl>
 

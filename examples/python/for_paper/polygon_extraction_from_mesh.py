@@ -7,12 +7,11 @@ import matplotlib.colors as colors
 import matplotlib
 from mpl_toolkits.mplot3d import Axes3D
 from shapely.geometry import Polygon, MultiPolygon
-from descartes import PolygonPatch
 
 
 from polylidar import Delaunator, MatrixDouble, Polylidar3D
 from polylidar.polylidarutil import (plot_polygons_3d, generate_3d_plane, set_axes_equal,
-                           scale_points, rotation_matrix, apply_rotation, get_point)
+                           scale_points, rotation_matrix, apply_rotation, get_point, PolygonPatch)
 from polylidar.polylidarutil.plane_filtering import get_points
 
 COLOR_PALETTE = list(map(colors.to_rgb, plt.rcParams['axes.prop_cycle'].by_key()['color']))

@@ -8,7 +8,7 @@ trap 'last_command=$current_command; current_command=$BASH_COMMAND' DEBUG
 trap 'echo "\"${last_command}\" command filed with exit code $?."' EXIT
 
 python scripts/manage_versions.py --bump patch
-pip install . --use-feature=in-tree-build
+pip install .
 cd src_docs && python make_docs.py && cd ..
 git status
 

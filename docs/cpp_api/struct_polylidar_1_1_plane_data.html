@@ -5,11 +5,11 @@
 <!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+  <meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Struct PlaneData &mdash; Polylidar3D 1.0.8 documentation</title>
+  <title>Struct PlaneData &mdash; Polylidar3D 1.0.9 documentation</title>
   
 
   
@@ -22,15 +22,13 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
         <script src="../_static/jquery.js"></script>
         <script src="../_static/underscore.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script src="../_static/language_data.js"></script>
         <script src="../_static/collapsible-lists\js\CollapsibleLists.compressed.js"></script>
         <script src="../_static/collapsible-lists\js\apply-collapsible-lists.js"></script>
         <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../_static/js/theme.js"></script>
 
@@ -70,7 +68,7 @@
             
             
               <div class="version">
-                1.0.8
+                1.0.9
               </div>
             
           
@@ -94,26 +92,49 @@
               
             
             
-              <p><span class="caption-text">Getting Started</span></p>
+              <p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../introduction.html">Introducing Polylidar3D</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../install_instructions.html">Software Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#install-instructions-1">Install Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../install_instructions.html#id1">Install Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../builddocs.html">Building Documentation</a></li>
 </ul>
-<p><span class="caption-text">Tutorial</span></p>
+<p class="caption" role="heading"><span class="caption-text">Tutorial</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../tutorial/Python/index.html">Python</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tutorial/C++/index.html">C++</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorial/C%2B%2B/index.html">C++</a></li>
 </ul>
-<p><span class="caption-text">Python API</span></p>
+<p class="caption" role="heading"><span class="caption-text">Python API</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.html">polylidar</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../python_api/polylidar.polylidarutil.plane_filtering.html">polylidar.polylidarutil.plane_filtering</a></li>
 </ul>
-<p><span class="caption-text">C++ API</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a></li>
+<p class="caption" role="heading"><span class="caption-text">C++ API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="cpp_library_root.html">C++ Library API</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="cpp_library_root.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="cpp_library_root.html#full-api">Full API</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#namespaces">Namespaces</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="cpp_library_root.html#classes-and-structs">Classes and Structs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_extreme_point.html">Struct ExtremePoint</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Struct PlaneData</a></li>
+<li class="toctree-l4"><a class="reference internal" href="struct_polylidar_1_1_polygon.html">Struct Polygon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_delaunator_1_1_delaunator.html">Class Delaunator</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_matrix.html">Template Class Matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_mesh_helper_1_1_half_edge_triangulation.html">Class HalfEdgeTriangulation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_polylidar3_d.html">Class Polylidar3D</a></li>
+<li class="toctree-l4"><a class="reference internal" href="class_polylidar_1_1_utility_1_1_timer.html">Class Timer</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#variables">Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#defines">Defines</a></li>
+<li class="toctree-l3"><a class="reference internal" href="cpp_library_root.html#typedefs">Typedefs</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
             
@@ -209,30 +230,30 @@
 </ul>
 <section id="struct-documentation">
 <h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
-<dl class="class">
-<dt id="_CPPv4N9Polylidar9PlaneDataE">
-<span class="target" id="struct_polylidar_1_1_plane_data"></span><em class="property">struct </em><code class="sig-name descname">PlaneData</code><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneDataE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar9PlaneDataE">
+<span class="target" id="struct_polylidar_1_1_plane_data"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Polylidar</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">PlaneData</span></span></span><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneDataE" title="Permalink to this definition">¶</a><br /></dt>
 <dd><p>Represents information about a dominant plane normal Contains the surface unit normal and rotation matrix to align this normal to [0,0,1] Needs rotation is false if plane normal is already close to [0,0,1] Each dominant plane normal also has a unique id to represent it </p>
 <div class="breathe-sectiondef docutils container">
-<p class="breathe-sectiondef-title rubric">Public Members</p>
-<dl class="member">
-<dt id="_CPPv4N9Polylidar9PlaneData12plane_normalE">
-<span class="target" id="struct_polylidar_1_1_plane_data_1aa5fc16cfca724472c2a51fff942cc8de"></span>std::array&lt;double, 3&gt; <code class="sig-name descname">plane_normal</code> = <a class="reference internal" href="variable__types_8hpp_1affa84bf61aeceb782f8b1bd3bac39fc9.html#_CPPv4N9Polylidar25PL_DEFAULT_DESIRED_VECTORE" title="Polylidar::PL_DEFAULT_DESIRED_VECTOR">PL_DEFAULT_DESIRED_VECTOR</a><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData12plane_normalE" title="Permalink to this definition">¶</a><br /></dt>
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar9PlaneData12plane_normalE">
+<span class="target" id="struct_polylidar_1_1_plane_data_1aa5fc16cfca724472c2a51fff942cc8de"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">3</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">plane_normal</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="variable__types_8hpp_1affa84bf61aeceb782f8b1bd3bac39fc9.html#_CPPv4N9Polylidar25PL_DEFAULT_DESIRED_VECTORE" title="Polylidar::PL_DEFAULT_DESIRED_VECTOR"><span class="n"><span class="pre">PL_DEFAULT_DESIRED_VECTOR</span></span></a><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData12plane_normalE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar9PlaneData15rotation_matrixE">
-<span class="target" id="struct_polylidar_1_1_plane_data_1a94fbf38212d343c6f9083f94661e7555"></span>std::array&lt;double, 9&gt; <code class="sig-name descname">rotation_matrix</code> = <a class="reference internal" href="variable__types_8hpp_1ade7920342e2ab6fee9a3e9b21d70f567.html#_CPPv4N9Polylidar22PL_DEFAULT_IDENTITY_RME" title="Polylidar::PL_DEFAULT_IDENTITY_RM">PL_DEFAULT_IDENTITY_RM</a><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData15rotation_matrixE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar9PlaneData15rotation_matrixE">
+<span class="target" id="struct_polylidar_1_1_plane_data_1a94fbf38212d343c6f9083f94661e7555"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">array</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="m"><span class="pre">9</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rotation_matrix</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="variable__types_8hpp_1ade7920342e2ab6fee9a3e9b21d70f567.html#_CPPv4N9Polylidar22PL_DEFAULT_IDENTITY_RME" title="Polylidar::PL_DEFAULT_IDENTITY_RM"><span class="n"><span class="pre">PL_DEFAULT_IDENTITY_RM</span></span></a><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData15rotation_matrixE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar9PlaneData13need_rotationE">
-<span class="target" id="struct_polylidar_1_1_plane_data_1adc5504a0ef9465c100528b1826a11f2e"></span>bool <code class="sig-name descname">need_rotation</code> = false<a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData13need_rotationE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar9PlaneData13need_rotationE">
+<span class="target" id="struct_polylidar_1_1_plane_data_1adc5504a0ef9465c100528b1826a11f2e"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">need_rotation</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="k"><span class="pre">false</span></span><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData13need_rotationE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
-<dl class="member">
-<dt id="_CPPv4N9Polylidar9PlaneData9normal_idE">
-<span class="target" id="struct_polylidar_1_1_plane_data_1aeb53eaf482be4f7f3832185d302a7f0f"></span>uint8_t <code class="sig-name descname">normal_id</code> = <a class="reference internal" href="variable__types_8hpp_1a4079d21632ff8d22636e133700c44fed.html#_CPPv4N9Polylidar9ONE_UINT8E" title="Polylidar::ONE_UINT8">ONE_UINT8</a><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData9normal_idE" title="Permalink to this definition">¶</a><br /></dt>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9Polylidar9PlaneData9normal_idE">
+<span class="target" id="struct_polylidar_1_1_plane_data_1aeb53eaf482be4f7f3832185d302a7f0f"></span><span class="n"><span class="pre">uint8_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normal_id</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><a class="reference internal" href="variable__types_8hpp_1a4079d21632ff8d22636e133700c44fed.html#_CPPv4N9Polylidar9ONE_UINT8E" title="Polylidar::ONE_UINT8"><span class="n"><span class="pre">ONE_UINT8</span></span></a><a class="headerlink" href="#_CPPv4N9Polylidar9PlaneData9normal_idE" title="Permalink to this definition">¶</a><br /></dt>
 <dd></dd></dl>
 
 </div>
