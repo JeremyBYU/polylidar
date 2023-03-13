@@ -75,7 +75,7 @@ jobs:
           #   python-arch: x86
           #   cmake-arch: -A Win32
     env:
-      CIBW_SKIP: "cp27-* cp35-* cp36-* pp*"
+      CIBW_SKIP: "cp27-* cp35-* cp36-* cp311-* pp*"
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
